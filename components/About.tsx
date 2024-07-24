@@ -5,10 +5,11 @@ const About = () => {
     <div className=' text-center mt-20'>
         <h2 className='text-4xl mt-5 font-bold'>About Us</h2>
         <h3 className='text-3xl mt-20 font-bold'>What is Nifty Tales?</h3>
-        <h2 className='text-xl text-gray-500 font-light w-[60%] mx-auto mt-10'>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Animi natus aliquid culpa reiciendis dolores facere rem nostrum nisi quasi magnam eveniet harum quo placeat atque nobis, modi iure ducimus incidunt. Odio recusandae quam eum, voluptates aut accusamus quae alias, ipsa magni nam error, inventore facere non temporibus tenetur dolor? Rerum.</h2>
+        <h2 className='text-xl text-gray-500 font-light w-[60%] mx-auto mt-10'>Nifty Tales is an innovative platform where you can read, collect, and publish illustrated stories on the blockchain. We blend traditional storytelling with cutting-edge technology, offering a unique experience for authors and readers alike.</h2>
         <h3 className='text-3xl mt-20 font-bold'>Our Vision</h3>
-        <h2 className='text-xl text-gray-500 font-light w-[60%] mx-auto mt-10'>Lorem ipsum dolAnimi natus aliquid culpa reiciendis doloondae quam eum, voluptatenam error, inventore facere non temporibus tenetur dolor? Rerum.</h2>
+        <h2 className='text-xl text-gray-500 font-light w-[60%] mx-auto mt-10'>Our vision is to revolutionize storytelling by creating a dynamic space where creativity thrives. We empower authors to monetize their work and offer readers unique, collectible editions. We aim to make storytelling accessible and engaging for everyone.</h2>
         <h3 className='text-3xl mt-20 font-bold'>Our Team</h3>
+        <h2 className='text-xl text-gray-500 font-light w-[60%] mx-auto mt-10'>Our team is a passionate group of professionals from blockchain, digital art, publishing, and marketing. United by our love for storytelling, we are dedicated to transforming the literary landscape with innovation and creativity.</h2>
         <div className='flex items-center justify-center my-20 gap-10'>
             <div className='w-72 hover:scale-110 duration-150 rounded-xl bg-[#fafafa] shadow-black/25 shadow-lg p-5 flex flex-col items-center justify-center'>
                 <div className='w-[95%] bg-white overflow-hidden aspect-square rounded-full'></div>
