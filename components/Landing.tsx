@@ -8,7 +8,7 @@ const Landing = () => {
         <div className=' pl-12 flex flex-col items-start justify-center h-full'>
             <h1 className='text-6xl font-bold'>Nifty Tales</h1>
             <h2 className='text-3xl mt-5'>Empowering Authors, Engaging Readers</h2>
-            <h2 className='text-2xl text-gray-500 font-light mt-5'>Lorem ipsum dolor sit amet contio dicta possimebitis, illo consequatur frum, pariatur eum?</h2>
+            <h2 className='text-xl text-gray-500 font-light mt-5'>Discover, read, and publish illustrated stories on the blockchain. Our platform connects authors with readers in a unique, interactive way, transforming traditional storytelling into an innovative digital experience.</h2>
 
         </div>
         <div className='flex h-full'>
