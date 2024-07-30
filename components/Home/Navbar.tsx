@@ -2,10 +2,13 @@
 import Image from 'next/image'
 import React from 'react'
 import { logo } from '@/assets/assets'
+import { useRouter } from 'next/navigation'
 
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const router = useRouter()
 
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-40 md:px-10'>
@@ -23,8 +26,8 @@ const Navbar = () => {
         
 
         <div className='flex items-center gap-2 max-md:hidden'>
-            <button className='bg-[#171717] rounded-lg text-[#eeeeee] h-10 font-semibold px-5'> Pre-Register </button>
-            {/* <button className='bg-[#eeeeee] hover:bg-[#d3d3d3] rounded-lg text-[#171717] h-10 font-semibold px-5'> Wallet Connect </button> */}
+          <button onClick={()=>{router.push("/register")}} className='bg-[#171717] rounded-lg text-[#eeeeee] h-10 font-semibold px-5 w-52 my-4 max-md:mx-auto'> Pre-Register </button>
+        {/* <button className='bg-[#eeeeee] hover:bg-[#d3d3d3] rounded-lg text-[#171717] h-10 font-semibold px-5'> Wallet Connect </button> */}
         </div>
     </div>
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 "}`}>

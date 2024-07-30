@@ -21,14 +21,22 @@ export async function POST(req) {
                 email: rest.email
             })
 
-            if(emailExists != null ){
-                return new NextResponse(JSON.stringify({success: false, error: "Email already exists"}), { status: 409 });
+            console.log(emailExists);
+
+            if(emailExists != null && emailExists.username != username ){
+                return new NextResponse(JSON.stringify({success: false, error: "Email already exists"}), { status: 408 });
             }
+            else if(emailExists != null && emailExists.username == username ){
+                return new NextResponse(JSON.stringify({success: false, error: "Already registered"}), { status: 400 });
+            }
+            
         }
 
         if(userNameExists != null ){
             return new NextResponse(JSON.stringify({success: false, error: "Username already exists"}), { status: 409 });
         }
+
+        
 
         console.log("hello1");
         const user = await User.create({
