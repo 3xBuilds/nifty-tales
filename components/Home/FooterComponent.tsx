@@ -2,9 +2,9 @@ import React from 'react'
 
 const FooterComponent = () => {
   return (
-    <div className='bg-[#1a1a1a] w-screen px-20 pt-20 text-white'>
+    <div className='bg-[#1a1a1a] w-screen px-20 pt-20 max-md:px-5 max-md:pt-10 text-white'>
         <h2 className='text-2xl font-bold'> Nifty Tales </h2>
-        <div className='grid grid-cols-5 mt-10'>
+        <div className='grid grid-cols-3 max-md:grid-cols-2 max-md:text-sm max-md:mt-5 mt-10'>
             <ul className='flex flex-col'>
                 <li>niftytales@gmail.com</li>
                 <li>Instagram</li>
@@ -18,7 +18,7 @@ const FooterComponent = () => {
                 <li>Opensea</li>
             </ul>
         </div>
-        <h2 className='text-sm text-center mx-auto text-[#b4b4b4] pt-16 pb-5'> All Rights Reserved by NiftyTales © </h2>
+        <h2 className='text-sm text-center mx-auto text-[#b4b4b4] max-md:pt-10 pt-16 pb-5'> All Rights Reserved by NiftyTales © </h2>
     </div>
   )
 }

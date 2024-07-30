@@ -1,13 +1,11 @@
-import About from "@/components/About";
-import FooterComponent from "@/components/FooterComponent";
-import Landing from "@/components/Landing";
-import Navbar from "@/components/Navbar";
-import Image from "next/image";
+import About from "@/components/Home/About";
+import FooterComponent from "@/components/Home/FooterComponent";
+import Landing from "@/components/Home/Landing";
+import Navbar from "@/components/Home/Navbar";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">
-      <Navbar/>
       <Landing/>
       <About/>
       <FooterComponent/>

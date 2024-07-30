@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Providers from "@/utils/provider/Providers"
-
-const poppins = Poppins({ subsets: ["latin"], weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900' ] });
+import Navbar from "@/components/Home/Navbar";
+import { poppins } from "@/utils/font";
 
 export const metadata: Metadata = {
   title: "NiftyTales",
@@ -19,6 +19,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={poppins.className}>
         <Providers>
+          <Navbar/>
           {children}
         </Providers>
         </body>
