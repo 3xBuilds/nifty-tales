@@ -6,7 +6,8 @@ const FooterComponent = () => {
         <h2 className='text-2xl font-bold'> Nifty Tales </h2>
         <div className='grid grid-cols-3 max-md:grid-cols-2 max-md:text-sm max-md:mt-5 mt-10'>
             <ul className='flex flex-col'>
-                <li>niftytales@gmail.com</li>
+                <li className='max-md:hidden'>niftytales@gmail.com</li>
+                <li className='md:hidden'>Email</li>
                 <li>Instagram</li>
                 <li>Twitter</li>
                 <li>Discord</li>

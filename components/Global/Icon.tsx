@@ -1,7 +1,7 @@
 import React from 'react'
 
 type IconCompProp = {
-  name: 'arrow' | 'metamask' | 'settings' | 'wallet' | 'search' | 'home' | 'notification' | 'youtube' | 'instagram' | 'twitter' | 'twitch' | 'tiktok' | 'more' | 'add' | 'addread' ,
+  name: 'arrow' | 'google' | 'metamask' | 'settings' | 'wallet' | 'search' | 'home' | 'notification' | 'youtube' | 'instagram' | 'twitter' | 'twitch' | 'tiktok' | 'more' | 'add' | 'addread' ,
   className?: string,
   color?: string
 }
@@ -11,6 +11,9 @@ const Icon = ({name, className, color}: IconCompProp) => {
     if(name==='arrow') return (
         <Arrow className={className} color={color}/>
     )
+    if(name==='google') return (
+      <Google className={className} color={color}/>
+  )
     if(name==='metamask') return (
         <Metamask className={className}/>
     )
@@ -56,6 +59,34 @@ const Icon = ({name, className, color}: IconCompProp) => {
 
 
 }
+
+function Google({className, color}:{ className?: string, color?: string }) {
+  return (
+      <svg
+      className={' w-5 ' + className}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 23 23"
+      >
+      <path
+          fill={color || "#FFC107"}
+          d="M22.531 9.297h-.906V9.25H11.5v4.5h6.358A6.747 6.747 0 014.75 11.5a6.75 6.75 0 016.75-6.75c1.72 0 3.286.65 4.478 1.71l3.182-3.183A11.198 11.198 0 0011.5.25C5.287.25.25 5.287.25 11.5S5.287 22.75 11.5 22.75s11.25-5.037 11.25-11.25c0-.754-.078-1.49-.219-2.203z"
+      ></path>
+      <path
+          fill={color || "#FF3D00"}
+          d="M1.547 6.264l3.697 2.71A6.747 6.747 0 0111.5 4.75c1.72 0 3.286.65 4.478 1.71l3.182-3.183A11.198 11.198 0 0011.5.25c-4.32 0-8.068 2.44-9.953 6.014z"
+      ></path>
+      <path
+          fill={color || "#4CAF50"}
+          d="M11.5 22.75c2.906 0 5.546-1.112 7.543-2.92l-3.482-2.947a6.699 6.699 0 01-4.06 1.367 6.747 6.747 0 01-6.348-4.47l-3.668 2.827C3.347 20.25 7.128 22.75 11.5 22.75z"
+      ></path>
+      <path
+          fill={color || "#1976D2"}
+          d="M22.531 9.297h-.906V9.25H11.5v4.5h6.358a6.773 6.773 0 01-2.299 3.134l.002-.001 3.482 2.946c-.247.224 3.707-2.704 3.707-8.329 0-.754-.078-1.49-.219-2.203z"
+      ></path>
+      </svg>
+  );
+  }
 
 function Arrow({className, color}:{ className?: string, color?: string }) {
     return (
