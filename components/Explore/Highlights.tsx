@@ -66,7 +66,7 @@ const Highlights = () => {
                         <Image src={highlight.cover} alt="" className=' object-cover w-full flex items-center justify-center'/>
                     </div>
                     <div className='flex flex-row gap-2 absolute bottom-8 right-8 z-20'>
-                        <button onClick={()=>{router.push(`/${highlight.id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
+                        <button onClick={()=>{router.push(`/books/${highlight.id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
                         <button onClick={()=>{addToReadList()}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
                             <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>
                         </button>
