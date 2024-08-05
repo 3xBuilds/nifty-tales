@@ -68,7 +68,7 @@ export default function Home(){
             style={{ display: 'none' }}
             accept="image/png, image/jpeg, image/jpg"
             //@ts-ignore
-            onChange={(e : React.ChangeEvent<HTMLInputElement>) => console.log(e.target.files)}
+            onChange={(e : React.ChangeEvent<HTMLInputElement>) => console.log(e.target.files[0])}
       />
             <button onClick={deployContract} className="bg-black text-white px-4 py-2 rounded-xl my-10 hover:scale-105 duration-200" >Create</button>
         </div>
