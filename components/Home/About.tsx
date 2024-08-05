@@ -9,7 +9,7 @@ const About = () => {
         <h3 className='text-3xl max-md:text-xl mt-20 font-bold'>Our Vision</h3>
         <h2 className='text-xl max-md:text-base max-md:w-[80%] text-gray-500 font-light w-[60%] mx-auto mt-10'>Our vision is to revolutionize storytelling by creating a dynamic space where creativity thrives. We empower authors to monetize their work and offer readers unique, collectible editions. We aim to make storytelling accessible and engaging for everyone.</h2>
         <h3 className='text-3xl max-md:text-xl mt-20 font-bold'>Our Team</h3>
-        <h2 className='text-xl max-md:text-base max-md:w-[80%] text-gray-500 font-light w-[60%] mx-auto mt-10'>Our team is a passionate group of professionals from blockchain, digital art, publishing, and marketing. United by our love for storytelling, we are dedicated to transforming the literary landscape with innovation and creativity.</h2>
+        <h2 className='text-xl max-md:text-base max-md:w-[80%] text-gray-500 font-light w-[60%] mx-auto mt-10'>Our team is a passionate group of professionals from blockchain, digital art, and publishing. United by our love for books, storytelling, and solving problems, we are dedicated to transforming the literary landscape with innovation and creativity.</h2>
         {/* <div className='flex items-center justify-center my-20 gap-10'>
             <div className='w-72 hover:scale-110 duration-150 rounded-xl bg-[#fafafa] shadow-black/25 shadow-lg p-5 flex flex-col items-center justify-center'>
                 <div className='w-[95%] bg-white overflow-hidden aspect-square rounded-full'></div>
