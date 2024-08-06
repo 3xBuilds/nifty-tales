@@ -16,6 +16,11 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true
+    }, 
+    contractAdd: {
+        type: String,
+        default:"",
+        unique: false
     }
   }, {collection: "users"})
 

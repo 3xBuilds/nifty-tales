@@ -36,8 +36,9 @@ export default function Home() {
                 const contract = await factory.deploy(collectionName, symbol, uri);
 
 
-                await contract.deployed();
-                console.log('Contract deployed to:', contract.address);
+                const res = await contract.deployed();
+                console.log("HELLO I AM RES",res);
+                
                 return contract.address;
             }
 
@@ -169,7 +170,7 @@ export default function Home() {
                 </div>
 
                 <div className="md:w-[40%] px-10 flex items-center text-gray-400">
-                    <ul className="flex flex-col gap-2 list-disc">
+                    <ul className="flex flex-col gap-2 list-disc max-md:my-5">
                         <li>By becoming an author, you are giving niftytales.xyz lmao</li>
                         <li>You are agreeing to share a part of your earning as platform fee (0.0007 ETH per mint) </li>
 

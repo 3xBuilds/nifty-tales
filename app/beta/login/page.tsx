@@ -48,17 +48,36 @@ const PreRegister = () => {
 
   useEffect(()=>{
     if(session){
-      console.log(session)
-      setUserName(session?.user?.name || "");
-      setEmail(session?.user?.email || "");
-
-      register(session?.user?.name || "", session?.user?.email||"");
+      console.log(session);
+      const name = localStorage.getItem("userName");
+      if(name == ""){
+        register(session?.user?.name || "", session?.user?.email||"");
+      }
+      else{
+        register(name || "", session?.user?.email||"");
+      }
+      localStorage.clear();
+      router.push("/explore");
     }
   },[session?.user])
 
+  // useEffect(()=>{
+  //   if(session){
+  //     const router = useRouter();
+  //     router.push('/explore')
+  //   }
+  // },[])
+
   const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: '/explore' })
+    signIn('google');
   }
+
+  const registerWithGoogle = () =>{
+    signIn('google');
+    localStorage.setItem("userName", userName)
+    }
+  
+  
 
   return (
     <div className=' flex flex-col items-center justify-center'>
@@ -73,18 +92,18 @@ const PreRegister = () => {
             <div className='bg-white w-72 outline-nifty-black rounded-xl shadow-2xl shadow-black/50 p-5 flex flex-col items-center justify-start gap-4 mt-10'>
                 <OptionToggle options={['Login', 'Register']} selectedOption={type} setOption={setType} />
 
+              {type == "Register" && <div className={` w-full `}>
+                <h3 className={`text-xs font-semibold pb-2 duration-200 to-nifty-black `}>Username (optional)</h3>
+                <input placeholder='needle03' name='Username' value={userName} onChange={(e)=>{setUserName(e.target.value)}} className={` w-full ${userNameExists ? "border-red-500 border-[1px]" : "border-[1px] border-nifty-gray-1 "} rounded outline-nifty-black  p-2`} ></input>
+              </div>}
               {/* <div className={` w-full `}>
-                <h3 className={`text-xs font-semibold pb-2 duration-200 to-nifty-black `}>Username</h3>
-                <input name='Username' value={userName} onChange={(e)=>{setUserName(e.target.value)}} className={` w-full ${userNameExists ? "border-red-500 border-[1px]" : "border-[1px] border-nifty-gray-1 "} rounded outline-nifty-black  p-2`} ></input>
-              </div>
-              <div className={` w-full `}>
                 <h3 className={`text-xs font-semibold pb-2 duration-200 to-nifty-black `}>Email</h3>
                 <input type='email' name='Username' value={email} onChange={(e)=>{setEmail(e.target.value)}} className={` w-full ${emailExists ? "border-red-500 border-[1px]" : "border-[1px] border-nifty-gray-1 "} rounded  outline-nifty-black p-2`} ></input>
               </div> */}
 
               {/* <button onClick={()=>{register(userName, email)}} className='bg-black w-full rounded-xl px-6 py-3 text-white' >Pre-Register</button> */}
                 <div className='h-full flex items-center mt-4'>
-                {type == "Login" ? <button onClick={handleGoogleSignIn} className='bg-nifty-white w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/>Login with Google</button> : <button onClick={handleGoogleSignIn} className='bg-nifty-white w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/>Register with Google</button>}
+                {type == "Login" ? <button onClick={handleGoogleSignIn} className='bg-nifty-white w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/>Login with Google</button> : <button onClick={()=>{registerWithGoogle()}} className='bg-nifty-white w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/>Register with Google</button>}
 
                 </div>
             </div>
