@@ -6,27 +6,29 @@ export async function POST(req) {
     try{
         const body = await req.json();
         
-        const {wallet, username, ...rest } = body;
+        const {wallet, username } = body;
         
         await connectToDB();
         
-        const userNameExists = await User.findOne({
+        const user = await User.findOne({
             username
         });
 
         if(userNameExists != null){
-            return new NextResponse(JSON.stringify({success: false, error: "Username or wallet already exists"}), { status: 409 });
+            user.wallet = wallet;
+            await user.save();
+
+            return new NextResponse(JSON.stringify({
+                user
+            }), { status: 200 });
         }
 
-        const user = await User.create({
-                wallet,
-                username,
-                ...rest
-            }
-        )
-        return new NextResponse(JSON.stringify({
-            user
-        }), { status: 200 });
+        else{
+            return new NextResponse(JSON(
+                "User not found!"
+            ), { status: 404 });
+        }
+
     }
     catch (error) {
         return new NextResponse(JSON.stringify(error), {

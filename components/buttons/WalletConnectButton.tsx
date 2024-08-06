@@ -7,7 +7,7 @@ import Image from 'next/image';
 
 export const WalletConnectButton = () => {
   return (
-    <div className='block text-black bg-red-500 h-10 w-32 '>
+    <div className=' text-black '>
     <ConnectButton.Custom>
       {({
         account,
@@ -41,7 +41,7 @@ export const WalletConnectButton = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <button onClick={openConnectModal} type="button" className='text-white font-bold rounded-full hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>
+                  <button onClick={openConnectModal} type="button" className='text-black font-bold rounded-xl hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>
                     {/* <Image src={wallet} alt="stickerGen" className='w-10'/> */}
                     <h3 className='max-md:hidden'>Connect</h3>
                   </button>
@@ -49,7 +49,7 @@ export const WalletConnectButton = () => {
               }
               if (chain.unsupported) {
                 return (
-                  <button onClick={openChainModal} type="button" className='text-white bg-red-500 hover:bg-red-400 font-bold rounded-full hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex-col flex items-center justify-center gap-2'>
+                  <button onClick={openChainModal} type="button" className='text-white bg-red-500 hover:bg-red-400 font-bold rounded-xl hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex-col flex items-center justify-center gap-2'>
                     Wrong network
                   </button>
                 );
@@ -57,8 +57,11 @@ export const WalletConnectButton = () => {
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
                   
-                  <button title='Click to view address' onClick={openAccountModal} type="button" className='flex flex-col font-bold hover:-translate-y-1 duration-200 items-center gap-0 justify-center text-white rounded-full max-md:text-md text-sm px-3 py-1 transform transition '>
-                    {/* <Image src={wallet} alt="stickerGen" className='w-10'/> */}
+                  <button title='Click to view address' onClick={openAccountModal} type="button" className='flex font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center text-black rounded-xl max-md:text-md text-lg border-2 border-black px-3 py-1 transform transition '>
+                    {/* <Image src={wallet} alt="stickerGen" className='w-10'/>
+                     */}
+                     <IoMdWallet/>
+                     {account.ensName? account.ensName : account.displayName} | 
                     {account.displayBalance
                       ? ` ${account.displayBalance}`
                       : ''}
