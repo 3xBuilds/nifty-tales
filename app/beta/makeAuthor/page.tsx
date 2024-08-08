@@ -122,12 +122,6 @@ export default function Home() {
         router.push("/explore");
     },[user])
 
-    useEffect(()=>{
-        if(address && user?.wallet == ""){
-            axios.patch("/api/user/"+user.email, {wallet: address});
-        }
-    },[address])
-
 
     return (
         <div className=" gap-10 w-screen min-h-screen md:p-10 p-4">
