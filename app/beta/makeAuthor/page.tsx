@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import { ethers } from "ethers";
 import abi from "@/utils/abis/templateABI"
 import { bytecode } from "@/utils/bytecode/bytecode";
@@ -8,6 +8,8 @@ import Navbar from "@/components/Home/Navbar";
 import { WalletConnectButton } from "@/components/buttons/WalletConnectButton";
 import axios from "axios";
 import Image from "next/image";
+import { useGlobalContext } from "@/context/MainContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
 
@@ -15,6 +17,9 @@ export default function Home() {
     const [symbol, setSymbol] = useState<string>("");
     const [profileImg, setProfileImg] = useState<File | null>(null);
     let { address } = useAccount();
+    const {user} = useGlobalContext();
+
+    const router = useRouter()
 
 
     async function deployContract() {
@@ -36,8 +41,10 @@ export default function Home() {
                 const contract = await factory.deploy(collectionName, symbol, uri);
 
 
-                const res = await contract.deployed();
-                console.log("HELLO I AM RES",res);
+                await contract.deployed();
+                await axios.patch(`/api/user/${user?.email}`, {contractAdd: contract.address});
+
+                console.log(contract.address);
                 
                 return contract.address;
             }
@@ -59,6 +66,8 @@ export default function Home() {
         try {
             // Deploy the contract
             const contractAddress = await deployContract();
+
+            router.push("/authors/"+contractAddress);
 
             if (!contractAddress) {
                 throw new Error("Contract deployment failed");
@@ -113,6 +122,11 @@ export default function Home() {
             setProfileImg(e.target.files[0]);
         }
     };
+
+    useEffect(()=>{
+        if(user?.contractAdd!="")
+        router.push("/explore");
+    },[user])
 
 
     return (
