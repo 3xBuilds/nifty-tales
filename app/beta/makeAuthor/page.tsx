@@ -67,11 +67,11 @@ export default function Home() {
             // Deploy the contract
             const contractAddress = await deployContract();
 
-            router.push("/authors/"+contractAddress);
-
             if (!contractAddress) {
                 throw new Error("Contract deployment failed");
             }
+
+            router.push("/authors/"+contractAddress);
 
             // Create FormData object
             const formData = new FormData();
