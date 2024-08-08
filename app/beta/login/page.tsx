@@ -51,10 +51,10 @@ const PreRegister = () => {
       console.log(session);
       const name = localStorage.getItem("userName");
       if(name == ""){
-        register(session?.user?.name || "", session?.user?.email||"");
+        // register(session?.user?.name || "", session?.user?.email||"");
       }
       else{
-        register(name || "", session?.user?.email||"");
+        // register(name || "", session?.user?.email||"");
       }
       localStorage.clear();
       router.push("/explore");
