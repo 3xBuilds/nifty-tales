@@ -111,12 +111,6 @@ export default function Home() {
 
     const fileInputRef = useRef(null);
 
-    const handleClick = () => {
-
-        //@ts-ignore
-        fileInputRef.current.click();
-    };
-
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setProfileImg(e.target.files[0]);
@@ -128,12 +122,24 @@ export default function Home() {
         router.push("/explore");
     },[user])
 
+    useEffect(()=>{
+        if(address && user?.wallet == ""){
+            axios.patch("/api/user/"+user.email, {wallet: address});
+        }
+    },[address])
+
 
     return (
         <div className=" gap-10 w-screen min-h-screen md:p-10 p-4">
+        
             <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <WalletConnectButton />
             </div>
+
+            {address == null && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
+                <WalletConnectButton/>
+                <h3 className="font-semibold text-xl text-white">Connect Wallet to proceed</h3>
+            </div>}
 
             <div className="w-full flex md:justify-start justify-center font-bold max-md:mt-16 mt-10">
                 <h2 className="text-3xl">Become an Author</h2>
