@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import React from 'react'
 import { logo } from '@/assets/assets'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
 import { IoIosLogOut } from 'react-icons/io'
 import { useGlobalContext } from '@/context/MainContext'
@@ -15,6 +15,7 @@ const Navbar = () => {
   const {user} = useGlobalContext();
 
   const router = useRouter();
+  const pathName = usePathname()
 
   const {data: session} = useSession();
 
@@ -43,7 +44,9 @@ const Navbar = () => {
         <div className='flex items-center gap-2 max-md:hidden'>
           
           {!session ? <button onClick={()=>{router.push("/register")}} className='bg-[#171717] rounded-lg text-[#eeeeee] h-10 font-semibold px-5 w-52 my-4 max-md:mx-auto'> Pre-Register </button> : <div className='flex gap-2 items-center justify-center'>
-            {user?.contractAdd == "" ? <button onClick={()=>{router.push("/beta/makeAuthor")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Become an Author</button>: <button onClick={()=>{router.push("/authors/"+user?.contractAdd)}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Author Dashboard</button>}
+            {pathName.split("/")[pathName.split("/").length-2] !== "authors" && <>
+              {user?.contractAdd == "" ? <button onClick={()=>{router.push("/beta/makeAuthor")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Become an Author</button>: <button onClick={()=>{router.push("/authors/"+user?.contractAdd)}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Author Dashboard</button>}
+            </>}
             <WalletConnectButton/>
             <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 my-4 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>
             </div>}

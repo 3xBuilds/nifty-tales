@@ -65,8 +65,8 @@ export default function Home(){
     return(
         <div>
             <Navbar/>
-            <div className="w-screen h-80 overflow-hidden object-cover mt-16 relative">
-                <Image width={1080} height={1080} src={bucketLink} alt="dp" className="w-[80rem] absolute blur-xl h-[80rem] translate-y-[-30rem] rounded-full" />
+            <div className="w-screen h-80 overflow-hidden object-fill mt-16 relative">
+                <Image width={1080} height={1080} src={bucketLink} alt="dp" className="w-[150vw] absolute blur-xl translate-y-[-40rem] rounded-full" />
                 <div className="flex gap-4 items-center absolute z-50 top-[4.5rem] left-10">
                     <Image width={1080} height={1080} src={bucketLink} alt="dp" className="w-[10rem] h-[10rem] border-4 border-white rounded-full" />
                     <h2 className="text-5xl font-bold text-white">{name}</h2>
