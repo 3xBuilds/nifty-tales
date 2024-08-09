@@ -10,6 +10,7 @@ import axios from "axios";
 import Image from "next/image";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
+import { RiLoader5Line } from "react-icons/ri";
 
 export default function Home() {
 
@@ -18,6 +19,8 @@ export default function Home() {
     const [profileImg, setProfileImg] = useState<File | null>(null);
     let { address } = useAccount();
     const {user} = useGlobalContext();
+
+    const [loading, setLoading] = useState<boolean>(false);
 
     const router = useRouter()
 
@@ -52,10 +55,13 @@ export default function Home() {
         }
         catch (err) {
             console.log(err);
+            setLoading(false);
+
         }
     }
 
     async function handleSubmit(e: any) {
+        setLoading(true);
         e.preventDefault();
 
         if (!collectionName || !symbol || !profileImg) {
@@ -71,8 +77,6 @@ export default function Home() {
                 throw new Error("Contract deployment failed");
             }
 
-            router.push("/authors/"+contractAddress);
-
             // Create FormData object
             const formData = new FormData();
 
@@ -87,6 +91,11 @@ export default function Home() {
                     'Content-Type': 'multipart/form-data'
                 }
             });
+
+            if(response.status == 200){
+                delay(1000);
+                router.push("/authors/"+contractAddress);
+            }
 
             if (response.status !== 200) {
                 throw new Error('Upload failed');
@@ -106,6 +115,7 @@ export default function Home() {
         } catch (error) {
             console.error("Error submitting form:", error);
             alert("An error occurred while creating the collection. Please try again.");
+            setLoading(false);
         }
     }
 
@@ -116,6 +126,10 @@ export default function Home() {
             setProfileImg(e.target.files[0]);
         }
     };
+
+    function delay(ms:number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
 
     useEffect(()=>{
         if(user?.contractAdd!="")
@@ -129,6 +143,12 @@ export default function Home() {
             <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <WalletConnectButton />
             </div>
+
+
+            {loading && <div className="flex z-50 items-center justify-center w-screen h-screen fixed top-0 left-0 backdrop-blur-2xl">
+            <RiLoader5Line className="text-black text-5xl animate-spin"/>
+
+            </div>}
 
             {address == null && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
                 <WalletConnectButton/>

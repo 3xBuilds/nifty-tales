@@ -7,6 +7,7 @@ import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { WalletConnectButton } from "@/components/buttons/WalletConnectButton";
+import Navbar from "@/components/Home/Navbar";
 
 export default function Home(){
 
@@ -63,9 +64,14 @@ export default function Home(){
 
     return(
         <div>
-            <WalletConnectButton/>
-            <Image width={1080} height={1080} src={bucketLink} alt="dp" className="w-20 h-20 rounded-full" />
-            <h2 className="text-5xl font-bold">{name}</h2>
+            <Navbar/>
+            <div className="w-screen h-80 overflow-hidden object-cover mt-16 relative">
+                <Image width={1080} height={1080} src={bucketLink} alt="dp" className="w-[80rem] absolute blur-xl h-[80rem] translate-y-[-30rem] rounded-full" />
+                <div className="flex gap-4 items-center absolute z-50 top-[4.5rem] left-10">
+                    <Image width={1080} height={1080} src={bucketLink} alt="dp" className="w-[10rem] h-[10rem] border-4 border-white rounded-full" />
+                    <h2 className="text-5xl font-bold text-white">{name}</h2>
+                </div>
+            </div>
         </div>
     )
 }

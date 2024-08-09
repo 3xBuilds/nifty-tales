@@ -64,7 +64,7 @@ export const WalletConnectButton = () => {
               }
               if (chain.unsupported) {
                 return (
-                  <button onClick={openChainModal} type="button" className='text-white bg-red-500 hover:bg-red-400 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex-col flex items-center justify-center gap-2'>
+                  <button onClick={openChainModal} type="button" className='text-white bg-red-500 hover:bg-red-400 font-bold rounded-lg hover:-translate-y-1 px-3 h-10 transform transition duration-200 ease-in-out flex-col flex items-center justify-center gap-2'>
                     Wrong network
                   </button>
                 );
