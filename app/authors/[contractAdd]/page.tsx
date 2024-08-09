@@ -37,7 +37,7 @@ export default function Home(){
 
         }
         catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }
 
@@ -49,15 +49,13 @@ export default function Home(){
             setName(contractName);
         }
         catch(err){
-            console.log(err);
+            console.error(err);
         }
     }
 
     useEffect(()=>{
         if(address){
-
             setBucketLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + address + "/info/profileImage");
-            console.log(address)
             getContractDetails();
         }
     },[address])

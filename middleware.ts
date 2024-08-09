@@ -4,17 +4,15 @@ import { NextResponse } from 'next/server';
 
 export async function middleware(req: NextApiRequest) {
     const path = req.url;
-    console.log("path", path);
 
     const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-    console.log("token", token);
 
-    const publicPaths = path === '/' || path === '/regsiter'
+    const publicPaths = path === '/' || path === '/regsiter' || path === '/beta/login'
 
     if(publicPaths && token) {
         return NextResponse.redirect(new URL("/explore", req.url));
     }
-    if(publicPaths && !token) {
+    if(!publicPaths && !token) {
         return NextResponse.redirect(new URL("/register", req.url));
     }
 

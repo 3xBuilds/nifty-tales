@@ -11,12 +11,6 @@ const Explore = () => {
   const {data:session} = useSession();
   const router = useRouter();
 
-  useEffect(()=>{
-    if(!session){
-      router.push("/beta/login")
-    }
-  },[])
-
   return (
     <div className='pt-16'>
         <Navbar/>

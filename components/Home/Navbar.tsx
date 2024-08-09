@@ -20,8 +20,7 @@ const Navbar = () => {
   const {data: session} = useSession();
 
   function handleSignOut(){
-    signOut({ callbackUrl: '/beta/login' })
-
+    signOut()
   }
 
   return (<>

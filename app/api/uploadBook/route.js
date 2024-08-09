@@ -50,7 +50,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, wallet
 
     return true;
   } catch(e) {
-    console.log(e);
+    console.error(e);
     return false;
   }
 }

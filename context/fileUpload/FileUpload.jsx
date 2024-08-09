@@ -28,11 +28,10 @@ const FileUpload = () => {
                 },
               });
 
-            console.log(response?.data);
             setUploading(false);
         }
         catch(error){
-            console.log(err);
+            console.error(err);
             setUploading(false);
 
         }

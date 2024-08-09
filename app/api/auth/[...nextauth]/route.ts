@@ -22,11 +22,11 @@ const handler = NextAuth({
           email
          });
          if(userNameExists){
-           console.log('----user exists in db: ', userNameExists);
+          //  console.log('----user exists in db: ', userNameExists);
            return true;
          }
          else{
-            console.log('----creating user in db');
+            // console.log('----creating user in db');
             await User.create({
               email,
               username: name,
@@ -43,7 +43,7 @@ const handler = NextAuth({
       });
 
       if(!dbUser){
-        console.log('----user not found in db');
+        // console.log('----user not found in db');
         return token;
       }
 
@@ -77,13 +77,13 @@ const handler = NextAuth({
     },
     async session({ session, token }:any) {
 
-      console.log('tokennnn: ', token);
+      // console.log('tokennnn: ', token);
       // Attach access token and refresh token to the session
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
       session.role = token.role;
       session.image = token.picture;
-      console.log('ssssss: ', session)
+      // console.log('ssssss: ', session)
       return session;
     },
     async redirect({ url, baseUrl }) {

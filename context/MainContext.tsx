@@ -41,7 +41,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       setUser(res.data.user);
     }
     catch(err){
-      console.log(err);
+      console.error(err);
     }
   }
 

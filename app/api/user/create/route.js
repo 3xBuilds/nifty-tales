@@ -10,8 +10,6 @@ export async function POST(req) {
         
         await connectToDB();
 
-        console.log(rest);
-        
         const userNameExists = await User.findOne({
             username
         });
@@ -20,8 +18,6 @@ export async function POST(req) {
             const emailExists = await User.findOne({
                 email: rest.email
             })
-
-            console.log(emailExists);
 
             if(emailExists != null && emailExists.username != username ){
                 return new NextResponse(JSON.stringify({success: false, error: "Email already exists"}), { status: 408 });
@@ -36,9 +32,6 @@ export async function POST(req) {
             return new NextResponse(JSON.stringify({success: false, error: "Username already exists"}), { status: 409 });
         }
 
-        
-
-        console.log("hello1");
         const user = await User.create({
             username,
             ...rest

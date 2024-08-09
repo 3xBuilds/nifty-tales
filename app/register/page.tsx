@@ -8,7 +8,6 @@ import Icon from '@/components/Global/Icon';
 
 const PreRegister = () => {
   const {data:session} = useSession();
-  console.log("seshhhh: ", session);
   const router = useRouter()
 
   const [userName, setUserName] = useState<string>("");
@@ -20,14 +19,12 @@ const PreRegister = () => {
 
   async function register(userName:string, email:string){
     try{
-      console.log(email, userName);
       await axios.post("/api/user/create", {username:userName, email:email})
         .then((res)=>{
-          console.log(res);
           setFirst(true);
         })
         .catch((err)=>{
-          console.log(err);
+          console.error(err);
           if(err.response.status == 400){
             setUserExists(true);
           }
@@ -40,17 +37,14 @@ const PreRegister = () => {
         });
     }
     catch(err){
-      console.log(err);
+      console.error(err);
     }
   }
 
   useEffect(()=>{
     if(session){
-      console.log(session)
       setUserName(session?.user?.name || "");
       setEmail(session?.user?.email || "");
-
-      // register(session?.user?.name || "", session?.user?.email||"");
     }
   },[session?.user])
 

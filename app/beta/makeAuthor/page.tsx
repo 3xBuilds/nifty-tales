@@ -27,7 +27,6 @@ export default function Home() {
 
     async function deployContract() {
         try {
-            console.log(address)
             //@ts-ignore
             if (typeof window.ethereum !== 'undefined') {
 
@@ -46,15 +45,13 @@ export default function Home() {
 
                 await contract.deployed();
                 await axios.patch(`/api/user/${user?.email}`, {contractAdd: contract.address});
-
-                console.log(contract.address);
                 
                 return contract.address;
             }
 
         }
         catch (err) {
-            console.log(err);
+            console.error(err);
             setLoading(false);
 
         }
