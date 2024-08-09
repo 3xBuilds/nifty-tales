@@ -48,6 +48,7 @@ export async function POST(request) {
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
 
+        console.log('request: ', request);
         const session = await getToken({
             req: request,
             secret: process.env.NEXTAUTH_SECRET

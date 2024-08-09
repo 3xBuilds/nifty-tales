@@ -37,6 +37,16 @@ const handler = NextAuth({
       return true;
     },
     async jwt({ token, user, account }) {
+
+      const dbUser = await User.findOne({
+        email: token.email
+      });
+
+      if(!dbUser){
+        console.log('----user not found in db');
+        return token;
+      }
+
       // Add user id and provider to the token
       if (account?.provider && user) {
         token.provider = account.provider;
@@ -47,7 +57,7 @@ const handler = NextAuth({
           { userId: user.id, provider: account.provider },
           // @ts-ignore
           process.env.NEXTAUTH_SECRET,
-          { expiresIn: '15m' }
+          { expiresIn: '1d' }
         );
 
         const refreshToken = jwt.sign(
@@ -57,15 +67,23 @@ const handler = NextAuth({
           { expiresIn: '7d' }
         );
 
+        token.role = dbUser.role || 'USER';
+        token.email = dbUser.email;
         token.accessToken = accessToken;
         token.refreshToken = refreshToken;
+        token.picture = dbUser.profileImage;
       }
       return token;
     },
     async session({ session, token }:any) {
+
+      console.log('tokennnn: ', token);
       // Attach access token and refresh token to the session
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
+      session.role = token.role;
+      session.image = token.picture;
+      console.log('ssssss: ', session)
       return session;
     },
     async redirect({ url, baseUrl }) {

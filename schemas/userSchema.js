@@ -21,7 +21,12 @@ const UserSchema = new Schema({
         type: String,
         default:"",
         unique: false
-    }
+    },
+    role: {
+        type: String,
+        default: "USER",
+        unique: false
+    },
   }, {collection: "users"})
 
   const User = models.User || model('User', UserSchema);
