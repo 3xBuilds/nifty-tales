@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { getToken } from "next-auth/jwt";
 
 const s3Client = new S3Client({
     region: process.env.AWS_S3_REGION,
@@ -45,6 +46,18 @@ export async function POST(request) {
         }
         if(!wallet){
             return NextResponse.json({error: "File is required."}, {status: 400})
+        }
+
+        console.log('request: ', request);
+        const session = await getToken({
+            req: request,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+
+        console.log(session);
+    
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
         const buffer = Buffer.from(await profileImage.arrayBuffer());

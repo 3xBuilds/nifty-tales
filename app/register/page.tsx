@@ -8,6 +8,7 @@ import Icon from '@/components/Global/Icon';
 
 const PreRegister = () => {
   const {data:session} = useSession();
+  console.log("seshhhh: ", session);
   const router = useRouter()
 
   const [userName, setUserName] = useState<string>("");
@@ -49,7 +50,7 @@ const PreRegister = () => {
       setUserName(session?.user?.name || "");
       setEmail(session?.user?.email || "");
 
-      register(session?.user?.name || "", session?.user?.email||"");
+      // register(session?.user?.name || "", session?.user?.email||"");
     }
   },[session?.user])
 
