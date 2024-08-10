@@ -63,8 +63,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   const pathname = usePathname();
 
-  console.log(pathname.split("/"));
-
   useEffect(()=>{
     if(user && user.wallet != address){
       setWalletNotRegistered(true);

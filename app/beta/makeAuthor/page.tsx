@@ -91,7 +91,7 @@ export default function Home() {
 
             if(response.status == 200){
                 delay(1000);
-                router.push("/authors/"+contractAddress);
+                router.push("/authors/");
             }
 
             if (response.status !== 200) {
@@ -129,8 +129,9 @@ export default function Home() {
       }
 
     useEffect(()=>{
-        if(user?.contractAdd!="")
-        router.push("/explore");
+        if(user?.contractAdd!=""){
+            router.push("/explore");
+        }
     },[user])
 
 
