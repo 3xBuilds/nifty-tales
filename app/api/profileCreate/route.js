@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getToken } from "next-auth/jwt";
 import User from "@/schemas/userSchema";
+import { connectToDB } from "@/utils/db";
 
 const s3Client = new S3Client({
     region: process.env.AWS_S3_REGION,
@@ -38,42 +39,44 @@ async function uploadFileToS3 (file, wallet) {
 export async function POST(request) {
 
     try{
+
+        await connectToDB();
         const formData = await request.formData();
         const profileImage = formData.get('profileImage');
         const wallet = formData.get('wallet');
-
+        
         if(!profileImage){
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
         if(!wallet){
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
-
+        
         const session = await getToken({
             req: request,
             secret: process.env.NEXTAUTH_SECRET
         });
-
+        
         if (!session) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-
-        const user = User.findOne({wallet: wallet});
-
+        
+        const user = await User.findOne({wallet: wallet});
+        
         if(!user){
             return NextResponse.json({error: "User not found."}, {status: 404})
         }
         
-        if(user.email !== session.user.email){
+        if(user.email !== session.email){
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
-
+        
         const buffer = Buffer.from(await profileImage.arrayBuffer());
         const status = await uploadFileToS3(buffer, wallet);
 
         return NextResponse.json({success: status});
     }
     catch(e){
-        return NextResponse.json({error: "Error Uploading File"})
+        return NextResponse.json({error: "Error Uploading File"}, {status: 500})
     }
 }

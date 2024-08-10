@@ -12,6 +12,11 @@ const UserSchema = new Schema({
         unique: true,
         required: true
     },
+    profileImage: {
+        type: String,
+        default: "",
+        unique: false
+    },
     username: {
         type: String,
         required: true,
