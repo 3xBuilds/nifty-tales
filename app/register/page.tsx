@@ -5,6 +5,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation'
 import { IoBackspaceSharp } from 'react-icons/io5';
 import Icon from '@/components/Global/Icon';
+import { WalletNotRegistered } from '@/components/popups/walletNotRegistered';
 
 const PreRegister = () => {
   const {data:session} = useSession();
@@ -54,6 +55,7 @@ const PreRegister = () => {
 
   return (
     <div className=' flex flex-col items-center justify-center'>
+
       <button onClick={()=>{router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full absolute top-5 left-5'>
         <IoBackspaceSharp className='w-10'/>
       </button>

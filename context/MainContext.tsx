@@ -1,7 +1,9 @@
 "use client";
 
+import { WalletNotRegistered } from "@/components/popups/walletNotRegistered";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import {
   createContext,
   useContext,
@@ -11,16 +13,19 @@ import {
   ReactNode,
   useEffect
 } from "react";
+import { useAccount } from "wagmi";
 
 type GlobalContextType = {
 
   user: UserType | null;
   setUser: Dispatch<SetStateAction<UserType | null>>;
+  
 }
 
 const GlobalContext = createContext<GlobalContextType>({
   user: null,
   setUser: () => { },
+  
 });
 
 type UserType = {
@@ -34,6 +39,8 @@ type UserType = {
 export const GlobalContextProvider = ({ children } : { children: ReactNode}) => {
 
   const {data: session} = useSession();
+
+  const {address} = useAccount();
 
   async function getUser(){
     try{
@@ -52,11 +59,26 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
 
   const [user, setUser] = useState<UserType | null>(null);
+  const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
+
+  const pathname = usePathname();
+
+  console.log(pathname.split("/"));
+
+  useEffect(()=>{
+    if(user && user.wallet != address){
+      setWalletNotRegistered(true);
+    }
+    else if(user && user.wallet == address){
+      setWalletNotRegistered(false);
+    }
+  })
 
   return (
     <GlobalContext.Provider value={{
       user, setUser
     }}>
+      {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}
     </GlobalContext.Provider>
   );
