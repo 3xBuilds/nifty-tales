@@ -42,7 +42,7 @@ const Navbar = () => {
 
         <div className='flex items-center gap-2 max-md:hidden'>
           
-          {!session &&  <div className='flex gap-2 items-center justify-center'>
+          {session &&  <div className='flex gap-2 items-center justify-center'>
             {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
               {user?.contractAdd == "" ? <button onClick={()=>{router.push("/makeAuthor")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Become an Author</button>: <button onClick={()=>{router.push("/authors")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Author Dashboard</button>}
             </>}
@@ -57,7 +57,7 @@ const Navbar = () => {
           <ul className='w-full pb-5 px-5 flex flex-col gap-2'>
             <li onClick={()=>{router.push("/")}}>Home</li>
             {user?.contractAdd == "" ? <li className='font-bold' onClick={()=>{router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/"+user?.contractAdd)}} className='font-bold'>Author Dashboard</li>}
-            {!session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
+            {session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
           <li><WalletConnectButton/></li>
           </ul>
         </div>
