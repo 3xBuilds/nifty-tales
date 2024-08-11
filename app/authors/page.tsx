@@ -34,7 +34,7 @@ export default function Home(){
                 //@ts-ignore
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
-
+                console.log(user, user?.contractAdd);
                 //@ts-ignore
                 const contract = new ethers.Contract(user?.contractAdd, abi, signer);
 
@@ -67,7 +67,7 @@ export default function Home(){
             setBucketLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + address + "/info/profileImage");
             getContractDetails();
         }
-    },[address])
+    },[user])
 
     return(
         <div className="">
