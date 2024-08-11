@@ -76,7 +76,7 @@ export async function POST(request) {
     const tokenId = formData.get('tokenId');
     const wallet = formData.get('wallet');
 
-    const publishStatus = formData.get('publishStatus');
+    const publishStatus = formData.get('publishStatus'); // publish | draft
 
     console.log(name, isbn, description, tags, artist, cover, content, price, maxMint, tokenId, wallet, publishStatus);
 
@@ -91,15 +91,13 @@ export async function POST(request) {
     const contentArrayBuffer = await content.arrayBuffer();
     const contentBuffer = Buffer.from(contentArrayBuffer);
 
-    // const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, wallet);
+    const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, wallet);
 
     const author = await User.findOne({wallet});
-    console.log("author", author);
-    console.log("tags", tags);
 
     let bookdData = {
       name,
-      isPublished: publishStatus === "true" || false,
+      isPublished: publishStatus === "publish" || false,
       price,
       maxMint,
       cover: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/metadata/${tokenId}/content/cover`,
@@ -117,7 +115,6 @@ export async function POST(request) {
     //add book to author
     author.yourBooks.push(newBook._id);
     await author.save();
-
 
     // return NextResponse.json({success: status});
     return NextResponse.json({success: true});
