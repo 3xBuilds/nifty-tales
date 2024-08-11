@@ -191,7 +191,6 @@ export default function Home() {
                                     </div>
                                     <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
                                 </label>
-                                {/* <button onClick={handleSubmit} disabled={uploading} className=' col-span-2 w-32 py-2 font-medium text-black rounded-xl hover:-translate-y-[0.3rem] duration-200 bg-jel-gray-3 hover:bg-jel-gray-2 text-nowrap mt-2'>{uploading ? "Uploading..." : "Upload"}</button> */}
                             </div>
                         </div>
 
