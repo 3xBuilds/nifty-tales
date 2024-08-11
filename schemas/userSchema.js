@@ -1,4 +1,5 @@
 import mongoose, {Schema, model, models, trusted} from 'mongoose';
+import Book from "./bookSchema"
 
 const UserSchema = new Schema({
 
@@ -22,6 +23,10 @@ const UserSchema = new Schema({
         required: true,
         unique: true
     }, 
+    publishedBooks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Book,
+    }],
     contractAdd: {
         type: String,
         default:"",
