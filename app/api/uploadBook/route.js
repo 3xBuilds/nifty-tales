@@ -116,8 +116,7 @@ export async function POST(request) {
     author.yourBooks.push(newBook._id);
     await author.save();
 
-    // return NextResponse.json({success: status});
-    return NextResponse.json({success: true});
+    return NextResponse.json({success: status});
   } catch(e) {
     console.error(e);
     return NextResponse.json({error: "Error Uploading File"}, {status: 500});
