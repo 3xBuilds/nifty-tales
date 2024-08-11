@@ -22,8 +22,12 @@ const UserSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }, 
-    publishedBooks: [{
+    },
+    readlist: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Book,
+    }],
+    yourBooks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: Book,
     }],

@@ -1,21 +1,40 @@
+import { ObjectId } from 'mongodb';
 import mongoose, {Schema, model, models, trusted} from 'mongoose';
 
 const BookSchema = new Schema({
 
-    bookName: {
+    name: {
         type: String,
-        default: "",
+        default: null,
         unique: false,
         required: true
     },
-    author: {
+    isPublished: {
+        type: Boolean,
+        default: false,
+        unique: false
+    },
+    cover: {
         type: String,
-        default:"",
+        default: null,
+        unique: false
+    },
+    author: {
+        type: ObjectId,
+        default: null,
+        unique: false,
+        required: true
+    },
+    artist: {
+        type: String,
+        default: null,
         unique: false
     },
     ISBN:{
         type:String,
         unique: true,
+        default: null,
+        required: false
     },
     description: {
         type: String,
@@ -24,13 +43,22 @@ const BookSchema = new Schema({
     },
     tags: {
         type: [String],
-        default: [""]
+        default: []
     }, 
     pdf:{
         type: String,
+        default: null,
         required: true
     },
-    publishTime:{
+    readers: {
+        type: Number,
+        default: 0
+    },
+    isBoosted:{
+        type: String,
+        default: null
+    },
+    createdAt:{
         type: Date,
         default: Date.now
     }
