@@ -44,7 +44,7 @@ const Navbar = () => {
           
           {!session &&  <div className='flex gap-2 items-center justify-center'>
             {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
-              {user?.contractAdd == "" ? <button onClick={()=>{router.push("/beta/makeAuthor")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Become an Author</button>: <button onClick={()=>{router.push("/authors")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Author Dashboard</button>}
+              {user?.contractAdd == "" ? <button onClick={()=>{router.push("/makeAuthor")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Become an Author</button>: <button onClick={()=>{router.push("/authors")}} className='bg-[#000000] rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Author Dashboard</button>}
             </>}
             <WalletConnectButton/>
             <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 my-4 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>
@@ -56,7 +56,7 @@ const Navbar = () => {
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-2'>
             <li onClick={()=>{router.push("/")}}>Home</li>
-            {user?.contractAdd == "" ? <li className='font-bold' onClick={()=>{router.push("/beta/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/"+user?.contractAdd)}} className='font-bold'>Author Dashboard</li>}
+            {user?.contractAdd == "" ? <li className='font-bold' onClick={()=>{router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/"+user?.contractAdd)}} className='font-bold'>Author Dashboard</li>}
             {!session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
           <li><WalletConnectButton/></li>
           </ul>
