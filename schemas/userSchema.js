@@ -26,10 +26,12 @@ const UserSchema = new Schema({
     readlist: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: Book,
+        default: []
     }],
     yourBooks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: Book,
+        default: []
     }],
     contractAdd: {
         type: String,

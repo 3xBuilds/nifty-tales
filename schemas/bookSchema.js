@@ -14,6 +14,16 @@ const BookSchema = new Schema({
         default: false,
         unique: false
     },
+    price: {
+        type: Number,
+        default: 0,
+        unique: false
+    },
+    maxMint: {
+        type: Number,
+        default: 1,
+        unique: false
+    },
     cover: {
         type: String,
         default: null,
@@ -38,7 +48,7 @@ const BookSchema = new Schema({
     },
     description: {
         type: String,
-        default: "",
+        default: null,
         unique: false
     },
     tags: {
