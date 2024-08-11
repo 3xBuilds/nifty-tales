@@ -5,6 +5,7 @@ import Navbar from "@/components/Home/Navbar"
 import { ethers } from "ethers"
 import Image from "next/image"
 import { useState, useEffect } from "react"
+import { FaFilePdf } from "react-icons/fa"
 import { FaSquareCheck } from "react-icons/fa6"
 import { ImCross } from "react-icons/im"
 
@@ -113,8 +114,9 @@ export default function Home(){
                             <div>
                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed group rounded-xl mt-2 cursor-pointer hover:bg-jel-gray-1">
                                     <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
-                                        {!pdf ? <div>
-
+                                        {!pdf ? <div className="bg-gray-300 text-gray-500 gap-2 flex flex-col items-center justify-center w-full h-full rounded-xl">
+                                                <FaFilePdf className="text-xl" />
+                                                <h3 className="w-[80%] text-xs text-center">Use .pdf files only with white background for best readability.</h3>
                                             </div> :
                                             <div className="text-sm font-bold group-hover:scale-105 duration-200">
                                                 {pdf.name}
