@@ -11,12 +11,15 @@ import Image from "next/image";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
 import { RiLoader5Line } from "react-icons/ri";
+import { CiImageOn } from "react-icons/ci";
 
 export default function Home() {
 
     const [collectionName, setCollectionName] = useState<string>("");
     const [symbol, setSymbol] = useState<string>("");
     const [profileImg, setProfileImg] = useState<File | null>(null);
+    const [bannerImg, setBannerImg] = useState<File | null>(null);
+
     let { address } = useAccount();
     const {user} = useGlobalContext();
 
@@ -80,6 +83,8 @@ export default function Home() {
             formData.append("profileImage", profileImg);
             formData.append("wallet", String(address));
 
+            //@ts-ignore
+            formData.append("bannerImage", bannerImg);
 
 
             // Upload to S3 using the API route
@@ -119,8 +124,16 @@ export default function Home() {
     const fileInputRef = useRef(null);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
+        if (e.target.files && e.target.files.length > 0) {
+            console.log("HANDLE", e.target.files[0]);
             setProfileImg(e.target.files[0]);
+        }
+    };
+    
+    const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            console.log("HANDLE BANNER", e.target.files[0]);
+            setBannerImg(e.target.files[0]);
         }
     };
 
@@ -132,7 +145,7 @@ export default function Home() {
         if(user?.contractAdd!=""){
             router.push("/explore");
         }
-    },[user])
+    },[address])
 
 
     return (
@@ -162,9 +175,9 @@ export default function Home() {
                 <div className="flex flex-col items-center h-fit justify-start md:w-[60%] md:border-r-[1px] max-md:border-b-[1px] border-dashed border-gray-300">
 
 
-                    <form onSubmit={handleSubmit} className="mt-10 px-10 flex max-md:flex-col md:items-start items-center justify-center gap-4 h-full w-full">
+                    <form onSubmit={handleSubmit} className="mt-10 px-10 h-full w-full">
 
-
+                    <div className="flex max-md:flex-col md:items-start items-center justify-center gap-4" >
                         <div className="flex flex-col items-center justify-center md:justify-start md:w-[40%]">
                             <h2 className="text-sm">Upload a Photo</h2>
 
@@ -197,6 +210,27 @@ export default function Home() {
                                 <button type="submit" className="bg-black text-white md:px-4 md:py-2 px-6 py-3 rounded-xl my-10 hover:scale-105 duration-200">Create</button>
                             </div>
                         </div>
+                    </div>
+
+                    <div className="w-full flex items-center justify-center">
+                        <div className="flex flex-col items-center w-[42rem] justify-center md:justify-start h-[14rem]">
+                                <h2 className="text-sm -translate-y-2">Upload a Banner</h2>
+
+                                <div className="w-full h-full" >
+                                    <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
+                                        <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
+                                            {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
+                                                    <CiImageOn className="text-2xl text-gray-400" />
+                                                    <h3 className="text-md text-gray-400 font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                                </div> :
+                                                <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
+                                        </div>
+                                        <input id="banner-dropzone-file" type="file" accept='image/*' onChange={handleBannerChange} className="hidden" />
+                                    </label>
+                                    {/* <button onClick={handleSubmit} disabled={uploading} className=' col-span-2 w-32 py-2 font-medium text-black rounded-xl hover:-translate-y-[0.3rem] duration-200 bg-jel-gray-3 hover:bg-jel-gray-2 text-nowrap mt-2'>{uploading ? "Uploading..." : "Upload"}</button> */}
+                                </div>
+                            </div>    
+                    </div>
 
                     </form>
                 </div>

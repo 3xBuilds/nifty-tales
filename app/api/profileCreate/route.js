@@ -13,19 +13,31 @@ const s3Client = new S3Client({
 });
 
 
-async function uploadFileToS3 (file, wallet) {
+async function uploadFileToS3 (file, wallet, bannerImage) {
     const fileBuffer = file;
+    const bannerBuffer = bannerImage;
 
-    const params = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/info/profileImage`,
-        Body: fileBuffer,
-        ContentType: "image/png"
-    }
-
+    
     try{
+        const params = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: `users/${wallet}/info/profileImage`,
+            Body: fileBuffer,
+            ContentType: "image/png"
+        }
         const command = new PutObjectCommand(params);
         await s3Client.send(command);
+
+        const params2 = {
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: `users/${wallet}/info/bannerImage`,
+            Body: bannerBuffer,
+            ContentType: "image/png"
+        }
+        const command2 = new PutObjectCommand(params2);
+        await s3Client.send(command2);
+
+
         return true;
     }
     catch(e){
@@ -43,9 +55,14 @@ export async function POST(request) {
         await connectToDB();
         const formData = await request.formData();
         const profileImage = formData.get('profileImage');
+        const bannerImage = formData.get('bannerImage');
+
         const wallet = formData.get('wallet');
         
         if(!profileImage){
+            return NextResponse.json({error: "File is required."}, {status: 400})
+        }
+        if(!bannerImage){
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
         if(!wallet){
@@ -72,7 +89,9 @@ export async function POST(request) {
         }
         
         const buffer = Buffer.from(await profileImage.arrayBuffer());
-        const status = await uploadFileToS3(buffer, wallet);
+        const bannerBuffer = Buffer.from(await bannerImage.arrayBuffer());
+
+        const status = await uploadFileToS3(buffer, wallet, bannerBuffer);
 
         return NextResponse.json({success: status});
     }
