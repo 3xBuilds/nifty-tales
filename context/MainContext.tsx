@@ -61,6 +61,10 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   }
 
   useEffect(()=>{
+    getUser();
+  },[pathname])
+
+  useEffect(()=>{
     if(session && !user)
     {getUser();}
   },[session])

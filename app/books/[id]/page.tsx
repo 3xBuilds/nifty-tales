@@ -6,11 +6,19 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Navbar from '@/components/Home/Navbar';
 import { useRouter } from 'next/navigation';
+import { ethers } from 'ethers';
+import abi from "@/utils/abis/templateABI"
+import { ImArrowLeft } from 'react-icons/im';
+import { IoIosArrowBack } from 'react-icons/io';
+import { Loader } from '@/components/Global/Loader';
+import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 
 type BookType = {
   name: string;
   isPublished?: boolean;
   price?: number;
+  tokenId: number;
+  contractAddress: string;
   maxMint?: number;
   cover?: string | null;
   author: Object | null;
@@ -29,8 +37,12 @@ export default function Page() {
 
     const[bookDetails, setBookDetails] = useState<BookType>();
 
-    const [publishedBooks, setPublishedBooks] = useState([])
-    const[slicer, setSlicer] = useState(4);
+  
+
+    const[amount, setAmount] = useState(0);
+    const[showModal, setShowModal] = useState(false);
+
+    const[loading, setLoading] = useState(false);
 
     const router = useRouter()
 
@@ -45,52 +57,92 @@ export default function Page() {
       }
     }
 
-    async function getAllBooks(){
-      try{
-        const books = await axios.get("/api/book/");
 
-        var arr1:any= []
-        var subArr1:any = []
+    async function contractSetup(){
+      try {
+          //@ts-ignore
+          if (typeof window.ethereum !== 'undefined') {
 
-        books.data.data.reverse().map((item:any, i:number)=>{
-            if(item.isPublished){
-                subArr1.push(item);
-            }
-            if(subArr1.length == slicer || i == books.data.data.length-1){
-                arr1.push(subArr1);
-                subArr1 = []
-            }
-        })
+              //@ts-ignore
+              await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-        //@ts-ignore
-        setPublishedBooks(arr1);
+              //@ts-ignore
+              const provider = new ethers.providers.Web3Provider(window.ethereum);
+              const signer = provider.getSigner();
+
+              console.log(bookDetails?.contractAddress)
+              //@ts-ignore
+              const contract = new ethers.Contract(bookDetails?.contractAddress, abi, signer);
+
+          return contract;
+
+          }
 
       }
+      catch (err) {
+        setLoading(false);
+
+          console.error(err);
+      }
+  }
+
+    async function mint(){
+      try{
+        const contract = await contractSetup();
+        console.log(contract);
+        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
+
+        txn.wait().then((res:any)=>{
+          console.log(res);
+          setLoading(false);
+
+        })
+      }
       catch(err){
+        setLoading(false);
         console.log(err);
       }
     }
 
     useEffect(()=>{
       getBookDetails();
-      const screenWidth = window.innerWidth;
-
-      if(screenWidth > 1200){
-          setSlicer(5);
-      }
     },[])
 
-    useEffect(()=>{
-      getAllBooks();
-
-
-  },[slicer])
+    
 
     return (
     <div className=''>
         <div className="h-16 w-screen relative z-[100000]">
             <Navbar/>
         </div>
+
+        {loading && <Loader/>}
+
+      <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
+          <div className='bg-white rounded-xl h-40 flex flex-col gap-4 justify-center items-center px-10'>
+            <div className='flex rounded-xl items-center justify-center gap-4 ' >
+              <button onClick={()=>{
+                if(amount != 0){
+                  setAmount((prev)=>(prev-1))
+                }
+              }} className='hover:scale-105 duration-200' ><IoIosArrowBack className='text-2xl text-black'/></button>
+              <h3 className='text-2xl font-bold'>{amount}</h3>
+              <button onClick={()=>{
+                if(bookDetails?.maxMint == 0 || amount != bookDetails?.maxMint){
+                  setAmount((prev)=>(prev+1))
+                }
+                else{
+                  setAmount((prev)=>(prev))
+                }
+              }} className='hover:scale-105 duration-200'><IoIosArrowBack className='text-2xl text-black rotate-180'/></button>
+            </div>
+            <div className='flex gap-2 items-center justify-center' >
+                <button onClick={()=>{setShowModal(false)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
+                <button onClick={()=>{ setLoading(true); setShowModal(false); mint()}} className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >Mint</button>
+            </div>
+          </div>
+      </div>
+
         <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
             <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
@@ -109,43 +161,23 @@ export default function Page() {
               <div className='flex flex-col gap-8 w-[50%]'>
                 <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
                 <p className='text-sm text-white' >{bookDetails?.description}</p>
+                <div className='flex flex-wrap gap-2'>
+                  {bookDetails?.tags?.map((item)=>(
+                    <div className='min-w-20 px-2 py-2 bg-white/10 flex items-center justify-center text-white text-sm font-semibold border-[1px] border-white rounded-lg'>
+                      {item}
+                    </div>
+                  ))}
+                </div>
                 <div className='flex gap-4'>
                     <a target='_blank' className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' href={bookDetails?.pdf}>Read</a>
-                    <button onClick={()=>{}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Mint</button>
+                    <button onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Mint</button>
 
                 </div>
               </div>
             </div>
         </div>
 
-        <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-            <div className="w-full">
-                    <h3 className="text-2xl font-bold ">Recommended</h3>
-            </div>
-
-            {publishedBooks.map((item:any)=>(
-                <div className="w-full mb-5">
-                <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                {item.map((item2:any)=>(<div className="flex flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                <h2 className="font-semibold text-sm" >{item2.name}</h2>
-
-                    <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                        <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
-                            <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                        </div>
-                        <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                        </div>
-                    </button>
-                </div>
-                ))}
-                </div>
-                    <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
-                    </div>
-                </div>
-            ))}
-
-
-        </div>
+        <RecommendedFetcher/>
     </div>
   )
 }

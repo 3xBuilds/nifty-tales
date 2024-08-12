@@ -88,8 +88,9 @@ export default function Home(){
 
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
-            txn.wait().then((res:any)=>{
+            txn.wait().then(async (res:any)=>{
                 console.log(res);
+                await delay(1000);
                 setLoading(false);
                 router.push("/authors")
             })
@@ -107,6 +108,10 @@ export default function Home(){
     const removeTag = (indexToRemove: number) => {
         setTags(prevTags => prevTags.filter((_, index) => index !== indexToRemove));
     };
+
+    function delay(ms:number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
 
     const handlePdfChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -156,7 +161,7 @@ export default function Home(){
             formData.append('maxMint', maxMints.toString());
             formData.append('content', pdf as Blob);
             formData.append('cover', cover as Blob);
-    
+            formData.append('contractAdd', String(user?.contractAdd) as string);
             formData.append('tokenId', tokenId);
             formData.append('wallet', address.toString() as string);
             formData.append('publishStatus', publish);

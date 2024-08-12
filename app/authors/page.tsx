@@ -15,8 +15,7 @@ import { FaPlusCircle } from "react-icons/fa";
 
 export default function Home(){
 
-    const pathName = usePathname();
-    const {address} = useAccount();
+   
 
     const router = useRouter()
 

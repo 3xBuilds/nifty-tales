@@ -13,12 +13,12 @@ const s3Client = new S3Client({
   }
 });
 
-async function uploadFileToS3(cover, content, name, description, tokenId, wallet) {
+async function uploadFileToS3(cover, content, name, description, tokenId, objectId, wallet) {
   try {
     // Upload Cover
     const coverParams = {
       Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: `users/${wallet}/metadata/${tokenId}/content/cover`,
+      Key: `users/${wallet}/content/${objectId}/cover`,
       Body: cover,
       ContentType: "image/png"
     }
@@ -28,7 +28,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, wallet
     // Upload Content (PDF)
     const contentParams = {
       Bucket: process.env.AWS_S3_BUCKET_NAME,
-      Key: `users/${wallet}/metadata/${tokenId}/content/book`,
+      Key: `users/${wallet}/content/${objectId}/book`,
       Body: content,
       ContentType: "application/pdf"
     }
@@ -40,8 +40,8 @@ async function uploadFileToS3(cover, content, name, description, tokenId, wallet
       name,
       description,
       tokenId,
-      image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/metadata/${tokenId}/content/cover`,
-      content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/metadata/${tokenId}/content/book`
+      image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/cover`,
+      content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/book`
     }
     const metadataParams = {
       Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -69,6 +69,7 @@ export async function POST(request) {
     const description = formData.get('description');
     const tags = formData.getAll('tags') || [];
     const artist = formData.get('artist');
+    const contractAdd = formData.get('contractAdd');
     const cover = formData.get('cover');
     const content = formData.get('content');
     const price = formData.get('price') || 0;
@@ -97,6 +98,8 @@ export async function POST(request) {
     let bookdData = {
       name,
       isPublished: publishStatus === "publish" || false,
+      tokenId,
+      contractAddress: contractAdd,
       price,
       maxMint,
       author: author._id,
@@ -109,10 +112,11 @@ export async function POST(request) {
     const newBook = await Book.create(bookdData);
     console.log("newBook", newBook);
 
-    const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, newBook._id, wallet);
+    const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, newBook._id, wallet);
 
     newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/cover`;
     newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/book`;
+
     await newBook.save();
 
     //add book to author
