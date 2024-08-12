@@ -265,7 +265,7 @@ export default function Home(){
 
                         <div className="w-full text-start flex flex-col">
                             <input placeholder="ISBN Number" onChange={(e) => { setIsbn(e.target.value) }} value={isbn} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">ISBN (Optional)</h2>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">ISBN</h2>
                         </div>
 
                     </div>
@@ -290,18 +290,18 @@ export default function Home(){
 
                     <div className="w-full text-start flex flex-col">
                         <input placeholder="Pablo Picasso" onChange={(e) => { setIllustrationArtist(e.target.value) }} value={illustrationArtist} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist (Optional)</h2>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist</h2>
                     </div>
 
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
                             <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price (ETH)</h2>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
                             <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => { setMaxMints(Number(e.target.value)) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Optional)</h2>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Leave 0 for no limit)</h2>
                         </div>
                     </div>
 
