@@ -70,10 +70,10 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
 
   useEffect(()=>{
-    if(user && user.wallet != address){
+    if(user && user.wallet != "" && user.wallet != address){
       setWalletNotRegistered(true);
     }
-    else if(user && user.wallet == address){
+    else if(user && user.wallet != "" && user.wallet == address){
       setWalletNotRegistered(false);
     }
   })
