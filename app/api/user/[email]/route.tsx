@@ -11,7 +11,7 @@ export async function GET(req : any) {
         const email = req.nextUrl.pathname.split("/")[3];
 
         await connectToDB();
-        const user = await User.findOne({email: email})
+        const user = await User.findOne({email: email}).populate("yourBooks")
 
         return new NextResponse(JSON.stringify({
             user

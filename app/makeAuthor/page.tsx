@@ -12,6 +12,7 @@ import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
 import { RiLoader5Line } from "react-icons/ri";
 import { CiImageOn } from "react-icons/ci";
+import { Loader } from "@/components/Global/Loader";
 
 export default function Home() {
 
@@ -156,10 +157,7 @@ export default function Home() {
             </div>
 
 
-            {loading && <div className="flex z-50 items-center justify-center w-screen h-screen fixed top-0 left-0 backdrop-blur-2xl">
-            <RiLoader5Line className="text-black text-5xl animate-spin"/>
-
-            </div>}
+            {loading && <Loader/>}
 
             {address == null && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
                 <WalletConnectButton/>
@@ -179,7 +177,7 @@ export default function Home() {
 
                     <div className="flex max-md:flex-col md:items-start items-center justify-center gap-4" >
                         <div className="flex flex-col items-center justify-center md:justify-start md:w-[40%]">
-                            <h2 className="text-sm">Upload a Photo</h2>
+                            <h2 className="text-sm text-gray-400">Upload a Photo</h2>
 
                             <div>
                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
@@ -195,25 +193,22 @@ export default function Home() {
                         </div>
 
                         <div className="md:w-[60%]">
-                            <div className="w-full">
-                                <h2 className="text-sm">Library Name</h2>
-                                <input onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className="p-2 rounded-xl w-full border-2 border-black" ></input>
+                            <div className="w-full text-start flex flex-col">
+                                <input placeholder="Enter Book Name..." onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                                <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Collection Name</h2>
                             </div>
 
-                            <div className="w-full">
-                                <h2 className="text-sm mt-5">Library Symbol</h2>
-                                <input onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className="p-2 w-full rounded-xl border-2 border-black" ></input>
+                            <div className="w-full text-start flex flex-col">
+                                <input placeholder="Enter Book Name..." onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                                <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Library Symbol</h2>
                             </div>
 
-                            <div className="w-full flex items-center justify-center md:justify-end">
-                                <button type="submit" className="bg-black text-white md:px-4 md:py-2 px-6 py-3 rounded-xl my-10 hover:scale-105 duration-200">Create</button>
-                            </div>
                         </div>
                     </div>
 
                     <div className="w-full flex items-center justify-center">
                         <div className="flex flex-col items-center w-[42rem] justify-center md:justify-start h-[14rem]">
-                                <h2 className="text-sm -translate-y-2">Upload a Banner</h2>
+                                <h2 className="text-sm -translate-y-2 text-gray-400">Upload a Banner</h2>
 
                                 <div className="w-full h-full" >
                                     <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
@@ -229,6 +224,10 @@ export default function Home() {
                                     {/* <button onClick={handleSubmit} disabled={uploading} className=' col-span-2 w-32 py-2 font-medium text-black rounded-xl hover:-translate-y-[0.3rem] duration-200 bg-jel-gray-3 hover:bg-jel-gray-2 text-nowrap mt-2'>{uploading ? "Uploading..." : "Upload"}</button> */}
                                 </div>
                             </div>    
+                    </div>
+
+                    <div className="w-full flex items-center justify-center md:justify-end">
+                        <button type="submit" className="bg-black text-white md:px-4 md:py-2 px-6 py-3 rounded-xl my-10 hover:scale-105 duration-200">Create</button>
                     </div>
 
                     </form>

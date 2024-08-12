@@ -12,11 +12,15 @@ import { FaSquareCheck } from "react-icons/fa6"
 import { ImCross } from "react-icons/im"
 import { useAccount } from "wagmi"
 import abi from "@/utils/abis/templateABI"
+import { Loader } from "@/components/Global/Loader"
+import { useRouter } from "next/navigation"
 
 export default function Home(){
 
     const {address} = useAccount();
     const {user, setUser} = useGlobalContext();
+
+    const[loading, setLoading] = useState<boolean>(false);
 
     const[bookName, setBookName] = useState<string>("");
     const[bookDesc, setBookDesc] = useState<string>("");
@@ -36,6 +40,8 @@ export default function Home(){
     const[currentTag, setCurrentTag] = useState<string>("");
 
     const[agree, setAgree] = useState<boolean>(false);
+
+    const router = useRouter()
 
     async function contractSetup(){
         try {
@@ -76,6 +82,24 @@ export default function Home(){
         }
     }
 
+    async function contractPublishBook(){
+        try{
+            const contract = await contractSetup();
+
+            const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
+            
+            txn.wait().then((res:any)=>{
+                console.log(res);
+                setLoading(false);
+                router.push("/authors")
+            })
+        }
+        catch(err){
+            setLoading(false);
+            console.log(err);
+        }
+    }
+
     useEffect(()=>{
         getContractDetails();
     }, [user])
@@ -99,40 +123,53 @@ export default function Home(){
 
     const handleSubmit = async (publish:string) => {
 
-        if(!agree){
-            alert("Please agree to the terms");
-            return;
+        try{
+
+            if(!agree){
+                alert("Please agree to the terms");
+                return;
+            }
+    
+            if(!tokenId){
+                alert("Token ID not found");
+                return;
+            }
+    
+            if(!address){
+                alert("Please connect wallet");
+                return;
+            }
+    
+            const formData = new FormData();
+            formData.append('name', bookName);
+            formData.append('isbn', isbn);
+            formData.append('description', bookDesc);
+            tags.forEach(element => {
+                formData.append('tags', element);
+            });
+            formData.append('artist', illustrationArtist);
+            formData.append('price', mintPrice.toString());
+            formData.append('maxMint', maxMints.toString());
+            formData.append('content', pdf as Blob);
+            formData.append('cover', cover as Blob);
+    
+            formData.append('tokenId', tokenId);
+            formData.append('wallet', address.toString() as string);
+            formData.append('publishStatus', publish);
+    
+            const response = await axios.post("/api/uploadBook", formData);
+            console.log(response.data);
+
+            if(publish == "publish"){
+                contractPublishBook();
+            }
         }
 
-        if(!tokenId){
-            alert("Token ID not found");
-            return;
+        catch(err){
+            console.log(err);
+            setLoading(false);
+
         }
-
-        if(!address){
-            alert("Please connect wallet");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append('name', bookName);
-        formData.append('isbn', isbn);
-        formData.append('description', bookDesc);
-        tags.forEach(element => {
-            formData.append('tags', element);
-        });
-        formData.append('artist', illustrationArtist);
-        formData.append('price', mintPrice.toString());
-        formData.append('maxMint', maxMints.toString());
-        formData.append('content', pdf as Blob);
-        formData.append('cover', cover as Blob);
-
-        formData.append('tokenId', tokenId);
-        formData.append('wallet', address.toString() as string);
-        formData.append('publishStatus', publish);
-
-        const response = await axios.post("/api/uploadBook", formData);
-        console.log(response.data);
 
     }
 
@@ -141,6 +178,8 @@ export default function Home(){
             <div className="flex w-screen justify-end absolute">
                <Navbar/>
             </div>
+
+            {loading && <Loader/>}
 
             <h3 className="text-3xl font-bold">Publish Your Book</h3>
 
@@ -193,7 +232,7 @@ export default function Home(){
                         <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (upto 5)</h2>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {tags.map((item, i)=>(
-                                <div className="py-2 w-20 rounded-xl flex gap-2 items-center justify-center bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs">
+                                <div className="py-2 min-w-20 px-2 rounded-xl flex gap-2 items-center justify-center bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs">
                                     {item}
                                     <button onClick={()=>{removeTag(i)}} className="hover:text-white duration-200" ><ImCross/></button>
                                 </div>
@@ -251,7 +290,7 @@ export default function Home(){
                     I agree that have the rights of everything I am publishing
                 </div>
                 <button onClick={()=>{handleSubmit("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
-                <button onClick={()=>{handleSubmit("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
+                <button onClick={()=>{setLoading(true); handleSubmit("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
             </div>
 
         </div>
