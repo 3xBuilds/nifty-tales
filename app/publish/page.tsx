@@ -182,7 +182,16 @@ export default function Home(){
 
     if (typeof window !== 'undefined') {
         window.addEventListener('beforeunload', function() {
-          localStorage.clear();
+            
+            localStorage.removeItem("name");
+            localStorage.removeItem("price");
+            localStorage.removeItem("maxMint");
+            localStorage.removeItem("cover");
+            localStorage.removeItem("artist");
+            localStorage.removeItem("isbn");
+            localStorage.removeItem("description");
+            localStorage.removeItem("tags");
+            localStorage.removeItem("pdf");
         });
       }
 

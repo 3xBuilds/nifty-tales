@@ -12,7 +12,7 @@ import { publicProvider } from "wagmi/providers/public";
 const WalletIdContext = createContext<any>(null);
 
 const { chains, publicClient } = configureChains(
-  [base],
+  [base, polygon],
   [publicProvider()]
 );
 
@@ -21,13 +21,6 @@ const { wallets } = getDefaultWallets({
   projectId: "5d10af3027c340310f3a3da64cbcedac",
   chains,
 });
-
-
-// const connector = new WalletConnectConnector({
-//   options: {
-//     projectId: '5d10af3027c340310f3a3da64cbcedac',
-//   },
-// })
 
 
 const connectors = connectorsForWallets(

@@ -60,11 +60,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   }
 
-useEffect(()=>{
-  if(!pathname.split("/").includes("publish"))
-    localStorage.clear()
-},[pathname])
-
   useEffect(()=>{
     if(session && !user)
     {getUser();}
