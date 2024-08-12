@@ -67,7 +67,7 @@ useEffect(()=>{
 
   useEffect(()=>{
     if(session && !user)
-    getUser();
+    {getUser();}
   },[session])
 
 

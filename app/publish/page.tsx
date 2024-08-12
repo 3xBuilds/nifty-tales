@@ -180,7 +180,8 @@ export default function Home(){
 
     }
 
-    window.addEventListener('beforeunload', function() {
+
+    window?.addEventListener('beforeunload', function() {
         localStorage.clear();
     });
 
