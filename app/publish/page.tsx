@@ -180,10 +180,11 @@ export default function Home(){
 
     }
 
-
-    window?.addEventListener('beforeunload', function() {
-        localStorage.clear();
-    });
+    if (typeof window !== 'undefined') {
+        window.addEventListener('beforeunload', function() {
+          localStorage.clear();
+        });
+      }
 
     useEffect(()=>{
         setBookName(localStorage.getItem('name') || "");

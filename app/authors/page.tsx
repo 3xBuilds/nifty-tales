@@ -44,7 +44,6 @@ export default function Home(){
                 //@ts-ignore
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
-                console.log(user, user?.contractAdd);
                 //@ts-ignore
                 const contract = new ethers.Contract(user?.contractAdd, abi, signer);
 
@@ -61,6 +60,7 @@ export default function Home(){
     async function getContractDetails(){
         try{
             const contract = await contractSetup();
+            console.log(contract?.address);
             const contractName = await contract?.name();
 
             console.log(contractName);
@@ -79,7 +79,7 @@ export default function Home(){
             getContractDetails();
 
         }
-    },[user, slicer])
+    },[user])
 
     useEffect(()=>{
         if(user){
@@ -143,15 +143,17 @@ export default function Home(){
             <div className="h-16 w-screen relative z-[100000]">
                 <Navbar/>
             </div>
-            <div className="w-screen relative h-[10rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
+
+            <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
                 <div className="w-screen absolute h-full overflow-hidden">
-                    <Image width={1080} height={1080} src={bannerLink} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-50 -translate-y-1/2"/>
+                    <Image width={1080} height={1080} src={bannerLink || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
-                <div className="flex gap-8 object-center items-center h-full justify-center my-auto max-md:w-[90%] absolute z-50  md:left-10">
-                    <Image width={1080} height={1080} src={profileImgLink} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
+                <div className="flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl">
+                    <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
                     <h2 className="md:text-5xl text-xl font-bold text-white">{name}</h2>
                 </div>
             </div>
+            
 
             { user && user?.yourBooks?.length == 0 ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
                 <h2 className="text-xl font-bold">Publish your first book!</h2>
