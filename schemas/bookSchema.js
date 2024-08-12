@@ -40,6 +40,15 @@ const BookSchema = new Schema({
         default: null,
         unique: false
     },
+    tokenId:{
+        type: Number,
+        required: false
+    },
+    contractAddress: {
+        type: String,
+        default: null,
+        required: false
+    },
     ISBN:{
         type:String,
         // unique: true,

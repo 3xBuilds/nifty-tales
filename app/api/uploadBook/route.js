@@ -91,7 +91,6 @@ export async function POST(request) {
     const contentArrayBuffer = await content.arrayBuffer();
     const contentBuffer = Buffer.from(contentArrayBuffer);
 
-    const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, wallet);
 
     const author = await User.findOne({wallet});
 
@@ -100,17 +99,21 @@ export async function POST(request) {
       isPublished: publishStatus === "publish" || false,
       price,
       maxMint,
-      cover: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/metadata/${tokenId}/content/cover`,
       author: author._id,
       artist: artist || null,
       ISBN: isbn || null,
       description,
-      tags: tags || [],
-      pdf: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/metadata/${tokenId}/content/book`,
+      tags: tags || []
     }
 
     const newBook = await Book.create(bookdData);
     console.log("newBook", newBook);
+
+    const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, newBook._id, wallet);
+
+    newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/cover`;
+    newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/book`;
+    await newBook.save();
 
     //add book to author
     author.yourBooks.push(newBook._id);
