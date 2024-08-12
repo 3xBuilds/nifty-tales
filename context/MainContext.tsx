@@ -28,6 +28,8 @@ const GlobalContext = createContext<GlobalContextType>({
   
 });
 
+
+
 type UserType = {
   id: string;
   wallet: string;
@@ -45,6 +47,8 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const {data: session} = useSession();
 
   const {address} = useAccount();
+  const pathname = usePathname();
+
 
   async function getUser(){
     try{
@@ -56,16 +60,19 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   }
 
+useEffect(()=>{
+  if(!pathname.split("/").includes("publish"))
+    localStorage.clear()
+},[pathname])
+
   useEffect(()=>{
-    if(session)
+    if(session && !user)
     getUser();
   },[session])
 
 
   const [user, setUser] = useState<UserType | null>(null);
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
-
-  const pathname = usePathname();
 
   useEffect(()=>{
     if(user && user.wallet != address){

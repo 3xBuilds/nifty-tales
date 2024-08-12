@@ -127,16 +127,20 @@ export default function Home(){
 
             if(!agree){
                 alert("Please agree to the terms");
+                setLoading(false);
                 return;
             }
     
             if(!tokenId){
                 alert("Token ID not found");
+                setLoading(false);
+
                 return;
             }
     
             if(!address){
                 alert("Please connect wallet");
+                setLoading(false);
                 return;
             }
     
@@ -163,6 +167,9 @@ export default function Home(){
             if(publish == "publish"){
                 contractPublishBook();
             }
+            else{
+                router.push("/authors")
+            }
         }
 
         catch(err){
@@ -172,6 +179,31 @@ export default function Home(){
         }
 
     }
+
+    window.addEventListener('beforeunload', function() {
+        localStorage.clear();
+    });
+
+    useEffect(()=>{
+        setBookName(localStorage.getItem('name') || "");
+        setBookDesc(localStorage.getItem("description") || "")
+        setIllustrationArtist(localStorage.getItem("artist") || "")
+
+        //@ts-ignore
+        setTags(JSON.parse(localStorage.getItem("tags")) || [])
+
+        //@ts-ignore
+        setIsbn(localStorage.getItem("isbn") || "")
+
+        //@ts-ignore
+        setMintPrice(localStorage.getItem("price") || 0)
+
+        //@ts-ignore
+        setMaxMints(localStorage.getItem("maxMints") || 0);
+
+        console.log(location)
+
+    },[])
 
     return(
         <div className="md:px-16 pt-24 max-md:px-4 w-screen h-screen flex flex-col items-start justify-start">
@@ -185,10 +217,10 @@ export default function Home(){
 
             <OptionToggle options={["Upload PDF", "Write your Own"]} selectedOption={option} setOption={setOption} />
 
-            <div className="md:w-[70%] flex max-md:flex-col gap-10 mt-5">
-                <div className="relative w-36 max-md:hidden">
+            <div className="md:w-[70%] flex max-md:items-center max-md:justify-center max-md:flex-col gap-10 mt-5">
+                <div className="relative w-36 ">
                     {/* Image Holder */}
-                    <div className="h-44 absolute z-[2] w-32 mt-4 bg-gray-500 rounded-lg shadow-lg shadow-black/10">
+                    <div className="h-44 md:absolute relative z-[2] w-32 mt-4 bg-gray-500 rounded-lg shadow-lg shadow-black/10">
 
                             <label htmlFor="dropzone-file2" className=" w-full h-full bg-red-600 group rounded-xl cursor-pointer ">
                                 <div className="flex flex-col items-center h-full w-full overflow-hidden justify-center rounded-lg">
@@ -280,14 +312,14 @@ export default function Home(){
                 </div>
             </div>
 
-            <div className="w-full flex max-md:flex-col gap-6 mt-20 pb-10 items-center justify-center md:justify-end">
-                <div className="flex gap-2 items-center justify-end text-gray-400">
+            <div className="w-full flex max-md:flex-col max-md:items-center max-md:justify-center gap-6 mt-20 pb-10 items-center justify-center md:justify-end">
+                <div className="flex gap-2 items-center justify-center text-gray-400">
                     <button onClick={()=>{
                         setAgree((prev)=>(!prev));
                     }} className="border-[1px] h-8 w-8 flex items-center justify-center border-gray-400 rounded-md">
                         {agree && <FaSquareCheck className="h-7 w-7"/>}
                     </button>
-                    I agree that have the rights of everything I am publishing
+                    <h2 className="text-start max-md:w-full" >I agree that have the rights of everything I am publishing</h2>
                 </div>
                 <button onClick={()=>{handleSubmit("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
                 <button onClick={()=>{setLoading(true); handleSubmit("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>

@@ -25,7 +25,11 @@ export default function Home(){
     const[profileImgLink, setProfileImgLink] = useState<string>("")
     const[bannerLink, setBannerLink] = useState<string>("")
 
-    const[slicer, setSlicer] = useState<number>(3);
+    const[publishedBooks, setPublishedBooks] = useState([])
+    const[draftBooks, setDraftBooks] = useState([])
+
+
+    const[slicer, setSlicer] = useState<number>(4);
 
     const[name, setName] = useState<string>("")
 
@@ -73,21 +77,70 @@ export default function Home(){
             setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage");
             setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage");
             getContractDetails();
+
         }
-    },[user])
+    },[user, slicer])
+
+    useEffect(()=>{
+        if(user){
+
+            var arr1:any= []
+            var subArr1:any = []
+            var arr2:any = []
+            var subArr2:any = []
+
+
+            user.yourBooks.reverse().map((item:any, i)=>{
+                if(item.isPublished){
+                    subArr1.push(item);
+                }
+                if(subArr1.length == slicer || i == user.yourBooks.length-1){
+                    arr1.push(subArr1);
+                    subArr1 = []
+                }
+                if(!item.isPublished){
+                    subArr2.push(item);
+                }
+                if(subArr2.length == slicer || i == user.yourBooks.length-1){
+                    arr2.push(subArr2);
+                    subArr2 = []
+                }
+            })
+
+            //@ts-ignore
+            setPublishedBooks(arr1);
+            //@ts-ignore
+            setDraftBooks(arr2);
+        }
+    },[slicer, user])
 
     useEffect(()=>{
         const screenWidth = window.innerWidth;
 
         if(screenWidth > 1200){
-            setSlicer(4);
+            setSlicer(5);
         }
 
     },[])
 
+    function handleDraft(item:any){
+        console.log(item);
+        localStorage.setItem("name", item.name);
+        localStorage.setItem("price", item.price);
+        localStorage.setItem("maxMint", item.maxMint);
+        localStorage.setItem("cover", item.cover);
+        localStorage.setItem("artist", item.artist);
+        localStorage.setItem("isbn", item.ISBN);
+        localStorage.setItem("description", item.description);
+        localStorage.setItem("tags", JSON.stringify(item.tags));
+        localStorage.setItem("pdf", item.pdf);
+
+        router.push("/publish")
+    }
+
     return(
         <div className="">
-            <div className="h-16 w-screen">
+            <div className="h-16 w-screen relative z-[100000]">
                 <Navbar/>
             </div>
             <div className="w-screen relative h-[10rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
@@ -104,39 +157,75 @@ export default function Home(){
                 <h2 className="text-xl font-bold">Publish your first book!</h2>
                 <button onClick={()=>{router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-2 max-md:mx-auto'>Publish</button>
             </div>: 
-            
-            <div className="flex flex-col items-start mt-8 justify-center px-10">
-                <h3 className="text-2xl font-bold">Your Books</h3>
-                <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 ">
-                    {user?.yourBooks.reverse().slice(0,slicer).map((item:any)=>(<div className="flex flex-col items-center px-10 mt-2 justify-center gap-4">
-                        <h2 className="font-semibold text-base" >{item.name}</h2>
+            <>
 
-                        <div className="w-40 h-68 flex flex-col relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                            <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
-                                <Image src={item.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                            </div>
-                            <div className="w-full h-52 shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                            </div>
+                {/* PUBLISHED BOOKS */}
+                <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                    <div className="flex items-center justify-center w-full ">
+                        <div className="w-1/2 flex items-start justify-start ">
+                            <h3 className="text-2xl font-bold ">Your Books</h3>
+                        </div>
+                        <div className="w-1/2 flex justify-end">
+                            <button onClick={()=>{router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
                         </div>
                     </div>
+
+                    {publishedBooks.map((item:any)=>(
+                        <div className="w-full mb-5">
+                        <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
+                        {item.map((item2:any)=>(<div className="flex flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                        <h2 className="font-semibold text-sm" >{item2.name}</h2>
+
+                            <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                                <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
+                                    <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                                </div>
+                                <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
+                                </div>
+                            </button>
+                        </div>
+                        ))}
+                        </div>
+                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
+                            </div>
+                        </div>
                     ))}
-                    <div className="flex flex-col items-center px-10 mt-2 justify-center gap-4">
-                        <h2 className="font-semibold text-base" >Create New</h2>
 
-                        <div className="w-40 h-68 flex flex-col relative items-center justify-center hover:scale-105 hover:-translate-y-2 duration-200 " >
-                            <div className="w-full h-52 bg-gray-300 overflow-hidden rounded-lg relative z-10 flex items-center justify-center">
-                                <button onClick={()=>{router.push("/publish")}} className="w-full h-full flex items-center justify-center" ><FaPlusCircle className="text-4xl text-gray-400" /></button>
-                            </div>
-                            <div className="w-full h-52 shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                            </div>
+
+                </div>
+
+
+                {/* DRAFT BOOKS */}
+                <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+            <div className="w-full">
+                    <h3 className="text-2xl font-bold ">Drafts</h3>
+            </div>
+
+            {draftBooks.map((item:any)=>(
+                <div className="w-full mb-5">
+                <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
+                {item.map((item2:any)=>(<button onClick={()=>{handleDraft(item2)}} className="flex flex-col items-center px-10 mt-2 justify-center gap-4">
+                <h2 className="font-semibold text-sm" >{item2.name}</h2>
+
+                    <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                        <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
+                            <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                         </div>
+                        <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
+                        </div>
+                    </button>
+                </button>
+                ))}
+                </div>
+                    <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
                     </div>
                 </div>
+            ))}
 
-                {/* bar */}
-                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
-                </div>
-            </div>}
+
+        </div>
+            </>
+            }
         </div>
     )
 }
