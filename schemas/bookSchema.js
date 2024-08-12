@@ -67,7 +67,6 @@ const BookSchema = new Schema({
     pdf:{
         type: String,
         default: null,
-        required: true
     },
     readers: {
         type: Number,
