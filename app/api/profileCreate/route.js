@@ -14,6 +14,9 @@ const s3Client = new S3Client({
 
 
 async function uploadFileToS3 (file, wallet, bannerImage) {
+
+    console.log("Profile Create: Uploading File to S3");
+
     const fileBuffer = file;
     const bannerBuffer = bannerImage;
 
@@ -41,7 +44,7 @@ async function uploadFileToS3 (file, wallet, bannerImage) {
         return true;
     }
     catch(e){
-        console.error(e);
+        console.error("This is error: ", e);
         return false
     }
     
