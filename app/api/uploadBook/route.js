@@ -114,6 +114,11 @@ export async function POST(request) {
 
     const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, newBook._id, wallet);
 
+    if(status === false) {
+      const deleteStatus = await Book.deleteOne({_id: newBook._id});
+      return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
+    }
+
     newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/cover`;
     newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/book`;
 
