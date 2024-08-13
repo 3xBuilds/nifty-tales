@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { RiLoader5Line } from "react-icons/ri";
 import { CiImageOn } from "react-icons/ci";
 import { Loader } from "@/components/Global/Loader";
+import { toast } from "react-toastify";
 
 export default function Home() {
 
@@ -65,8 +66,13 @@ export default function Home() {
         setLoading(true);
         e.preventDefault();
 
-        if (!collectionName || !symbol || !profileImg) {
-            alert("Please fill in all fields and upload an image.");
+        if(!address){
+            toast.error("Somwthing went wrong. Please try again");
+            return;
+        }
+
+        if (!collectionName || !symbol || !profileImg || !bannerImg) {
+            toast.error("Please fill in all fields and upload an image.");
             return;
         }
 
@@ -75,7 +81,8 @@ export default function Home() {
             const contractAddress = await deployContract();
 
             if (!contractAddress) {
-                throw new Error("Contract deployment failed");
+                toast.error("Contract deployment failed");
+                // throw new Error("Contract deployment failed");
             }
 
             // Create FormData object
@@ -96,12 +103,13 @@ export default function Home() {
             });
 
             if(response.status == 200){
-                delay(1000);
                 router.push("/authors/");
             }
 
             if (response.status !== 200) {
-                throw new Error('Upload failed');
+                toast.error("An error occurred while uploading.");
+                setLoading(false);
+                return;
             }
 
             // Reset form fields
@@ -116,8 +124,7 @@ export default function Home() {
 
             // alert("Collection created successfully!");
         } catch (error) {
-            console.error("Error submitting form:", error);
-            alert("An error occurred while creating the collection. Please try again.");
+            toast.error("An error occurred while creating the collection. Please try again.");
             setLoading(false);
         }
     }
