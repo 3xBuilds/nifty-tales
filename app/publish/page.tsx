@@ -14,6 +14,7 @@ import { useAccount } from "wagmi"
 import abi from "@/utils/abis/templateABI"
 import { Loader } from "@/components/Global/Loader"
 import { useRouter } from "next/navigation"
+import { toast } from "react-toastify"
 
 export default function Home(){
 
@@ -72,12 +73,16 @@ export default function Home(){
     async function getContractDetails(){
         try{
             const contract = await contractSetup();
-            console.log('contract: ', contract);
+            console.log('contract is here broooo: ', contract);
             const id = await contract?.BOOK();
             console.log("heheh id: ", id);
-            setTokenId(Number(id).toString());
+            // setTokenId(Number(id).toString());
+            if(id){
+                handleSubmit('publish', id.toString());
+            }
         }
         catch(err){
+
             console.error(err);
         }
     }
@@ -101,9 +106,9 @@ export default function Home(){
         }
     }
 
-    useEffect(()=>{
-        getContractDetails();
-    }, [user])
+    // useEffect(()=>{
+    //     getContractDetails();
+    // }, [user])
 
     const removeTag = (indexToRemove: number) => {
         setTags(prevTags => prevTags.filter((_, index) => index !== indexToRemove));
@@ -126,25 +131,24 @@ export default function Home(){
     }
     
 
-    const handleSubmit = async (publish:string) => {
+    const handleSubmit = async (publish:string, tokenId:string) => {
 
         try{
 
             if(!agree){
-                alert("Please agree to the terms");
+                toast.error("Please agree to the terms");
                 setLoading(false);
                 return;
             }
     
             if(!tokenId){
-                alert("Token ID not found");
+                toast.error("Token ID not found");
                 setLoading(false);
-
                 return;
             }
     
             if(!address){
-                alert("Please connect wallet");
+                toast.error("Please connect wallet");
                 setLoading(false);
                 return;
             }
@@ -337,8 +341,8 @@ export default function Home(){
                     </button>
                     <h2 className="text-start max-md:w-full" >I agree that have the rights of everything I am publishing</h2>
                 </div>
-                <button onClick={()=>{handleSubmit("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
-                <button onClick={()=>{setLoading(true); handleSubmit("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
+                <button onClick={()=>{handleSubmit("draft", tokenId)}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
+                <button onClick={()=>{setLoading(true); getContractDetails()}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
             </div>
 
         </div>
