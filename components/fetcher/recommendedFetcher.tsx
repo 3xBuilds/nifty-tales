@@ -9,7 +9,7 @@ export const RecommendedFetcher = () => {
 
     const router = useRouter()
     const [publishedBooks, setPublishedBooks] = useState([])
-    const[slicer, setSlicer] = useState(4);
+    const[slicer, setSlicer] = useState(0);
 
     async function getAllBooks(){
         try{
@@ -42,13 +42,13 @@ export const RecommendedFetcher = () => {
   
         if(screenWidth > 1200){
             setSlicer(5);
+        } else if(screenWidth <= 1200){
+            setSlicer(4);
         }
       },[])
   
       useEffect(()=>{
         getAllBooks();
-  
-  
     },[slicer])
 
   return (

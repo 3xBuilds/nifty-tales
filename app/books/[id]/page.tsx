@@ -12,6 +12,7 @@ import { ImArrowLeft } from 'react-icons/im';
 import { IoIosArrowBack } from 'react-icons/io';
 import { Loader } from '@/components/Global/Loader';
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
+import { useGlobalContext } from '@/context/MainContext';
 
 type BookType = {
   name: string;
@@ -23,6 +24,7 @@ type BookType = {
   cover?: string | null;
   author: Object | null;
   artist?: string | null;
+  minted?: number;
   ISBN?: string | null;
   description?: string | null;
   tags?: string[];
@@ -37,7 +39,7 @@ export default function Page() {
 
     const[bookDetails, setBookDetails] = useState<BookType>();
 
-  
+    const{fetch, setFetch} = useGlobalContext();
 
     const[amount, setAmount] = useState(0);
     const[showModal, setShowModal] = useState(false);
@@ -49,6 +51,7 @@ export default function Page() {
     async function getBookDetails(){
       try{
         await axios.get("/api/book/"+pathname.split("/")[2]).then((res)=>{
+          console.log("REFETCHED BOOK ASSHOLE", res.data.data);
           setBookDetails(res.data.data);
         });
       }
@@ -56,6 +59,7 @@ export default function Page() {
         console.log(err);
       }
     }
+
 
 
     async function contractSetup(){
@@ -92,10 +96,13 @@ export default function Page() {
         console.log(contract);
         const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
 
-        txn.wait().then((res:any)=>{
+        txn.wait().then(async(res:any)=>{
           console.log(res);
-          setLoading(false);
-
+          //@ts-ignore
+          await axios.patch("/api/book/"+pathname.split("/")[2], {minted: bookDetails?.minted+amount}).then((res)=>{
+            setFetch((prev)=>(!prev));
+            setLoading(false);
+          })
         })
       }
       catch(err){
@@ -106,7 +113,7 @@ export default function Page() {
 
     useEffect(()=>{
       getBookDetails();
-    },[])
+    },[ , fetch])
 
     
 
@@ -128,7 +135,7 @@ export default function Page() {
               }} className='hover:scale-105 duration-200' ><IoIosArrowBack className='text-2xl text-black'/></button>
               <h3 className='text-2xl font-bold'>{amount}</h3>
               <button onClick={()=>{
-                if(bookDetails?.maxMint == 0 || amount != bookDetails?.maxMint){
+                if(bookDetails?.maxMint == 0 || bookDetails?.minted as number+amount != bookDetails?.maxMint){
                   setAmount((prev)=>(prev+1))
                 }
                 else{
@@ -144,6 +151,7 @@ export default function Page() {
       </div>
 
         <div className="w-screen relative h-[40rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
+          <div className='absolute top-0 bg-white/10 px-4 py-2 z-[1000] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</div>
             <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
             </div>
@@ -151,7 +159,7 @@ export default function Page() {
             <div className='flex max-md:flex-col gap-8 object-center items-center max-md:py-10 md:h-full h-fit md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
               <div className="flex object-center items-center md:h-full md:px-10 md:w-60 h-full justify-center md:justify-start my-auto">
 
-                  <div className="w-48 max-md:w-32 max-md:h-52 relative md:absolute h-64">
+                  <div className="w-48 max-md:w-32 max-md:h-48 relative md:absolute h-64">
                       <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="shadow-xl shadow-black/20 w-full h-full z-10 object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
                       <div className='w-full h-full bg-white absolute top-1 left-1 z-[9] shadow-xl shadow-black/20' ></div>
                       <div className='w-full h-full bg-white absolute top-2 left-2 z-[8] shadow-xl shadow-black/20' ></div>
@@ -160,7 +168,7 @@ export default function Page() {
               </div>
               <div className='flex flex-col gap-8 md:w-[50%] max-md:w-[90%] '>
                 <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
-                <p className='text-sm text-white' >{bookDetails?.description}</p>
+                <p className='text-sm text-white' >{bookDetails?.description?.substring(0,200)}</p>
                 <div className='flex flex-wrap gap-2'>
                   {bookDetails?.tags?.map((item)=>(
                     <div className='min-w-20 px-2 py-2 bg-white/10 flex items-center justify-center text-white text-sm font-semibold border-[1px] border-white rounded-lg'>

@@ -21,7 +21,7 @@ type BookType = {
     createdAt?: Date;
 }
 
-// get all books route
+
 export async function GET(req: NextRequest) {
 
     try {
@@ -53,4 +53,36 @@ export async function GET(req: NextRequest) {
         }, { status: 500 })
     }
 
+}
+
+export async function PATCH(req:any){
+    try {
+        revalidatePath('/', 'layout') 
+
+        const id = req.nextUrl.pathname.split("/")[3];
+
+        console.log(id);
+        const body = await req.json()
+
+        await connectToDB();
+        const {...rest} = body;
+
+
+        const updatedBook = await Book.findByIdAndUpdate(
+            { _id: id }, 
+            { $set: body }, 
+            { new: true, runValidators: true } 
+        );
+
+        console.log(updatedBook);
+
+        return NextResponse.json({
+            data: updatedBook
+        }, { status: 200 })
+
+    } catch (error) {
+        return NextResponse.json({
+            message: "Something went wrong"
+        }, { status: 500 })
+    }
 }

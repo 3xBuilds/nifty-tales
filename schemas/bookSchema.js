@@ -21,7 +21,12 @@ const BookSchema = new Schema({
     },
     maxMint: {
         type: Number,
-        default: 1,
+        default: 0,
+        unique: false
+    },
+    minted: {
+        type: Number,
+        default: 0,
         unique: false
     },
     cover: {

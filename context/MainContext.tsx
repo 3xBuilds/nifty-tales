@@ -19,13 +19,16 @@ type GlobalContextType = {
 
   user: UserType | null;
   setUser: Dispatch<SetStateAction<UserType | null>>;
-  
+  fetch: boolean | false;
+  setFetch: Dispatch<SetStateAction<boolean | false>>;
+
 }
 
 const GlobalContext = createContext<GlobalContextType>({
   user: null,
   setUser: () => { },
-  
+  fetch: false,
+  setFetch: () => {}
 });
 
 
@@ -53,12 +56,14 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   async function getUser(){
     try{
       const res = await axios.get(`/api/user/${session?.user?.email}`);
+      console.log("DADDY I JUST FETCHED USER!!!", res.data.user);
       setUser(res.data.user);
     }
     catch(err){
       console.error(err);
     }
   }
+  const[fetch, setFetch] = useState(false);
 
   useEffect(()=>{
     getUser();
@@ -73,6 +78,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const [user, setUser] = useState<UserType | null>(null);
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
 
+
   useEffect(()=>{
     if(user && user.wallet != "" && user.wallet != address){
       setWalletNotRegistered(true);
@@ -80,11 +86,11 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     else if(user && user.wallet != "" && user.wallet == address){
       setWalletNotRegistered(false);
     }
-  })
+  },[address])
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser
+      user, setUser, fetch, setFetch
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

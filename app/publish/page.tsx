@@ -280,8 +280,8 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <textarea onKeyDown={(e)=>{if(characterDesc == 100 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 100){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/100 chars</span></h2>
+                        <textarea onKeyDown={(e)=>{if(characterDesc == 200 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 200){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/200 chars</span></h2>
                     </div>
 
                     <div className="w-full text-start flex flex-col">
