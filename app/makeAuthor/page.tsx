@@ -201,13 +201,13 @@ export default function Home() {
 
                         <div className="md:w-[60%]">
                             <div className="w-full text-start flex flex-col">
-                                <input placeholder="Enter Book Name..." onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                                <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Collection Name</h2>
+                                <input placeholder="John's Collection" onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                                <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Name your collection</h2>
                             </div>
 
                             <div className="w-full text-start flex flex-col">
-                                <input placeholder="Enter Book Name..." onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                                <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Library Symbol</h2>
+                                <input placeholder="JCN" onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                                <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Collection Symbol</h2>
                             </div>
 
                         </div>

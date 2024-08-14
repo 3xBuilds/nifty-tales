@@ -30,6 +30,11 @@ export default function Home(){
     const [pdf, setPdf] = useState<File | null>(null);
     const [cover, setCover] = useState<File | null>(null);
 
+    const[characterDesc, setCharacterDesc] = useState(0)
+    const[characterName, setCharacterName] = useState(0)
+    const[characterArtist, setCharacterArtist] = useState(0)
+
+
     const [mintPrice, setMintPrice] = useState<number>(0);
     const [maxMints, setMaxMints] = useState<number>(0);
 
@@ -263,8 +268,8 @@ export default function Home(){
                 <div className="flex flex-col w-full">
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input placeholder="Enter Book Name..." onChange={(e) => { setBookName(e.target.value) }} value={bookName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name</h2>
+                            <input onKeyDown={(e)=>{if(characterName == 20 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => { if(characterName < 20){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/20 chars</span></h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
@@ -275,8 +280,8 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <textarea placeholder="Description..." onChange={(e) => { setBookDesc(e.target.value) }} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name</h2>
+                        <textarea onKeyDown={(e)=>{if(characterDesc == 100 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 100){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/100 chars</span></h2>
                     </div>
 
                     <div className="w-full text-start flex flex-col">
@@ -293,8 +298,8 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <input placeholder="Pablo Picasso" onChange={(e) => { setIllustrationArtist(e.target.value) }} value={illustrationArtist} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist</h2>
+                        <input placeholder="Pablo Picasso" onKeyDown={(e)=>{if(characterArtist == 20 && e.key == "Backspace"){setCharacterArtist((prev)=>(prev-1))}}} onChange={(e) => { if(characterArtist < 20){setIllustrationArtist(e.target.value); setCharacterArtist(e.target.value.length) }}} value={illustrationArtist} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist <span className="text-xs">{characterArtist}/20 chars</span></h2>
                     </div>
 
                     <div className="flex gap-4">
