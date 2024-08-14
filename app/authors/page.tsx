@@ -10,7 +10,11 @@ import { WalletConnectButton } from "@/components/buttons/WalletConnectButton";
 import Navbar from "@/components/Home/Navbar";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaPlusCircle } from "react-icons/fa";
+import { FaEdit, FaPlusCircle } from "react-icons/fa";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { IoClose } from "react-icons/io5";
+import { CiImageOn } from "react-icons/ci";
 
 
 export default function Home(){
@@ -137,10 +141,127 @@ export default function Home(){
         router.push("/publish")
     }
 
+    const [profileImg, setProfileImg] = useState<File | null>(null);
+    const [bannerImg, setBannerImg] = useState<File | null>(null);
+
+    const [imageModal, setImageModal] = useState<boolean>(false);
+    const [bannerModal, setBannerModal] = useState<boolean>(false);
+
+
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setProfileImg(e.target.files[0]);
+        }
+    };
+    
+    const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files.length > 0) {
+
+            setBannerImg(e.target.files[0]);
+        }
+    };
+
+    const {address} = useAccount();
+
+
+    async function handleSubmit(e:any) {
+        e.preventDefault();
+
+        if(!address){
+            toast.error("Somwthing went wrong. Please try again");
+            return;
+        }
+
+        try {
+
+            // Create FormData object
+            const formData = new FormData();
+
+            //@ts-ignore
+            if(!bannerImg && profileImg)
+            formData.append("profileImage", profileImg);
+
+            formData.append("wallet", String(address));
+
+            //@ts-ignore
+            if(bannerImg && !profileImg)
+            formData.append("bannerImage", bannerImg);
+
+
+            // Upload to S3 using the API route
+            const response = await axios.patch('/api/profileCreate', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+
+            if (response.status !== 200) {
+                toast.error("An error occurred while uploading.");
+                return;
+            }
+
+            // Reset form fields
+            if(response.status == 200){
+                setProfileImg(null);
+                setImageModal(false);
+
+                setBannerImg(null);
+                setBannerModal(false);
+            }
+
+            // alert("Collection created successfully!");
+        } catch (error) {
+            toast.error("An error occurred while creating the collection. Please try again.");
+            console.log(error);
+        }
+    }
+
     return(
         <div className="">
             <div className="h-16 w-screen relative z-[100000]">
                 <Navbar/>
+            </div>
+
+
+            {/* Image Modal */}
+            <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
+                <div className="bg-white gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
+                    <div className="w-full items-end flex justify-end text-xl"><button className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div>
+                        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
+                            <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
+                                {!profileImg ? <svg className="w-8 h-8 text-jel-gray-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                </svg> :
+                                    <Image alt="hello" className='w-full h-full object-cover rounded-full hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!profileImg ? "" : (profileImg instanceof File ? URL.createObjectURL(profileImg) : profileImg)} />}
+                            </div>
+                            <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
+                        </label>
+                    </div>
+                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Save</button>
+                </div>
+            </div>
+
+            {/* Banner Modal */}
+            <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${bannerModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
+                <div className="bg-white gap-4 max-md:w-[90%] h-84 w-96 rounded-xl p-6 flex flex-col items-center justify-center" >
+                    <div className="w-full items-end flex justify-end text-xl"><button className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div className="w-full h-full" >
+                        <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
+                            <div className="flex flex-col items-center h-32 w-full p-2 overflow-hidden justify-center rounded-lg">
+                                {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
+                                        <CiImageOn className="text-xl text-gray-400" />
+                                        <h3 className="text-xs text-gray-400 font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                    </div> :
+                                    <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
+                            </div>
+                            <input id="banner-dropzone-file" type="file" accept='image/*' onChange={handleBannerChange} className="hidden" />
+                        </label>
+                        {/* <button onClick={handleSubmit} disabled={uploading} className=' col-span-2 w-32 py-2 font-medium text-black rounded-xl hover:-translate-y-[0.3rem] duration-200 bg-jel-gray-3 hover:bg-jel-gray-2 text-nowrap mt-2'>{uploading ? "Uploading..." : "Upload"}</button> */}
+                    </div>
+                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Save</button>
+                </div>
             </div>
 
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
@@ -151,8 +272,13 @@ export default function Home(){
                     <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
                     <div className="flex flex-col gap-2">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{name}</h2>
-                        <a href={`https://polygonscan.com/address/${user?.contractAdd}`} className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0,7)}...{user?.contractAdd.substring(user.contractAdd.length-7, user.contractAdd.length)}</a>
+                        <a href={`https://basescan.com/address/${user?.contractAdd}`} className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0,7)}...{user?.contractAdd.substring(user.contractAdd.length-7, user.contractAdd.length)}</a>
                     </div>
+                </div>
+
+                <div className="absolute top-3 md:right-3 gap-4 flex items-center justify-center z-50">
+                        <button onClick={()=>{setImageModal(true)}} className="py-2 bg-white/10 md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Edit Image <FaEdit/></button>
+                        <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-white/10 md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Edit Banner <FaEdit/></button>
                 </div>
             </div>
             
