@@ -143,22 +143,22 @@ export default function Page() {
           </div>
       </div>
 
-        <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
+        <div className="w-screen relative h-[40rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
             <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
             </div>
 
-            <div className='flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
-              <div className="flex gap-8 object-center items-center h-full md:px-10 w-60 justify-center md:justify-start my-auto">
+            <div className='flex max-md:flex-col gap-8 object-center items-center max-md:py-10 h-fit md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
+              <div className="flex object-center items-center md:h-full md:px-10 md:w-60 h-full justify-center md:justify-start my-auto">
 
-                  <div className="w-48 absolute h-64">
+                  <div className="w-48 max-md:w-32 max-md:h-52 relative md:absolute h-64">
                       <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="shadow-xl shadow-black/20 w-full h-full z-10 object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
                       <div className='w-full h-full bg-white absolute top-1 left-1 z-[9] shadow-xl shadow-black/20' ></div>
                       <div className='w-full h-full bg-white absolute top-2 left-2 z-[8] shadow-xl shadow-black/20' ></div>
                   </div>
 
               </div>
-              <div className='flex flex-col gap-8 w-[50%]'>
+              <div className='flex flex-col gap-8 md:w-[50%] max-md:w-[90%] '>
                 <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
                 <p className='text-sm text-white' >{bookDetails?.description}</p>
                 <div className='flex flex-wrap gap-2'>
