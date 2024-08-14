@@ -203,11 +203,7 @@ export default function Home(){
 
             // Reset form fields
             if(response.status == 200){
-                setProfileImg(null);
-                setImageModal(false);
-
-                setBannerImg(null);
-                setBannerModal(false);
+                window.location.reload();
             }
 
             // alert("Collection created successfully!");
