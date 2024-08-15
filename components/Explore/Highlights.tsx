@@ -21,6 +21,7 @@ const Highlights = () => {
     const fetchHighlights = async () => {
         try{
             await axios.get("/api/book").then((res)=>{
+                console.log(res.data.data)
                 setHighlights(res.data.data);
             })
         }
@@ -48,7 +49,7 @@ const Highlights = () => {
     <div className='w-full p-5 flex-col flex items-start justify-start noscr'>
         <h2 className='font-bold text-2xl mb-4' >Latest Publishes</h2>
         <div className='grid grid-rows-1 grid-flow-col gap-2'>
-            {highlights.reverse().slice(0,5).map((highlight:BookType, index)=>(
+            {highlights?.reverse().slice(0,5).map((highlight:BookType, index)=>(
                 <div className='w-[450px] p-8 bg-gray-200 flex flex-row items-center justify-start overflow-hidden relative rounded-xl'>
                     <div onClick={()=>{router.push(`/books/${highlight._id}`)}} className="md:w-40 md:h-68 max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                         <div className="w-40 h-52 overflow-hidden rounded-lg relative z-40">

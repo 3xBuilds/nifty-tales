@@ -113,7 +113,7 @@ export default function Home(){
             })
 
             //@ts-ignore
-            if(arr1[0].length > 0)
+            // if(arr1[0].length > 0)
             setPublishedBooks(arr1);
 
             //@ts-ignore
