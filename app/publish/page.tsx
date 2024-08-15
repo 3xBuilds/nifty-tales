@@ -399,8 +399,8 @@ export default function Home(){
                 <div className="flex flex-col w-full">
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input onKeyDown={(e)=>{if(characterName == 20 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => { setRequiredName(false); if(characterName < 20){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/20 chars</span><span className="text-red-500 ml-1" >*</span></h2>
+                            <input onKeyDown={(e)=>{if(characterName == 50 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => { setRequiredName(false); if(characterName < 50){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/50 chars</span><span className="text-red-500 ml-1" >*</span></h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
@@ -411,8 +411,8 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <textarea onKeyDown={(e)=>{if(characterDesc == 200 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 200){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/200 chars</span></h2>
+                        <textarea onKeyDown={(e)=>{if(characterDesc == 250 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 250){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/250 chars</span></h2>
                     </div>
 
                     <div className="w-full text-start flex flex-col">
