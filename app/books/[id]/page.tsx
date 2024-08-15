@@ -14,30 +14,12 @@ import { Loader } from '@/components/Global/Loader';
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
 
-type BookType = {
-  name: string;
-  isPublished?: boolean;
-  price?: number;
-  tokenId: number;
-  contractAddress: string;
-  maxMint?: number;
-  cover?: string | null;
-  author: Object | null;
-  artist?: string | null;
-  minted?: number;
-  ISBN?: string | null;
-  description?: string | null;
-  tags?: string[];
-  pdf: string;
-  readers?: number;
-  isBoosted?: string | null;
-  createdAt?: Date;
-}
  
 export default function Page() {
     const pathname = usePathname();
 
     const[bookDetails, setBookDetails] = useState<BookType>();
+    const[userDetails, setUserDetails] = useState<UserType>();
 
     const{fetch, setFetch} = useGlobalContext();
 
@@ -53,6 +35,7 @@ export default function Page() {
         await axios.get("/api/book/"+pathname.split("/")[2]).then((res)=>{
           console.log("REFETCHED BOOK ASSHOLE", res.data.data);
           setBookDetails(res.data.data);
+          setUserDetails(res.data.user);
         });
       }
       catch(err){
@@ -125,6 +108,8 @@ export default function Page() {
 
         {loading && <Loader/>}
 
+
+      {/* MINTING MODAL */}
       <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
           <div className='bg-white rounded-xl h-40 flex flex-col gap-4 justify-center items-center px-10'>
             <div className='flex rounded-xl items-center justify-center gap-4 ' >
@@ -150,6 +135,8 @@ export default function Page() {
           </div>
       </div>
 
+
+
         <div className="w-screen relative h-[40rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
           <div className='absolute top-0 bg-white/10 px-4 py-2 z-[1000] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</div>
             <div className="w-screen absolute h-full overflow-hidden">
@@ -166,8 +153,11 @@ export default function Page() {
                   </div>
 
               </div>
-              <div className='flex flex-col gap-8 md:w-[50%] max-md:w-[90%] '>
-                <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
+              <div className='flex flex-col gap-6 md:w-[50%] max-md:w-[90%] '>
+                <div className='flex flex-col gap-2 items-start justify-start'>
+                  <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
+                  <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className='underline text-sm text-semibold text-white'>Published by: {userDetails?.username}</button>
+                </div>
                 <p className='text-sm text-white' >{bookDetails?.description?.substring(0,200)}</p>
                 <div className='flex flex-wrap gap-2'>
                   {bookDetails?.tags?.map((item)=>(

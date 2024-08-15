@@ -2,24 +2,8 @@ import Book from "@/schemas/bookSchema"
 import { connectToDB } from "@/utils/db";
 import { NextRequest, NextResponse } from "next/server"
 import { revalidatePath } from "next/cache";
+import User from "@/schemas/userSchema";
 
-
-type BookType = {
-    name: string;
-    isPublished?: boolean;
-    price?: number;
-    maxMint?: number;
-    cover?: string | null;
-    author: Object | null;
-    artist?: string | null;
-    ISBN?: string | null;
-    description?: string | null;
-    tags?: string[];
-    pdf: string;
-    readers?: number;
-    isBoosted?: string | null;
-    createdAt?: Date;
-}
 
 
 export async function GET(req: NextRequest) {
@@ -34,7 +18,9 @@ export async function GET(req: NextRequest) {
         await connectToDB();
         const book: BookType | null = await Book.findById(id);
 
-        console.log(book);
+        const user: UserType | null = await User.findById({_id: book?.author});
+
+        console.log(book, user);
 
         if (!book) {
             return NextResponse.json({
@@ -44,7 +30,8 @@ export async function GET(req: NextRequest) {
         }
 
         return NextResponse.json({
-            data: book
+            data: book,
+            user: user
         }, { status: 200 })
 
     } catch (error) {

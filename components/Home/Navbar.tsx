@@ -38,8 +38,6 @@ const Navbar = () => {
         </button>
 
 
-        
-
         <div className='flex items-center gap-2 max-md:hidden'>
           
           {session &&  <div className='flex gap-2 items-center justify-center'>

@@ -5,40 +5,23 @@ import Image from 'next/image';
 import Icon from '../Global/Icon';
 import { openSans } from '@/utils/font';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const Highlights = () => {
 
     const router = useRouter();
 
-    const [highlights, setHighlights] = useState([
-        {
-            id: 1,
-            title: 'Mollie',
-            cover: book3,
-            description: 'This is a test description for this book or any book that is going to be displayed in a card in this format on the highlights section of the home page.'
-        },
-        {
-            id: 2,
-            title: 'Five Feet Apart',
-            cover: book4,
-            description: 'This is a test description for this book or any book that is going to be displayed in a card in this format on the highlights section of the home page.'
-        },
-        {
-            id: 3,
-            title: 'Spring Book',
-            cover: book5,
-            description: 'This is a test description for this book or any book that is going to be displayed in a card in this format on the highlights section of the home page.'
-        },
-        {
-            id: 4,
-            title: 'Mollie',
-            cover: book3,
-            description: 'This is a test description for this book or any book that is going to be displayed in a card in this format on the highlights section of the home page.'
-        }
-    ]);
+    const [highlights, setHighlights] = useState<Array<BookType>>([]);
 
-    const fetchHighlgihts = async () => {
-        console.log('fetching highlights');
+    const fetchHighlights = async () => {
+        try{
+            await axios.get("/api/book").then((res)=>{
+                setHighlights(res.data.data);
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     const addToReadList = () => {
@@ -46,27 +29,32 @@ const Highlights = () => {
     }
 
     useEffect(() => {
-        fetchHighlgihts();
+        fetchHighlights();
     }, [])
 
   return (
-    <div className='w-full p-5 flex items-center justify-start noscr'>
+    <div className='w-full p-5 flex-col flex items-start justify-start noscr'>
+        <h2 className='font-bold text-2xl mb-4' >Latest Publishes</h2>
         <div className='grid grid-rows-1 grid-flow-col gap-2'>
-            {highlights.map((highlight, index)=>(
+            {highlights.reverse().slice(0,5).map((highlight:BookType, index)=>(
                 <div className='w-[450px] p-8 bg-gray-200 flex flex-row items-center justify-start overflow-hidden relative rounded-xl'>
-                    <div className='w-56 h-full grow-1 overflow-hidden rounded shadow-black/50 shadow-lg relative z-20'>
-                        <Image src={highlight.cover} alt="bookcover" className='w-full h-full object-cover'/>
+                    <div onClick={()=>{router.push(`/books/${highlight._id}`)}} className="md:w-40 md:h-68 max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
+                        <div className="w-40 h-52 overflow-hidden rounded-lg relative z-40">
+                            <Image src={highlight.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                        </div>
+                        <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[39]" >
+                        </div>
                     </div>
                     <div className='w-fit relative z-20 pl-5 pt-5 text-white flex flex-col items-start justify-start h-full'>
-                        <h1 className='text-2xl font-bold'>{highlight.title}</h1>
-                        <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.description}</p>
+                        <h1 className='text-2xl font-bold'>{highlight.name}</h1>
+                        <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.description?.substring(0,100)}...</p>
                     </div>
                     <div className='w-full h-full absolute top-0 left-0 z-10 bg-black/30 backdrop-blur'></div>
                     <div className='w-full h-full absolute top-0 left-0 z-0'>
-                        <Image src={highlight.cover} alt="" className=' object-cover w-full flex items-center justify-center'/>
+                        <Image width={1080} height={1080} src={highlight.cover as string} alt="" className=' object-cover w-full flex items-center justify-center'/>
                     </div>
                     <div className='flex flex-row gap-2 absolute bottom-8 right-8 z-20'>
-                        <button onClick={()=>{router.push(`/books/${highlight.id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
+                        <button onClick={()=>{router.push(`/books/${highlight._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
                         <button onClick={()=>{addToReadList()}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
                             <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>
                         </button>
