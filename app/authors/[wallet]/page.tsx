@@ -163,7 +163,7 @@ export default function Home(){
 
                 {/* PUBLISHED BOOKS */}
                 <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                    <div className="flex items-center justify-center w-full ">
+                    <div className="flex items-center justify-center w-full mb-5">
                         <div className="w-full flex items-start justify-start ">
                             <h3 className="text-2xl font-bold ">Published</h3>
                         </div>

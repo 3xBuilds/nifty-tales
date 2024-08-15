@@ -348,9 +348,9 @@ export default function Home(){
 
                 {/* PUBLISHED BOOKS */}
                 <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                    <div className="flex items-center justify-center w-full ">
+                    <div className="flex items-center justify-center w-full mb-5">
                         <div className="w-1/2 flex items-start justify-start ">
-                            <h3 className="text-2xl font-bold ">Your Books</h3>
+                            <h3 className="text-2xl font-bold">Your Books</h3>
                         </div>
                         <div className="w-1/2 flex justify-end">
                             <button onClick={()=>{router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
@@ -389,7 +389,7 @@ export default function Home(){
 
                 {/* HIDDEN BOOKS */}
                 { hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                <div className="w-full">
+                <div className="w-full mb-5">
                     
                         <h3 className="text-2xl font-bold ">Hidden</h3>
                 </div>
@@ -421,7 +421,7 @@ export default function Home(){
 
                 {/* DRAFT BOOKS */}
                { draftBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-            <div className="w-full">
+            <div className="w-full mb-4">
                 
                     <h3 className="text-2xl font-bold ">Drafts</h3>
             </div>
