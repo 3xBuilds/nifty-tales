@@ -3,36 +3,39 @@ import { connectToDB } from "@/utils/db";
 import User from "@/schemas/userSchema";
 import Book from "@/schemas/bookSchema";
 
-export async function POST(req:any){
-    try{
-        await connectToDB()
+export async function POST(req: any) {
+    try {
+        await connectToDB();
         const body = await req.json();
-        const{email, bookId} = body;
+        const { email, bookId } = body;
 
-        const user: UserType | null = await User.findOne({email: email});
-        if(user?.readlist.includes(bookId)){
-            return new NextResponse(JSON.stringify("Book already in readlist"), {
-                status: 401,
-            });
+        const user = await User.findOne({ email: email });
+        if (!user) {
+            return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 
-        else{
-            const book: BookType | null = await Book.findById({_id: bookId});
-
-            //@ts-ignore
-            book?.readers += 1;
-            //@ts-ignore
-            await book?.save();
-            user?.readlist.push(bookId);
-            //@ts-ignore
-            await user?.save();
-            return new NextResponse(JSON.stringify({
-                book: book,
-                user:user
-            }), { status: 200 });
+        if (user.readlist.includes(bookId)) {
+            return NextResponse.json({ message: "Book already in readlist" }, { status: 400 });
         }
-    }
-    catch(err){
-        console.log(err);
+
+        const book = await Book.findById(bookId);
+        if (!book) {
+            return NextResponse.json({ message: "Book not found" }, { status: 404 });
+        }
+
+        book.readers = (book.readers || 0) + 1;
+        await book.save();
+
+        user.readlist.push(bookId);
+        await user.save();
+
+        return NextResponse.json({
+            message: "Book added to readlist successfully",
+            book: book,
+            user: user
+        }, { status: 200 });
+    } catch (err) {
+        console.error("Error adding book to readlist:", err);
+        return NextResponse.json({ message: "Internal server error" }, { status: 500 });
     }
 }
