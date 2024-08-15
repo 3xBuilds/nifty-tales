@@ -46,7 +46,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
       // Create a json file with metadata
       const metadata = {
         name,
-        description,
+        description: description + "Go to https://niftytales.xyz/books/"+objectId,
         tokenId,
         image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/cover`,
         content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/book`
@@ -77,7 +77,7 @@ export async function POST(request) {
     const isbn = formData.get('isbn');
     const description = formData.get('description');
     const tags = formData.getAll('tags') || [];
-    const artist = formData.get('artist');
+    const artist = formData.get('artist') || "";
     const contractAdd = formData.get('contractAdd');
     const cover = formData.get('cover') || null;
     const content = formData.get('content') || null;
@@ -93,7 +93,7 @@ export async function POST(request) {
 
 
 
-    if(!artist || !name || !description || !tokenId || !wallet ) {
+    if( !name  || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 400});
     }
 
@@ -182,44 +182,29 @@ export async function POST(request) {
       }
     }
 
-    // if(cover && !content && id == ""){
-    //   const coverBuffer = Buffer.from(await cover.arrayBuffer());
+    if(content && id == ""){
+      const newBook = await Book.create(bookdData);
+      author.yourBooks.push(newBook._id);
+      await author.save();
+      console.log("newBook", newBook);
 
-    //   const status = await uploadFileToS3(coverBuffer, null, name, description, tokenId, id, wallet);
+      console.log("BULLSEYE")
+      const contentArrayBuffer = await content.arrayBuffer();
+      const contentBuffer = Buffer.from(contentArrayBuffer);
+      // const coverBuffer = Buffer.from(await cover.arrayBuffer());
 
-    //   if(status === false) {
+      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, newBook._id, wallet);
 
-    //     return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
-    //   }
+      if(status === true){
+        console.log("Hellooooooo");
+        console.log("NEW BOOK",newBook)
+        // newBook.cover = ``;
+        newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/book`;
 
-    //   if(status === true){
-        
-    //     newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/cover`;
-        
-    //     await newBook.save();
-    //     return NextResponse.json({success: newBook});
-    //   }
-
-    // }
-    // // Handle PDF content
-    // if(content && !cover && id == ""){
-    //   const contentArrayBuffer = await content.arrayBuffer();
-    //   const contentBuffer = Buffer.from(contentArrayBuffer);
-
-    //   const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, id, wallet);
-
-    //   if(status === false) {
-    //     return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
-    //   }
-
-    //   if(status === true){
-        
-    //     newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/pdf`;
-        
-    //     await newBook.save();
-    //     return NextResponse.json({success: newBook});
-    //   }
-    // }
+        await newBook.save();
+        return NextResponse.json({success: newBook});
+      }
+    }
 
     if(content && cover && id == ""){
       const newBook = await Book.create(bookdData);
@@ -305,7 +290,7 @@ export async function PATCH(request){
     const id = formData.get("id");
     const publishStatus = formData.get('publishStatus');
 
-    if(!artist || !name || !description || !tokenId || !wallet ) {
+    if(!name || tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 400});
     }
 

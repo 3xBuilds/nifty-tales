@@ -16,7 +16,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose, IoTrashBin } from "react-icons/io5";
 import { CiImageOn } from "react-icons/ci";
-import placeholder from "@/assets/books/NIFTYTALES.png"
+import Book from "@/components/Global/Book";
 
 export default function Home(){
 
@@ -140,7 +140,7 @@ export default function Home(){
     useEffect(()=>{
         const screenWidth = window.innerWidth;
 
-        if(screenWidth > 1200){
+        if(screenWidth > 1100){
             setSlicer(5);
         }
 
@@ -361,18 +361,14 @@ export default function Home(){
                         <div className="w-full mb-5">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
                             </div>
                             <div className="absolute z-50 top-1  right-8" >
-                                <button onClick={()=>{hide(item2._id)}} className="bg-white text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
+                                <button onClick={()=>{hide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
                             </div>
                             <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                                <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
-                                    <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                                </div>
-                                <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                                </div>
+                                <Book img={item2.cover} />
                             </button>
                         </div>
                         ))}
@@ -397,18 +393,14 @@ export default function Home(){
                         <div className="w-full mb-5">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
                             </div>
                             <div className="absolute z-50 top-1  right-8" >
-                                <button onClick={()=>{unHide(item2._id)}} className="bg-white text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye/></button>
+                                <button onClick={()=>{unHide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye/></button>
                             </div>
                             <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                                <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
-                                    <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                                </div>
-                                <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                                </div>
+                                <Book img={item2.cover} />
                             </button>
                         </div>
                         ))}
@@ -430,20 +422,15 @@ export default function Home(){
                 <div className="w-full mb-5">
                 <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                 {item.map((item2:any)=>(<div  className="flex group relative flex-col items-center px-10 mt-2 justify-center gap-4">
-                    <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                    <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
                             </div>
                             <div className="absolute z-50 top-1  right-8" >
-                                <button onClick={()=>{deleteBook(item2._id)}} className="bg-white text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
+                                <button onClick={()=>{deleteBook(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
                             </div>
 
                     <button onClick={()=>{handleDraft(item2)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                        <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
-                            
-                            <Image src={item2.cover ? item2.cover : placeholder} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                        </div>
-                        <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                        </div>
+                        <Book img={item2.cover} />
                     </button>
                 </div>
                 ))}

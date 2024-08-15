@@ -26,10 +26,7 @@ const PublicLibrary = () => {
             </div>      
         </div>
         <div className='mt-20 flex flex-row gap-10 items-center justify-center'>
-              <Book/>
-              <Book/>
-              <Book/>
-              <Book/>
+              
               <div className=''></div>
         </div>
     </div>

@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import Book from '../Global/Book'
 
 export const RecommendedFetcher = () => {
 
@@ -41,9 +42,9 @@ export const RecommendedFetcher = () => {
     useEffect(()=>{
         const screenWidth = window.innerWidth;
   
-        if(screenWidth > 1200){
+        if(screenWidth > 1100){
             setSlicer(5);
-        } else if(screenWidth <= 1200){
+        } else if(screenWidth <= 1100){
             setSlicer(4);
         }
       },[])
@@ -55,21 +56,20 @@ export const RecommendedFetcher = () => {
   return (
     <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
             <div className="w-full">
-                    <h3 className="text-2xl font-bold ">Recommended</h3>
+                    <h3 className="text-2xl font-bold mb-5">Recommended</h3>
             </div>
 
             {publishedBooks.map((item:any)=>(
                 <div className="w-full mb-5">
                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                {item.map((item2:any)=>(<div className="flex flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                <h2 className="font-semibold text-sm" >{item2.name}</h2>
+                {item.map((item2:any)=>(<div className="flex flex-col relative group items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                    <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
+                            <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
+                        </div>
+                        
 
                     <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                        <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
-                            <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                        </div>
-                        <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
-                        </div>
+                        <Book img={item2.cover} />
                     </button>
                 </div>
                 ))}

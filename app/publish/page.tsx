@@ -8,7 +8,7 @@ import { ethers } from "ethers"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { FaFilePdf, FaImage } from "react-icons/fa"
-import { FaSquareCheck } from "react-icons/fa6"
+import { FaArrowPointer, FaSquareCheck } from "react-icons/fa6"
 import { ImCross } from "react-icons/im"
 import { useAccount } from "wagmi"
 import abi from "@/utils/abis/templateABI"
@@ -29,6 +29,11 @@ export default function Home(){
     const [isbn, setIsbn] = useState<string>("");
     const [pdf, setPdf] = useState<File | null>(null);
     const [cover, setCover] = useState<File | null>(null);
+
+    const[requiredName, setRequiredName] = useState(false);
+    const[requiredTags, setRequiredTags] = useState(false);
+    const[requiredPdf, setRequiredPdf] = useState(false);
+
 
     const[id, setId] = useState("");
 
@@ -146,6 +151,24 @@ export default function Home(){
     const handleSubmit = async (publish:string, tokenId:string) => {
 
         try{
+
+            if(bookName == ""){
+                setRequiredName(true);
+                setLoading(false);
+                return;
+            }
+
+            if(tags.length == 0){
+                setRequiredTags(true);
+                setLoading(false);
+                return;
+            }
+
+            if(!pdf && fileLink == ""){
+                setRequiredPdf(true);
+                setLoading(false);
+                return;
+            }
 
             if(!agree){
                 toast.error("Please agree to the terms");
@@ -287,6 +310,9 @@ export default function Home(){
         }
 
         catch(err){
+            toast.error("Failed Interaction")
+
+            axios.patch("/api/book/"+id,{isPublished: false});
             console.log(err);
             setLoading(false);
 
@@ -367,8 +393,8 @@ export default function Home(){
                 <div className="flex flex-col w-full">
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input onKeyDown={(e)=>{if(characterName == 20 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => { if(characterName < 20){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/20 chars</span></h2>
+                            <input onKeyDown={(e)=>{if(characterName == 20 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => { setRequiredName(false); if(characterName < 20){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/20 chars</span><span className="text-red-500 ml-1" >*</span></h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
@@ -384,8 +410,8 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <input placeholder="Add tags to get noticed (Enter to create)" onKeyDown={(e)=>{if(e.key == "Enter" && tags.length<5){setTags((prev)=>[...prev, currentTag.toLowerCase()]); setCurrentTag("")};}} onChange={(e) => {if(tags.length<5)setCurrentTag(e.target.value) }} value={currentTag} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (upto 5)</h2>
+                        <input placeholder="Add tags to get noticed (Enter to create)" onKeyDown={(e)=>{if(e.key == "Enter" && tags.length<5){setTags((prev)=>[...prev, currentTag.toLowerCase()]); setCurrentTag("")};}} onChange={(e) => {setRequiredTags(false);if(tags.length<5)setCurrentTag(e.target.value) }} value={currentTag} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 ${requiredTags ? "border-red-500" : "border-gray-400"}`}></input>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (upto 5)<span className="text-red-500 ml-1" >*</span></h2>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {tags.map((item, i)=>(
                                 <div className="py-2 min-w-20 px-2 rounded-xl flex gap-2 items-center justify-center bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs">
@@ -414,10 +440,10 @@ export default function Home(){
                     </div>
 
                     <div className="flex flex-col items-start justify-center md:justify-start md:w-[40%]">
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Upload Pdf</h2>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Upload Pdf<span className="text-red-500 ml-1" >*</span></h2>
 
                             <div>
-                                <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed group rounded-xl mt-2 cursor-pointer hover:bg-jel-gray-1">
+                                <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-48 h-48 border-2 ${requiredPdf ? "border-red-500"  : "border-jel-gray-3" } border-dashed group rounded-xl mt-2 cursor-pointer hover:bg-jel-gray-1`}>
                                     <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
                                         {!pdf ? <div className="bg-gray-300 text-gray-500 gap-2 flex flex-col items-center justify-center w-full h-full rounded-xl">
                                                 <FaFilePdf className="text-xl" />
@@ -428,18 +454,18 @@ export default function Home(){
                                             </div>
                                         }
                                     </div>
-                                    <input id="dropzone-file" type="file" accept='application/pdf' onChange={handlePdfChange} className="hidden" />
+                                    <input id="dropzone-file" type="file" accept='application/pdf' onChange={(e)=>{handlePdfChange(e); setRequiredPdf(false)}} className="hidden" />
                                 </label>
                                 {/* <button onClick={handleSubmit} disabled={uploading} className=' col-span-2 w-32 py-2 font-medium text-black rounded-xl hover:-translate-y-[0.3rem] duration-200 bg-jel-gray-3 hover:bg-jel-gray-2 text-nowrap mt-2'>{uploading ? "Uploading..." : "Upload"}</button> */}
                             </div>
+                        {fileLink!=="" && <a href={fileLink} target="_blank" className="text-md mt-5 ml-4 font-bold flex items-center justify-center h-10 w-40 rounded-lg gap-2 bg-black text-white hover:-translate-y-1 duration-200" >Uploaded <FaArrowPointer/> </a>}
                         </div> 
-                        {fileLink!=="" && <a href={fileLink} target="_blank" className="text-lg font-bold underline text-black" >Earlier Uploaded file</a>}
                 </div>
 
                 <div className=" w-[23rem] h-full border-l-2 border-dashed border-gray-300 text-gray-400 text-sm pl-6">
                     <ul className="list-disc flex flex-col gap-10">
                         <li>
-                            <h2><b>Creating</b> a draft / <b>publishing</b> requires both an image and a pdf</h2>
+                            <h2><b>Creating</b> a draft requires a pdf</h2>
                         </li>
                         <li>
                             <h2>After creating a draft you can edit it as many times you want</h2>
