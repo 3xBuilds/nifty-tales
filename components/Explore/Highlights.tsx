@@ -7,6 +7,7 @@ import { openSans } from '@/utils/font';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useSession } from 'next-auth/react'
+import { toast } from 'react-toastify';
 
 
 const Highlights = () => {
@@ -22,7 +23,14 @@ const Highlights = () => {
         try{
             await axios.get("/api/book").then((res)=>{
                 console.log(res.data.data)
-                setHighlights(res.data.data);
+                var arr:any = []
+                res.data.data.map((item:BookType)=>{
+                    
+                    if(item.isPublished && !item.isHidden)
+                        arr.push(item);
+                })
+
+                setHighlights(arr);
             })
         }
         catch(err){
@@ -34,6 +42,7 @@ const Highlights = () => {
         try{
             await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
                 console.log(res.data.user, res.data.book);
+                toast.success("added to readlist");
             });
         }
         catch(err){
@@ -48,14 +57,22 @@ const Highlights = () => {
   return (
     <div className='w-full p-5 flex-col flex items-start justify-start noscr'>
         <h2 className='font-bold text-2xl mb-4' >Latest Publishes</h2>
-        <div className='grid grid-rows-1 grid-flow-col gap-2'>
-            {highlights?.reverse().slice(0,5).map((highlight:BookType, index)=>(
+        <div className='grid grid-rows-1 h-[16.5rem] grid-flow-col gap-2'>
+            {
+                highlights.length == 0 ? <div className='h-[16.5rem] flex gap-2'>
+                        {[0,1,2,3,4].map((item)=>(
+                            <div className='w-[450px] h-[16.5rem] p-8 bg-gray-200 flex flex-row animate-pulse items-center justify-start overflow-hidden relative rounded-xl'>
+                            </div>
+                        ))}
+                    </div>:
+                    <>
+                    {highlights?.reverse().slice(0,5).map((highlight:BookType, index)=>(
                 <div className='w-[450px] p-8 bg-gray-200 flex flex-row items-center justify-start overflow-hidden relative rounded-xl'>
-                    <div onClick={()=>{router.push(`/books/${highlight._id}`)}} className="md:w-40 md:h-68 max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
+                    <div onClick={()=>{router.push(`/books/${highlight._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                         <div className="w-40 h-52 max-md:w-32 max-md:h-44 overflow-hidden rounded-lg relative z-30">
                             <Image src={highlight.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                         </div>
-                        <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[29]" >
+                        <div className="w-full h-[13rem] shadow-xl shadow-black/40 absolute top-8 left-1 bg-gray-200 rounded-lg z-[29]" >
                         </div>
                     </div>
                     <div className='w-fit relative z-20 pl-5 pt-5 text-white flex flex-col items-start justify-start h-full'>
@@ -73,6 +90,11 @@ const Highlights = () => {
                         </button>
                     </div>
                 </div>))}
+                    </>
+                
+            }
+            
+            
         </div>
     </div>
   )

@@ -15,6 +15,7 @@ type UserType = {
     _id:string;
     name: string;
     isPublished?: boolean;
+    isHidden?: boolean;
     price?: number;
     tokenId: number;
     contractAddress: string;

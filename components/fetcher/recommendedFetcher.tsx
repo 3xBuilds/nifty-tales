@@ -19,10 +19,11 @@ export const RecommendedFetcher = () => {
           var subArr1:any = []
   
           books.data.data.reverse().map((item:any, i:number)=>{
-              if(item.isPublished){
+              if(item.isPublished && !item.isHidden){
                   subArr1.push(item);
               }
               if(subArr1.length == slicer || i == books.data.data.length-1){
+                if(subArr1.length>0)
                   arr1.push(subArr1);
                   subArr1 = []
               }

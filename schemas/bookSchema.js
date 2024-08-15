@@ -14,6 +14,11 @@ const BookSchema = new Schema({
         default: false,
         unique: false
     },
+    isHidden:{
+        type: Boolean,
+        default: false,
+        unique: false
+    },
     price: {
         type: Number,
         default: 0,

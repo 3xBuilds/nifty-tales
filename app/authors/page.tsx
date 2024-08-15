@@ -6,11 +6,12 @@ import abi from "@/utils/abis/templateABI"
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { IoMdTrash } from "react-icons/io";
 import { WalletConnectButton } from "@/components/buttons/WalletConnectButton";
 import Navbar from "@/components/Home/Navbar";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaEdit, FaPlusCircle } from "react-icons/fa";
+import { FaEdit, FaEye, FaEyeSlash, FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose, IoTrashBin } from "react-icons/io5";
@@ -30,7 +31,7 @@ export default function Home(){
 
     const[publishedBooks, setPublishedBooks] = useState([])
     const[draftBooks, setDraftBooks] = useState([])
-
+    const[hiddenBooks, setHiddenBooks] = useState([])
 
     const[slicer, setSlicer] = useState<number>(4);
 
@@ -92,12 +93,17 @@ export default function Home(){
             var arr2:any = []
             var subArr2:any = []
 
+            var arr3: any = []
+            var subArr3:any = []
+
 
             user.yourBooks.reverse().map((item:any, i)=>{
-                if(item.isPublished){
+                if(item.isPublished && !item.isHidden){
+                    
                     subArr1.push(item);
                 }
                 if(subArr1.length == slicer || i == user.yourBooks.length-1){
+                    if(subArr1.length>0)
                     arr1.push(subArr1);
                     subArr1 = []
                 }
@@ -110,12 +116,22 @@ export default function Home(){
                     arr2.push(subArr2);
                     subArr2 = []
                 }
+
+                if(item.isPublished && item.isHidden){
+                    subArr3.push(item);
+                }
+                if(subArr3.length == slicer || i == user.yourBooks.length-1){
+                    if(subArr3.length>0)
+                    arr3.push(subArr3);
+                    subArr3 = []
+                }
             })
 
             //@ts-ignore
             // if(arr1[0].length > 0)
             setPublishedBooks(arr1);
 
+            setHiddenBooks(arr3);
             //@ts-ignore
             setDraftBooks(arr2);
         }
@@ -232,6 +248,32 @@ export default function Home(){
         }
     }
 
+    async function unHide(id:string){
+        try{
+            console.log(id);
+            await axios.patch("/api/book/"+id,{isHidden : false}).then((res)=>{
+                console.log(res.data.data);
+                getUser();
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
+    async function hide(id:string){
+        try{
+            console.log(id);
+            await axios.patch("/api/book/"+id,{isHidden : true}).then((res)=>{
+                console.log(res.data.data);
+                getUser();
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     return(
         <div className="">
             <div className="h-16 w-screen relative z-[100000]">
@@ -318,10 +360,12 @@ export default function Home(){
                     {publishedBooks.map((item:any)=>(
                         <div className="w-full mb-5">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                        {item.map((item2:any)=>(<div className="flex flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div className="flex gap-2 items-center justify-center"> 
-                                <h2 className="font-semibold text-sm" >{item2.name}</h2>
-                                <button onClick={()=>{deleteBook(item2._id)}} className="w-8 h-8 hover:scale-105 duration-200 flex items-center justify-center bg-black p-1 rounded-lg text-white" ><IoTrashBin/></button>
+                        {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                                <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
+                            </div>
+                            <div className="absolute z-50 top-1  right-8" >
+                                <button onClick={()=>{hide(item2._id)}} className="bg-white text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
                             </div>
                             <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                                 <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
@@ -338,9 +382,42 @@ export default function Home(){
                         </div>
                     ))}
 
+                    
+
 
                 </div>
 
+                {/* HIDDEN BOOKS */}
+                { hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                <div className="w-full">
+                    
+                        <h3 className="text-2xl font-bold ">Hidden</h3>
+                </div>
+                {hiddenBooks.map((item:any)=>(
+                        <div className="w-full mb-5">
+                        <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
+                        {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                                <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
+                            </div>
+                            <div className="absolute z-50 top-1  right-8" >
+                                <button onClick={()=>{unHide(item2._id)}} className="bg-white text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye/></button>
+                            </div>
+                            <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                                <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">
+                                    <Image src={item2.cover} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                                </div>
+                                <div className="w-full h-full shadow-xl shadow-black/40 absolute top-1 left-1 bg-gray-200 rounded-lg z-[9]" >
+                                </div>
+                            </button>
+                        </div>
+                        ))}
+                        </div>
+                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
+                            </div>
+                        </div>
+                    ))}
+                </div>}
 
                 {/* DRAFT BOOKS */}
                { draftBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
@@ -352,11 +429,13 @@ export default function Home(){
             {draftBooks.map((item:any)=>(
                 <div className="w-full mb-5">
                 <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                {item.map((item2:any)=>(<div  className="flex flex-col items-center px-10 mt-2 justify-center gap-4">
-                <div className="flex gap-2 items-center justify-center"> 
-                    <h2 className="font-semibold text-sm" >{item2.name}</h2>
-                    <button onClick={()=>{deleteBook(item2._id)}} className="w-8 h-8 hover:scale-105 duration-200 flex items-center justify-center bg-black p-1 rounded-lg text-white" ><IoTrashBin/></button>
-                </div>
+                {item.map((item2:any)=>(<div  className="flex group relative flex-col items-center px-10 mt-2 justify-center gap-4">
+                    <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                                <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
+                            </div>
+                            <div className="absolute z-50 top-1  right-8" >
+                                <button onClick={()=>{deleteBook(item2._id)}} className="bg-white text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
+                            </div>
 
                     <button onClick={()=>{handleDraft(item2)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                         <div className="w-full h-52 overflow-hidden rounded-lg relative z-10">

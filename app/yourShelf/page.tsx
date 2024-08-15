@@ -79,7 +79,7 @@ export default function Home(){
                         <div className="w-full mb-5">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item?.map((item2:BookType)=>(<div className="flex relative group flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
+                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[90%] text-white rounded-b-xl to-black/70 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
                             </div>
                             <div className="absolute z-50 top-1  right-8" >
