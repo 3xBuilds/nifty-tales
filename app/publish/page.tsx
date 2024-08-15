@@ -437,7 +437,15 @@ export default function Home(){
                 </div>
 
                 <div className=" w-[23rem] h-full border-l-2 border-dashed border-gray-300 text-gray-400 text-sm pl-6">
-                 <h2>Creating a draft / publishing requires both an image and a pdf</h2>
+                    <ul className="list-disc flex flex-col gap-10">
+                        <li>
+                            <h2><b>Creating</b> a draft / <b>publishing</b> requires both an image and a pdf</h2>
+                        </li>
+                        <li>
+                            <h2>After creating a draft you can edit it as many times you want</h2>
+                        </li>
+                    </ul>
+                 
                 </div>
             </div>
 
