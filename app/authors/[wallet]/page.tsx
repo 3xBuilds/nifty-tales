@@ -163,12 +163,10 @@ export default function Home(){
                 {/* PUBLISHED BOOKS */}
                 <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                     <div className="flex items-center justify-center w-full ">
-                        <div className="w-1/2 flex items-start justify-start ">
+                        <div className="w-full flex items-start justify-start ">
                             <h3 className="text-2xl font-bold ">Published</h3>
                         </div>
-                        <div className="w-1/2 flex justify-end">
-                            <button onClick={()=>{router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
-                        </div>
+                        
                     </div>
 
                     {publishedBooks.map((item:any)=>(
