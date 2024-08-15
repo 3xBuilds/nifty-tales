@@ -1,5 +1,6 @@
 type UserType = {
     id: string;
+    collectionName: string;
     wallet: string;
     email: string;
     username: string;

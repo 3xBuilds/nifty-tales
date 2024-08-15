@@ -21,6 +21,9 @@ type GlobalContextType = {
   setUser: Dispatch<SetStateAction<UserType | null>>;
   fetch: boolean | false;
   setFetch: Dispatch<SetStateAction<boolean | false>>;
+  getUser: () => void;
+
+
 
 }
 
@@ -28,7 +31,10 @@ const GlobalContext = createContext<GlobalContextType>({
   user: null,
   setUser: () => { },
   fetch: false,
-  setFetch: () => {}
+  setFetch: () => {},
+  getUser: () => { },
+
+
 });
 
 
@@ -88,9 +94,26 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   },[address])
 
+  useEffect(()=>{
+    console.log(pathname.split("/")[1])
+    if(pathname.split("/")[1] !== "publish"){
+      localStorage.removeItem("name");
+      localStorage.removeItem("id");
+
+      localStorage.removeItem("price");
+      localStorage.removeItem("maxMint");
+      localStorage.removeItem("cover");
+      localStorage.removeItem("artist");
+      localStorage.removeItem("isbn");
+      localStorage.removeItem("description");
+      localStorage.removeItem("tags");
+      localStorage.removeItem("pdf");
+    }
+  },[pathname])
+
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch
+      user, setUser, fetch, setFetch, getUser
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

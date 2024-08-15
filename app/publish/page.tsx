@@ -30,10 +30,14 @@ export default function Home(){
     const [pdf, setPdf] = useState<File | null>(null);
     const [cover, setCover] = useState<File | null>(null);
 
+    const[id, setId] = useState("");
+
     const[characterDesc, setCharacterDesc] = useState(0)
     const[characterName, setCharacterName] = useState(0)
     const[characterArtist, setCharacterArtist] = useState(0)
 
+    const[coverLink, setCoverLink] = useState("");
+    const[fileLink, setFileLink] = useState("");
 
     const [mintPrice, setMintPrice] = useState<number>(0);
     const [maxMints, setMaxMints] = useState<number>(0);
@@ -75,15 +79,15 @@ export default function Home(){
         }
     }
 
-    async function getContractDetails(){
+    async function getContractDetails(type:string){
         try{
             const contract = await contractSetup();
             console.log('contract is here broooo: ', contract);
             const id = await contract?.BOOK();
             console.log("heheh id: ", id);
-            // setTokenId(Number(id).toString());
+            setTokenId(Number(id).toString());
             if(id){
-                handleSubmit('publish', id.toString());
+                handleSubmit(type, id.toString());
             }
         }
         catch(err){
@@ -99,10 +103,13 @@ export default function Home(){
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
             txn.wait().then(async (res:any)=>{
-                console.log(res);
-                await delay(1000);
-                setLoading(false);
-                router.push("/authors")
+                console.log("THIS IS ID",id);
+                // await axios.patch("/api/book/"+id, {
+                //     isPublshed: true
+                // }).then((res)=>{
+                    setLoading(false);
+                    router.push("/authors")
+                // })
             })
         }
         catch(err){
@@ -157,29 +164,122 @@ export default function Home(){
                 setLoading(false);
                 return;
             }
-    
-            const formData = new FormData();
-            formData.append('name', bookName);
-            formData.append('isbn', isbn);
-            formData.append('description', bookDesc);
-            tags.forEach(element => {
-                formData.append('tags', element);
-            });
-            formData.append('artist', illustrationArtist);
-            formData.append('price', mintPrice.toString());
-            formData.append('maxMint', maxMints.toString());
-            formData.append('content', pdf as Blob);
-            formData.append('cover', cover as Blob);
-            formData.append('contractAdd', String(user?.contractAdd) as string);
-            formData.append('tokenId', tokenId);
-            formData.append('wallet', address.toString() as string);
-            formData.append('publishStatus', publish);
-    
-            const response = await axios.post("/api/uploadBook", formData);
-            console.log(response.data);
+            
+            if(cover && pdf){
+                const formData = new FormData();
+                formData.append('name', bookName);
+                formData.append('isbn', isbn);
+                formData.append('description', bookDesc);
+                tags.forEach(element => {
+                    formData.append('tags', element);
+                });
+                formData.append('artist', illustrationArtist);
+                formData.append('price', mintPrice.toString());
+                formData.append('maxMint', maxMints.toString());
+                formData.append('content', pdf as Blob);
+                formData.append('cover', cover as Blob);
+                formData.append('contractAdd', String(user?.contractAdd) as string);
+                formData.append('tokenId', tokenId);
+                formData.append('wallet', address.toString() as string);
+                formData.append('publishStatus', publish)
+                formData.append("id", id);
+
+                console.log("TRIGGER NORMAL DRAFT", cover, pdf);
+        
+                const response = await axios.post("/api/uploadBook", formData);
+                console.log(response.data);
+            }
+
+            if(!cover && !pdf && id !== ""){
+                const formData = new FormData();
+                formData.append('name', bookName);
+                formData.append('isbn', isbn);
+                formData.append('description', bookDesc);
+                tags.forEach(element => {
+                    formData.append('tags', element);
+                });
+                formData.append('artist', illustrationArtist);
+                formData.append('price', mintPrice.toString());
+                formData.append('maxMint', maxMints.toString());
+                formData.append('id', id.toString());
+                formData.append('contractAdd', String(user?.contractAdd) as string);
+                formData.append('tokenId', tokenId);
+                formData.append('wallet', address.toString() as string);
+                formData.append('publishStatus', publish);
+        
+                const response = await axios.patch("/api/uploadBook", formData);
+                console.log(response.data);
+            }
+
+            if(!cover && !pdf && id == ""){
+                const formData = new FormData();
+                formData.append('name', bookName);
+                formData.append('isbn', isbn);
+                formData.append('description', bookDesc);
+                tags.forEach(element => {
+                    formData.append('tags', element);
+                });
+                formData.append('artist', illustrationArtist);
+                formData.append('price', mintPrice.toString());
+                formData.append('maxMint', maxMints.toString());
+                formData.append('id', id.toString());
+                formData.append('contractAdd', String(user?.contractAdd) as string);
+                formData.append('tokenId', tokenId);
+                formData.append('wallet', address.toString() as string);
+                formData.append('publishStatus', publish);
+        
+                const response = await axios.post("/api/uploadBook", formData);
+                console.log(response.data);
+            }
+
+            if(cover && !pdf){
+                const formData = new FormData();
+                formData.append('name', bookName);
+                formData.append('isbn', isbn);
+                formData.append('description', bookDesc);
+                tags.forEach(element => {
+                    formData.append('tags', element);
+                });
+                formData.append('artist', illustrationArtist);
+                formData.append('price', mintPrice.toString());
+                formData.append('maxMint', maxMints.toString());
+                formData.append('id', id);
+                formData.append('cover', cover as Blob);
+                formData.append('contractAdd', String(user?.contractAdd) as string);
+                formData.append('tokenId', tokenId);
+                formData.append('wallet', address.toString() as string);
+                formData.append('publishStatus', publish);
+        
+                const response = await axios.post("/api/uploadBook", formData);
+                console.log(response.data);
+            }
+
+            if(!cover && pdf){
+                const formData = new FormData();
+                formData.append('name', bookName);
+                formData.append('isbn', isbn);
+                formData.append('description', bookDesc);
+                tags.forEach(element => {
+                    formData.append('tags', element);
+                });
+                formData.append('artist', illustrationArtist);
+                formData.append('price', mintPrice.toString());
+                formData.append('maxMint', maxMints.toString());
+                formData.append('id', id);
+                formData.append('content', pdf as Blob);
+                formData.append('contractAdd', String(user?.contractAdd) as string);
+                formData.append('tokenId', tokenId);
+                formData.append('wallet', address.toString() as string);
+                formData.append('publishStatus', publish);
+        
+                const response = await axios.post("/api/uploadBook", formData);
+                console.log(response.data);
+            }
 
             if(publish == "publish"){
+                
                 contractPublishBook();
+                
             }
             else{
                 router.push("/authors")
@@ -194,26 +294,15 @@ export default function Home(){
 
     }
 
-    if (typeof window !== 'undefined') {
-        window.addEventListener('beforeunload', function() {
-            
-            localStorage.removeItem("name");
-            localStorage.removeItem("price");
-            localStorage.removeItem("maxMint");
-            localStorage.removeItem("cover");
-            localStorage.removeItem("artist");
-            localStorage.removeItem("isbn");
-            localStorage.removeItem("description");
-            localStorage.removeItem("tags");
-            localStorage.removeItem("pdf");
-        });
-      }
 
     useEffect(()=>{
         setBookName(localStorage.getItem('name') || "");
         setBookDesc(localStorage.getItem("description") || "")
         setIllustrationArtist(localStorage.getItem("artist") || "")
-
+        setCoverLink(localStorage.getItem("cover") || "");
+        setFileLink(localStorage.getItem("pdf") || "")
+        console.log("THIS IS ID",localStorage.getItem("id"))
+        setId(localStorage.getItem("id") || "")
         //@ts-ignore
         setTags(JSON.parse(localStorage.getItem("tags")) || [])
 
@@ -226,9 +315,9 @@ export default function Home(){
         //@ts-ignore
         setMaxMints(localStorage.getItem("maxMints") || 0);
 
-        console.log(location)
 
     },[])
+
 
     return(
         <div className="md:px-16 pt-24 max-md:px-4 w-screen h-screen flex flex-col items-start justify-start">
@@ -242,16 +331,24 @@ export default function Home(){
 
             <OptionToggle options={["Upload PDF", "Write your Own"]} selectedOption={option} setOption={setOption} />
 
-            <div className="md:w-[70%] flex max-md:items-center max-md:justify-center max-md:flex-col gap-10 mt-5">
-                <div className="relative w-36 ">
+            <div className="md:w-[100%] flex max-md:items-center max-md:justify-center max-md:flex-col gap-10 mt-5">
+                <div className="relative w-44">
                     {/* Image Holder */}
                     <div className="h-44 md:absolute relative z-[2] w-32 mt-4 bg-gray-500 rounded-lg shadow-lg shadow-black/10">
 
                             <label htmlFor="dropzone-file2" className=" w-full h-full bg-red-600 group rounded-xl cursor-pointer ">
                                 <div className="flex flex-col items-center h-full w-full overflow-hidden justify-center rounded-lg">
                                     {!cover ? <div className=" flex flex-col items-center justify-center w-full h-full rounded-md hover:bg-white/20 duration-200">
+                                            
+                                            {coverLink !== "" ? <div className=" flex flex-col items-center justify-center w-full h-full rounded-md hover:bg-white/20 duration-200">
+                                                <Image width={1080} height={1080} src={coverLink} alt="nothing" className=" object-cover w-full h-full hover:scale-110 hover:opacity-50 duration-150 " />
+                                            </div>:
+                                            <>
                                             <FaImage className=" text-xl text-white mb-2 " />
                                             <h3 className="w-[80%] font-bold text-base text-center text-white">Upload Cover Image</h3>
+                                            </>
+                                            }
+                                            
                                         </div> :
                                         <div className=" flex flex-col items-center justify-center w-full h-full rounded-md hover:bg-white/20 duration-200">
                                             <Image width={500} height={500} className=" object-cover w-full h-full hover:scale-110 hover:opacity-50 duration-150 " src={!cover ? "" : (cover instanceof File ? URL.createObjectURL(cover) : cover)} alt=""/>
@@ -262,8 +359,10 @@ export default function Home(){
                             </label>
                     </div>
                     <div className="absolute z-[1] h-44 w-32 top-1 left-1 mt-4 bg-white rounded-lg shadow-lg shadow-black/10">
-
+                        
                     </div>
+
+                    
                 </div>
                 <div className="flex flex-col w-full">
                     <div className="flex gap-4">
@@ -334,6 +433,11 @@ export default function Home(){
                                 {/* <button onClick={handleSubmit} disabled={uploading} className=' col-span-2 w-32 py-2 font-medium text-black rounded-xl hover:-translate-y-[0.3rem] duration-200 bg-jel-gray-3 hover:bg-jel-gray-2 text-nowrap mt-2'>{uploading ? "Uploading..." : "Upload"}</button> */}
                             </div>
                         </div> 
+                        {fileLink!=="" && <a href={fileLink} target="_blank" className="text-lg font-bold underline text-black" >Earlier Uploaded file</a>}
+                </div>
+
+                <div className=" w-[23rem] h-full border-l-2 border-dashed border-gray-300 text-gray-400 text-sm pl-6">
+                 <h2>Creating a draft / publishing requires both an image and a pdf</h2>
                 </div>
             </div>
 
@@ -346,9 +450,11 @@ export default function Home(){
                     </button>
                     <h2 className="text-start max-md:w-full" >I agree that have the rights of everything I am publishing</h2>
                 </div>
-                <button onClick={()=>{handleSubmit("draft", tokenId)}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
-                <button onClick={()=>{setLoading(true); getContractDetails()}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
+                <button onClick={()=>{setLoading(true); getContractDetails("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
+                <button onClick={()=>{setLoading(true); getContractDetails("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
             </div>
+
+            
 
         </div>
     )

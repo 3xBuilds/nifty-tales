@@ -85,6 +85,10 @@ export default function Home() {
                 // throw new Error("Contract deployment failed");
             }
 
+            await axios.patch("/api/user/"+user?.email, {collectionName: collectionName}).then((res)=>{
+                console.log(res.data.updatedUser);
+            });
+
             // Create FormData object
             const formData = new FormData();
 

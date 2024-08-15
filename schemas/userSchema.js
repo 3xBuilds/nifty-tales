@@ -8,6 +8,11 @@ const UserSchema = new Schema({
         default: "",
         unique: false
     },
+    collectionName: {
+        type: String,
+        default: "",
+        unique: false
+    },
     email:{
         type:String,
         unique: true,

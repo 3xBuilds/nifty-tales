@@ -6,10 +6,15 @@ import Icon from '../Global/Icon';
 import { openSans } from '@/utils/font';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { useSession } from 'next-auth/react'
+
 
 const Highlights = () => {
 
     const router = useRouter();
+
+    const {data:session} = useSession();
+
 
     const [highlights, setHighlights] = useState<Array<BookType>>([]);
 
@@ -24,8 +29,15 @@ const Highlights = () => {
         }
     }
 
-    const addToReadList = () => {
-        console.log('add to read list');
+    const addToReadList = async (id:string) => {
+        try{
+            await axios.post("/api/addToReadlist", {email: session?.user?.email, bookId:id}).then((res)=>{
+                console.log(res.data.user, res.data.book)
+            });
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     useEffect(() => {
@@ -55,7 +67,7 @@ const Highlights = () => {
                     </div>
                     <div className='flex flex-row gap-2 absolute bottom-8 right-8 z-20'>
                         <button onClick={()=>{router.push(`/books/${highlight._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
-                        <button onClick={()=>{addToReadList()}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
+                        <button onClick={()=>{addToReadList(highlight._id)}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
                             <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>
                         </button>
                     </div>

@@ -73,3 +73,44 @@ export async function PATCH(req:any){
         }, { status: 500 })
     }
 }
+
+export async function DELETE(req: any) {
+    try {
+        // Connect to the database
+        await connectToDB();
+
+        // Extract the book ID from the URL
+        const id = req.nextUrl.pathname.split("/")[3];
+
+        if (!id) {
+            return NextResponse.json({ message: "Book ID is required" }, { status: 400 });
+        }
+
+        // Find the book and delete it
+        const deletedBook = await Book.findByIdAndDelete(id);
+
+        if (!deletedBook) {
+            return NextResponse.json({ message: "Book not found" }, { status: 404 });
+        }
+
+        // Find all users who have this book in their array and remove it
+        await User.updateMany(
+            { yourBooks: id },
+            { $pull: { yourBooks: id } }
+        );
+
+        await User.updateMany(
+            { readlist: id },
+            { $pull: { readlist: id } }
+        );
+
+        // Revalidate the path to update any static pages
+        revalidatePath('/', 'layout');
+
+        return NextResponse.json({ message: "Book deleted successfully and removed from users", data: deletedBook }, { status: 200 });
+
+    } catch (error) {
+        console.error("Error deleting book:", error);
+        return NextResponse.json({ message: "Error deleting book" }, { status: 500 });
+    }
+}

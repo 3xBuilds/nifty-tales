@@ -57,7 +57,7 @@ const BookSchema = new Schema({
     ISBN:{
         type:String,
         // unique: true,
-        default: null,
+        default: "",
         required: false
     },
     description: {

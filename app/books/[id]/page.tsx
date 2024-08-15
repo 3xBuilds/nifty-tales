@@ -13,6 +13,7 @@ import { IoIosArrowBack } from 'react-icons/io';
 import { Loader } from '@/components/Global/Loader';
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
+import { FaBookOpen, FaLocationArrow } from 'react-icons/fa';
 
  
 export default function Page() {
@@ -21,7 +22,7 @@ export default function Page() {
     const[bookDetails, setBookDetails] = useState<BookType>();
     const[userDetails, setUserDetails] = useState<UserType>();
 
-    const{fetch, setFetch} = useGlobalContext();
+    const{getUser} = useGlobalContext();
 
     const[amount, setAmount] = useState(0);
     const[showModal, setShowModal] = useState(false);
@@ -83,7 +84,7 @@ export default function Page() {
           console.log(res);
           //@ts-ignore
           await axios.patch("/api/book/"+pathname.split("/")[2], {minted: bookDetails?.minted+amount}).then((res)=>{
-            setFetch((prev)=>(!prev));
+            getUser()
             setLoading(false);
           })
         })
@@ -96,7 +97,7 @@ export default function Page() {
 
     useEffect(()=>{
       getBookDetails();
-    },[ , fetch])
+    },[])
 
     
 
@@ -156,7 +157,7 @@ export default function Page() {
               <div className='flex flex-col gap-6 md:w-[50%] max-md:w-[90%] '>
                 <div className='flex flex-col gap-2 items-start justify-start'>
                   <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
-                  <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className='underline text-sm text-semibold text-white'>Published by: {userDetails?.username}</button>
+                  <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
                 </div>
                 <p className='text-sm text-white' >{bookDetails?.description?.substring(0,200)}</p>
                 <div className='flex flex-wrap gap-2'>
