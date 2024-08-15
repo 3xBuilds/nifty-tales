@@ -42,7 +42,7 @@ const Highlights = () => {
         try{
             await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
                 console.log(res.data.user, res.data.book);
-                toast.success("added to readlist");
+                toast.success("Added to Readlist!");
             });
         }
         catch(err){

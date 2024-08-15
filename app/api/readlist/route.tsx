@@ -30,7 +30,7 @@ export async function POST(req: any) {
         await user.save();
 
         return NextResponse.json({
-            message: "Book added to readlist successfully",
+            message: "Book Added to Readlist! successfully",
             book: book,
             user: user
         }, { status: 200 });

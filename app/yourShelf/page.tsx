@@ -9,10 +9,13 @@ import Image from "next/image";
 import { IoMdTrash } from "react-icons/io";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import OptionToggle from "@/components/Global/OptionToggle";
 
 export default function Home(){
 
     const {user, getUser} = useGlobalContext();
+
+    const[toggle, setToggle] = useState<string>("Readlist");
 
     const {data:session} = useSession()
 
@@ -73,10 +76,11 @@ export default function Home(){
             </div>
 
             <div className="w-full">
-                <h3 className="text-3xl font-bold mb-10">Your Shelf</h3>
-                {readList.length > 0 ? <div>
+                <h3 className="text-3xl font-bold mb-2">Your Shelf</h3>
+                <OptionToggle  options={["Readlist", "Minted"]} selectedOption={toggle} setOption={setToggle} />
+                {readList.length > 0 && toggle == "Readlist" ? <div>
                     {readList.map((item:any)=>(
-                        <div className="w-full mb-5">
+                        <div className="w-full mb-5 mt-10">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item?.map((item2:BookType)=>(<div className="flex relative group flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
                             <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
@@ -101,9 +105,9 @@ export default function Home(){
                     ))}
                 </div>:
                     <div className="w-full h-80 flex flex-col items-center justify-center">
-                        <h3 className="text-xl font-semibold text-gray-500 mb-3">Your shelf seems empty :(</h3>
+                        {toggle == "Readlist" && <><h3 className="text-xl font-semibold text-gray-500 mb-3">Your shelf seems empty :(</h3>
                         <h3 className="text-lg font-medium text-gray-400 mb-5 flex gap-2 items-center">Add some books from <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
-
+                        </>}
                     </div>
                 }
             </div>

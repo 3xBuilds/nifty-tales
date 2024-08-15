@@ -170,6 +170,12 @@ export default function Home(){
                 return;
             }
 
+            if(publish=="publish" && !cover && coverLink == ""){
+                toast.error("Upload a cover image!");
+                setLoading(false);
+                return;
+            }
+
             if(!agree){
                 toast.error("Please agree to the terms");
                 setLoading(false);

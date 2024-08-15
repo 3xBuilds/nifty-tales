@@ -7,7 +7,7 @@ const Book = ({img}:any) => {
     <div className='w-fit h-fit relative hover:scale-105 duration-150'>
         <div className='bg-nifty-gray-1 overflow-hidden rounded w-36 h-48 shadow-black/50 shadow relative z-10'>
             {img ? <Image width={1080} height={1080} src={img} alt="bookcover" className='w-full h-full object-cover'/>: 
-              <Image width={1080} height={1080} src={placeholder} alt="bookcover" className='w-full h-full object-cover'/>
+                        <Image width={1080} height={1080} src={placeholder} alt="bookcover" className='w-full h-full object-cover'/>
 
             }
 

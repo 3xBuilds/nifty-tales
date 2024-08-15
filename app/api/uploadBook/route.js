@@ -89,8 +89,7 @@ export async function POST(request) {
 
     const publishStatus = formData.get('publishStatus'); // publish | draft
 
-    console.log("I AM PUBLISH STATUS", id, publishStatus, artist, name, description, tokenId, wallet);
-
+    console.log("I AM PUBLISH STATUS", id, publishStatus, artist, name, description, tokenId, wallet, content, cover);
 
 
     if( !name  || !tags || !tokenId || !wallet ) {
@@ -112,6 +111,26 @@ export async function POST(request) {
       description,
       tags: tags || []
     }
+
+    if(publishStatus == "draft" && content && !cover && id==""){
+      const book = await Book.create(bookdData);
+      author.yourBooks.push(book._id);
+      await author.save();
+      const contentArrayBuffer = await content.arrayBuffer();
+      const contentBuffer = Buffer.from(contentArrayBuffer);
+      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, book._id, wallet);
+
+      if(status === true){ 
+        book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${book._id}/book`;
+        book.isPublished = false;
+        book.createdAt = Date.now();
+        await book.save();
+        return NextResponse.json({success: book});
+
+
+      }
+    }
+
 
     if(cover && !content && id !== ""){
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
@@ -182,29 +201,6 @@ export async function POST(request) {
       }
     }
 
-    if(content && id == ""){
-      const newBook = await Book.create(bookdData);
-      author.yourBooks.push(newBook._id);
-      await author.save();
-      console.log("newBook", newBook);
-
-      console.log("BULLSEYE")
-      const contentArrayBuffer = await content.arrayBuffer();
-      const contentBuffer = Buffer.from(contentArrayBuffer);
-      // const coverBuffer = Buffer.from(await cover.arrayBuffer());
-
-      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, newBook._id, wallet);
-
-      if(status === true){
-        console.log("Hellooooooo");
-        console.log("NEW BOOK",newBook)
-        // newBook.cover = ``;
-        newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/book`;
-
-        await newBook.save();
-        return NextResponse.json({success: newBook});
-      }
-    }
 
     if(content && cover && id == ""){
       const newBook = await Book.create(bookdData);
