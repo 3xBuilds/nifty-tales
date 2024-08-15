@@ -5,6 +5,7 @@ import Providers from "@/utils/provider/Providers"
 import Navbar from "@/components/Home/Navbar";
 import { poppins } from "@/utils/font";
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const metadata: Metadata = {
   title: "NiftyTales",
