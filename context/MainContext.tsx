@@ -56,7 +56,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   async function getUser(){
     try{
       const res = await axios.get(`/api/user/${session?.user?.email}`);
-      console.log("DADDY I JUST FETCHED USER!!!", res.data.user);
+      // console.log("DADDY I JUST FETCHED USER!!!", res.data.user);
       setUser(res.data.user);
     }
     catch(err){
