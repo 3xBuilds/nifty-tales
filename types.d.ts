@@ -8,6 +8,7 @@ type UserType = {
     profileImage: string;
     readlist: Array<string>;
     yourBooks: Array<string>;
+    mintedBooks: Array<string>;
     searchHistory: Array<string>;
     role: string
   }

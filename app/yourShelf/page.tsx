@@ -76,6 +76,7 @@ export default function Home(){
             </div>
 
             <div className="w-full">
+                <h2 className="text-5xl font-bold mb-10">Hi, {user?.username}</h2>
                 <h3 className="text-3xl font-bold mb-2">Your Shelf</h3>
                 <OptionToggle  options={["Readlist", "Minted"]} selectedOption={toggle} setOption={setToggle} />
                 {readList.length > 0 && toggle == "Readlist" ? <div>

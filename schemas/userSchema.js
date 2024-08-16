@@ -33,6 +33,11 @@ const UserSchema = new Schema({
         ref: Book,
         default: []
     }],
+    mintedBooks: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: Book,
+        default: []
+    }],
     searchHistory: {
         type: [String],
         default: null

@@ -12,7 +12,7 @@ import { publicProvider } from "wagmi/providers/public";
 const WalletIdContext = createContext<any>(null);
 
 const { chains, publicClient } = configureChains(
-  [base, polygon],
+  [base],
   [publicProvider()]
 );
 
