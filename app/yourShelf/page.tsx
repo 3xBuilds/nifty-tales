@@ -134,7 +134,7 @@ export default function Home(){
                 }
                 
                 {/* @ts-ignore */}
-                {mintList.length > 0 && toggle == "Minted" ? <div>
+                {mintList?.length > 0 && toggle == "Minted" ? <div>
                     {mintList?.map((item:any)=>(
                         <div className="w-full mb-5 mt-10">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
