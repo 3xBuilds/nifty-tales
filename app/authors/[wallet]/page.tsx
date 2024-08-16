@@ -151,7 +151,7 @@ export default function Home(){
                     <div className="flex flex-col gap-1">
 
                         <h2 className="md:text-5xl text-2xl font-bold text-white">{user?.collectionName}</h2>
-                        <h2 className="md:text-2xl text-md font-semibold text-white" >Made by: {user?.username}</h2>
+                        <h2 className="md:text-2xl text-md font-semibold text-white" >Author: {user?.username}</h2>
                         <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md underline text-xs font-semibold text-white">Check on BaseScan</a>
                     </div>
                 </div>
@@ -176,7 +176,7 @@ export default function Home(){
                         <div className="w-full mb-5">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item.map((item2:any)=>(<div className="flex relative group flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
+                            <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
                             </div>
                             <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >

@@ -30,7 +30,7 @@ const Highlights = () => {
                         arr.push(item);
                 })
 
-                setHighlights(arr);
+                setHighlights(arr.reverse());
             })
         }
         catch(err){
@@ -67,7 +67,7 @@ const Highlights = () => {
                             ))}
                         </div>:
                         <>
-                        {highlights?.reverse().slice(0,5).map((highlight:BookType, index)=>(
+                        {highlights?.slice(0,5).map((highlight:BookType, index)=>(
                     <div className='w-[450px] p-8 bg-gray-200 flex flex-row items-center justify-start overflow-hidden relative rounded-xl'>
                         <div onClick={()=>{router.push(`/books/${highlight._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                             <div className="w-40 h-52 max-md:w-32 max-md:h-44 overflow-hidden rounded-lg relative z-30">
@@ -77,7 +77,7 @@ const Highlights = () => {
                             </div>
                         </div>
                         <div className='w-fit relative z-20 pl-5 pt-5 text-white flex flex-col items-start justify-start h-full'>
-                            <h1 className='text-2xl font-bold'>{highlight.name}</h1>
+                            <h2 className='text-2xl font-bold'>{highlight.name}</h2>
                             <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.description?.substring(0,100)}...</p>
                         </div>
                         <div className='w-full h-full absolute top-0 left-0 z-10 bg-black/30 backdrop-blur'></div>
