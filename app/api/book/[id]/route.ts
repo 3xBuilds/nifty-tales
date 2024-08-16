@@ -52,7 +52,7 @@ export async function PATCH(req:any){
         const body = await req.json()
 
         await connectToDB();
-        const {...rest} = body;
+        const {email, ...rest} = body;
 
 
         const updatedBook = await Book.findByIdAndUpdate(
@@ -60,6 +60,10 @@ export async function PATCH(req:any){
             { $set: body }, 
             { new: true, runValidators: true } 
         );
+
+        const user = await User.findOne({email: email});
+        user.mintedBooks.push(id);
+        await user.save();
 
         console.log(updatedBook);
 

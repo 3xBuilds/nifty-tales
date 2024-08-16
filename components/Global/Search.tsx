@@ -29,7 +29,7 @@ type Props = {
 
     useEffect(()=>{
         setSearchResults([]);
-        
+        setHistoryBookResult([]);
         setHistoryUserResult([]);
         setSearch("")
     },[bringSearchBar])
@@ -73,7 +73,6 @@ type Props = {
                     }
                     else if(item[0] == "B"){
                         const response = await axios.get("/api/book/"+item.slice(1,item.length));
-
                         setHistoryBookResult((prev)=>[...prev, response.data.data]);
                     }
                 })
@@ -98,12 +97,6 @@ type Props = {
         catch(err){
             console.log(err);
         }
-    }
-
-    async function getWallet(id:string){
-        const res = await axios.get("/api/user/id/"+id);
-        return res.data.user.wallet;
-
     }
 
     useEffect(()=>{

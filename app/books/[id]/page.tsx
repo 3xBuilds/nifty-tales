@@ -15,6 +15,8 @@ import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
 import { FaBookOpen, FaLocationArrow } from 'react-icons/fa';
 import Book from '@/components/Global/Book';
+import { useSession } from 'next-auth/react';
+import { TiMinus, TiPlus } from 'react-icons/ti';
 
  
 export default function Page() {
@@ -22,6 +24,8 @@ export default function Page() {
 
     const[bookDetails, setBookDetails] = useState<BookType>();
     const[userDetails, setUserDetails] = useState<UserType>();
+
+    const[price, setPrice] = useState<string>("0");
 
     const{getUser} = useGlobalContext();
 
@@ -44,7 +48,6 @@ export default function Page() {
         console.log(err);
       }
     }
-
 
 
     async function contractSetup(){
@@ -75,6 +78,8 @@ export default function Page() {
       }
   }
 
+  const{data:session} = useSession()
+
     async function mint(){
       try{
         const contract = await contractSetup();
@@ -84,7 +89,7 @@ export default function Page() {
         txn.wait().then(async(res:any)=>{
           console.log(res);
           //@ts-ignore
-          await axios.patch("/api/book/"+pathname.split("/")[2], {minted: bookDetails?.minted+amount}).then((res)=>{
+          await axios.patch("/api/book/"+pathname.split("/")[2], {minted: bookDetails?.minted+amount, email:session?.user?.email}).then((res)=>{
             getUser()
             setLoading(false);
           })
@@ -100,7 +105,21 @@ export default function Page() {
       getBookDetails();
     },[])
 
-    
+    async function setMintPrice(){
+      try{
+        const contract = await contractSetup();
+
+        const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
+        setPrice(String(ethers.utils.parseEther(String(price))));
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+
+    useEffect(()=>{
+      setMintPrice();
+    },[])
 
     return (
     <div className=''>
@@ -113,14 +132,17 @@ export default function Page() {
 
       {/* MINTING MODAL */}
       <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
-          <div className='bg-white rounded-xl h-40 flex flex-col gap-4 justify-center items-center px-10'>
-            <div className='flex rounded-xl items-center justify-center gap-4 ' >
+          <div className='bg-white rounded-xl flex flex-col shadow-xl shadow-black/30 gap-4 justify-center items-start p-5'>
+            <h2 className='text-2xl font-bold' >Mint</h2>
+            <h2 className='text-lg font-semibold text-gray-400' >Choose number of mints</h2>
+
+            <div className='flex rounded-xl items-center justify-center gap-4 w-full h-28 border-[1px] border-gray-300' >
               <button onClick={()=>{
                 if(amount != 0){
                   setAmount((prev)=>(prev-1))
                 }
-              }} className='hover:scale-105 duration-200' ><IoIosArrowBack className='text-2xl text-black'/></button>
-              <h3 className='text-2xl font-bold'>{amount}</h3>
+              }} className='hover:scale-105 duration-200' ><TiMinus className='text-2xl text-black'/></button>
+              <h3 className='text-2xl font-bold w-24 text-center'>{amount}</h3>
               <button onClick={()=>{
                 if(bookDetails?.maxMint == 0 || bookDetails?.minted as number+amount != bookDetails?.maxMint){
                   setAmount((prev)=>(prev+1))
@@ -128,7 +150,13 @@ export default function Page() {
                 else{
                   setAmount((prev)=>(prev))
                 }
-              }} className='hover:scale-105 duration-200'><IoIosArrowBack className='text-2xl text-black rotate-180'/></button>
+              }} className='hover:scale-105 duration-200'><TiPlus className='text-2xl text-black rotate-180'/></button>
+            </div>
+            <div className='text-gray-400 w-full'>
+              <div className='w-full flex'>
+                <h2 className='w-1/2 text-md'>Spending</h2>
+                <h2 className='w-1/2 text-md font-semibold text-end'>{price} ETH</h2>
+              </div>
             </div>
             <div className='flex gap-2 items-center justify-center' >
                 <button onClick={()=>{setShowModal(false)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
