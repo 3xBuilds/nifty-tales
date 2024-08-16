@@ -282,7 +282,7 @@ export default function Home(){
             {/* Image Modal */}
             <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
                 <div className="bg-white gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
-                    <div className="w-full items-end flex justify-end text-xl"><button className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
                     <div>
                         <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
                             <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
@@ -301,7 +301,7 @@ export default function Home(){
             {/* Banner Modal */}
             <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${bannerModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
                 <div className="bg-white gap-4 max-md:w-[90%] h-84 w-96 rounded-xl p-6 flex flex-col items-center justify-center" >
-                    <div className="w-full items-end flex justify-end text-xl"><button className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setBannerModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
                     <div className="w-full h-full" >
                         <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
                             <div className="flex flex-col items-center h-32 w-full p-2 overflow-hidden justify-center rounded-lg">

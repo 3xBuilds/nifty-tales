@@ -14,6 +14,7 @@ import { Loader } from '@/components/Global/Loader';
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
 import { FaBookOpen, FaLocationArrow } from 'react-icons/fa';
+import Book from '@/components/Global/Book';
 
  
 export default function Page() {
@@ -147,11 +148,7 @@ export default function Page() {
             <div className='flex max-md:flex-col gap-8 object-center items-center max-md:py-10 md:h-full h-fit md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
               <div className="flex object-center items-center md:h-full md:px-10 md:w-60 h-full justify-center md:justify-start my-auto">
 
-                  <div className="w-48 max-md:w-32 max-md:h-48 relative md:absolute h-64">
-                      <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="shadow-xl shadow-black/20 w-full h-full z-10 object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-                      <div className='w-full h-full bg-white absolute top-1 left-1 z-[9] shadow-xl shadow-black/20' ></div>
-                      <div className='w-full h-full bg-white absolute top-2 left-2 z-[8] shadow-xl shadow-black/20' ></div>
-                  </div>
+                  <Book img={bookDetails?.cover} />
 
               </div>
               <div className='flex flex-col gap-6 md:w-[50%] max-md:w-[90%] '>

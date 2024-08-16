@@ -46,6 +46,7 @@ const Navbar = () => {
             <FaSearch/>
           </button>
 
+
           <button onClick={()=>{setIsOpen(prev=>!prev)}} className='flex p-2 mr-2 flex-col gap-1'>
             <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " rotate-45 translate-y-[3px] "}`}></div>
             {!isOpen && <div className='rounded-full bg-black w-5 h-[3px]'></div>}
@@ -61,6 +62,9 @@ const Navbar = () => {
           <button className='mr-2 hover:bg-gray-200 duration-200 bg-gray-100 rounded-full p-3' onClick={()=>{setBringSearchBar(true)}} >
             <FaSearch/>
           </button>
+
+          <button onClick={()=>{router.push("/explore")}} className='text-black text-sm font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200'>Explore</button>
+
 
           {session &&  <div className='flex gap-4 items-center justify-center'>
             {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
@@ -80,10 +84,11 @@ const Navbar = () => {
     </div>
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-2'>
-            <li><WalletConnectButton/></li>
+            <li onClick={()=>{router.push("/explore")}} >Explore</li>
             {pathName.split("/")[1] == "yourShelf" ? <li onClick={()=>{router.push("/yourShelf")}} >{user?.username}</li> : <li onClick={()=>{router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold' onClick={()=>{router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/")}} className='font-bold'>Author Dashboard</li>}
             {session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
+            <li><WalletConnectButton/></li>
           </ul>
         </div>
     </>
