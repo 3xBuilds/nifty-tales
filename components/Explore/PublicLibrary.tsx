@@ -15,7 +15,7 @@ const PublicLibrary = () => {
   return (
     <div className='px-5 pt-5'>
         <div className='flex flex-row items-center justify-between'>
-            <div className='pl-4'>
+            <div className=''>
               <h1 className='font-bold text-2xl mb-4'>Public Library</h1>
               <OptionToggle options={['Trending', 'Latest', 'Upcoming']} selectedOption={type} setOption={setType} />
 

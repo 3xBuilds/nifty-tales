@@ -1,5 +1,5 @@
 type UserType = {
-    id: string;
+    _id: string;
     collectionName: string;
     wallet: string;
     email: string;
@@ -8,6 +8,7 @@ type UserType = {
     profileImage: string;
     readlist: Array<string>;
     yourBooks: Array<string>;
+    searchHistory: Array<string>;
     role: string
   }
 

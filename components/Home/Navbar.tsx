@@ -7,12 +7,17 @@ import { useSession, signOut } from 'next-auth/react'
 import { IoIosLogOut } from 'react-icons/io'
 import { useGlobalContext } from '@/context/MainContext'
 import { WalletConnectButton } from '../buttons/WalletConnectButton'
-import { MdAccountCircle } from 'react-icons/md'
+import { MdAccountCircle, MdOutlineDashboard } from 'react-icons/md'
+import { FaPenNib, FaSearch } from 'react-icons/fa'
+import { Search } from '../Global/Search'
 
 const Navbar = () => {
 
   const [isOpen, setIsOpen] = React.useState(false);
   const [showLogout, setShowLogout] = useState<boolean>(false);
+
+  const[bringSearchBar, setBringSearchBar] = useState<boolean>(false);
+  const[search, setSearch] = useState<string>("")
 
   const {user} = useGlobalContext();
 
@@ -32,21 +37,36 @@ const Navbar = () => {
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
         </div>
 
-        
-        <button onClick={()=>{setIsOpen(prev=>!prev)}} className='flex p-2 mr-2 flex-col gap-1 md:hidden'>
-          <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " rotate-45 translate-y-[3px] "}`}></div>
-          {!isOpen && <div className='rounded-full bg-black w-5 h-[3px]'></div>}
-          <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
-        </button>
+        <div className='md:hidden flex gap-4 items-center justify-center'>
+
+          <Search bringSearchBar={bringSearchBar} search={search} setSearch={setSearch} setBringSearchBar={setBringSearchBar} />
+
+
+          <button onClick={()=>{setBringSearchBar(true)}} >
+            <FaSearch/>
+          </button>
+
+          <button onClick={()=>{setIsOpen(prev=>!prev)}} className='flex p-2 mr-2 flex-col gap-1'>
+            <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " rotate-45 translate-y-[3px] "}`}></div>
+            {!isOpen && <div className='rounded-full bg-black w-5 h-[3px]'></div>}
+            <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
+          </button>
+        </div>
 
 
         <div className='flex items-center gap-2 max-md:hidden'>
           
+          <Search bringSearchBar={bringSearchBar} search={search} setSearch={setSearch} setBringSearchBar={setBringSearchBar} />
+
+          <button className='mr-2 hover:bg-gray-200 duration-200 bg-gray-100 rounded-full p-3' onClick={()=>{setBringSearchBar(true)}} >
+            <FaSearch/>
+          </button>
+
           {session &&  <div className='flex gap-4 items-center justify-center'>
             {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
-              { user && user?.contractAdd == "" ? <button onClick={()=>{router.push("/makeAuthor")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Become an Author</button>: <button onClick={()=>{router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Author Dashboard</button>}
+              { user && user?.contractAdd == "" ? <button onClick={()=>{router.push("/makeAuthor")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}
             </>}
-            {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>{user?.username}</button> : <button onClick={()=>{router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>Reader Dashboard</button>}
+            {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>{user?.username}</button> : <button onClick={()=>{router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
             <button onClick={()=>{setShowLogout((prev)=>!prev)}} className='text-gray-500 p-2 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full' ><MdAccountCircle/></button>
             <div className={`${showLogout ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[40rem]"} duration-500 absolute right-4 top-16 flex flex-col items-end justify-end gap-2 `} >
@@ -60,10 +80,10 @@ const Navbar = () => {
     </div>
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-2'>
+            <li><WalletConnectButton/></li>
             {pathName.split("/")[1] == "yourShelf" ? <li onClick={()=>{router.push("/yourShelf")}} >{user?.username}</li> : <li onClick={()=>{router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold' onClick={()=>{router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/")}} className='font-bold'>Author Dashboard</li>}
             {session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
-          <li><WalletConnectButton/></li>
           </ul>
         </div>
     </>

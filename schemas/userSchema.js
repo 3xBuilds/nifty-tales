@@ -18,11 +18,6 @@ const UserSchema = new Schema({
         unique: true,
         required: true
     },
-    profileImage: {
-        type: String,
-        default: "",
-        unique: false
-    },
     username: {
         type: String,
         required: true,
@@ -38,6 +33,10 @@ const UserSchema = new Schema({
         ref: Book,
         default: []
     }],
+    searchHistory: {
+        type: [String],
+        default: null
+    },
     contractAdd: {
         type: String,
         default:"",
@@ -51,5 +50,7 @@ const UserSchema = new Schema({
   }, {collection: "users"})
 
   const User = models.User || model('User', UserSchema);
+
+  UserSchema.index({ username: 'text', wallet: 'text', collection: 'text' });
 
   export default User

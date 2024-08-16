@@ -1,5 +1,7 @@
+
 import { ObjectId } from 'mongodb';
 import mongoose, {Schema, model, models, trusted} from 'mongoose';
+
 
 const BookSchema = new Schema({
 
@@ -94,5 +96,8 @@ const BookSchema = new Schema({
   }, {collection: "books"})
 
   const Book = models.Book || model('Book', BookSchema);
+
+  BookSchema.index({ name: 'text'});
+
 
   export default Book

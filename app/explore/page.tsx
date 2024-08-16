@@ -13,7 +13,9 @@ const Explore = () => {
 
   return (
     <div className='pt-16'>
+      <div className='relative z-[100]'>
         <Navbar/>
+      </div>
         <Highlights/>
         <PublicLibrary/>
     </div>

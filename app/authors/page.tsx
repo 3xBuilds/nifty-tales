@@ -20,8 +20,6 @@ import Book from "@/components/Global/Book";
 
 export default function Home(){
 
-   
-
     const router = useRouter()
 
     const {user, getUser} = useGlobalContext();
@@ -328,7 +326,7 @@ export default function Home(){
                 <div className="flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl">
                     <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
                     <div className="flex flex-col gap-2">
-                        <h2 className="md:text-5xl text-xl font-bold text-white">{name}</h2>
+                        <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
                         <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0,7)}...{user?.contractAdd.substring(user.contractAdd.length-7, user.contractAdd.length)}</a>
                     </div>
                 </div>
