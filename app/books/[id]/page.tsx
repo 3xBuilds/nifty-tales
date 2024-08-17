@@ -17,6 +17,9 @@ import { FaBookOpen, FaLocationArrow } from 'react-icons/fa';
 import Book from '@/components/Global/Book';
 import { useSession } from 'next-auth/react';
 import { TiMinus, TiPlus } from 'react-icons/ti';
+import { AiOutlineLoading } from 'react-icons/ai';
+import Icon from '@/components/Global/Icon';
+import { toast } from 'react-toastify';
 
  
 export default function Page() {
@@ -84,13 +87,15 @@ export default function Page() {
       try{
         const contract = await contractSetup();
         console.log(contract);
+        console.log(bookDetails);
         const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
 
         txn.wait().then(async(res:any)=>{
           console.log(res);
           //@ts-ignore
           await axios.patch("/api/book/"+pathname.split("/")[2], {minted: bookDetails?.minted+amount, email:session?.user?.email}).then((res)=>{
-            getUser()
+            getBookDetails()
+            setShowModal(false); 
             setLoading(false);
           })
         })
@@ -110,12 +115,24 @@ export default function Page() {
         const contract = await contractSetup();
 
         const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
-        setPrice(String(ethers.utils.parseEther(String(price))));
+        setPrice(ethers.utils.formatEther(String(price)));
       }
       catch(err){
         console.log(err);
       }
     }
+
+    const readlist = async (id:string) => {
+      try{
+          await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
+              console.log(res.data.user, res.data.book);
+              toast.success("Added to Readlist!");
+          });
+      }
+      catch(err){
+          console.log(err);
+      }
+  }
 
     useEffect(()=>{
       setMintPrice();
@@ -123,18 +140,16 @@ export default function Page() {
 
     return (
     <div className=''>
-        <div className="h-16 w-screen relative z-[100000]">
+        <div className="h-16 w-screen relative z-[1000]">
             <Navbar/>
         </div>
-
-        {loading && <Loader/>}
 
 
       {/* MINTING MODAL */}
       <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
           <div className='bg-white rounded-xl flex flex-col shadow-xl shadow-black/30 gap-4 justify-center items-start p-5'>
             <h2 className='text-2xl font-bold' >Mint</h2>
-            <h2 className='text-lg font-semibold text-gray-400' >Choose number of mints</h2>
+            <h2 className='text-lg text-gray-400' >Choose number of mints</h2>
 
             <div className='flex rounded-xl items-center justify-center gap-4 w-full h-28 border-[1px] border-gray-300' >
               <button onClick={()=>{
@@ -155,12 +170,12 @@ export default function Page() {
             <div className='text-gray-400 w-full'>
               <div className='w-full flex'>
                 <h2 className='w-1/2 text-md'>Spending</h2>
-                <h2 className='w-1/2 text-md font-semibold text-end'>{price} ETH</h2>
+                <h2 className='w-1/2 text-md font-semibold text-end'>{Number(price)*amount} ETH</h2>
               </div>
             </div>
-            <div className='flex gap-2 items-center justify-center' >
-                <button onClick={()=>{setShowModal(false)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
-                <button onClick={()=>{ setLoading(true); setShowModal(false); mint()}} className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >Mint</button>
+            <div className='flex gap-2 items-center flex-col justify-center w-full' >
+                <button disabled={loading} onClick={()=>{ setLoading(true); mint()}} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Minting</h2></div>: "Mint"}</button>
+                <button onClick={()=>{setShowModal(false)}} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
             </div>
           </div>
       </div>
@@ -181,7 +196,12 @@ export default function Page() {
               </div>
               <div className='flex flex-col gap-6 md:w-[50%] max-md:w-[90%] '>
                 <div className='flex flex-col gap-2 items-start justify-start'>
-                  <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
+                  <div className='flex items-center justify-center gap-4'>
+                    <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
+                    <button onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex items-center justify-center rounded-lg'>
+                      <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>
+                    </button>
+                  </div>
                   <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
                 </div>
                 <p className='text-sm text-white' >{bookDetails?.description?.substring(0,200)}</p>

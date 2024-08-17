@@ -95,7 +95,7 @@ export default function Home(){
 
     return(
         <div className="h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-24 " >
-            <div className="flex w-screen justify-end absolute">
+            <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div>
 

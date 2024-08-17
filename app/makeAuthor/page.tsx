@@ -193,9 +193,9 @@ export default function Home() {
                             <div>
                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
                                     <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
-                                        {!profileImg ? <svg className="w-8 h-8 text-jel-gray-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        {!profileImg ?<div className="bg-gray-200 text-gray-400 w-full h-full flex gap-2 flex-col items-center justify-center rounded-full" > <svg className="w-8 h-8 text-jel-gray-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                        </svg> :
+                                        </svg><h2 className="text-sm text-center px-2 font-semibold text-gray-400" >Upload a photo for your collection</h2></div> :
                                             <Image alt="hello" className='w-full h-full object-cover rounded-full hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!profileImg ? "" : (profileImg instanceof File ? URL.createObjectURL(profileImg) : profileImg)} />}
                                     </div>
                                     <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />

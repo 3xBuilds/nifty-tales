@@ -61,9 +61,13 @@ export async function PATCH(req:any){
             { new: true, runValidators: true } 
         );
 
-        const user = await User.findOne({email: email});
-        user.mintedBooks.push(id);
-        await user.save();
+        if(email){
+            const user = await User.findOne({email: email});
+            if(!user.mintedBooks.includes(id)){
+                user.mintedBooks.push(id);
+            }
+            await user.save();
+        }
 
         console.log(updatedBook);
 

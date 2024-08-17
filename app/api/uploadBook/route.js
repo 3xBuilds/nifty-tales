@@ -126,8 +126,6 @@ export async function POST(request) {
         book.createdAt = Date.now();
         await book.save();
         return NextResponse.json({success: book});
-
-
       }
     }
 

@@ -8,13 +8,15 @@ import { ethers } from "ethers"
 import Image from "next/image"
 import { useState, useEffect } from "react"
 import { FaFilePdf, FaImage } from "react-icons/fa"
-import { FaArrowPointer, FaSquareCheck } from "react-icons/fa6"
+import { FaArrowPointer, FaRegCircleCheck, FaSquareCheck } from "react-icons/fa6"
 import { ImCross } from "react-icons/im"
 import { useAccount } from "wagmi"
 import abi from "@/utils/abis/templateABI"
 import { Loader } from "@/components/Global/Loader"
 import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
+import { TbCircleDashedNumber1, TbCircleDashedNumber2 } from "react-icons/tb"
+import { AiOutlineLoading } from "react-icons/ai"
 
 export default function Home(){
 
@@ -54,6 +56,8 @@ export default function Home(){
     const[tags, setTags] = useState<Array<string>>([]);
     const[currentTag, setCurrentTag] = useState<string>("");
 
+    const[step, setStep] = useState<number>(0);
+
     const[agree, setAgree] = useState<boolean>(false);
 
     const router = useRouter()
@@ -92,6 +96,7 @@ export default function Home(){
             console.log("heheh id: ", id);
             setTokenId(Number(id).toString());
             if(id){
+                setStep(1);
                 handleSubmit(type, id.toString());
             }
         }
@@ -103,6 +108,7 @@ export default function Home(){
 
     async function contractPublishBook(){
         try{
+            setStep(2);
             const contract = await contractSetup();
 
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
@@ -353,11 +359,24 @@ export default function Home(){
 
     return(
         <div className="md:px-16 pt-24 max-md:px-4 w-screen h-screen flex flex-col items-start justify-start">
-            <div className="flex w-screen justify-end absolute">
+            <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div>
 
-            {loading && <Loader/>}
+            {loading && <div className="w-screen fixed top-0 left-0 z-[10] h-screen backdrop-blur-xl flex items-center justify-center">
+                    <div className="bg-white w-96 shadow-xl shadow-black/30 rounded-xl p-4">
+                        <h2 className="text-2xl font-bold" >Steps</h2>
+                        {step == 0 ? <ul className="my-2 flex flex-col gap-4">
+                            <li><h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span></h2></li>
+                            <li> <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2></li>
+
+                        </ul> : <ul className="my-2 flex flex-col gap-4">
+                            <li>{step == 1 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Files successfully upload!</span></h2>}</li>
+                            <li>{step == 2 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Contract interaction successful!</span></h2>}</li>
+
+                        </ul>}
+                    </div>
+                </div>}
 
             <h3 className="text-3xl font-bold">Publish Your Book</h3>
 

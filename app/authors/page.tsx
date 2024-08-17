@@ -274,7 +274,7 @@ export default function Home(){
 
     return(
         <div className="">
-            <div className="h-16 w-screen relative z-[100000]">
+            <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div>
 

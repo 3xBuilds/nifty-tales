@@ -55,6 +55,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       console.error(err);
     }
   }
+
   const[fetch, setFetch] = useState(false);
 
   useEffect(()=>{
