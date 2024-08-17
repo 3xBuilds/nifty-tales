@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
         await connectToDB();
 
         const body = await req.json();
-        const { txnHash, bookId, userId } = body;
+        const { txnHash, bookId, userId, value } = body;
 
         if (!txnHash || !bookId || !userId) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Book or User not found" }, { status: 404 });
         }
 
-        const txn = await Transactions.create({ txnHash, book: bookId, user: userId });
+        const txn = await Transactions.create({ txnHash, book: bookId, user: userId, value });
         user.mintedBooks.push(txn._id);
         await user.save();
 

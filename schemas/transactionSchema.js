@@ -17,6 +17,14 @@ const TransactionSchema = new Schema({
     txnHash:{
         type: String,
         required: true
+    },
+    value:{
+        type: Number,
+        required:true,
+    },
+    createdAt:{
+        type: Date,
+        default: Date.now
     }
 
   }, {collection: "transactions"})

@@ -108,7 +108,7 @@ export default function Home(){
 
 
             user.yourBooks.reverse().map((item:any, i)=>{
-                if(item.isPublished && !item.Hidden){
+                if(item.isPublished && !item.isHidden){
                     subArr1.push(item);
                 }
                 if(subArr1.length == slicer || i == user.yourBooks.length-1){

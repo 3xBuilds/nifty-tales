@@ -36,13 +36,15 @@ export default function Home(){
 
 
             user.readlist.reverse().map((item:any, i)=>{
-                console.log(item);
-                subArr1.push(item);
-                
+                if(item.isPublished && !item.isHidden){
+                    subArr1.push(item);
+                }
                 if(subArr1.length == slicer || i == user.readlist.length-1){
+                    if(subArr1.length>0)
                     arr1.push(subArr1);
                     subArr1 = []
                 }
+                
             })
 
             //@ts-ignore
@@ -52,15 +54,17 @@ export default function Home(){
 
         }
 
-            user?.mintedBooks.reverse().map((item:any, i)=>{
-                console.log(item);
-                subArr2.push(item);
-                
-                if(subArr1.length == slicer || i == user.mintedBooks.length-1){
-                    arr2.push(subArr2);
-                    subArr2 = []
-                }
-            })
+        user?.mintedBooks.reverse().map((item:any, i)=>{
+            if(item.isPublished && !item.isHidden){
+                subArr1.push(item);
+            }
+            if(subArr1.length == slicer || i == user.mintedBooks.length-1){
+                if(subArr1.length>0)
+                arr1.push(subArr1);
+                subArr1 = []
+            }
+            
+        })
 
             //@ts-ignore
             // if(arr1[0].length > 0)
@@ -125,9 +129,9 @@ export default function Home(){
                     ))}
                 </div>:<>
                 
-                {toggle == "Readlist" && <div className="w-full h-80 flex flex-col items-center justify-center">
-                        <h3 className="text-xl font-semibold text-gray-500 mb-3">Your shelf seems empty :(</h3>
-                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex gap-2 items-center">Add some books from <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                {toggle == "Readlist" && <div className="w-full h-80 flex flex-col text-center items-center justify-center">
+                        <h3 className="text-xl font-semibold text-gray-500 mb-3">Your shelf seems empty</h3>
+                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Add some books from <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
                 </>
@@ -157,9 +161,9 @@ export default function Home(){
                     ))}
                 </div>:
                     <>
-                    {toggle == "Minted" && <div className="w-full h-80 flex flex-col items-center justify-center">
+                    {toggle == "Minted" && <div className="w-full text-center h-80 flex flex-col items-center justify-center">
                         <h3 className="text-xl font-semibold text-gray-500 mb-3">Seems like you haven't minted anything</h3>
-                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex gap-2 items-center">Find an author to support <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Find an author to support <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
                     </>

@@ -20,17 +20,18 @@ import { TiMinus, TiPlus } from 'react-icons/ti';
 import { AiOutlineLoading } from 'react-icons/ai';
 import Icon from '@/components/Global/Icon';
 import { toast } from 'react-toastify';
+import { MdLibraryAddCheck } from 'react-icons/md';
 
  
 export default function Page() {
     const pathname = usePathname();
-
+    const [readListed, setReadListed] = useState<boolean>(false);
     const[bookDetails, setBookDetails] = useState<BookType>();
     const[userDetails, setUserDetails] = useState<UserType>();
 
     const[price, setPrice] = useState<string>("0");
 
-    const{getUser} = useGlobalContext();
+    const{user, getUser} = useGlobalContext();
 
     const[amount, setAmount] = useState(0);
     const[showModal, setShowModal] = useState(false);
@@ -92,7 +93,7 @@ export default function Page() {
 
         txn.wait().then(async(res:any)=>{
           console.log(res.transactionHash, pathname.split("/")[2], userDetails?._id)
-          await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: userDetails?._id}).then(async(res)=>{
+          await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: userDetails?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
             getBookDetails()
             setShowModal(false); 
             setLoading(false);
@@ -137,12 +138,21 @@ export default function Page() {
           await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
               console.log(res.data.user, res.data.book);
               toast.success("Added to Readlist!");
+              getUser();
           });
       }
       catch(err){
           console.log(err);
       }
   }
+
+  useEffect(()=>{
+    user?.readlist.map((item:any)=>{
+      if(item._id == bookDetails?._id){
+        setReadListed(true);
+      }
+    })
+  },[user, bookDetails])
 
     useEffect(()=>{
       setMintPrice();
@@ -208,8 +218,8 @@ export default function Page() {
                 <div className='flex flex-col gap-2 items-start justify-start'>
                   <div className='flex items-center justify-center gap-4'>
                     <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
-                    <button onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex items-center justify-center rounded-lg'>
-                      <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>
+                    <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
+                      {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-white'/>}
                     </button>
                   </div>
                   <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
