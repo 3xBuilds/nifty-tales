@@ -91,13 +91,23 @@ export default function Page() {
         const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
 
         txn.wait().then(async(res:any)=>{
-          console.log(res);
-          //@ts-ignore
-          await axios.patch("/api/book/"+pathname.split("/")[2], {minted: bookDetails?.minted+amount, email:session?.user?.email}).then((res)=>{
+          console.log(res.transactionHash, pathname.split("/")[2], userDetails?._id)
+          await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: userDetails?._id}).then(async(res)=>{
             getBookDetails()
             setShowModal(false); 
             setLoading(false);
+
+            //@ts-ignore
+            axios.patch("/api/book/"+pathname.split("/")[2], {minted : bookDetails?.minted+amount});
+          }).catch((err)=>{
+            console.log(err);
           })
+
+            getBookDetails()
+            setShowModal(false); 
+            setLoading(false);
+
+          
         })
       }
       catch(err){
@@ -183,7 +193,7 @@ export default function Page() {
 
 
         <div className="w-screen relative h-[40rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
-          <div className='absolute top-0 bg-white/10 px-4 py-2 z-[1000] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</div>
+          <div className='absolute top-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</div>
             <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
             </div>
