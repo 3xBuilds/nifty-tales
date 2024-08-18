@@ -60,20 +60,6 @@ export const RecommendedFetcher = () => {
         }
       },[])
 
-      const readlist = async (id:string) => {
-        try{
-            await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
-                console.log(res.data.user, res.data.book);
-                toast.success("Added to Readlist!");
-                getUser();
-            });
-        }
-
-        
-        catch(err){
-            console.log(err);
-        }
-    }
 
     useEffect(()=>{
       //@ts-ignore
@@ -108,10 +94,6 @@ export const RecommendedFetcher = () => {
                     <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 max-md:translate-y-3 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
                             <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
                         </div>
-
-                      <button disabled={readListed[i]} onClick={()=>{readlist(item2?._id as string)}} className='bg-black h-10 w-10 group-hover:opacity-100 opacity-0 flex hover:-translate-y-1 duration-200 absolute z-10 top-0 items-center justify-center rounded-lg'>
-                      {!readListed[i] ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-white'/>}
-                    </button>
 
                     <button className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                         <Book img={item2.cover} />
