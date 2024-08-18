@@ -52,7 +52,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       await axios.get(`/api/user/${session?.user?.email}`).then((res)=>{
         setUser(res.data.user);
       }).catch((err)=>{
-        router.push("/explore");
+        router.push("/register");
       });
       // console.log("DADDY I JUST FETCHED USER!!!", res.data.user);
     }
