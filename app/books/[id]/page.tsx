@@ -219,7 +219,7 @@ export default function Page() {
                   <div className='flex items-center justify-center gap-4'>
                     <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
                     <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
-                      {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-white'/>}
+                      {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>
                   </div>
                   <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>

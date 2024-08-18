@@ -12,9 +12,11 @@ export async function GET(req : any) {
 
         await connectToDB();
         const user = await User.findOne({email: email}).populate("yourBooks").populate("readlist").populate("mintedBooks");
+        const user2 = await User.findOne({email: email});
+
 
         return new NextResponse(JSON.stringify({
-            user
+            user, unPopulated:user2
         }), { status: 200 });
     }
     catch (error) {

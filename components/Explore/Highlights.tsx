@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify';
+import { useGlobalContext } from '@/context/MainContext';
+import { MdLibraryAddCheck } from 'react-icons/md';
 
 
 const Highlights = () => {
@@ -15,23 +17,34 @@ const Highlights = () => {
     const router = useRouter();
 
     const {data:session} = useSession();
+    const {user, getUser} = useGlobalContext();
 
 
     const [highlights, setHighlights] = useState<Array<BookType>>([]);
 
     const fetchHighlights = async () => {
         try{
-            await axios.get("/api/book").then((res)=>{
-                console.log(res.data.data)
-                var arr:any = []
-                res.data.data.map((item:BookType)=>{
-                    
-                    if(item.isPublished && !item.isHidden)
-                        arr.push(item);
-                })
+            await axios.get("/api/book").then(async(res)=>{
 
-                setHighlights(arr.reverse());
-            })
+                await axios.get("/api/user/"+session?.user?.email).then((res2)=>{
+
+                    const userNew = res2.data.unPopulated;
+
+                    var arr:any = []
+    
+                    res.data.data.map((item:BookType)=>{
+                        if(item.isPublished && !item.isHidden){
+
+                            arr.push({item, readlisted: userNew?.readlist.includes(item._id)});
+                        }
+                    })
+                    
+                    setHighlights(arr.reverse());
+                });
+
+            });
+
+            
         }
         catch(err){
             console.log(err);
@@ -41,8 +54,9 @@ const Highlights = () => {
     const readlist = async (id:string) => {
         try{
             await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
-                console.log(res.data.user, res.data.book);
+
                 toast.success("Added to Readlist!");
+                getUser();
             });
         }
         catch(err){
@@ -52,7 +66,7 @@ const Highlights = () => {
 
     useEffect(() => {
         fetchHighlights();
-    }, [])
+    }, [session, user])
 
   return (
     <div className='w-full p-5'>
@@ -67,27 +81,27 @@ const Highlights = () => {
                             ))}
                         </div>:
                         <>
-                        {highlights?.slice(0,5).map((highlight:BookType, index)=>(
+                        {highlights?.slice(0,5).map((highlight:any, i)=>(
                     <div className='w-[450px] p-8 bg-gray-200 flex flex-row items-center justify-start overflow-hidden relative rounded-xl'>
-                        <div onClick={()=>{router.push(`/books/${highlight._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
+                        <div onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                             <div className="w-40 h-52 max-md:w-32 max-md:h-44 overflow-hidden rounded-lg relative z-30">
-                                <Image src={highlight.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                                <Image src={highlight.item.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                             </div>
                             <div className="w-full h-[13rem] max-md:h-44 shadow-xl shadow-black/40 absolute max-md:top-1 md:top-8 left-1 bg-gray-200 rounded-lg z-[29]" >
                             </div>
                         </div>
                         <div className='w-fit relative z-20 pl-5 pt-5 text-white flex flex-col items-start justify-start h-full'>
-                            <h2 className='text-2xl font-bold'>{highlight.name}</h2>
-                            <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.description?.substring(0,100)}...</p>
+                            <h2 className='text-2xl font-bold'>{highlight.item.name}</h2>
+                            <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.item.description?.substring(0,100)}...</p>
                         </div>
                         <div className='w-full h-full absolute top-0 left-0 z-10 bg-black/30 backdrop-blur'></div>
                         <div className='w-full h-full absolute top-0 left-0 z-0'>
-                            <Image width={1080} height={1080} src={highlight.cover as string} alt="" className=' object-cover w-full flex items-center justify-center'/>
+                            <Image width={1080} height={1080} src={highlight.item.cover as string} alt="" className=' object-cover w-full flex items-center justify-center'/>
                         </div>
                         <div className='flex flex-row gap-2 absolute bottom-8 right-8 z-20'>
-                            <button onClick={()=>{router.push(`/books/${highlight._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
-                            <button onClick={()=>{readlist(highlight._id)}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
-                                <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>
+                            <button onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
+                            <button disabled={highlight.readlisted} onClick={()=>{readlist(highlight.item._id)}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
+                                    {!highlight.readlisted ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                             </button>
                         </div>
                     </div>))}
