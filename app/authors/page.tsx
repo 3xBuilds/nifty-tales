@@ -18,6 +18,7 @@ import { IoClose, IoTrashBin } from "react-icons/io5";
 import { CiImageOn } from "react-icons/ci";
 import Book from "@/components/Global/Book";
 import { Analytics } from "@/components/Author/Analytics";
+import Link from "next/link";
 
 export default function Home(){
 
@@ -333,7 +334,7 @@ export default function Home(){
                 </div>
 
                 <div className="absolute top-3 md:right-3 gap-4 flex items-center justify-center z-50">
-                        <button className="py-2 bg-white/10 md:w-40 max-md:text-sm w-12 h-10 border-[1px] border-white flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200" ><span className="max-md:hidden" >Analytics</span> <FaChartLine/></button>
+                        <Link href="#analytics" className="py-2 bg-white/10 md:w-40 max-md:text-sm w-12 h-10 border-[1px] border-white flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200" ><span className="max-md:hidden" >Analytics</span> <FaChartLine/></Link>
                         <button onClick={()=>{setImageModal(true)}} className="py-2 bg-white/10 h-10 border-[1px] border-white md:w-40 max-md:text-sm w-28 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Image <FaEdit/></button>
                         <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-white/10 h-10 border-[1px] border-white md:w-40 max-md:text-sm w-28 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Banner <FaEdit/></button>
                 </div>
@@ -387,7 +388,7 @@ export default function Home(){
                 { hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                 <div className="w-full mb-5">
                     
-                        <h3 className="text-2xl font-bold ">isHidden</h3>
+                        <h3 className="text-2xl font-bold ">Hidden</h3>
                 </div>
                 {hiddenBooks.map((item:any)=>(
                         <div className="w-full mb-5">
