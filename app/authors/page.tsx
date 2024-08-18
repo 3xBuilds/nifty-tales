@@ -77,6 +77,9 @@ export default function Home(){
     }
 
     useEffect(()=>{
+        if(user?.contractAdd == ""){
+            router.push("/makeAuthor");
+        }
         if(user){
             setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage");
             setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage");

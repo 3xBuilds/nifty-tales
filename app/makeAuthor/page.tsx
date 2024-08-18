@@ -82,50 +82,54 @@ export default function Home() {
             // Deploy the contract
             const contractAddress = await deployContract();
 
+
+            //@ts-ignore
+            contractAddress.wait().then(async(res)=>{
+                await axios.patch("/api/user/"+user?.email, {collectionName: collectionName}).then((res)=>{
+                    console.log(res.data.updatedUser);
+                });
+    
+                // Create FormData object
+                const formData = new FormData();
+    
+                formData.append("profileImage", profileImg);
+                formData.append("wallet", String(address));
+    
+                //@ts-ignore
+                formData.append("bannerImage", bannerImg);
+    
+    
+                // Upload to S3 using the API route
+                const response = await axios.post('/api/profileCreate', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+    
+                if(response.status == 200){
+                    router.push("/authors/");
+                }
+    
+                if (response.status !== 200) {
+                    toast.error("An error occurred while uploading.");
+                    setLoading(false);
+                    return;
+                }
+    
+                // Reset form fields
+                setCollectionName("");
+                setSymbol("");
+                setProfileImg(null);
+                if (fileInputRef.current) {
+    
+                    //@ts-ignore
+                    fileInputRef.current.value = "";
+                }
+            })
+
             if (!contractAddress) {
                 toast.error("Contract deployment failed");
                 // throw new Error("Contract deployment failed");
-            }
-
-            await axios.patch("/api/user/"+user?.email, {collectionName: collectionName}).then((res)=>{
-                console.log(res.data.updatedUser);
-            });
-
-            // Create FormData object
-            const formData = new FormData();
-
-            formData.append("profileImage", profileImg);
-            formData.append("wallet", String(address));
-
-            //@ts-ignore
-            formData.append("bannerImage", bannerImg);
-
-
-            // Upload to S3 using the API route
-            const response = await axios.post('/api/profileCreate', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-
-            if(response.status == 200){
-                router.push("/authors/");
-            }
-
-            if (response.status !== 200) {
-                toast.error("An error occurred while uploading.");
-                setLoading(false);
-                return;
-            }
-
-            // Reset form fields
-            setCollectionName("");
-            setSymbol("");
-            setProfileImg(null);
-            if (fileInputRef.current) {
-
-                //@ts-ignore
-                fileInputRef.current.value = "";
             }
 
             // alert("Collection created successfully!");
@@ -151,13 +155,10 @@ export default function Home() {
         }
     };
 
-    function delay(ms:number) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
 
     useEffect(()=>{
         if(user?.contractAdd!=""){
-            router.push("/explore");
+            router.push("/authors");
         }
     },[address])
 
