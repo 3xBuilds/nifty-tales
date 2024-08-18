@@ -19,35 +19,35 @@ const PreRegister = () => {
   const [userNameExists, setUserNameExists] = useState<boolean>(false);
   const [userExists, setUserExists] = useState<boolean>(false);
 
-  async function register(userName:string, email:string){
-    try{
-      await axios.post("/api/user/create", {username:userName, email:email})
-        .then((res)=>{
-          setFirst(true);
-        })
-        .catch((err)=>{
-          console.error(err);
-          if(err.response.status == 400){
-            setUserExists(true);
-          }
-          else if(err.response.status == 408){
-            setEmailExists(true)
-          }
-          else if(err.response.status == 409){
-            setUserNameExists(true);
-          }
-        });
-    }
-    catch(err){
-      console.error(err);
-    }
-  }
+  // async function register(userName:string, email:string){
+  //   try{
+  //     await axios.post("/api/user/create", {username:userName, email:email})
+  //       .then((res)=>{
+  //         setFirst(true);
+  //       })
+  //       .catch((err)=>{
+  //         console.error(err);
+  //         if(err.response.status == 400){
+  //           setUserExists(true);
+  //         }
+  //         else if(err.response.status == 408){
+  //           setEmailExists(true)
+  //         }
+  //         else if(err.response.status == 409){
+  //           setUserNameExists(true);
+  //         }
+  //       });
+  //   }
+  //   catch(err){
+  //     console.error(err);
+  //   }
+  // }
 
-  useEffect(()=>{
-    if(session){
-      router.push("/explore")
-    }
-  },[session?.user])
+  // useEffect(()=>{
+  //   if(session){
+  //     router.push("/explore")
+  //   }
+  // },[session?.user])
 
   const handleGoogleSignIn = () => {
     signIn('google', { callbackUrl: '/explore' })

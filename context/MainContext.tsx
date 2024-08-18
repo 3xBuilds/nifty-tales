@@ -23,8 +23,8 @@ type GlobalContextType = {
   fetch: boolean | false;
   setFetch: Dispatch<SetStateAction<boolean | false>>;
   getUser: () => void;
-
-
+  userRaw: UserType | null;
+  setUserRaw: Dispatch<SetStateAction<UserType | null>>;
 
 }
 
@@ -34,7 +34,8 @@ const GlobalContext = createContext<GlobalContextType>({
   fetch: false,
   setFetch: () => {},
   getUser: () => { },
-
+  userRaw: null,
+  setUserRaw: () =>{ }
 
 });
 
@@ -50,11 +51,14 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   async function getUser(){
     try{
       await axios.get(`/api/user/${session?.user?.email}`).then((res)=>{
+        // console.log("user",res);
         setUser(res.data.user);
+        setUserRaw(res.data.unPopulated);
       }).catch((err)=>{
+        // console.log("user",err);
         router.push("/register");
       });
-      // console.log("DADDY I JUST FETCHED USER!!!", res.data.user);
+
     }
     catch(err){
       console.error(err);
@@ -64,18 +68,19 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const[fetch, setFetch] = useState(false);
 
   useEffect(()=>{
+    if(session)
     getUser();
-  },[pathname])
-
-  useEffect(()=>{
-    if(session && !user)
-    {getUser();}
   },[session])
+
+  // useEffect(()=>{
+  //   if(session && !user)
+  //   {getUser();}
+  // },[session])
 
 
   const [user, setUser] = useState<UserType | null>(null);
+  const [userRaw, setUserRaw] = useState<UserType | null>(null);
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
-
 
   useEffect(()=>{
     if(user && user.wallet != "" && user.wallet != address){
@@ -105,7 +110,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser
+      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

@@ -17,7 +17,7 @@ const Highlights = () => {
     const router = useRouter();
 
     const {data:session} = useSession();
-    const {user, getUser} = useGlobalContext();
+    const {user, getUser, userRaw} = useGlobalContext();
 
 
     const [highlights, setHighlights] = useState<Array<BookType>>([]);
@@ -26,21 +26,19 @@ const Highlights = () => {
         try{
             await axios.get("/api/book").then(async(res)=>{
 
-                await axios.get("/api/user/"+session?.user?.email).then((res2)=>{
+                const userNew = userRaw;
 
-                    const userNew = res2.data.unPopulated;
+                var arr:any = []
 
-                    var arr:any = []
-    
-                    res.data.data.map((item:BookType)=>{
-                        if(item.isPublished && !item.isHidden){
+                res.data.data.map((item:BookType)=>{
+                    if(item.isPublished && !item.isHidden){
 
-                            arr.push({item, readlisted: userNew?.readlist.includes(item._id)});
-                        }
-                    })
-                    
-                    setHighlights(arr.reverse());
-                });
+                        arr.push({item, readlisted: userNew?.readlist.includes(item._id)});
+                    }
+                })
+                
+                setHighlights(arr.reverse());
+
 
             });
 
@@ -66,7 +64,7 @@ const Highlights = () => {
 
     useEffect(() => {
         fetchHighlights();
-    }, [session, user])
+    }, [user])
 
   return (
     <div className='w-full p-5'>

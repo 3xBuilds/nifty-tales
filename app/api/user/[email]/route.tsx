@@ -11,9 +11,16 @@ export async function GET(req : any) {
         const email = req.nextUrl.pathname.split("/")[3];
 
         await connectToDB();
-        const user = await User.findOne({email: email}).populate("yourBooks").populate("readlist").populate("mintedBooks");
-        const user2 = await User.findOne({email: email});
 
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+
+        const user = await User.findOne({email: email}).populate("yourBooks").populate("readlist").populate("mintedBooks");
+        
+        if (!user) {
+            console.log(`User not found for email: ${email}`);
+            return NextResponse.json({message: "User not found!"}, {status : 404});
+        }
+        const user2 = await User.findOne({email: email});
 
         return new NextResponse(JSON.stringify({
             user, unPopulated:user2

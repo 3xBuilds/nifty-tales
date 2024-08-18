@@ -43,9 +43,9 @@ export const Analytics = () => {
         </div>
       </div>
 
-      <div className='w-full max-w-full overflow-x-auto md:w-[90%] mx-auto mb-10'>
-        <div className='overflow-x-auto'>
-          <div className='min-w-[800px]'> {/* Set a minimum width for the table */}
+      <div className='w-full max-w-full overflow-x-auto mx-auto mb-10'>
+        <div className='overflow-x-auto '>
+          <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
             <div className='border-[1px] rounded-t-lg border-gray-300'>
               <div className='flex text-center py-2'>
                 <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-gray-400'>

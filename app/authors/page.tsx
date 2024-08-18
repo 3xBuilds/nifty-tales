@@ -64,7 +64,7 @@ export default function Home(){
     async function getContractDetails(){
         try{
             const contract = await contractSetup();
-            console.log(contract?.address);
+            // console.log(contract?.address);
             const contractName = await contract?.name();
 
             console.log(contractName);
@@ -77,13 +77,17 @@ export default function Home(){
     }
 
     useEffect(()=>{
-        if(user?.contractAdd == ""){
-            router.push("/makeAuthor");
-        }
+        console.log(user)
+
         if(user){
+            console.log("checking");
+            if( user?.contractAdd == ""){
+                router.push("/makeAuthor");
+            }
             setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage");
             setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage");
             getContractDetails();
+
 
         }
     },[user])
@@ -344,14 +348,14 @@ export default function Home(){
             </div>
             
 
-            { user && user?.yourBooks?.length == 0 ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
+            { user && user?.yourBooks?.length == 0 && user?.contractAdd !== "" ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
                 <h2 className="text-xl font-bold">Publish your first book!</h2>
                 <button onClick={()=>{router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-2 max-md:mx-auto'>Publish</button>
             </div>: 
             <>
 
                 {/* PUBLISHED BOOKS */}
-                <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                {user && user?.contractAdd !== "" && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                     <div className="flex items-center justify-center w-full mb-5">
                         <div className="w-1/2 flex items-start justify-start ">
                             <h3 className="text-2xl font-bold">Your Books</h3>
@@ -385,7 +389,7 @@ export default function Home(){
                     
 
 
-                </div>
+                </div>}
 
                 {/* HIDDEN BOOKS */}
                 { hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">

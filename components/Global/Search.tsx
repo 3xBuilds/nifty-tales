@@ -37,7 +37,6 @@ type Props = {
     const getSearchResults = async () => {
         try{
             const res = await axios.get(`/api/search?query=${debouncedSearch}`);
-
             setSearchResults(res.data.result);
             setHistory(res.data.history);
         }
@@ -48,7 +47,6 @@ type Props = {
 
     async function setHistoryData(id:string){
         try{
-            console.log("HIT IT BITCH")
             await axios.post("/api/user/history", {search: id});
         }
         catch(err){
@@ -62,10 +60,8 @@ type Props = {
         setHistoryBookResult([]);
         try{
             const res = await axios.get("/api/getHistory/"+session?.user?.email);
-            console.log(res.data.user);
 
             res.data.user.map((item2:UserType)=>{
-                console.log(item2);
                 item2.searchHistory.map(async(item:string)=>{
                     if(item[0] == "U"){
                         const response = await axios.get("/api/user/"+item.slice(1,item.length));

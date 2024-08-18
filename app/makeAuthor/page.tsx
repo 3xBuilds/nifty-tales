@@ -22,8 +22,8 @@ export default function Home() {
     const [profileImg, setProfileImg] = useState<File | null>(null);
     const [bannerImg, setBannerImg] = useState<File | null>(null);
 
-    let { address } = useAccount();
-    const {user} = useGlobalContext();
+    const { address, isDisconnected } = useAccount();
+    const {user, getUser} = useGlobalContext();
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -51,13 +51,14 @@ export default function Home() {
                 await contract.deployed();
                 await axios.patch(`/api/user/${user?.email}`, {contractAdd: contract.address});
                 
-                return contract.address;
+                return true;
             }
 
         }
         catch (err) {
             console.error(err);
             setLoading(false);
+            return false;
 
         }
     }
@@ -82,12 +83,11 @@ export default function Home() {
             // Deploy the contract
             const contractAddress = await deployContract();
 
-
+            console.log("Address", contractAddress);
             //@ts-ignore
-            contractAddress.wait().then(async(res)=>{
-                await axios.patch("/api/user/"+user?.email, {collectionName: collectionName}).then((res)=>{
-                    console.log(res.data.updatedUser);
-                });
+            
+            if(contractAddress){
+                axios.patch("/api/user/"+user?.email, {collectionName: collectionName})
     
                 // Create FormData object
                 const formData = new FormData();
@@ -105,10 +105,7 @@ export default function Home() {
                         'Content-Type': 'multipart/form-data'
                     }
                 });
-    
-                if(response.status == 200){
-                    router.push("/authors/");
-                }
+
     
                 if (response.status !== 200) {
                     toast.error("An error occurred while uploading.");
@@ -125,12 +122,20 @@ export default function Home() {
                     //@ts-ignore
                     fileInputRef.current.value = "";
                 }
-            })
+                console.log("timeout started")
+                await new Promise(resolve => setTimeout(resolve, 3000));
 
-            if (!contractAddress) {
-                toast.error("Contract deployment failed");
-                // throw new Error("Contract deployment failed");
+                if(response.status == 200){
+                    getUser()
+                    router.push("/authors/");
+                }
             }
+
+            else{
+                toast.error("Library Creation failed!");
+                setLoading(false);
+            }
+
 
             // alert("Collection created successfully!");
         } catch (error) {
@@ -143,24 +148,21 @@ export default function Home() {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            console.log("HANDLE", e.target.files[0]);
             setProfileImg(e.target.files[0]);
         }
     };
     
     const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
-            console.log("HANDLE BANNER", e.target.files[0]);
             setBannerImg(e.target.files[0]);
         }
     };
 
-
     useEffect(()=>{
-        if(user?.contractAdd!=""){
+        if(user?.contractAdd !== ""){
             router.push("/authors");
         }
-    },[address])
+    },[user])
 
 
     return (
@@ -170,10 +172,9 @@ export default function Home() {
                 <WalletConnectButton />
             </div>
 
-
             {loading && <Loader/>}
 
-            {address == null && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
+            {isDisconnected && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
                 <WalletConnectButton/>
                 <h3 className="font-semibold text-xl text-white">Connect Wallet to proceed</h3>
             </div>}
@@ -182,12 +183,12 @@ export default function Home() {
                 <h2 className="text-3xl">Become an Author</h2>
             </div>
 
-            <div className="flex max-md:flex-col">
+            {user?.contractAdd == "" && <div className="flex max-md:flex-col">
 
                 <div className="flex flex-col items-center h-fit justify-start md:w-[60%] md:border-r-[1px] max-md:border-b-[1px] border-dashed border-gray-300">
 
 
-                    <form onSubmit={handleSubmit} className="mt-10 px-10 h-full w-full">
+                    <form onSubmit={handleSubmit} className="mt-10 md:px-10 px-3 h-full w-full">
 
                     <div className="flex max-md:flex-col md:items-start items-center justify-center gap-4" >
                         <div className="flex flex-col items-center justify-center md:justify-start md:w-[40%]">
@@ -220,7 +221,7 @@ export default function Home() {
                         </div>
                     </div>
 
-                    <div className="w-full flex items-center justify-center">
+                    <div className="w-full flex items-center max-md:mt-10 justify-center">
                         <div className="flex flex-col items-center w-[42rem] justify-center md:justify-start h-[14rem]">
                                 <h2 className="text-sm -translate-y-2 text-gray-400">Upload a Banner</h2>
 
@@ -229,7 +230,7 @@ export default function Home() {
                                         <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
                                             {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
                                                     <CiImageOn className="text-2xl text-gray-400" />
-                                                    <h3 className="text-md text-gray-400 font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                                    <h3 className="text-sm text-gray-400 font-semibold text-center" >Upload a 1500x500 png image for best quality</h3>
                                                 </div> :
                                                 <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
                                         </div>
@@ -247,7 +248,7 @@ export default function Home() {
                     </form>
                 </div>
 
-                <div className="md:w-[40%] px-10 flex items-center text-gray-400">
+                <div className="md:w-[40%] md:px-10 px-3 flex items-center text-gray-400">
                     <ul className="flex flex-col gap-2 list-disc max-md:my-5">
                         <li>By becoming an author, you are giving niftytales.xyz access to your photos and pdf</li>
                         <li>You are agreeing to share a part of your earning as platform fee (0.0007 ETH per mint) </li>
@@ -255,7 +256,7 @@ export default function Home() {
                     </ul>
                 </div>
 
-            </div>
+            </div>}
 
         </div>
     )
