@@ -4,6 +4,7 @@ import { WalletNotRegistered } from "@/components/popups/walletNotRegistered";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useContext,
@@ -44,12 +45,16 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const {address} = useAccount();
   const pathname = usePathname();
 
+  const router = useRouter()
 
   async function getUser(){
     try{
-      const res = await axios.get(`/api/user/${session?.user?.email}`);
+      await axios.get(`/api/user/${session?.user?.email}`).then((res)=>{
+        setUser(res.data.user);
+      }).catch((err)=>{
+        router.push("/explore");
+      });
       // console.log("DADDY I JUST FETCHED USER!!!", res.data.user);
-      setUser(res.data.user);
     }
     catch(err){
       console.error(err);
