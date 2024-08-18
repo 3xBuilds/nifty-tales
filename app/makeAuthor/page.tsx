@@ -68,11 +68,13 @@ export default function Home() {
 
         if(!address){
             toast.error("Somwthing went wrong. Please try again");
+            setLoading(false);
             return;
         }
 
         if (!collectionName || !symbol || !profileImg || !bannerImg) {
             toast.error("Please fill in all fields and upload an image.");
+            setLoading(false);
             return;
         }
 
