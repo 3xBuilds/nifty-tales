@@ -90,7 +90,7 @@ type Props = {
     async function getBookResults(){
         try{
             const res = await axios.get(`/api/bookSearch?query=${debouncedSearch}`);
-            console.log("GOOOOOOOOO",res.data.result[0]);
+            // console.log("GOOOOOOOOO",res.data.result[0]);
             setBookHistory(res.data.result);
         }
         catch(err){

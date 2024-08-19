@@ -24,7 +24,7 @@ export async function GET(req:any){
 
     }
     catch(err){
-        console.log(err);
+        // console.log(err);
         return NextResponse.json({error: err}, {status:500});
     }
 }

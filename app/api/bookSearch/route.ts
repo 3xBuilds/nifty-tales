@@ -17,7 +17,7 @@ export async function GET(req: any) {
 
         const slicedResult = result?.slice(0, 2) || [];
 
-        console.log(slicedResult);
+        // console.log(slicedResult);
 
         const session = await getToken({
             req,

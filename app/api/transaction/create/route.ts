@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
         }
 
-        console.log("TRANSACTIONNNN",txnHash);
+        // console.log("TRANSACTIONNNN",txnHash);
 
         const [book, user] = await Promise.all([
             Book.findById(bookId),
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
         user.mintedBooks.push(txn._id);
         await user.save();
 
-        console.log("new user", user)
+        // console.log("new user", user)
 
         return NextResponse.json({ txn: txn }, { status: 200 });
     } catch (err) {

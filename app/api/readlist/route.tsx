@@ -46,29 +46,29 @@ export async function DELETE(req: any) {
         const body = await req.json();
         const { email, bookId } = body;
 
-        console.log(`Attempting to remove book ${bookId} from readlist of user ${email}`);
+        // console.log(`Attempting to remove book ${bookId} from readlist of user ${email}`);
 
         const user = await User.findOne({ email: email });
         if (!user) {
-            console.log(`User not found: ${email}`);
+            // console.log(`User not found: ${email}`);
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 
-        console.log(`Current readlist: ${user.readlist}`);
+        // console.log(`Current readlist: ${user.readlist}`);
 
         if (!user.readlist.includes(bookId)) {
-            console.log(`Book ${bookId} not in readlist`);
+            // console.log(`Book ${bookId} not in readlist`);
             return NextResponse.json({ message: "Book not in readlist" }, { status: 400 });
         }
 
         user.readlist = user.readlist.filter((id: any) => id.toString() !== bookId);
         await user.save();
 
-        console.log(`Updated readlist: ${user.readlist}`);
+        // console.log(`Updated readlist: ${user.readlist}`);
 
         const book = await Book.findById(bookId);
         if (!book) {
-            console.log(`Book not found: ${bookId}`);
+            // console.log(`Book not found: ${bookId}`);
             return NextResponse.json({ message: "Book not found" }, { status: 404 });
         }
 
@@ -77,10 +77,10 @@ export async function DELETE(req: any) {
         }
         await book.save();
 
-        console.log(`Book ${bookId} removed from readlist and reader count updated`);
+        // console.log(`Book ${bookId} removed from readlist and reader count updated`);
         return NextResponse.json({ message: "Book removed from readlist and reader count updated" }, { status: 200 });
     } catch (err) {
-        console.error("Error:", err);
+        // console.error("Error:", err);
         return NextResponse.json({ message: "An error occurred", error: err }, { status: 500 });
     }
 }

@@ -24,7 +24,7 @@ export async function POST(req: any) {
     const { search } = await req.json();
     const user = await User.findOne({ email: session.email });
 
-    console.log("helo00:", user);
+    // console.log("helo00:", user);
 
 
     if(user.searchHistory){

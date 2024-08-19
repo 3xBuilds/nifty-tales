@@ -36,11 +36,11 @@ const Explore = () => {
   }
 
  useEffect(()=>{
-  console.log(user, session?.user?.email);
+  // console.log(user, session?.user?.email);
  },[user]);
 
   return (
-    <div className='pt-10'>
+    <div className=''>
       <div className={`w-screen ${modal ? "h-screen":"h-0"} z-[100] flex flex-col items-center justify-center overflow-hidden fixed top-0 left-0 duration-200 backdrop-blur-xl`}>
           <div className='w-80 p-4 bg-white rounded-xl'>
             <div className='flex gap-2 items-center justify-start'>
@@ -55,9 +55,9 @@ const Explore = () => {
               <button onClick={rename} className='font-bold text-white w-full bg-black h-10 rounded-lg hover:-translate-y-1 duration-200' >Save</button>
           </div>
       </div>
-      <div className='relative z-[100]'>
+      {/* <div className='relative z-[100]'>
         <Navbar/>
-      </div>
+      </div> */}
       <div className='flex gap-4 w-full px-5 items-center justify-start'>
         <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 mt-10">Hi, {user?.username.split(" ")[0]}</h2>
         <button onClick={()=>{setModal(true)}} className='text-gray-500 flex items-center justify-center bg-gray-100 duration-200 hover:brightness-90 p-3 text-xl rounded-lg'><FaEdit/></button>

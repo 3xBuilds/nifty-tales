@@ -15,7 +15,7 @@ const s3Client = new S3Client({
 
 async function uploadFileToS3 (file, wallet, bannerImage) {
 
-    console.log("Profile Create: Uploading File to S3");
+    // console.log("Profile Create: Uploading File to S3");
 
     const fileBuffer = file;
     const bannerBuffer = bannerImage;
@@ -67,7 +67,7 @@ export async function PATCH(request){
         const wallet = formData.get('wallet');
         
 
-        console.log(profileImage, bannerImage, wallet);
+        // console.log(profileImage, bannerImage, wallet);
         
         if(!wallet){
             return NextResponse.json({error: "File is required."}, {status: 400})

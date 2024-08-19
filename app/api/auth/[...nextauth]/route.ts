@@ -86,7 +86,7 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }:any) {
-      console.log("SESSION",session, token);
+      // console.log("SESSION",session, token);
       // console.log('tokennnn: ', token);
       // Attach access token and refresh token to the session
       session.accessToken = token.accessToken;
@@ -99,11 +99,11 @@ const handler = NextAuth({
 
 
 
-      console.log('ssssss: ', session)
+      // console.log('ssssss: ', session)
       return session;
     },
     async redirect({ url, baseUrl }) {
-      console.log("METAMASK", baseUrl);
+      // console.log("METAMASK", baseUrl);
       return `${baseUrl}/explore`
     }
   }

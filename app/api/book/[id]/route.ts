@@ -13,14 +13,14 @@ export async function GET(req: NextRequest) {
 
         const id = req.nextUrl.pathname.split("/")[3];
 
-        console.log(id);
+        // console.log(id);
 
         await connectToDB();
         const book: BookType | null = await Book.findById(id);
 
         const user: UserType | null = await User.findById({_id: book?.author});
 
-        console.log(book, user);
+        // console.log(book, user);
 
         if (!book) {
             return NextResponse.json({
@@ -48,7 +48,7 @@ export async function PATCH(req:any){
 
         const id = req.nextUrl.pathname.split("/")[3];
 
-        console.log(id);
+        // console.log(id);
         const body = await req.json()
 
         await connectToDB();
@@ -61,7 +61,7 @@ export async function PATCH(req:any){
             { new: true, runValidators: true } 
         );
 
-        console.log(updatedBook);
+        // console.log(updatedBook);
 
         return NextResponse.json({
             data: updatedBook

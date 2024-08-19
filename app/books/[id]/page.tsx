@@ -43,7 +43,7 @@ export default function Page() {
     async function getBookDetails(){
       try{
         await axios.get("/api/book/"+pathname.split("/")[2]).then((res)=>{
-          console.log("REFETCHED BOOK ASSHOLE", res.data.data);
+          // console.log("REFETCHED BOOK ASSHOLE", res.data.data);
           setBookDetails(res.data.data);
           setUserDetails(res.data.user);
         });
@@ -66,7 +66,7 @@ export default function Page() {
               const provider = new ethers.providers.Web3Provider(window.ethereum);
               const signer = provider.getSigner();
 
-              console.log(bookDetails?.contractAddress)
+              // console.log(bookDetails?.contractAddress)
               //@ts-ignore
               const contract = new ethers.Contract(bookDetails?.contractAddress, abi, signer);
 
@@ -87,12 +87,12 @@ export default function Page() {
     async function mint(){
       try{
         const contract = await contractSetup();
-        console.log(contract);
-        console.log(bookDetails);
+        // console.log(contract);
+        // console.log(bookDetails);
         const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
 
         txn.wait().then(async(res:any)=>{
-          console.log(res.transactionHash, pathname.split("/")[2], userDetails?._id)
+          // console.log(res.transactionHash, pathname.split("/")[2], userDetails?._id)
           await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: userDetails?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
             getBookDetails()
             setShowModal(false); 
@@ -136,7 +136,7 @@ export default function Page() {
     const readlist = async (id:string) => {
       try{
           await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
-              console.log(res.data.user, res.data.book);
+              // console.log(res.data.user, res.data.book);
               toast.success("Added to Readlist!");
               getUser();
           });
@@ -160,9 +160,9 @@ export default function Page() {
 
     return (
     <div className=''>
-        <div className="h-16 w-screen relative z-[1000]">
+        {/* <div className="h-16 w-screen relative z-[1000]">
             <Navbar/>
-        </div>
+        </div> */}
 
 
       {/* MINTING MODAL */}

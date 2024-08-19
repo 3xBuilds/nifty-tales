@@ -6,7 +6,7 @@ import { connectToDB } from "@/utils/db";
 function verifySignature(message:any, signature:any) {
     try {
       const address = ethers.utils.verifyMessage(message, signature);
-      console.log("MESSAGE", typeof(message), message, "SIG", signature);
+      // console.log("MESSAGE", typeof(message), message, "SIG", signature);
       return address;
     } catch (error) {
       console.error('Error verifying signature:', error);
@@ -30,10 +30,10 @@ export const walletAuthProvider = CredentialsProvider({
     const address = verifySignature(credentials.message, credentials.signature);
 
     const message = JSON.parse(credentials.message);
-    console.log(message);
+    // console.log(message);
 
     //@ts-ignore
-    console.log("AFTER VERIFY SIGNATURE", message.address);
+    // console.log("AFTER VERIFY SIGNATURE", message.address);
 
     await connectToDB()
 
@@ -43,17 +43,17 @@ export const walletAuthProvider = CredentialsProvider({
 
     
     //@ts-ignore
-    console.log("TYPE", typeof(address), message.address);
+    // console.log("TYPE", typeof(address), message.address);
 
 
 
     // Check if the user exists in your database
     var user = await User.findOne({ wallet: message.address });
 
-    console.log("after finding")
+    // console.log("after finding")
 
     if (!user) {
-        console.log("Creating user");
+        // console.log("Creating user");
       // Create a new user if they don't exist
       user = await User.create({
         wallet: message.address,
@@ -61,7 +61,7 @@ export const walletAuthProvider = CredentialsProvider({
         username: `${message.address.slice(0, 6)}`, // placeholder username
       });
 
-      console.log("Created");
+      // console.log("Created");
     }
 
     return {

@@ -76,7 +76,7 @@ export default function Home(){
         try{
             await axios.get("/api/user/authors/"+address).then((res)=>{
                 setUser(res.data.user);
-                console.log(res.data.user);
+                // console.log(res.data.user);
             });
         }
         catch(err){
@@ -94,7 +94,7 @@ export default function Home(){
 
     useEffect(()=>{
         if(address){
-            console.log(address);
+            // console.log(address);
             getUser();
         }
     },[address])
@@ -139,9 +139,9 @@ export default function Home(){
 
     return(
         <div className="">
-            <div className="h-16 w-screen relative z-[1000]">
+            {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
-            </div>
+            </div> */}
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
                 <div className="w-screen absolute h-full overflow-hidden">
                     <Image width={1080} height={1080} src={bannerLink || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>

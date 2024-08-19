@@ -67,7 +67,7 @@ export default function Home(){
             // console.log(contract?.address);
             const contractName = await contract?.name();
 
-            console.log(contractName);
+            // console.log(contractName);
 
             setName(contractName);
         }
@@ -77,10 +77,10 @@ export default function Home(){
     }
 
     useEffect(()=>{
-        console.log(user)
+        // console.log(user)
 
         if(user){
-            console.log("checking");
+            // console.log("checking");
             if( user?.contractAdd == ""){
                 router.push("/makeAuthor");
             }
@@ -116,7 +116,7 @@ export default function Home(){
                 }
                 if(!item.isPublished){
                     subArr2.push(item);
-                    console.log(item);
+                    // console.log(item);
                 }
                 if(subArr2.length == slicer || i == user.yourBooks.length-1){
                     if(subArr2.length>0)
@@ -154,7 +154,7 @@ export default function Home(){
     },[])
 
     function handleDraft(item:any){
-        console.log(item);
+        // console.log(item);
         localStorage.setItem("name", item.name);
         localStorage.setItem("id", item._id);
 
@@ -238,54 +238,54 @@ export default function Home(){
             // alert("Collection created successfully!");
         } catch (error) {
             toast.error("An error occurred while creating the collection. Please try again.");
-            console.log(error);
+            // console.log(error);
         }
     }
 
     async function deleteBook(id:string){
         try{
-            console.log(id);
+            // console.log(id);
             await axios.delete("/api/book/"+id).then((res)=>{
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 getUser();
             })
         }
         catch(err){
-            console.log(err);
+            // console.log(err);
         }
     }
 
     async function unHide(id:string){
         try{
-            console.log(id);
+            // console.log(id);
             await axios.patch("/api/book/"+id,{isHidden : false}).then((res)=>{
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 getUser();
             })
         }
         catch(err){
-            console.log(err);
+            // console.log(err);
         }
     }
 
     async function hide(id:string){
         try{
-            console.log(id);
+            // console.log(id);
             await axios.patch("/api/book/"+id,{isHidden : true}).then((res)=>{
-                console.log(res.data.data);
+                // console.log(res.data.data);
                 getUser();
             })
         }
         catch(err){
-            console.log(err);
+            // console.log(err);
         }
     }
 
     return(
         <div className="">
-            <div className="h-16 w-screen relative z-[1000]">
+            {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
-            </div>
+            </div> */}
 
 
             {/* Image Modal */}

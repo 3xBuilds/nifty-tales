@@ -83,7 +83,7 @@ export default function Home() {
             // Deploy the contract
             const contractAddress = await deployContract();
 
-            console.log("Address", contractAddress);
+            // console.log("Address", contractAddress);
             //@ts-ignore
             
             if(contractAddress){
@@ -122,7 +122,7 @@ export default function Home() {
                     //@ts-ignore
                     fileInputRef.current.value = "";
                 }
-                console.log("timeout started")
+                // console.log("timeout started")
                 await new Promise(resolve => setTimeout(resolve, 3000));
 
                 if(response.status == 200){
@@ -168,9 +168,9 @@ export default function Home() {
     return (
         <div className=" gap-10 w-screen min-h-screen md:p-10 p-4">
         
-            <div className="flex items-center justify-end absolute top-4 w-screen right-4">
+            {/* <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <Navbar/>
-            </div>
+            </div> */}
 
             {loading && <Loader/>}
 
@@ -222,7 +222,7 @@ export default function Home() {
                     </div>
 
                     <div className="w-full flex items-center max-md:mt-10 justify-center">
-                        <div className="flex flex-col items-center w-[42rem] justify-center md:justify-start h-[14rem]">
+                        <div className="flex flex-col items-center w-[42rem] justify-center mt-10 md:justify-start h-[14rem]">
                                 {/* <h2 className="text-sm -translate-y-2 text-gray-400">Upload a Banner</h2> */}
 
                                 <div className="w-full h-full" >

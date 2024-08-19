@@ -88,7 +88,7 @@ export default function Home(){
     async function deleteFromReadList(id:string){
         try{
             await axios.delete("/api/readlist", {data:{email: session?.user?.email, bookId: id}}).then((res)=>{
-                console.log(res.data.book, res.data.user);
+                // console.log(res.data.book, res.data.user);
                 getUser()
             })
         }
@@ -98,10 +98,10 @@ export default function Home(){
     }
 
     return(
-        <div className="h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-24 " >
-            <div className="flex w-screen z-[1000] justify-end absolute">
+        <div className="h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-10 " >
+            {/* <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
-            </div>
+            </div> */}
 
             <div className="w-full px-5">
                 <h3 className="text-3xl font-bold mb-2">Your Shelf</h3>

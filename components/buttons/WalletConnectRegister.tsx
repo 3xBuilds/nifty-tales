@@ -13,16 +13,6 @@ import { useRouter } from 'next/navigation';
 
 export const WalletConnectRegister = () => {
 
-  const {address, isConnected, isDisconnected, isConnecting, } = useAccount();
-  const {user} = useGlobalContext();
-  const router = useRouter()
-
-
-useEffect(()=>{
-  if(isConnected)
-  console.log("MM CONNECTED", address);
-},[isConnected])
-
 
   return (
     <div className=''>

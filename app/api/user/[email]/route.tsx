@@ -17,7 +17,7 @@ export async function GET(req : any) {
         const user = await User.findOne({email: email}).populate("yourBooks").populate("readlist").populate("mintedBooks");
         
         if (!user) {
-            console.log(`User not found for email: ${email}`);
+            // console.log(`User not found for email: ${email}`);
             return NextResponse.json({message: "User not found!"}, {status : 404});
         }
         const user2 = await User.findOne({email: email});

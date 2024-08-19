@@ -20,9 +20,15 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className + " bg-white  "}>
+        {/* <Navbar/> */}
         <ToastContainer />
         <Providers>
-          {children}
+          <div className="flex w-screen z-[1000000] justify-end absolute">
+               <Navbar/>
+            </div> 
+            <div className="mt-16">
+              {children}
+            </div>
         </Providers>
         </body>
     </html>

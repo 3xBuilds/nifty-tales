@@ -93,9 +93,9 @@ export default function Home(){
     async function getContractDetails(type:string){
         try{
             const contract = await contractSetup();
-            console.log('contract is here broooo: ', contract);
+            // console.log('contract is here broooo: ', contract);
             const id = await contract?.BOOK();
-            console.log("heheh id: ", id);
+            // console.log("heheh id: ", id);
             setTokenId(Number(id).toString());
             if(id){
                 setStep(1);
@@ -116,13 +116,13 @@ export default function Home(){
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
             txn.wait().then(async (res:any)=>{
-                console.log("THIS IS ID",id);
+                // console.log("THIS IS ID",id);
                 setLoading(false);
                 router.push("/authors")
             })
         }
         catch(err){
-            console.log("BOOKID", bookId);
+            // console.log("BOOKID", bookId);
             setLoading(false);
             await axios.delete("/api/book/"+id);
             console.log(err);
@@ -219,7 +219,7 @@ export default function Home(){
                 formData.append('publishStatus', publish)
                 formData.append("id", id);
 
-                console.log("TRIGGER NORMAL DRAFT", cover, pdf);
+                // console.log("TRIGGER NORMAL DRAFT", cover, pdf);
         
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
@@ -369,7 +369,7 @@ export default function Home(){
         setIllustrationArtist(localStorage.getItem("artist") || "")
         setCoverLink(localStorage.getItem("cover") || "");
         setFileLink(localStorage.getItem("pdf") || "")
-        console.log("THIS IS ID",localStorage.getItem("id"))
+        // console.log("THIS IS ID",localStorage.getItem("id"))
         setId(localStorage.getItem("id") || "")
         //@ts-ignore
         setTags(JSON.parse(localStorage.getItem("tags")) || [])
@@ -389,9 +389,9 @@ export default function Home(){
 
     return(
         <div className="md:px-16 pt-24 max-md:px-4 w-screen h-screen flex flex-col items-start justify-start">
-            <div className="flex w-screen z-[1000] justify-end absolute">
+            {/* <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
-            </div>
+            </div> */}
 
             {loading && <div className="w-screen fixed top-0 left-0 z-[10] h-screen backdrop-blur-xl flex items-center justify-center">
                     <div className="bg-white w-96 shadow-xl shadow-black/30 rounded-xl p-4">

@@ -50,7 +50,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   async function getUser(){
     try{
-      console.log(session?.user?.email)
       await axios.get(`/api/user/${session?.user?.email}`).then((res)=>{
         // console.log("user",res);
         setUser(res.data.user);
@@ -88,7 +87,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   },[address])
 
   useEffect(()=>{
-    console.log(pathname.split("/")[1])
+    // console.log(pathname.split("/")[1])
     if(pathname.split("/")[1] !== "publish"){
       localStorage.removeItem("name");
       localStorage.removeItem("id");
@@ -126,7 +125,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   useEffect(()=>{
     if(address && user?.wallet == ""){
-        console.log(address);
+        // console.log(address);
         checkAndUpdateWallet()
     }
 },[address, user])

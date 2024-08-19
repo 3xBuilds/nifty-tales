@@ -57,7 +57,7 @@ const PreRegister = () => {
 
   useEffect(()=>{
     if(session){
-      console.log(session, "yay");
+      // console.log(session, "yay");
       router.push("/explore");
     }
   },[session])

@@ -89,7 +89,7 @@ export async function POST(request) {
 
     const publishStatus = formData.get('publishStatus'); // publish | draft
 
-    console.log("I AM PUBLISH STATUS", id, publishStatus, artist, name, description, tokenId, wallet, content, cover);
+    // console.log("I AM PUBLISH STATUS", id, publishStatus, artist, name, description, tokenId, wallet, content, cover);
 
 
     if( !name  || !tags || !tokenId || !wallet ) {
@@ -204,9 +204,9 @@ export async function POST(request) {
       const newBook = await Book.create(bookdData);
       author.yourBooks.push(newBook._id);
       await author.save();
-      console.log("newBook", newBook);
+      // console.log("newBook", newBook);
 
-      console.log("BULLSEYE")
+      // console.log("BULLSEYE")
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
@@ -214,8 +214,8 @@ export async function POST(request) {
       const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, newBook._id, wallet);
 
       if(status === true){
-        console.log("Hellooooooo");
-        console.log("NEW BOOK",newBook)
+        // console.log("Hellooooooo");
+        // console.log("NEW BOOK",newBook)
         newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/cover`;
         newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${newBook._id}/book`;
 
@@ -311,7 +311,7 @@ export async function PATCH(request){
 
   }
   catch(err){
-    console.log(err);
+    // console.log(err);
     return NextResponse.json({error: "Error Updating File"}, {status: 500});
 
   }

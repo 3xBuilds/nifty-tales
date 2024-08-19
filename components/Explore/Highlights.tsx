@@ -32,7 +32,6 @@ const Highlights = () => {
 
                 res.data.data.map((item:BookType)=>{
                     if(item.isPublished && !item.isHidden){
-
                         arr.push({item, readlisted: userNew?.readlist.includes(item._id)});
                     }
                 })
