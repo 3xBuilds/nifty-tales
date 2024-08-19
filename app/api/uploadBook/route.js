@@ -46,7 +46,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
       // Create a json file with metadata
       const metadata = {
         name,
-        description: description + "Go to https://niftytales.xyz/books/"+objectId,
+        description: description + ". Visit https://niftytales.xyz/books/"+objectId,
         tokenId,
         image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/cover`,
         content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/book`
