@@ -63,21 +63,19 @@ const PreRegister = () => {
   },[session])
 
   return (
-    <div className=' flex flex-col items-center justify-center'>
+    <div className='w-screen h-screen fixed top-0 flex flex-col items-center justify-center overflow-y-hidden object-contain'>
 
-      <button onClick={()=>{router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute top-5 left-5'>
+      <button onClick={()=>{router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute top-16 left-5'>
         <IoMdArrowBack/>
       </button>
 
-        <>
-          <div className='w-screen h-screen flex flex-col items-center justify-center'>
+      <div className='flex flex-col items-center justify-center'>
             <h1 className=' max-md:text-center max-md:text-xl text-center text-3xl font-bold'>Log In</h1>
             <div className='bg-white w-72 outline-nifty-black rounded-xl shadow-2xl shadow-black/50 p-5 flex flex-col items-center justify-center gap-4 mt-10'>
               <button onClick={handleGoogleSignIn} className='bg-nifty-white max-md:hidden hover:-translate-y-1 duration-200 w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/> Use Google</button>
               <WalletConnectRegister/>
             </div>
           </div>
-        </>
       
     </div>
   )
