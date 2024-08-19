@@ -71,6 +71,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     if(session){
       getUser();
       console.log("THIS IS SESSION", session);
+      // window.location.href = "/explore"
     }
   },[session])
 

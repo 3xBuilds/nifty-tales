@@ -51,12 +51,18 @@ const PreRegister = () => {
   // },[session?.user])
 
   const handleGoogleSignIn = () => {
-    signIn('google', { callbackUrl: '/explore' })
+    signIn('google')
   }
 
-  const handleMetamask = () =>{
-
+  const handleMMSignIn = () => {
+    signIn('credentials');
   }
+
+  // useEffect(()=>{
+  //   if(session){
+  //     router.push("/explore");
+  //   }
+  // },[session])
 
   return (
     <div className=' flex flex-col items-center justify-center'>
@@ -69,7 +75,7 @@ const PreRegister = () => {
           <div className='w-screen h-screen flex flex-col items-center justify-center'>
             <h1 className=' max-md:text-center max-md:text-xl text-center text-3xl font-bold'>Log In</h1>
             <div className='bg-white w-72 outline-nifty-black rounded-xl shadow-2xl shadow-black/50 p-5 flex flex-col items-center justify-center gap-4 mt-10'>
-            
+              <button onClick={handleMMSignIn} >TESTETSTETE</button>
               <button onClick={handleGoogleSignIn} className='bg-nifty-white max-md:hidden hover:-translate-y-1 duration-200 w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/> Use Google</button>
               <WalletConnectRegister/>
             </div>

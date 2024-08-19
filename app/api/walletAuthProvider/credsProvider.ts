@@ -6,7 +6,7 @@ import { connectToDB } from "@/utils/db";
 function verifySignature(message:any, signature:any) {
     try {
       const address = ethers.utils.verifyMessage(message, signature);
-      console.log("MESSAGE", message, "SIG", signature);
+      console.log("MESSAGE", typeof(message), message, "SIG", signature);
       return address;
     } catch (error) {
       console.error('Error verifying signature:', error);
@@ -29,7 +29,11 @@ export const walletAuthProvider = CredentialsProvider({
     // You'll need to implement this function
     const address = verifySignature(credentials.message, credentials.signature);
 
-    console.log("AFTER VERIFY SIGNATURE", address);
+    const message = JSON.parse(credentials.message);
+    console.log(message);
+
+    //@ts-ignore
+    console.log("AFTER VERIFY SIGNATURE", message.address);
 
     await connectToDB()
 
@@ -37,10 +41,14 @@ export const walletAuthProvider = CredentialsProvider({
       return null;
     }
 
-    console.log("TYPE", typeof(address), address);
+    
+    //@ts-ignore
+    console.log("TYPE", typeof(address), message.address);
+
+
 
     // Check if the user exists in your database
-    var user = await User.findOne({ wallet: address });
+    var user = await User.findOne({ wallet: message.address });
 
     console.log("after finding")
 
@@ -48,9 +56,9 @@ export const walletAuthProvider = CredentialsProvider({
         console.log("Creating user");
       // Create a new user if they don't exist
       user = await User.create({
-        wallet: address,
-        email: `${address.slice(0,6)}@wallet`, 
-        username: `${address.slice(0, 6)}`, // placeholder username
+        wallet: message.address,
+        email: `${message.address.slice(0,6)}@wallet`, 
+        username: `${message.address.slice(0, 6)}`, // placeholder username
       });
 
       console.log("Created");
@@ -58,7 +66,7 @@ export const walletAuthProvider = CredentialsProvider({
 
     return {
       id: user._id.toString(),
-      address: address,
+      address: message.address,
       email: user.email,
       name: user.username,
     };
