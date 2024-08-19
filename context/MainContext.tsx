@@ -68,8 +68,10 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const[fetch, setFetch] = useState(false);
 
   useEffect(()=>{
-    if(session)
-    getUser();
+    if(session){
+      getUser();
+      console.log("THIS IS SESSION", session);
+    }
   },[session])
 
   // useEffect(()=>{

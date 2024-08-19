@@ -2,6 +2,7 @@
 
 import React from 'react'
 
+
 //Context
 import { GlobalContextProvider } from '../../context/MainContext';
 
@@ -9,15 +10,16 @@ import { GlobalContextProvider } from '../../context/MainContext';
 import RainbowProvider from '../rainbow/rainbowKit';
 import { SessionProvider } from 'next-auth/react';
 
+
 const Providers = ({ children }) => {
 
   return (
     <SessionProvider>
-    <RainbowProvider>
-      <GlobalContextProvider>
+        <RainbowProvider>
+          <GlobalContextProvider>
           {children}
-      </GlobalContextProvider>
-    </RainbowProvider>
+          </GlobalContextProvider>
+        </RainbowProvider>
     </SessionProvider>
   )
 }

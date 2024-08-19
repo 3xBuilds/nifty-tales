@@ -3,6 +3,7 @@ import { connectToDB } from "@/utils/db";
 import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
+import { walletAuthProvider } from "../../walletAuthProvider/credsProvider";
 
 const handler = NextAuth({
   providers: [
@@ -10,6 +11,7 @@ const handler = NextAuth({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
     }),
+    walletAuthProvider,
   ],
   callbacks: {
 
@@ -34,12 +36,19 @@ const handler = NextAuth({
             return true;
          }
       }
+      else if (account.provider === "credentials") {
+        console.log("THIS IS FROM WALLET, I AM FROM NEXT AUTH ROUTE")
+        return true;
+      }
       return true;
     },
     async jwt({ token, user, account }) {
 
       const dbUser = await User.findOne({
-        email: token.email
+        $or: [
+          { email: token.email },
+          { wallet: user?.address },
+        ]
       });
 
       if(!dbUser){
@@ -51,6 +60,9 @@ const handler = NextAuth({
       if (account?.provider && user) {
         token.provider = account.provider;
         token.id = user.id;
+        if (user && 'address' in user) {
+          token.walletAddress = user.address;
+        }
 
         // Generate your own access token and refresh token
         const accessToken = jwt.sign(
@@ -83,6 +95,9 @@ const handler = NextAuth({
       session.refreshToken = token.refreshToken;
       session.role = token.role;
       session.image = token.picture;
+
+      session.walletAddress = token.walletAddress;
+
       // console.log('ssssss: ', session)
       return session;
     },

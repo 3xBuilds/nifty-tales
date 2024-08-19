@@ -1,60 +1,88 @@
 "use client";
-import React, { createContext, useContext } from "react";
-import "@rainbow-me/rainbowkit/styles.css";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import { connectorsForWallets, darkTheme } from '@rainbow-me/rainbowkit';
-import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { phantomWallet, metaMaskWallet, coinbaseWallet, walletConnectWallet, rainbowWallet } from '@rainbow-me/rainbowkit/wallets';
-import { mainnet, goerli, polygon, base } from "wagmi/chains";
-import { publicProvider } from "wagmi/providers/public";
+import '@rainbow-me/rainbowkit/styles.css';
+import {
+  getDefaultConfig,
+  RainbowKitProvider,
+} from '@rainbow-me/rainbowkit';
+import { WagmiProvider } from 'wagmi';
+import {
+  mainnet,
+  polygon,
+  optimism,
+  arbitrum,
+  base,
+} from 'wagmi/chains';
+import {
+  QueryClientProvider,
+  QueryClient,
+} from "@tanstack/react-query";
 
+import {
+  RainbowKitSiweNextAuthProvider,
+  GetSiweMessageOptions,
+} from '@rainbow-me/rainbowkit-siwe-next-auth';
 
-const WalletIdContext = createContext<any>(null);
-
-const { chains, publicClient } = configureChains(
-  [base],
-  [publicProvider()]
-);
-
-const { wallets } = getDefaultWallets({
-  appName: "My RainbowKit App",
-  projectId: "5d10af3027c340310f3a3da64cbcedac",
-  chains,
+const getSiweMessageOptions:GetSiweMessageOptions = () => ({
+  statement: 'Sign in to my RainbowKit app',
 });
 
 
-const connectors = connectorsForWallets(
-  [
-    ...wallets,
-    {
-      groupName: 'Phantom',
-      wallets: [phantomWallet({ chains })],
-    }],
+// const WalletIdContext = createContext<any>(null);
 
-  // { appName: 'RainbowKit App', projectId: '5d10af3027c340310f3a3da64cbcedac' }
-);
+// const { chains, publicClient } = configureChains(
+//   [base],
+//   [publicProvider()]
+// );
 
-const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors,
-  publicClient,
+// const { wallets } = getDefaultWallets({
+//   appName: "My RainbowKit App",
+//   projectId: "5d10af3027c340310f3a3da64cbcedac",
+//   chains,
+// });
+
+
+// const connectors = connectorsForWallets(
+//   [
+//     ...wallets,
+//     {
+//       groupName: 'Phantom',
+//       wallets: [phantomWallet({ chains })],
+//     }],
+
+//   // { appName: 'RainbowKit App', projectId: '5d10af3027c340310f3a3da64cbcedac' }
+// );
+
+// const wagmiConfig = createConfig({
+//   autoConnect: true,
+//   connectors,
+//   publicClient,
+// });
+
+const config = getDefaultConfig({
+  appName: 'My RainbowKit App',
+  projectId: '5d10af3027c340310f3a3da64cbcedac',
+  chains: [base],
+  ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
+const queryClient = new QueryClient()
 
 
-const Rainbow = ({ children }:any) => {
+
+const Rainbow = ({ children }: any) => {
   return (
-    <WagmiConfig config={wagmiConfig}>
-      {/* Provide the wallet ID through context */}
-
-      <RainbowKitProvider coolMode chains={chains}>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+      <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
+      <RainbowKitProvider coolMode >
         {children}
       </RainbowKitProvider>
-
-    </WagmiConfig>
+      </RainbowKitSiweNextAuthProvider>
+      </QueryClientProvider>
+      </WagmiProvider>
   );
 };
 
-export const useWalletId = () => useContext(WalletIdContext);
+// export const useWalletId = () => useContext(WalletIdContext);
 
 export default Rainbow;

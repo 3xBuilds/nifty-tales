@@ -7,6 +7,7 @@ import { IoBackspaceSharp } from 'react-icons/io5';
 import Icon from '@/components/Global/Icon';
 import { WalletNotRegistered } from '@/components/popups/walletNotRegistered';
 import { IoMdArrowBack } from 'react-icons/io';
+import { WalletConnectRegister } from '@/components/buttons/WalletConnectRegister';
 
 const PreRegister = () => {
   const {data:session} = useSession();
@@ -53,6 +54,10 @@ const PreRegister = () => {
     signIn('google', { callbackUrl: '/explore' })
   }
 
+  const handleMetamask = () =>{
+
+  }
+
   return (
     <div className=' flex flex-col items-center justify-center'>
 
@@ -65,7 +70,8 @@ const PreRegister = () => {
             <h1 className=' max-md:text-center max-md:text-xl text-center text-3xl font-bold'>Log In</h1>
             <div className='bg-white w-72 outline-nifty-black rounded-xl shadow-2xl shadow-black/50 p-5 flex flex-col items-center justify-center gap-4 mt-10'>
             
-              <button onClick={handleGoogleSignIn} className='bg-nifty-white hover:-translate-y-1 duration-200 w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/> Sign in with Google</button>
+              <button onClick={handleGoogleSignIn} className='bg-nifty-white max-md:hidden hover:-translate-y-1 duration-200 w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/> Use Google</button>
+              <WalletConnectRegister/>
             </div>
           </div>
         </>

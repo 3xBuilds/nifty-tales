@@ -10,7 +10,7 @@ import { useState, useEffect } from "react"
 import { FaFilePdf, FaImage } from "react-icons/fa"
 import { FaArrowPointer, FaRegCircleCheck, FaSquareCheck } from "react-icons/fa6"
 import { ImCross } from "react-icons/im"
-import { useAccount } from "wagmi"
+import {useAccount} from 'wagmi'
 import abi from "@/utils/abis/templateABI"
 import { Loader } from "@/components/Global/Loader"
 import { useRouter } from "next/navigation"
@@ -60,6 +60,8 @@ export default function Home(){
 
     const[agree, setAgree] = useState<boolean>(false);
 
+    const[bookId, setBookId] = useState<string>("")
+
     const router = useRouter()
 
     async function contractSetup(){
@@ -76,7 +78,7 @@ export default function Home(){
 
                 //@ts-ignore
                 const contract = new ethers.Contract(user?.contractAdd, abi, signer);
-                console.log("llulululul::",contract);
+                // console.log("llulululul::",contract);
 
             return contract;
 
@@ -106,7 +108,7 @@ export default function Home(){
         }
     }
 
-    async function contractPublishBook(){
+    async function contractPublishBook(id:string){
         try{
             setStep(2);
             const contract = await contractSetup();
@@ -115,16 +117,14 @@ export default function Home(){
             
             txn.wait().then(async (res:any)=>{
                 console.log("THIS IS ID",id);
-                // await axios.patch("/api/book/"+id, {
-                //     isPublshed: true
-                // }).then((res)=>{
-                    setLoading(false);
-                    router.push("/authors")
-                // })
+                setLoading(false);
+                router.push("/authors")
             })
         }
         catch(err){
+            console.log("BOOKID", bookId);
             setLoading(false);
+            await axios.delete("/api/book/"+id);
             console.log(err);
         }
     }
@@ -222,7 +222,15 @@ export default function Home(){
                 console.log("TRIGGER NORMAL DRAFT", cover, pdf);
         
                 const response = await axios.post("/api/uploadBook", formData);
-                console.log(response.data);
+                if(publish == "publish"){
+                
+                    contractPublishBook(response.data.success._id);
+                    
+                }
+                else{
+                    router.push("/authors")
+                }
+
             }
 
             if(!cover && !pdf && id !== ""){
@@ -243,7 +251,14 @@ export default function Home(){
                 formData.append('publishStatus', publish);
         
                 const response = await axios.patch("/api/uploadBook", formData);
-                console.log(response.data);
+                if(publish == "publish"){
+                
+                    contractPublishBook(response.data.success._id);
+                    
+                }
+                else{
+                    router.push("/authors")
+                }
             }
 
             if(!cover && !pdf && id == ""){
@@ -264,7 +279,14 @@ export default function Home(){
                 formData.append('publishStatus', publish);
         
                 const response = await axios.post("/api/uploadBook", formData);
-                console.log(response.data);
+                if(publish == "publish"){
+                
+                    contractPublishBook(response.data.success._id);
+                    
+                }
+                else{
+                    router.push("/authors")
+                }
             }
 
             if(cover && !pdf){
@@ -286,7 +308,14 @@ export default function Home(){
                 formData.append('publishStatus', publish);
         
                 const response = await axios.post("/api/uploadBook", formData);
-                console.log(response.data);
+                if(publish == "publish"){
+                
+                    contractPublishBook(response.data.success._id);
+                    
+                }
+                else{
+                    router.push("/authors")
+                }
             }
 
             if(!cover && pdf){
@@ -308,17 +337,18 @@ export default function Home(){
                 formData.append('publishStatus', publish);
         
                 const response = await axios.post("/api/uploadBook", formData);
-                console.log(response.data);
+
+                if(publish == "publish"){
+                
+                    contractPublishBook(response.data.success._id);
+                    
+                }
+                else{
+                    router.push("/authors")
+                }
             }
 
-            if(publish == "publish"){
-                
-                contractPublishBook();
-                
-            }
-            else{
-                router.push("/authors")
-            }
+            
         }
 
         catch(err){
@@ -372,7 +402,7 @@ export default function Home(){
 
                         </ul> : <ul className="my-2 flex flex-col gap-4">
                             <li>{step == 1 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Files successfully upload!</span></h2>}</li>
-                            <li>{step == 2 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Contract interaction successful!</span></h2>}</li>
+                            <li>{step == 2 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2>}</li>
 
                         </ul>}
                     </div>
