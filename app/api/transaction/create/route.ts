@@ -17,18 +17,19 @@ export async function POST(req: NextRequest) {
 
         // console.log("TRANSACTIONNNN",txnHash);
 
-        const [book, user] = await Promise.all([
-            Book.findById(bookId),
-            User.findById(userId)
-        ]);
+
+        const book = await Book.findById({_id:bookId})
+        const user = await User.findById({_id:userId})
+
 
         if (!book || !user) {
             return NextResponse.json({ error: "Book or User not found" }, { status: 404 });
         }
 
         const txn = await Transactions.create({ txnHash, book: bookId, user: userId, value });
-
+        console.log("I AM USER", user.mintedBooks);
         if(!user.mintedBooks.includes(bookId)){
+            console.log("savingggg");
             user.mintedBooks.push(bookId);
             await user.save();
         }

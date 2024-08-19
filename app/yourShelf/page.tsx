@@ -82,6 +82,9 @@ export default function Home(){
         if(screenWidth > 1100){
             setSlicer(5);
         }
+        else{
+            setSlicer(4)
+        }
 
     },[])
 

@@ -27,7 +27,7 @@ export default function Page() {
     const pathname = usePathname();
     const [readListed, setReadListed] = useState<boolean>(false);
     const[bookDetails, setBookDetails] = useState<BookType>();
-    const[userDetails, setUserDetails] = useState<UserType>();
+
 
     const[price, setPrice] = useState<string>("0");
 
@@ -45,7 +45,6 @@ export default function Page() {
         await axios.get("/api/book/"+pathname.split("/")[2]).then((res)=>{
           // console.log("REFETCHED BOOK ASSHOLE", res.data.data);
           setBookDetails(res.data.data);
-          setUserDetails(res.data.user);
         });
       }
       catch(err){
@@ -89,11 +88,12 @@ export default function Page() {
         const contract = await contractSetup();
         // console.log(contract);
         // console.log(bookDetails);
+        console.log("txn made")
         const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
-
         txn.wait().then(async(res:any)=>{
-          // console.log(res.transactionHash, pathname.split("/")[2], userDetails?._id)
-          await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: userDetails?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
+          console.log(pathname.split("/")[2], user?._id)
+          await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
+            console.log("TXN CREATE RES", res);
             getBookDetails()
             setShowModal(false); 
             setLoading(false);
@@ -224,7 +224,7 @@ export default function Page() {
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>
                   </div>
-                  <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
+                  <button onClick={()=>{router.push("/authors/"+user?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{user?.collectionName}<FaBookOpen/></span></button>
                 </div>
                 <p className='text-sm text-white' >{bookDetails?.description?.substring(0,200)}</p>
                 <div className='flex flex-wrap gap-2'>
