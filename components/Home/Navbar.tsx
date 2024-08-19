@@ -10,6 +10,7 @@ import { WalletConnectButton } from '../buttons/WalletConnectButton'
 import { MdAccountCircle, MdOutlineDashboard } from 'react-icons/md'
 import { FaPenNib, FaSearch } from 'react-icons/fa'
 import { Search } from '../Global/Search'
+import { AddWallet } from '../userChecker/addWallet'
 
 const Navbar = () => {
 
@@ -32,6 +33,8 @@ const Navbar = () => {
 
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
+    {user?.email.includes("@wallet") && <AddWallet/>}
+
         <div className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>

@@ -3,6 +3,7 @@
 import Highlights from '@/components/Explore/Highlights'
 import PublicLibrary from '@/components/Explore/PublicLibrary'
 import Navbar from '@/components/Home/Navbar'
+import { AddWallet } from '@/components/userChecker/addWallet'
 import { useGlobalContext } from '@/context/MainContext'
 import axios from 'axios'
 import { useSession } from 'next-auth/react'
@@ -34,6 +35,10 @@ const Explore = () => {
     }
   }
 
+ useEffect(()=>{
+  console.log(user, session?.user?.email);
+ },[user]);
+
   return (
     <div className='pt-10'>
       <div className={`w-screen ${modal ? "h-screen":"h-0"} z-[100] flex flex-col items-center justify-center overflow-hidden fixed top-0 left-0 duration-200 backdrop-blur-xl`}>
@@ -46,7 +51,7 @@ const Explore = () => {
               </div>
             </div>
               <h2 className='text-bold text-xs font-semibold'>Limit: {username.length}/15 characters</h2>
-              <input onKeyDown={(e)=>{if(characterName == 15 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => { if(characterName < 15){setUserName(e.target.value); setCharacterName(e.target.value.length) }}} value={username} className={`p-2 placeholder:text-gray-300 my-2 w-full peer focus:outline-none  focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+              <input onKeyDown={(e)=>{if(characterName == 15 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Username..." onChange={(e) => { if(characterName < 15){setUserName(e.target.value); setCharacterName(e.target.value.length) }}} value={username} className={`p-2 placeholder:text-gray-300 my-2 w-full peer focus:outline-none  focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
               <button onClick={rename} className='font-bold text-white w-full bg-black h-10 rounded-lg hover:-translate-y-1 duration-200' >Save</button>
           </div>
       </div>

@@ -23,7 +23,7 @@ import {
 } from '@rainbow-me/rainbowkit-siwe-next-auth';
 
 const getSiweMessageOptions:GetSiweMessageOptions = () => ({
-  statement: 'Sign in to my RainbowKit app',
+  statement: 'Sign in to Nifty Tales',
 });
 
 

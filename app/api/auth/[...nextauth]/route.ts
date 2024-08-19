@@ -18,6 +18,7 @@ const handler = NextAuth({
     async signIn( {user, account} : {user:any, account:any} ) {
 
       await connectToDB();
+
       if (account.provider === "google") {
          const {name, email} = user;
          const userNameExists = await User.findOne({
@@ -36,10 +37,7 @@ const handler = NextAuth({
             return true;
          }
       }
-      else if (account.provider === "credentials") {
-        console.log("THIS IS FROM WALLET, I AM FROM NEXT AUTH ROUTE")
-        return true;
-      }
+      
       return true;
     },
     async jwt({ token, user, account }) {
@@ -78,7 +76,7 @@ const handler = NextAuth({
           process.env.NEXTAUTH_SECRET,
           { expiresIn: '7d' }
         );
-
+        token.username = dbUser.username;
         token.role = dbUser.role || 'USER';
         token.email = dbUser.email;
         token.accessToken = accessToken;
@@ -88,21 +86,24 @@ const handler = NextAuth({
       return token;
     },
     async session({ session, token }:any) {
-
+      console.log("SESSION",session, token);
       // console.log('tokennnn: ', token);
       // Attach access token and refresh token to the session
       session.accessToken = token.accessToken;
       session.refreshToken = token.refreshToken;
       session.role = token.role;
       session.image = token.picture;
+      session.user = {username: token.username, email:token.email};
 
       session.walletAddress = token.walletAddress;
 
-      // console.log('ssssss: ', session)
+
+
+      console.log('ssssss: ', session)
       return session;
     },
     async redirect({ url, baseUrl }) {
-      console.log("METAMASK");
+      console.log("METAMASK", baseUrl);
       return `${baseUrl}/explore`
     }
   }

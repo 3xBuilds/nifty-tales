@@ -169,7 +169,7 @@ export default function Home() {
         <div className=" gap-10 w-screen min-h-screen md:p-10 p-4">
         
             <div className="flex items-center justify-end absolute top-4 w-screen right-4">
-                <WalletConnectButton />
+                <Navbar/>
             </div>
 
             {loading && <Loader/>}
@@ -223,7 +223,7 @@ export default function Home() {
 
                     <div className="w-full flex items-center max-md:mt-10 justify-center">
                         <div className="flex flex-col items-center w-[42rem] justify-center md:justify-start h-[14rem]">
-                                <h2 className="text-sm -translate-y-2 text-gray-400">Upload a Banner</h2>
+                                {/* <h2 className="text-sm -translate-y-2 text-gray-400">Upload a Banner</h2> */}
 
                                 <div className="w-full h-full" >
                                     <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">

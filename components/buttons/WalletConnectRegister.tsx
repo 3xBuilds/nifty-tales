@@ -13,21 +13,15 @@ import { useRouter } from 'next/navigation';
 
 export const WalletConnectRegister = () => {
 
-  const {address, isConnected, isDisconnected, isConnecting} = useAccount();
+  const {address, isConnected, isDisconnected, isConnecting, } = useAccount();
   const {user} = useGlobalContext();
   const router = useRouter()
 
-  useEffect(()=>{
-    if(address && user?.wallet == ""){
-        axios.patch("/api/user/"+user.email, {wallet: address});
-    }
-},[address])
 
 useEffect(()=>{
-  if(isConnected && address){
-    router.push("/explore")
-  }
-},[address])
+  if(isConnected)
+  console.log("MM CONNECTED", address);
+},[isConnected])
 
 
   return (

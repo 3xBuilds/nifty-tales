@@ -61,18 +61,21 @@ type Props = {
         try{
             const res = await axios.get("/api/getHistory/"+session?.user?.email);
 
-            res.data.user.map((item2:UserType)=>{
-                item2.searchHistory.map(async(item:string)=>{
-                    if(item[0] == "U"){
-                        const response = await axios.get("/api/user/"+item.slice(1,item.length));
-                        setHistoryUserResult((prev)=>[...prev, response.data.user]);
-                    }
-                    else if(item[0] == "B"){
-                        const response = await axios.get("/api/book/"+item.slice(1,item.length));
-                        setHistoryBookResult((prev)=>[...prev, response.data.data]);
-                    }
+            if(res){
+                res.data.user.map((item2:UserType)=>{
+                    item2.searchHistory.map(async(item:string)=>{
+                        if(item[0] == "U"){
+                            const response = await axios.get("/api/user/"+item.slice(1,item.length));
+                            setHistoryUserResult((prev)=>[...prev, response.data.user]);
+                        }
+                        else if(item[0] == "B"){
+                            const response = await axios.get("/api/book/"+item.slice(1,item.length));
+                            setHistoryBookResult((prev)=>[...prev, response.data.data]);
+                        }
+                    })
                 })
-            })
+
+            }
         }
         catch(err){
             console.log(err);

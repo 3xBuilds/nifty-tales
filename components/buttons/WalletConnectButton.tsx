@@ -6,19 +6,13 @@ import { IoMdWallet } from 'react-icons/io';
 import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import { useGlobalContext } from '@/context/MainContext';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 
 export const WalletConnectButton = () => {
 
   const {address} = useAccount();
   const {user} = useGlobalContext();
-
-  useEffect(()=>{
-    if(address && user?.wallet == ""){
-        axios.patch("/api/user/"+user.email, {wallet: address});
-    }
-},[address])
 
 
   return (
