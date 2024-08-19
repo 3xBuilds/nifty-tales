@@ -78,7 +78,7 @@ export default function Home(){
 
     useEffect(()=>{
         const screenWidth = window.innerWidth;
-
+        getUser()
         if(screenWidth > 1100){
             setSlicer(5);
         }
