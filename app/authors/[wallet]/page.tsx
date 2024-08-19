@@ -151,7 +151,7 @@ export default function Home(){
                     <div className="flex flex-col gap-1">
 
                         <h2 className="md:text-5xl text-2xl font-bold text-white">{user?.collectionName}</h2>
-                        <h2 className="md:text-2xl text-md font-semibold text-white" >Author: {user?.username}</h2>
+                        <h2 className="md:text-2xl text-md my-1 font-semibold text-white" >Author: {user?.username}</h2>
                         <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md underline text-xs font-semibold text-white">Check on BaseScan</a>
                     </div>
                 </div>

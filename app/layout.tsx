@@ -23,7 +23,7 @@ export default function RootLayout({
         {/* <Navbar/> */}
         <ToastContainer />
         <Providers>
-          <div className="flex w-screen z-[1000000] justify-end absolute">
+          <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div> 
             <div className="mt-16">

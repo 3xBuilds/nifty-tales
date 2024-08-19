@@ -59,7 +59,7 @@ const Explore = () => {
         <Navbar/>
       </div> */}
       <div className='flex gap-4 w-full px-5 items-center justify-start'>
-        <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 mt-10">Hi, {user?.username.split(" ")[0]}</h2>
+        <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0]}</h2>
         <button onClick={()=>{setModal(true)}} className='text-gray-500 flex items-center justify-center bg-gray-100 duration-200 hover:brightness-90 p-3 text-xl rounded-lg'><FaEdit/></button>
       </div>
 

@@ -1,3 +1,4 @@
+import { useGlobalContext } from '@/context/MainContext';
 import { useDebouncedValue } from '@mantine/hooks';
 import axios from 'axios';
 import { useSession } from 'next-auth/react';
@@ -15,7 +16,7 @@ type Props = {
  
  export const Search = ({bringSearchBar, setBringSearchBar, search, setSearch}:Props) => {
 
-
+    const{user} = useGlobalContext()
     const{data:session} = useSession()
 
     const [debouncedSearch] = useDebouncedValue(search, 200);
@@ -37,7 +38,8 @@ type Props = {
     const getSearchResults = async () => {
         try{
             const res = await axios.get(`/api/search?query=${debouncedSearch}`);
-            setSearchResults(res.data.result);
+            setSearchResults(res.data.user);
+            setBookHistory(res.data.book);
             setHistory(res.data.history);
         }
         catch(e){
@@ -59,11 +61,10 @@ type Props = {
         setHistoryUserResult([]);
         setHistoryBookResult([]);
         try{
-            const res = await axios.get("/api/getHistory/"+session?.user?.email);
+            // const res = await axios.get("/api/getHistory/"+session?.user?.email);
 
-            if(res){
-                res.data.user.map((item2:UserType)=>{
-                    item2.searchHistory.map(async(item:string)=>{
+            if(user){
+                user.searchHistory.map(async(item:string)=>{
                         if(item[0] == "U"){
                             const response = await axios.get("/api/user/"+item.slice(1,item.length));
                             setHistoryUserResult((prev)=>[...prev, response.data.user]);
@@ -72,7 +73,6 @@ type Props = {
                             const response = await axios.get("/api/book/"+item.slice(1,item.length));
                             setHistoryBookResult((prev)=>[...prev, response.data.data]);
                         }
-                    })
                 })
 
             }
@@ -87,21 +87,12 @@ type Props = {
         getHistory();
     },[history])
 
-    async function getBookResults(){
-        try{
-            const res = await axios.get(`/api/bookSearch?query=${debouncedSearch}`);
-            // console.log("GOOOOOOOOO",res.data.result[0]);
-            setBookHistory(res.data.result);
-        }
-        catch(err){
-            console.log(err);
-        }
-    }
+    
 
     useEffect(()=>{
         if(debouncedSearch ){
             getSearchResults();
-            getBookResults();
+            // getBookResults();
         }
     },[debouncedSearch])
 
