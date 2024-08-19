@@ -56,12 +56,12 @@ export default function Home(){
 
         user?.mintedBooks.reverse().map((item:any, i)=>{
             if(item.isPublished && !item.isHidden){
-                subArr1.push(item);
+                subArr2.push(item);
             }
-            if(subArr1.length == slicer || i == user.mintedBooks.length-1){
-                if(subArr1.length>0)
-                arr1.push(subArr1);
-                subArr1 = []
+            if(subArr2.length == slicer || i == user.mintedBooks.length-1){
+                if(subArr2.length>0)
+                arr2.push(subArr2);
+                subArr2 = []
             }
             
         })

@@ -27,8 +27,11 @@ export async function POST(req: NextRequest) {
         }
 
         const txn = await Transactions.create({ txnHash, book: bookId, user: userId, value });
-        user.mintedBooks.push(txn._id);
-        await user.save();
+
+        if(!user.mintedBooks.includes(bookId)){
+            user.mintedBooks.push(bookId);
+            await user.save();
+        }
 
         // console.log("new user", user)
 
