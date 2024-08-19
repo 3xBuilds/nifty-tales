@@ -17,7 +17,7 @@ const PublicLibrary = () => {
         <div className='flex flex-row items-center justify-between'>
             <div className=''>
               <h1 className='font-bold text-2xl mb-4'>Public Library</h1>
-              <OptionToggle options={['Trending', 'Latest', 'Upcoming']} selectedOption={type} setOption={setType} />
+              <OptionToggle options={['Trending', 'Latest']} selectedOption={type} setOption={setType} />
 
             </div>
                 
