@@ -126,6 +126,7 @@ export default function Page() {
         const contract = await contractSetup();
 
         const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
+        console.log(ethers.utils.formatEther(String(price)));
         setPrice(ethers.utils.formatEther(String(price)));
       }
       catch(err){
@@ -155,8 +156,9 @@ export default function Page() {
   },[user, bookDetails])
 
     useEffect(()=>{
+      if(bookDetails)
       setMintPrice();
-    },[])
+    },[bookDetails])
 
     return (
     <div className=''>

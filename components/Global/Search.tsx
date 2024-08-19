@@ -40,7 +40,7 @@ type Props = {
             const res = await axios.get(`/api/search?query=${debouncedSearch}`);
             setSearchResults(res.data.user);
             setBookHistory(res.data.book);
-            setHistory(res.data.history);
+            // setHistory(res.data.history);
         }
         catch(e){
             console.error(e);
@@ -83,9 +83,9 @@ type Props = {
     }
 
     useEffect(()=>{
-        if(historyUserResults.length == 0)
+        if(user && bringSearchBar)
         getHistory();
-    },[history])
+    },[user])
 
     
 

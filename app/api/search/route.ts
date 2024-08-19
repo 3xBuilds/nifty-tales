@@ -30,11 +30,7 @@ export async function GET(req: any) {
             return new NextResponse(JSON.stringify({ history: null, user: slicedResult1, book: slicedResult2}), { status: 200 });
         }
 
-        const user = await User.findOne({ email: session.email }).populate("searchHistory");
-
-        const history = user.searchHistory?.reverse().slice(0, 5) || [];
-
-        return new NextResponse(JSON.stringify({user: slicedResult1, book: slicedResult2, history: history}), { status: 200 });
+        return new NextResponse(JSON.stringify({user: slicedResult1, book: slicedResult2}), { status: 200 });
     } catch (error) {
         console.error("Error in GET request:", error);
         return new NextResponse(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
