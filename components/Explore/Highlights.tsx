@@ -96,7 +96,7 @@ const Highlights = () => {
                             <Image width={1080} height={1080} src={highlight.item.cover as string} alt="" className=' object-cover w-full flex items-center justify-center'/>
                         </div>
                         <div className='flex flex-row gap-2 max-md:items-center max-md:justify-center md:absolute bottom-8 right-8 z-20'>
-                            <button onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg px-4 py-1'>View</button>
+                            <button onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg max-md:w-36 px-4 py-1 md:px-4 md:py-1'>View</button>
                             <button disabled={highlight.readlisted} onClick={()=>{readlist(highlight.item._id)}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
                                     {!highlight.readlisted ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                             </button>
