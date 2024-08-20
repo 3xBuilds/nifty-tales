@@ -1,0 +1,23 @@
+/* quill-pdf.css */
+.ql-editor {
+    font-size: 12pt;
+    line-height: 1.5;
+    padding: 20px;
+  }
+  
+  .ql-editor p {
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+  }
+  
+  .ql-editor h1, .ql-editor h2 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    padding-bottom: 20px;
+
+  }
+  
+  .ql-editor img {
+    max-width: 100%;
+    height: auto;
+  }

@@ -10,7 +10,11 @@ const nextConfig = {
             },
         ]
     },
-    reactStrictMode: false
+    reactStrictMode: false,
+    webpack: (config) => {
+        config.externals = [...config.externals, { canvas: "canvas" }];  // required to make Quill work
+        return config;
+      },
 };
 
 export default nextConfig;

@@ -1,4 +1,4 @@
-import { Quill } from "@/components/Quill/quill";
+import Quill from "@/components/Quill/quill"
 
 export default function Home(){
     return(
