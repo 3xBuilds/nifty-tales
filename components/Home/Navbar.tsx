@@ -35,10 +35,10 @@ const Navbar = () => {
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
     {user?.email.includes("@wallet") && <AddWallet/>}
 
-        <div className='flex items-center'>
+        <button onClick={()=>{router.push("/explore")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
-        </div>
+        </button>
 
         <div className='md:hidden flex gap-4 items-center justify-center'>
 
