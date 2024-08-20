@@ -97,6 +97,7 @@ export default function Home(){
             const id = await contract?.BOOK();
             // console.log("heheh id: ", id);
             setTokenId(Number(id).toString());
+            console.log(id);
             if(id){
                 setStep(1);
                 handleSubmit(type, id.toString());
@@ -199,6 +200,9 @@ export default function Home(){
                 setLoading(false);
                 return;
             }
+
+            console.log(cover, pdf, coverLink, fileLink);
+
             
             if(cover && pdf){
                 const formData = new FormData();
@@ -234,6 +238,7 @@ export default function Home(){
             }
 
             if(!cover && !pdf && id !== ""){
+                console.log("BULLSAEYEYEY", coverLink, fileLink, bookName, tags, tokenId, address.toString());
                 const formData = new FormData();
                 formData.append('name', bookName);
                 formData.append('isbn', isbn);
@@ -262,6 +267,7 @@ export default function Home(){
             }
 
             if(!cover && !pdf && id == ""){
+                console.log("BULLSATE");
                 const formData = new FormData();
                 formData.append('name', bookName);
                 formData.append('isbn', isbn);
@@ -339,9 +345,7 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
 
                 if(publish == "publish"){
-                
                     contractPublishBook(response.data.success._id);
-                    
                 }
                 else{
                     router.push("/authors")
@@ -354,7 +358,7 @@ export default function Home(){
         catch(err){
             toast.error("Failed Interaction")
 
-            axios.patch("/api/book/"+id,{isPublished: false});
+            await axios.patch("/api/book/"+id,{isPublished: false});
             console.log(err);
             setLoading(false);
 

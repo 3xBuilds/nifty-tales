@@ -79,7 +79,7 @@ const Highlights = () => {
                         </div>:
                         <>
                         {highlights?.slice(0,5).map((highlight:any, i)=>(
-                    <div className='md:w-[450px] max-md:w-[20rem] max-md:h-[25rem] p-8 bg-gray-200 flex flex-row max-md:flex-col items-center justify-start overflow-hidden relative rounded-xl'>
+                    <div className='md:w-[450px] max-md:w-[20rem] max-md:h-[28rem] p-8 bg-gray-200 flex flex-row max-md:flex-col items-center justify-start overflow-hidden relative rounded-xl'>
                         <div onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                             <div className="w-40 h-52 max-md:w-32 max-md:h-44 overflow-hidden rounded-lg relative z-30">
                                 <Image src={highlight.item.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
@@ -93,7 +93,7 @@ const Highlights = () => {
                         </div>
                         <div className='w-full h-full absolute top-0 left-0 z-10 bg-black/30 backdrop-blur'></div>
                         <div className='w-full h-full absolute top-0 left-0 z-0'>
-                            <Image width={1080} height={1080} src={highlight.item.cover as string} alt="" className=' object-cover w-full flex items-center justify-center'/>
+                            <Image width={1080} height={1080} src={highlight.item.cover as string} alt="" className=' object-cover w-full h-full flex items-center justify-center'/>
                         </div>
                         <div className='flex flex-row gap-2 max-md:items-center max-md:justify-center md:absolute bottom-8 right-8 z-20'>
                             <button onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg max-md:w-36 px-4 py-1 md:px-4 md:py-1'>View</button>

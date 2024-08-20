@@ -1,65 +1,127 @@
-'use client';
+"use client"
 
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic';
+import "@/app/quil-pdf.scss"
+import React, { useState, useEffect, useCallback } from 'react';
+import { Editor, EditorContent, useEditor } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Link from '@tiptap/extension-link';
+import Document from "@tiptap/extension-document"
+import Underline from '@tiptap/extension-underline';
+import TextStyle from '@tiptap/extension-text-style';
+import Heading from '@tiptap/extension-heading'
+import Image from '@tiptap/extension-image';
+import { FaBold, FaItalic } from "react-icons/fa";
+import { MdKeyboardTab, MdOutlineFormatItalic, MdOutlineInsertLink } from "react-icons/md";
+import { CiImageOn } from "react-icons/ci";
 
-// Dynamically import html2pdf to ensure it only loads on the client-side
-const ClientQuill = dynamic(() => import('./ClientQuill'), {
-  ssr: false,
-  loading: () => <p>Loading editor...</p>,
-});
+const TiptapEditor = () => {
+  const [content, setContent] = useState('');
+  const [isBold, setIsBold] = useState(false);
+  const [isItalic, setIsItalic] = useState(false);
 
-export default function Quill() {
-  const [value, setValue] = useState('');
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Document,
+      Link,
+      Underline,
+      TextStyle,
+      Heading.configure({
+        levels: [1, 2, 3],
+      }),
+      Image,
+    ],
+    content: content,
+    onUpdate: ({ editor }) => {
+      setContent(editor.getHTML());
+    },
+  });
 
-  const handleChange = (content: string) => {
-    setValue(content);
+  const handleChange = useCallback((value:any) => {
+    setContent(value);
+    if (editor) {
+      editor.commands.setContent(value);
+    }
+  }, [editor]);
+
+  const toggleBold = () => {
+    if (editor) {
+      editor.chain().focus().toggleBold().run();
+      setIsBold((prev)=>!prev);
+    }
   };
 
-  const generatePDF = async () => {
-    const html2pdf = (await import('html2pdf.js')).default; // Dynamically import html2pdf
-    const content = `
-      <style>
-        body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; }
-        h1 { font-size: 24px; color: #333; }
-        h2 { font-size: 22px; color: #444; }
-        h3 { font-size: 20px; color: #555; }
-        h4 { font-size: 18px; color: #666; }
-        h5 { font-size: 16px; color: #777; }
-        h6 { font-size: 14px; color: #888; }
-      </style>
-      <div style="width: 210mm; padding: 10mm;">
-        ${value}
-      </div>
-    `;
-    
-    const opt = {
-      filename: 'quill-content.pdf',
-      image: { type: 'jpeg', quality: 1 },
-      html2canvas: { 
-        scale: 2,
-        useCORS: true,
-        logging: true,
-        letterRendering: true,
-      },
-      jsPDF: { 
-        unit: 'mm', 
-        format: 'a4', 
-        orientation: 'portrait',
-      },
-      pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-    };
-    
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = content;
-  
-    html2pdf().from(tempDiv).set(opt).save();
+  const toggleItalic = () => {
+    if (editor) {
+      editor.chain().focus().toggleItalic().run();
+      setIsItalic((prev)=>!prev);
+    }
   };
 
+  const addBlockquote = () => {
+    if (editor) {
+      editor.chain().focus().setBlockquote().run();
+    }
+  };
+
+  const removeBlockquote = () => {
+    if (editor) {
+      editor.chain().focus().unsetBlockquote().run();
+    }
+  };
+
+  const insertLink = () => {
+    if (editor) {
+      const url = prompt('Enter the URL');
+      editor.chain().focus().setLink({ href: url as string }).run();
+    }
+  };
+
+  const insertImage = () => {
+    if (editor) {
+      const url = prompt('Enter the image URL');
+      editor.chain().focus().setImage({ src: url as string }).run();
+    }
+  };
+
+  const toggleUnderline = () => {
+    if (editor) {
+      editor.chain().focus().toggleUnderline().run();
+    }
+  };
+
+  const setTextSize = (size:any) => {
+    // if (editor) {
+    //   editor.chain().focus().setTextStyle({ fontSize: size }).run();
+    // }
+  };
+
+
+  if(editor)
   return (
     <div>
-      <ClientQuill value={value} onChange={handleChange} />
-      <button className='mt-20' onClick={generatePDF}>Generate PDF</button>
+      <div className="flex gap-1 items-center justify-center w-screen mb-5">
+        <button className={`h-6 w-6 ${isBold ? "bg-gray-300" : ""} rounded-md hover:bg-gray-200 flex items-center justify-center duration-200`} onClick={toggleBold}><FaBold/></button>
+        <button className={`h-6 w-6 ${isItalic ? "bg-gray-300" : ""} rounded-md hover:bg-gray-200 flex items-center justify-center duration-200`} onClick={toggleItalic}><FaItalic/></button>
+        <button className={`h-6 w-6  rounded-md hover:bg-gray-300 flex items-center justify-center duration-200`} onClick={addBlockquote}><MdKeyboardTab/></button>
+        <button className={`h-6 w-6  rounded-md hover:bg-gray-300 flex items-center justify-center duration-200`} onClick={removeBlockquote}><MdKeyboardTab className="rotate-180" /></button>
+
+        <button onClick={insertLink}><MdOutlineInsertLink/></button>
+        <button onClick={insertImage}><CiImageOn/></button>
+        <button onClick={toggleUnderline}>Underline</button>
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}>H1</button>
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}>H2</button>
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} >H3</button>
+        
+      </div>
+      <EditorContent editor={editor} />
+      {/* <textarea
+        value={content}
+        onChange={(e) => handleChange(e.target.value)}
+        placeholder="Enter your text here..."
+      /> */}
     </div>
   );
-}
+};
+
+export default TiptapEditor;

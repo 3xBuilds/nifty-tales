@@ -91,9 +91,9 @@ export async function POST(request) {
 
     // console.log("I AM PUBLISH STATUS", id, publishStatus, artist, name, description, tokenId, wallet, content, cover);
 
-
+    console.log("COVER",cover, content)
     if( !name  || !tags || !tokenId || !wallet ) {
-      return NextResponse.json({error: "All fields are required."}, {status: 400});
+      return NextResponse.json({error: "All fields are required."}, {status: 401});
     }
 
     const author = await User.findOne({wallet});
@@ -284,7 +284,7 @@ export async function PATCH(request){
     const id = formData.get("id");
     const publishStatus = formData.get('publishStatus');
 
-    if(!name || tags || !tokenId || !wallet ) {
+    if(!name || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 400});
     }
 
