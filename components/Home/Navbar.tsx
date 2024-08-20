@@ -86,12 +86,12 @@ const Navbar = () => {
         </div>
     </div>
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
-          <ul className='w-full pb-5 px-5 flex flex-col gap-2'>
-            <li onClick={()=>{router.push("/explore")}} >Explore</li>
-            {pathName.split("/")[1] == "yourShelf" ? <li onClick={()=>{router.push("/yourShelf")}} >{user?.username}</li> : <li onClick={()=>{router.push("/yourShelf")}} >Reader Dashboard</li>}
-            {user && user?.contractAdd == "" ? <li className='font-bold' onClick={()=>{router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/")}} className='font-bold'>Author Dashboard</li>}
-            {session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
+          <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
             <li><WalletConnectButton/></li>
+            <li className='border-b-[1px] border-gray-300' onClick={()=>{router.push("/explore")}} >Explore</li>
+            {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{router.push("/yourShelf")}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{router.push("/yourShelf")}} >Reader Dashboard</li>}
+            {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
+            {session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
           </ul>
         </div>
     </>

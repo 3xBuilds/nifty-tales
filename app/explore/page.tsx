@@ -39,6 +39,16 @@ const Explore = () => {
   // console.log(user, session?.user?.email);
  },[user]);
 
+ useEffect(()=>{
+  if(user?.contractAdd == ""){
+    router.prefetch("/makeAuthor");
+  }
+  else{
+    router.prefetch("/authors");
+  }
+  router.prefetch("/yourShelf");
+ },[])
+
   return (
     <div className=''>
       <div className={`w-screen ${modal ? "h-screen":"h-0"} z-[100] flex flex-col items-center justify-center overflow-hidden fixed top-0 left-0 duration-200 backdrop-blur-xl`}>

@@ -72,7 +72,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     {getUser();}
   },[session])
 
-
   const [user, setUser] = useState<UserType | null>(null);
   const [userRaw, setUserRaw] = useState<UserType | null>(null);
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
