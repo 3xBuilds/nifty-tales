@@ -73,7 +73,7 @@ const Highlights = () => {
                 {
                     highlights.length == 0 ? <div className='md:h-[16.5rem] flex gap-2'>
                             {[0,1,2,3,4].map((item)=>(
-                                <div className='w-[450px] md:h-[16.5rem] p-8 bg-gray-200 flex flex-row animate-pulse items-center justify-start overflow-hidden relative rounded-xl'>
+                                <div className='w-[450px] md:h-[16.5rem] max-md:w-[20rem] max-md:h-[25rem] p-8 bg-gray-200 flex flex-row animate-pulse items-center justify-start overflow-hidden relative rounded-xl'>
                                 </div>
                             ))}
                         </div>:
