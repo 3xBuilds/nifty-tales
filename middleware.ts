@@ -5,7 +5,14 @@ import type { NextRequest } from 'next/server'
 export async function middleware(req: NextRequest) {
   const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
 
+  console.log("TOKEN", token);
+
   if (!token) {
+    // Check if the user is already on the register page
+    if (req.nextUrl.pathname === '/register') {
+      return NextResponse.next()
+    }
+    
     // Redirect to login page if there's no token
     return NextResponse.redirect(new URL('/register', req.url))
   }
@@ -17,13 +24,6 @@ export async function middleware(req: NextRequest) {
 // Specify which routes to apply this middleware
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api/auth (NextAuth routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     */
     '/((?!api/auth|_next/static|_next/image|favicon.ico|register|$).*)',
   ],
 }

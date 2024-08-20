@@ -56,7 +56,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         setUserRaw(res.data.unPopulated);
       }).catch((err)=>{
         // console.log("user",err);
-        router.push("/register");
+        // router.push("/register");
       });
 
     }
