@@ -69,7 +69,7 @@ export default function Home() {
         e.preventDefault();
 
         if(!address){
-            toast.error("Somwthing went wrong. Please try again");
+            toast.error("Please connect your wallet");
             setLoading(false);
             return;
         }

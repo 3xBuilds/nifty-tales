@@ -202,7 +202,7 @@ export default function Home(){
     async function handleSubmit(e:any) {
         e.preventDefault();
 
-        if(user?.wallet){
+        if(!user?.wallet){
             toast.error("Somwthing went wrong. Please try again");
             return;
         }
