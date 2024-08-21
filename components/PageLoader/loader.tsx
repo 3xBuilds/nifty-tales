@@ -14,11 +14,13 @@ const Loader = () => {
    useEffect(()=>{
 
     if(isLoading){
-      const interval = setInterval(()=>{
+      setInterval(()=>{
         setLength((prev)=>prev+0.03);
       },100);
 
-      // clearInterval(interval);
+      if(!isLoading){
+        setLength(0);
+      }
     }
 
    },[isLoading]);
