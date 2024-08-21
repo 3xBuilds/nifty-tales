@@ -106,7 +106,7 @@ const Navbar = () => {
             <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/explore")}} >Explore</li>
             {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
-            {session && <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>}
+            <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>
           </ul>
         </div>
     </>
