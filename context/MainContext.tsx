@@ -65,7 +65,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const [ens, setEns] = useState<string>("")
 
 
-  getEnsName(config, { address: user?.wallet as `0x${string}`}).then((ensName) => {
+  getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
     setEns(ensName as string);
   })
   .catch((error) => {
