@@ -15,6 +15,11 @@ import {
   useEffect
 } from "react";
 import { useAccount } from "wagmi";
+import { useEnsAvatar } from 'wagmi'
+import { normalize } from 'viem/ens'
+import { getEnsName } from '@wagmi/core'
+
+import {config} from "@/components/userChecker/config"
 
 type GlobalContextType = {
 
@@ -27,6 +32,8 @@ type GlobalContextType = {
   setUserRaw: Dispatch<SetStateAction<UserType | null>>;
   ensImg: string | "";
   setEnsImg: Dispatch<SetStateAction<string | "">>;
+  ens: string | "";
+  setEns: Dispatch<SetStateAction<string | "">>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -38,7 +45,9 @@ const GlobalContext = createContext<GlobalContextType>({
   userRaw: null,
   setUserRaw: () =>{ },
   ensImg: "",
-  setEnsImg: () =>{ }
+  setEnsImg: () =>{ },
+  ens: "",
+  setEns: () =>{ }
 
 });
 
@@ -52,6 +61,29 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const pathname = usePathname();
 
   const router = useRouter()
+  const [user, setUser] = useState<UserType | null>(null);
+  const [ens, setEns] = useState<string>("")
+
+
+  getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
+    setEns(ensName as string);
+  })
+  .catch((error) => {
+    console.error(`Error getting ENS name: ${error}`);
+  });
+
+
+  // async function getEnsData(){
+  
+
+  // }
+
+
+  // useEffect(()=>{
+  //   if(user)
+  //   getEnsData()
+  // },[user])
+
 
   async function getUser(){
     try{
@@ -79,7 +111,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   },[session])
 
-  const [user, setUser] = useState<UserType | null>(null);
   const [userRaw, setUserRaw] = useState<UserType | null>(null);
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
 
@@ -112,7 +143,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg
+      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns
     }}>
 
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
