@@ -44,11 +44,13 @@ const Navbar = () => {
   })
 
   function setImg(){ 
+    console.log("THIS IS AVATAR", avatar);
     setEnsImg(avatar as string)
   }
 
   useEffect(()=>{
     setImg()
+    console.log("I GOT AVATARAAAAA");
   },[avatar])
 
   function handleSignOut(){

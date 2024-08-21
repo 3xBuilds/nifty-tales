@@ -19,6 +19,7 @@ export const AddEmail = () => {
     const {address} = useAccount()
 
     getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
+        console.log("ENS NAMEEEE", ensName)
       setEns(ensName as string);
     })
     .catch((error) => {
