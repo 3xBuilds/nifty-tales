@@ -18,8 +18,7 @@ const Loader = () => {
         setLength((prev)=>prev+0.03);
       },100);
 
-      if(!isLoading)
-      clearInterval(interval);
+     
 
 
    },[isLoading]);
@@ -28,7 +27,6 @@ const Loader = () => {
     <motion.div
       initial={{ scaleX: 0 }}
       animate={{ scaleX: isLoading ? length : 0 }}
-      transition={{ease: easeInOut}}
       style={{
         position: 'fixed',
         top: 0,

@@ -202,7 +202,7 @@ export default function Home(){
     async function handleSubmit(e:any) {
         e.preventDefault();
 
-        if(!address){
+        if(user?.wallet){
             toast.error("Somwthing went wrong. Please try again");
             return;
         }
@@ -213,17 +213,17 @@ export default function Home(){
             const formData = new FormData();
 
             //@ts-ignore
-            if(!bannerImg && profileImg){
+            if(!bannerImg && profileImg && user){
                 formData.append("profileImage", profileImg);
-                formData.append("wallet", String(address));
+                formData.append("wallet", user?.wallet);
 
             }
 
             //@ts-ignore
-            if(bannerImg && !profileImg){
+            if(bannerImg && !profileImg && user){
                 console.log("brooo")
                 formData.append("bannerImage", bannerImg);
-                formData.append("wallet", String(address));
+                formData.append("wallet", user?.wallet);
             }
 
             // Upload to S3 using the API route

@@ -75,7 +75,7 @@ const Explore = () => {
   async function handleSubmit(e:any) {
     e.preventDefault();
 
-    if(!address){
+    if(!user?.wallet){
         toast.error("Something went wrong. Please try again");
         return;
     }
@@ -88,7 +88,7 @@ const Explore = () => {
         //@ts-ignore
         if(profileImg){
           formData.append("profileImage", profileImg);
-          formData.append("wallet", String(address));
+          formData.append("wallet", user.wallet);
         }
 
 
