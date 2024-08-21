@@ -147,7 +147,7 @@ const Explore = () => {
 
               </div>
             </div>
-              <h2 className='text-bold text-xs font-semibold'>Limit: {username.length}/10 characters</h2>
+              <h2 className='text-bold text-xs font-semibold'>Limit: {username.length}/15 characters</h2>
               <input onKeyDown={(e)=>{if(characterName == 15 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Username..." onChange={(e) => { if(characterName < 15){setUserName(e.target.value); setCharacterName(e.target.value.length) }}} value={username} className={`p-2 placeholder:text-gray-300 my-2 w-full peer focus:outline-none  focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
               <button onClick={rename} className='font-bold text-white w-full bg-black h-10 rounded-lg hover:-translate-y-1 duration-200' >Save</button>
           </div>
@@ -158,7 +158,7 @@ const Explore = () => {
       <div className='flex max-md:flex-col gap-4 w-full px-5 items-center justify-start'>
         <button onClick={()=>{setImageModal(true)}} className='rounded-full w-28 h-28 group border-4 border-black overflow-hidden flex items-center justify-center relative'>
           {/* @ts-ignore */}
-          <Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
+          <Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
           <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
 
         </button>
