@@ -219,7 +219,6 @@ export default function Home(){
             if(bannerImg && !profileImg)
             formData.append("bannerImage", bannerImg);
 
-
             // Upload to S3 using the API route
             const response = await axios.patch('/api/profileCreate', formData, {
                 headers: {
@@ -395,7 +394,7 @@ export default function Home(){
                         </div>
                         ))}
                         </div>
-                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
+                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
                             </div>
                         </div>
                     ))}
@@ -427,7 +426,7 @@ export default function Home(){
                         </div>
                         ))}
                         </div>
-                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
+                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
                             </div>
                         </div>
                     ))}

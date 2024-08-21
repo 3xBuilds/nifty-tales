@@ -13,6 +13,11 @@ const UserSchema = new Schema({
         default: "",
         unique: false
     },
+    profileImage:{
+        type: String,
+        default: "",
+        unique: false
+    },
     email:{
         type:String,
         unique: true,

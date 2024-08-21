@@ -10,13 +10,18 @@ import axios from 'axios'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
-import { FaEdit } from 'react-icons/fa'
+import { FaEdit, FaPen } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
+import Image, { StaticImageData } from 'next/image'
+import logo from "@/assets/logo.png"
+import { toast } from "react-toastify";
+import { useAccount } from 'wagmi'
+
 
 const Explore = () => {
   const {data:session} = useSession();
   const router = useRouter();
-
+  const {address} = useAccount();
   const[username, setUserName] = useState<string>("");
   const[modal, setModal] = useState<boolean>(false);
   const[characterName, setCharacterName] = useState(0)
@@ -56,8 +61,84 @@ const Explore = () => {
     setIsLoading(false)
   },[])
 
+  const [imageModal, setImageModal] = useState<boolean>(false);
+  const [profileImg, setProfileImg] = useState<File | null>(null);
+  const[profileImgLink, setProfileImgLink] = useState<string>("")
+
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+        setProfileImg(e.target.files[0]);
+    }
+};
+
+  async function handleSubmit(e:any) {
+    e.preventDefault();
+
+    if(!address){
+        toast.error("Something went wrong. Please try again");
+        return;
+    }
+
+    try {
+
+        // Create FormData object
+        const formData = new FormData();
+
+        //@ts-ignore
+        if(profileImg){
+          formData.append("profileImage", profileImg);
+          formData.append("wallet", String(address));
+        }
+
+
+        // Upload to S3 using the API route
+        const response = await axios.patch('/api/user/uploadDp', formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+
+
+        if (response.status !== 200) {
+            toast.error("An error occurred while uploading.");
+            return;
+        }
+
+        // Reset form fields
+        if(response.status == 200){
+            window.location.reload();
+        }
+
+        // alert("Collection created successfully!");
+    } catch (error) {
+        toast.error("An error occurred while creating the collection. Please try again.");
+        // console.log(error);
+    }
+}
+
   return (
     <div className=''>
+
+        <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
+                <div className="bg-white gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
+                    <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div>
+                        <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
+                            <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
+                                {!profileImg ? <svg className="w-8 h-8 text-jel-gray-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                </svg> :
+                                    <Image alt="hello" className='w-full h-full object-cover rounded-full hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!profileImg ? "" : (profileImg instanceof File ? URL.createObjectURL(profileImg) : profileImg)} />}
+                            </div>
+                            <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
+                        </label>
+                    </div>
+                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Save</button>
+                </div>
+            </div>
+
+
       <div className={`w-screen ${modal ? "h-screen":"h-0"} z-[100] flex flex-col items-center justify-center overflow-hidden fixed top-0 left-0 duration-200 backdrop-blur-xl`}>
           <div className='w-80 p-4 bg-white rounded-xl'>
             <div className='flex gap-2 items-center justify-start'>
@@ -76,6 +157,12 @@ const Explore = () => {
         <Navbar/>
       </div> */}
       <div className='flex gap-4 w-full px-5 items-center justify-start'>
+        <button onClick={()=>{setImageModal(true)}} className='rounded-full w-28 h-28 group border-4 border-black overflow-hidden flex items-center justify-center relative'>
+          {/* @ts-ignore */}
+          <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
+          <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
+
+        </button>
         <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0]}</h2>
         <button onClick={()=>{setModal(true)}} className='text-gray-500 flex items-center justify-center bg-gray-100 duration-200 hover:brightness-90 p-3 text-xl rounded-lg'><FaEdit/></button>
       </div>
