@@ -1,6 +1,10 @@
 "use client";
 import '@rainbow-me/rainbowkit/styles.css';
 import {
+  AvatarComponent,
+} from '@rainbow-me/rainbowkit';
+
+import {
   getDefaultConfig,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
@@ -26,37 +30,28 @@ const getSiweMessageOptions:GetSiweMessageOptions = () => ({
   statement: 'Sign in to Nifty Tales',
 });
 
-
-// const WalletIdContext = createContext<any>(null);
-
-// const { chains, publicClient } = configureChains(
-//   [base],
-//   [publicProvider()]
-// );
-
-// const { wallets } = getDefaultWallets({
-//   appName: "My RainbowKit App",
-//   projectId: "5d10af3027c340310f3a3da64cbcedac",
-//   chains,
-// });
-
-
-// const connectors = connectorsForWallets(
-//   [
-//     ...wallets,
-//     {
-//       groupName: 'Phantom',
-//       wallets: [phantomWallet({ chains })],
-//     }],
-
-//   // { appName: 'RainbowKit App', projectId: '5d10af3027c340310f3a3da64cbcedac' }
-// );
-
-// const wagmiConfig = createConfig({
-//   autoConnect: true,
-//   connectors,
-//   publicClient,
-// });
+const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+  // const color = generateColorFromAddress(address);
+  return ensImage ? (
+    <img
+      src={ensImage}
+      width={size}
+      height={size}
+      style={{ borderRadius: 999 }}
+    />
+  ) : (
+    <div
+      style={{
+        backgroundColor: `#284`,
+        borderRadius: 999,
+        height: size,
+        width: size,
+      }}
+    >
+      :^)
+    </div>
+  );
+};
 
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
@@ -74,7 +69,7 @@ const Rainbow = ({ children }: any) => {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
       <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
-      <RainbowKitProvider coolMode >
+      <RainbowKitProvider coolMode avatar={CustomAvatar} >
         {children}
       </RainbowKitProvider>
       </RainbowKitSiweNextAuthProvider>

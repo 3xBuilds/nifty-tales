@@ -14,6 +14,7 @@ import { RiLoader5Line } from "react-icons/ri";
 import { CiImageOn } from "react-icons/ci";
 import { Loader } from "@/components/Global/Loader";
 import { toast } from "react-toastify";
+import { useLoading } from "@/components/PageLoader/LoadingContext";
 
 export default function Home() {
 
@@ -127,6 +128,7 @@ export default function Home() {
 
                 if(response.status == 200){
                     getUser()
+                    setIsLoading(true);
                     router.push("/authors/");
                 }
             }
@@ -160,9 +162,18 @@ export default function Home() {
 
     useEffect(()=>{
         if(user?.contractAdd !== ""){
+            setLoading(true);
+            setIsLoading(true);
+
             router.push("/authors");
         }
     },[user])
+
+    const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
 
 
     return (

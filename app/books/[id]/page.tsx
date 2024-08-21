@@ -21,6 +21,7 @@ import { AiOutlineLoading } from 'react-icons/ai';
 import Icon from '@/components/Global/Icon';
 import { toast } from 'react-toastify';
 import { MdLibraryAddCheck } from 'react-icons/md';
+import { useLoading } from '@/components/PageLoader/LoadingContext';
 
  
 export default function Page() {
@@ -163,6 +164,12 @@ export default function Page() {
       setMintPrice();
     },[bookDetails])
 
+    const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
+
     return (
     <div className=''>
         {/* <div className="h-16 w-screen relative z-[1000]">
@@ -227,7 +234,7 @@ export default function Page() {
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>
                   </div>
-                  <button onClick={()=>{router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
+                  <button onClick={()=>{setIsLoading(true);router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
                 </div>
                 <p className='text-sm text-white' >{bookDetails?.description?.substring(0,200)}</p>
                 <div className='flex flex-wrap gap-2'>

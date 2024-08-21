@@ -8,6 +8,7 @@ import Icon from '@/components/Global/Icon';
 import { WalletNotRegistered } from '@/components/popups/walletNotRegistered';
 import { IoMdArrowBack } from 'react-icons/io';
 import { WalletConnectRegister } from '@/components/buttons/WalletConnectRegister';
+import { useLoading } from '@/components/PageLoader/LoadingContext';
 
 const PreRegister = () => {
   const {data:session} = useSession();
@@ -50,6 +51,12 @@ const PreRegister = () => {
   //   }
   // },[session?.user])
 
+  const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
+
   const handleGoogleSignIn = () => {
     signIn('google')
   }
@@ -57,15 +64,17 @@ const PreRegister = () => {
 
   useEffect(()=>{
     if(session){
-      // console.log(session, "yay");
+      setIsLoading(true);
       router.push("/explore");
     }
   },[session])
 
+  
+
   return (
     <div className='w-screen h-screen fixed top-0 flex flex-col items-center justify-center overflow-y-hidden object-contain'>
 
-      <button onClick={()=>{router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute top-16 left-5'>
+      <button onClick={()=>{setIsLoading(true);router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute top-16 left-5'>
         <IoMdArrowBack/>
       </button>
 

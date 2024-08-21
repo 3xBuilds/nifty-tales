@@ -3,6 +3,7 @@
 import Highlights from '@/components/Explore/Highlights'
 import PublicLibrary from '@/components/Explore/PublicLibrary'
 import Navbar from '@/components/Home/Navbar'
+import { useLoading } from '@/components/PageLoader/LoadingContext'
 import { AddWallet } from '@/components/userChecker/addWallet'
 import { useGlobalContext } from '@/context/MainContext'
 import axios from 'axios'
@@ -48,6 +49,12 @@ const Explore = () => {
   }
   router.prefetch("/yourShelf");
  },[])
+
+ const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
 
   return (
     <div className=''>

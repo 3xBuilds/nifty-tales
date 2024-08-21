@@ -11,10 +11,18 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import OptionToggle from "@/components/Global/OptionToggle";
 import Book from "@/components/Global/Book";
+import { useLoading } from "@/components/PageLoader/LoadingContext";
 
 export default function Home(){
 
     const {user, getUser} = useGlobalContext();
+
+
+  const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
 
     const[toggle, setToggle] = useState<string>("Readlist");
 
@@ -120,7 +128,7 @@ export default function Home(){
                             <div className="absolute z-50 top-1  " >
                                 <button onClick={()=>{deleteFromReadList(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
                             </div>
-                            <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                            <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                                 <Book img={item2.cover} />
                             </button>
                         </div>
@@ -134,7 +142,7 @@ export default function Home(){
                 
                 {toggle == "Readlist" && <div className="w-full h-80 flex flex-col text-center items-center justify-center">
                         <h3 className="text-xl font-semibold text-gray-500 mb-3">Your shelf seems empty</h3>
-                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Add some books from <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Add some books from <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
                 </>
@@ -152,7 +160,7 @@ export default function Home(){
                             <div className="absolute z-50 top-1  " >
                                 <button onClick={()=>{deleteFromReadList(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
                             </div>
-                            <button onClick={()=>{router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                            <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                                 <Book img={item2.cover} />
                             </button>
                         </div>
@@ -166,7 +174,7 @@ export default function Home(){
                     <>
                     {toggle == "Minted" && <div className="w-full text-center h-80 flex flex-col items-center justify-center">
                         <h3 className="text-xl font-semibold text-gray-500 mb-3">Seems like you haven't minted anything</h3>
-                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Find an author to support <button onClick={()=>{router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Find an author to support <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
                     </>

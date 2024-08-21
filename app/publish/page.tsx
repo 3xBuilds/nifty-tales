@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation"
 import { toast } from "react-toastify"
 import { TbCircleDashedNumber1, TbCircleDashedNumber2 } from "react-icons/tb"
 import { AiOutlineLoading } from "react-icons/ai"
+import { useLoading } from "@/components/PageLoader/LoadingContext"
 
 export default function Home(){
 
@@ -119,6 +120,7 @@ export default function Home(){
             txn.wait().then(async (res:any)=>{
                 // console.log("THIS IS ID",id);
                 setLoading(false);
+                setIsLoading(true);
                 router.push("/authors")
             })
         }
@@ -232,6 +234,8 @@ export default function Home(){
                     
                 }
                 else{
+                    setIsLoading(true);
+
                     router.push("/authors")
                 }
 
@@ -262,6 +266,8 @@ export default function Home(){
                     
                 }
                 else{
+                    setIsLoading(true);
+
                     router.push("/authors")
                 }
             }
@@ -291,6 +297,8 @@ export default function Home(){
                     
                 }
                 else{
+                    setIsLoading(true);
+
                     router.push("/authors")
                 }
             }
@@ -320,6 +328,8 @@ export default function Home(){
                     
                 }
                 else{
+                    setIsLoading(true);
+
                     router.push("/authors")
                 }
             }
@@ -348,6 +358,8 @@ export default function Home(){
                     contractPublishBook(response.data.success._id);
                 }
                 else{
+                    setIsLoading(true);
+
                     router.push("/authors")
                 }
             }
@@ -389,6 +401,12 @@ export default function Home(){
 
 
     },[])
+
+    const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
 
 
     return(

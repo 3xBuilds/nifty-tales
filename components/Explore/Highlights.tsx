@@ -10,11 +10,18 @@ import { useSession } from 'next-auth/react'
 import { toast } from 'react-toastify';
 import { useGlobalContext } from '@/context/MainContext';
 import { MdLibraryAddCheck } from 'react-icons/md';
+import { useLoading } from '../PageLoader/LoadingContext';
 
 
 const Highlights = () => {
 
     const router = useRouter();
+
+    const {setIsLoading} = useLoading()
+
+  useEffect(()=>{
+    setIsLoading(false)
+  },[])
 
     const {data:session} = useSession();
     const {user, getUser, userRaw} = useGlobalContext();
@@ -80,7 +87,7 @@ const Highlights = () => {
                         <>
                         {highlights?.slice(0,5).map((highlight:any, i)=>(
                     <div className='md:w-[450px] max-md:w-[20rem] max-md:h-[28rem] p-8 bg-gray-200 flex flex-row max-md:flex-col items-center justify-start overflow-hidden relative rounded-xl'>
-                        <div onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
+                        <div onClick={()=>{setIsLoading(true);(`/books/${highlight.item._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                             <div className="w-40 h-52 max-md:w-32 max-md:h-44 overflow-hidden rounded-lg relative z-30">
                                 <Image src={highlight.item.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                             </div>
@@ -96,7 +103,7 @@ const Highlights = () => {
                             <Image width={1080} height={1080} src={highlight.item.cover as string} alt="" className=' object-cover w-full h-full flex items-center justify-center'/>
                         </div>
                         <div className='flex flex-row gap-2 max-md:items-center max-md:justify-center md:absolute bottom-8 right-8 z-20'>
-                            <button onClick={()=>{router.push(`/books/${highlight.item._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg max-md:w-36 px-4 py-1 md:px-4 md:py-1'>View</button>
+                            <button onClick={()=>{setIsLoading(true);router.push(`/books/${highlight.item._id}`)}} className='text-nifty-black text-sm font-semibold bg-white hover:bg-nifty-white rounded-lg max-md:w-36 px-4 py-1 md:px-4 md:py-1'>View</button>
                             <button disabled={highlight.readlisted} onClick={()=>{readlist(highlight.item._id)}} className='text-nifty-black text-sm font-semibold bg-nifty-black rounded-lg w-8 h-8 flex items-center justify-center'>
                                     {!highlight.readlisted ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                             </button>
