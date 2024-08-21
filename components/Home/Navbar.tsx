@@ -43,7 +43,7 @@ const Navbar = () => {
 
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
-    {!user?.email.includes("@wallet") && <AddEmail/>}
+    {user?.email.includes("@wallet") && <AddEmail/>}
 
     {user && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-96 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is linked to another account. <b className="block mt-5">Go to your wallet and connect {user.wallet}.</b> </div></div>}
 
