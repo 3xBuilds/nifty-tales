@@ -12,6 +12,7 @@ import { FaPenNib, FaSearch } from 'react-icons/fa'
 import { Search } from '../Global/Search'
 import { AddWallet } from '../userChecker/addWallet'
 import { useLoading } from '../PageLoader/LoadingContext'
+import { AddEmail } from '../userChecker/addEmail'
 
 const Navbar = () => {
 
@@ -37,9 +38,11 @@ const Navbar = () => {
     signOut()
   }
 
+
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
     {user?.email.includes("@wallet") && <AddWallet/>}
+    {user?.wallet == "" && <AddEmail/>}
 
         <button onClick={()=>{setIsLoading(true);("/explore")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />

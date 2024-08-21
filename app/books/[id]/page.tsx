@@ -4,7 +4,6 @@ import { usePathname } from 'next/navigation'
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import Navbar from '@/components/Home/Navbar';
 import { useRouter } from 'next/navigation';
 import { ethers } from 'ethers';
 import abi from "@/utils/abis/templateABI"
@@ -207,7 +206,7 @@ export default function Page() {
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
                 <button disabled={loading} onClick={()=>{ setLoading(true); mint()}} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Minting</h2></div>: "Mint"}</button>
-                <button onClick={()=>{setShowModal(false)}} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
+                <button onClick={()=>{setLoading(false); setShowModal(false)}} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
             </div>
           </div>
       </div>
@@ -246,8 +245,8 @@ export default function Page() {
                 </div>
                 <div className='flex gap-4'>
                     <a target='_blank' className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' href={bookDetails?.pdf}>Read</a>
-                    <button onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Mint</button>
-
+                    {/* @ts-ignore */}
+                    <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Mint"}</button>
                 </div>
               </div>
             </div>

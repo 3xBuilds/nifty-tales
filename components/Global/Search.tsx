@@ -44,9 +44,10 @@ type Props = {
     const getSearchResults = async () => {
         try{
             const res = await axios.get(`/api/search?query=${debouncedSearch}`);
+            console.log(res.data.history);
             setSearchResults(res.data.user);
             setBookHistory(res.data.book);
-            // setHistory(res.data.history);
+            setHistory(res.data.history);
         }
         catch(e){
             console.error(e);
