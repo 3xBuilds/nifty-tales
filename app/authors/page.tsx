@@ -7,11 +7,10 @@ import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { IoMdTrash } from "react-icons/io";
-import { WalletConnectButton } from "@/components/buttons/WalletConnectButton";
-import Navbar from "@/components/Home/Navbar";
+
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaChartLine, FaEdit, FaEye, FaEyeSlash, FaPlusCircle } from "react-icons/fa";
+import { FaChartLine, FaEdit, FaEye, FaEyeSlash, FaPen, FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose, IoTrashBin } from "react-icons/io5";
@@ -86,8 +85,8 @@ export default function Home(){
                 setIsLoading(true);
                 router.push("/makeAuthor");
             }
-            setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage");
-            setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage");
+            setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage?v="+Date.now());
+            setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage?v="+Date.now());
             getContractDetails();
 
 
@@ -286,7 +285,6 @@ export default function Home(){
     }
 
    
-
   useEffect(()=>{
     setIsLoading(false)
   },[])
@@ -326,7 +324,7 @@ export default function Home(){
                             <div className="flex flex-col items-center h-32 w-full p-2 overflow-hidden justify-center rounded-lg">
                                 {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
                                         <CiImageOn className="text-xl text-gray-400" />
-                                        <h3 className="text-xs text-gray-400 font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                        <h3 className="text-xs text-gray-400 text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
                                     </div> :
                                     <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
                             </div>
@@ -339,22 +337,28 @@ export default function Home(){
             </div>
 
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
-                <div className="w-screen absolute h-full overflow-hidden">
+                
+
+                <div className="w-screen flex item-center justify-center group absolute h-full overflow-hidden">
+                    <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-black/30 h-12 w-12 relative z-[70] mt-4 max-md:text-sm flex items-center justify-center text-white font-bold gap-2 rounded-full hover:-translate-y-1 duration-200"><FaEdit/></button>
+
                     <Image width={1080} height={1080} src={bannerLink || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
-                <div className="flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl">
-                    <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
-                    <div className="flex flex-col gap-2">
+                <div className="flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto relative z-50 backdrop-blur-xl">
+                    
+                    <button onClick={()=>{setImageModal(true)}} className="rounded-full group relative duration-200 flex items-center justify-center">
+                        <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
+                        <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
+                    </button>
+                    <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
                         <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0,7)}...{user?.contractAdd.substring(user.contractAdd.length-7, user.contractAdd.length)}</a>
                     </div>
                 </div>
 
-                <div className="absolute top-3 md:right-3 gap-4 flex items-center justify-center z-50">
-                        <Link href="#analytics" className="py-2 bg-white/10 md:w-40 max-md:text-sm w-12 h-10 border-[1px] border-white flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200" ><span className="max-md:hidden" >Analytics</span> <FaChartLine/></Link>
-                        <button onClick={()=>{setImageModal(true)}} className="py-2 bg-white/10 h-10 border-[1px] border-white md:w-40 max-md:text-sm w-28 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Image <FaEdit/></button>
-                        <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-white/10 h-10 border-[1px] border-white md:w-40 max-md:text-sm w-28 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Banner <FaEdit/></button>
-                </div>
+                <div className="absolute right-3 top-3 md:right-3 gap-4 flex items-end justify-end z-50">
+                        <Link href="#analytics" className="py-2 bg-white/10 md:w-40 max-md:text-sm w-12 h-10 border-[1px] border-white flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200" ><span className="max-md:hidden" >Analytics</span> <FaChartLine/></Link>                
+                        </div>
             </div>
             
 

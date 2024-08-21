@@ -87,8 +87,8 @@ export default function Home(){
 
     useEffect(()=>{
         if(user){
-            setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user?.wallet + "/info/profileImage");
-            setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user?.wallet + "/info/bannerImage");
+            setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user?.wallet + "/info/profileImage?v="+Date.now());
+            setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user?.wallet + "/info/bannerImage?v="+Date.now());
             getContractDetails();
         }
     },[user])

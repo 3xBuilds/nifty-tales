@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import { logo } from '@/assets/assets'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { IoIosLogOut } from 'react-icons/io'
+import { IoIosLogOut, IoMdWallet } from 'react-icons/io'
 import { useGlobalContext } from '@/context/MainContext'
 import { WalletConnectButton } from '../buttons/WalletConnectButton'
 import { MdAccountCircle, MdOutlineDashboard } from 'react-icons/md'
@@ -72,7 +72,7 @@ const Navbar = () => {
             <FaSearch/>
           </button>
 
-          <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='text-black text-sm font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200'>Explore</button>
+          {!pathName.split("/").includes("explore") && <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='text-black text-sm font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200'>Explore</button>}
 
 
           {session &&  <div className='flex gap-4 items-center justify-center'>
@@ -81,7 +81,7 @@ const Navbar = () => {
             </>}
             {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>{user?.username}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
-            <button onClick={()=>{setShowLogout((prev)=>!prev)}} className='text-gray-500 p-2 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full' ><MdAccountCircle/></button>
+            <button onClick={()=>{setShowLogout((prev)=>!prev)}} className='text-gray-500 p-2 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full' ><IoMdWallet/></button>
             <div className={`${showLogout ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[40rem]"} duration-500 absolute right-4 top-16 flex flex-col items-end justify-end gap-2 `} >
               <WalletConnectButton/>
               <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>

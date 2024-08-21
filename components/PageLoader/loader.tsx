@@ -11,7 +11,7 @@ const Loader = () => {
     <motion.div
       initial={{ scaleX: 0 }}
       animate={{ scaleX: isLoading ? 1 : 0 }}
-      transition={{ duration: 1 }}
+      transition={{ duration: 2 }}
       style={{
         position: 'fixed',
         top: 0,
