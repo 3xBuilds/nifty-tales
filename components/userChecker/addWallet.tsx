@@ -17,16 +17,12 @@ export const AddWallet = () => {
 
     const {address} = useAccount()
 
-
     getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
       setEns(ensName as string);
     })
     .catch((error) => {
       console.error(`Error getting ENS name: ${error}`);
     });
-    //   console.log("EnsName",ensName);
-
-    const{data:session} = useSession()
 
     async function handleEmailSetup(){
         try{

@@ -7,7 +7,7 @@ import { useSession, signOut } from 'next-auth/react'
 import { IoIosLogOut, IoMdWallet } from 'react-icons/io'
 import { useGlobalContext } from '@/context/MainContext'
 import { WalletConnectButton } from '../buttons/WalletConnectButton'
-import { MdAccountCircle, MdOutlineDashboard } from 'react-icons/md'
+import { MdAccountCircle, MdLogout, MdOutlineDashboard } from 'react-icons/md'
 import { FaPenNib, FaSearch } from 'react-icons/fa'
 import { Search } from '../Global/Search'
 import { AddWallet } from '../userChecker/addWallet'
@@ -44,7 +44,7 @@ const Navbar = () => {
     {user?.email.includes("@wallet") && <AddWallet/>}
     {user?.wallet == "" && <AddEmail/>}
 
-        <button onClick={()=>{setIsLoading(true);("/explore")}} className='flex items-center'>
+        <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
         </button>
@@ -82,11 +82,11 @@ const Navbar = () => {
             {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
               { user && user?.contractAdd == "" ? <button onClick={()=>{setIsLoading(true);router.push("/makeAuthor")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{setIsLoading(true);router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}
             </>}
-            {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>{user?.username}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
+            {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>{user?.username.slice(0,8)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
-            <button onClick={()=>{setShowLogout((prev)=>!prev)}} className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full' >{user?.profileImage == "" ? <IoMdWallet/> : <Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-10 h-10 rounded-full object-cover object-center duration-200' />}</button>
+            <button onClick={()=>{signOut()}} className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <IoMdWallet/> :<> <MdLogout className='text-xl group-hover:opacity-100 opacity-0 duration-200 text-white absolute z-[10000]'/><Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>
             <div className={`${showLogout ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[40rem]"} duration-500 absolute right-4 top-16 flex flex-col items-end justify-end gap-2 `} >
-              <WalletConnectButton/>
+              {/* <WalletConnectButton/> */}
               <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>
             </div>
             </div>}
@@ -96,7 +96,7 @@ const Navbar = () => {
     </div>
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
-            <li><WalletConnectButton/></li>
+            {/* <li><WalletConnectButton/></li> */}
             <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/explore")}} >Explore</li>
             {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}

@@ -3,15 +3,31 @@
 // Loader.js
 import { motion } from 'framer-motion';
 import { useLoading } from './LoadingContext';
+import { useEffect, useState } from 'react';
+
 
 const Loader = () => {
   const { isLoading } = useLoading();
 
+  const [length, setLength] = useState<number>(0);
+
+   useEffect(()=>{
+
+    if(isLoading){
+      const interval = setInterval(()=>{
+        setLength((prev)=>prev+0.01);
+      },100);
+
+      // clearInterval(interval);
+    }
+
+   },[isLoading]);
+
   return (
     <motion.div
       initial={{ scaleX: 0 }}
-      animate={{ scaleX: isLoading ? 1 : 0 }}
-      transition={{ duration: 2 }}
+      animate={{ scaleX: isLoading ? length : 0 }}
+      // transition={{ duration: 2 }}
       style={{
         position: 'fixed',
         top: 0,

@@ -19,6 +19,7 @@ import Book from "@/components/Global/Book";
 import { Analytics } from "@/components/Author/Analytics";
 import Link from "next/link";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
+import { useSession } from "next-auth/react";
 
 export default function Home(){
 
@@ -195,6 +196,8 @@ export default function Home(){
 
     const {address} = useAccount();
 
+    const {data:session} = useSession();
+
 
     async function handleSubmit(e:any) {
         e.preventDefault();
@@ -210,14 +213,18 @@ export default function Home(){
             const formData = new FormData();
 
             //@ts-ignore
-            if(!bannerImg && profileImg)
-            formData.append("profileImage", profileImg);
+            if(!bannerImg && profileImg){
+                formData.append("profileImage", profileImg);
+                formData.append("wallet", String(address));
 
-            formData.append("wallet", String(address));
+            }
 
             //@ts-ignore
-            if(bannerImg && !profileImg)
-            formData.append("bannerImage", bannerImg);
+            if(bannerImg && !profileImg){
+                console.log("brooo")
+                formData.append("bannerImage", bannerImg);
+                formData.append("wallet", String(address));
+            }
 
             // Upload to S3 using the API route
             const response = await axios.patch('/api/profileCreate', formData, {
@@ -240,7 +247,8 @@ export default function Home(){
             // alert("Collection created successfully!");
         } catch (error) {
             toast.error("An error occurred while creating the collection. Please try again.");
-            // console.log(error);
+            console.log(error);
+            console.log(session);
         }
     }
 

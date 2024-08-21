@@ -6,8 +6,6 @@ import { IoMdWallet } from 'react-icons/io';
 import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import { useGlobalContext } from '@/context/MainContext';
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 export const WalletConnectButton = () => {
 
