@@ -36,6 +36,7 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
   const {setEnsImg} = useGlobalContext();
   // const color = generateColorFromAddress(address);
   if(ensImage){
+    console.log("THIS IS ENS IMAGE", ensImage)
     setEnsImg(ensImage)
   }
   return ensImage ? (
@@ -62,7 +63,7 @@ const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
   projectId: '5d10af3027c340310f3a3da64cbcedac',
-  chains: [base],
+  chains: [base,mainnet],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
