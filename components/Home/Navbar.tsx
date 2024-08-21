@@ -13,6 +13,7 @@ import { Search } from '../Global/Search'
 import { AddWallet } from '../userChecker/addWallet'
 import { useLoading } from '../PageLoader/LoadingContext'
 import { AddEmail } from '../userChecker/addEmail'
+import { useAccount } from 'wagmi'
 
 const Navbar = () => {
 
@@ -28,6 +29,7 @@ const Navbar = () => {
   const[search, setSearch] = useState<string>("")
 
   const {user, ensImg} = useGlobalContext();
+  const {address} = useAccount();
 
   const router = useRouter();
   const pathName = usePathname()
@@ -43,6 +45,8 @@ const Navbar = () => {
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
     {user?.email.includes("@wallet") && <AddWallet/>}
     {user?.wallet == "" && <AddEmail/>}
+    {user && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-96 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is linked to another account. <b className="block mt-5">Go to your wallet and connect {user.wallet}.</b> </div></div>}
+
 
         <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />

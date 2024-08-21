@@ -1,7 +1,7 @@
 "use client"
 
 // Loader.js
-import { motion } from 'framer-motion';
+import { easeInOut, motion } from 'framer-motion';
 import { useLoading } from './LoadingContext';
 import { useEffect, useState } from 'react';
 
@@ -13,13 +13,14 @@ const Loader = () => {
 
    useEffect(()=>{
 
-    if(isLoading){
+
       const interval = setInterval(()=>{
-        setLength((prev)=>prev+0.01);
+        setLength((prev)=>prev+0.03);
       },100);
 
-      // clearInterval(interval);
-    }
+      if(!isLoading)
+      clearInterval(interval);
+
 
    },[isLoading]);
 
@@ -27,7 +28,7 @@ const Loader = () => {
     <motion.div
       initial={{ scaleX: 0 }}
       animate={{ scaleX: isLoading ? length : 0 }}
-      // transition={{ duration: 2 }}
+      transition={{ease: easeInOut}}
       style={{
         position: 'fixed',
         top: 0,

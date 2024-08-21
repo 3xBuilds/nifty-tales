@@ -74,7 +74,9 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   useEffect(()=>{
     if(session && !user)
-    {getUser();}
+    {
+      getUser();
+    }
   },[session])
 
   const [user, setUser] = useState<UserType | null>(null);
@@ -112,7 +114,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     <GlobalContext.Provider value={{
       user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg
     }}>
-      {user && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-96 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is linked to another account. <b className="block">Go to your wallet and connect a different wallet.</b> </div></div>}
 
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

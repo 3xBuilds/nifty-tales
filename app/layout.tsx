@@ -39,6 +39,7 @@ export default function RootLayout({
                <Navbar/>
             </div> 
             <div className="mt-16">
+              
               {children}
             </div>
         </Providers>
