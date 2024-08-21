@@ -26,7 +26,7 @@ const Navbar = () => {
   const[bringSearchBar, setBringSearchBar] = useState<boolean>(false);
   const[search, setSearch] = useState<string>("")
 
-  const {user} = useGlobalContext();
+  const {user, ensImg} = useGlobalContext();
 
   const router = useRouter();
   const pathName = usePathname()
@@ -81,7 +81,7 @@ const Navbar = () => {
             </>}
             {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-4 max-md:mx-auto'>{user?.username}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
-            <button onClick={()=>{setShowLogout((prev)=>!prev)}} className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full' >{user?.profileImage == "" ? <IoMdWallet/> : <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-10 h-10 rounded-full object-cover object-center duration-200' />}</button>
+            <button onClick={()=>{setShowLogout((prev)=>!prev)}} className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full' >{user?.profileImage == "" ? <IoMdWallet/> : <Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-10 h-10 rounded-full object-cover object-center duration-200' />}</button>
             <div className={`${showLogout ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[40rem]"} duration-500 absolute right-4 top-16 flex flex-col items-end justify-end gap-2 `} >
               <WalletConnectButton/>
               <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>

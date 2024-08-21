@@ -25,7 +25,8 @@ type GlobalContextType = {
   getUser: () => void;
   userRaw: UserType | null;
   setUserRaw: Dispatch<SetStateAction<UserType | null>>;
-
+  ensImg: string | "";
+  setEnsImg: Dispatch<SetStateAction<string | "">>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -35,13 +36,17 @@ const GlobalContext = createContext<GlobalContextType>({
   setFetch: () => {},
   getUser: () => { },
   userRaw: null,
-  setUserRaw: () =>{ }
+  setUserRaw: () =>{ },
+  ensImg: "",
+  setEnsImg: () =>{ }
 
 });
 
 export const GlobalContextProvider = ({ children } : { children: ReactNode}) => {
 
   const {data: session} = useSession();
+
+  const [ensImg, setEnsImg] = useState<string>("")
 
   const {address} = useAccount();
   const pathname = usePathname();
@@ -131,7 +136,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw
+      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg
     }}>
       {walletExists && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[1000000000]"><div className="p-4 bg-white w-96 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is linked to another account. <b className="block">Go to your wallet and connect a different wallet.</b> </div></div>}
 

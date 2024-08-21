@@ -25,13 +25,19 @@ import {
   RainbowKitSiweNextAuthProvider,
   GetSiweMessageOptions,
 } from '@rainbow-me/rainbowkit-siwe-next-auth';
+import { useGlobalContext } from '@/context/MainContext';
 
 const getSiweMessageOptions:GetSiweMessageOptions = () => ({
   statement: 'Sign in to Nifty Tales',
 });
 
 const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+
+  const {setEnsImg} = useGlobalContext();
   // const color = generateColorFromAddress(address);
+  if(ensImage){
+    setEnsImg(ensImage)
+  }
   return ensImage ? (
     <img
       src={ensImage}
@@ -59,6 +65,7 @@ const config = getDefaultConfig({
   chains: [base],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
+
 
 const queryClient = new QueryClient()
 

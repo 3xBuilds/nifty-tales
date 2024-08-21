@@ -40,6 +40,13 @@ export async function PATCH(req:any){
         const body = await req.json();
 
         const {...rest} = body;
+
+        // if(body.username && body.username.length>15){
+            // return new NextResponse(JSON.stringify("Long username"), {
+            //     status: 400,
+            // });
+        // }
+
         const email = req.nextUrl.pathname.split("/")[3];
 
         await connectToDB();

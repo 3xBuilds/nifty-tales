@@ -2,19 +2,46 @@
 
 import { useGlobalContext } from '@/context/MainContext'
 import axios from 'axios';
-import { signOut } from 'next-auth/react';
+import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import React, { useState } from 'react'
+import { useAccount, useEnsName } from 'wagmi'
+import { getEnsName } from '@wagmi/core'
+import { config } from './config'
 
 
 export const AddWallet = () => {
     const {user, getUser} = useGlobalContext();
     const [newEmail, setNewEmail] = useState<string>();
 
+    const [ens, setEns] = useState<string>("");
+
+    const {address} = useAccount()
+
+
+    getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
+      setEns(ensName as string);
+    })
+    .catch((error) => {
+      console.error(`Error getting ENS name: ${error}`);
+    });
+    //   console.log("EnsName",ensName);
+
+    const{data:session} = useSession()
+
     async function handleEmailSetup(){
         try{
-            await axios.patch("/api/user/"+user?.email, {email: newEmail}).then((res)=>{
-                signOut();
-            })
+            if(ens == ""){
+                await axios.patch("/api/user/"+user?.email, {email: newEmail}).then((res)=>{
+                    signOut()
+
+                })
+            }
+            else{
+                console.log(user?.email);
+                await axios.patch("/api/user/"+user?.email, {email: newEmail, username: ens}).then((res)=>{
+                    signOut()
+                })
+            }
         }
         catch(err){
             console.log(err);
