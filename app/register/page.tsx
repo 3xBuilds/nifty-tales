@@ -37,8 +37,6 @@ const PreRegister = () => {
     signIn('google')
   }
 
-  console.log("OPEN CONNECT MODAL",openConnectModal)
-
 
   useEffect(()=>{
     if(session){

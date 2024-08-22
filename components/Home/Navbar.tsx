@@ -74,7 +74,6 @@ const Navbar = () => {
   }
 
   useEffect(()=>{
-    console.log(user?.wallet,"GAP", address, session?.user?.email)
     if(user?.wallet == "" && address){
       setWallet()
     }
