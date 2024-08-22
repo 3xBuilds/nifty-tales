@@ -65,14 +65,13 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const [ens, setEns] = useState<string>("")
 
 
-  getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
-    console.log("ENS NAMEEEE", ensName)
-
-    setEns(ensName as string);
-  })
-  .catch((error) => {
-    console.error(`Error getting ENS name: ${error}`);
-  });
+  // getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
+  //   console.log("ENS NAMEEEE", ensName)
+  //   setEns(ensName as string);
+  // })
+  // .catch((error) => {
+  //   console.error(`Error getting ENS name: ${error}`);
+  // });
 
 
   // async function getEnsData(){

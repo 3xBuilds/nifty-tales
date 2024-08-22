@@ -4,18 +4,18 @@ import React, { useEffect, useState } from 'react'
 import { logo } from '@/assets/assets'
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { IoIosLogOut, IoMdWallet } from 'react-icons/io'
+import { IoIosLogOut, IoMdLogOut, IoMdWallet } from 'react-icons/io'
 import { useGlobalContext } from '@/context/MainContext'
 import { WalletConnectButton } from '../buttons/WalletConnectButton'
 import { MdAccountCircle, MdLogout, MdOutlineDashboard } from 'react-icons/md'
-import { FaPenNib, FaSearch } from 'react-icons/fa'
+import { FaPenNib, FaSearch, FaSignOutAlt } from 'react-icons/fa'
 import { Search } from '../Global/Search'
 
 import { useLoading } from '../PageLoader/LoadingContext'
 import { AddEmail } from '../userChecker/addEmail'
-import { useAccount } from 'wagmi'
+import { useAccount, useEnsName } from 'wagmi'
 import { useEnsAvatar } from 'wagmi'
-import { normalize } from 'viem/ens'
+import { GetEnsNameReturnType, normalize } from 'viem/ens'
 
 
 const Navbar = () => {
@@ -28,30 +28,26 @@ const Navbar = () => {
   },[])
   const [showLogout, setShowLogout] = useState<boolean>(false);
 
+
+  const {user, ensImg, setEnsImg, ens} = useGlobalContext();
+
+  const { address, isConnected } = useAccount();
+  const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: "0xD659cFE409c2F1AD906cf5D3Bcc6f481B8c588B9" as `0x${string}`});
+  const { data: ensAvatar, isLoading: isLoadingAvatar } = useEnsAvatar({ name:ensName as string });
+
+  setEnsImg(ensAvatar as string)
+  console.log("THIS IS AVATAR", ensAvatar, ensName);
+
   const[bringSearchBar, setBringSearchBar] = useState<boolean>(false);
   const[search, setSearch] = useState<string>("")
 
-  const {user, ensImg, setEnsImg, ens} = useGlobalContext();
-  const {address} = useAccount();
 
   const router = useRouter();
   const pathName = usePathname()
 
   const {data: session} = useSession();
 
-  const { data: avatar, isLoading, isError } = useEnsAvatar({
-    name: normalize(ens),
-  })
 
-  function setImg(){ 
-    console.log("THIS IS AVATAR", avatar);
-    setEnsImg(avatar as string)
-  }
-
-  useEffect(()=>{
-    setImg()
-    console.log("I GOT AVATARAAAAA");
-  },[avatar])
 
   function handleSignOut(){
     signOut()
@@ -79,7 +75,7 @@ const Navbar = () => {
             <FaSearch/>
           </button>
 
-          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" && ensImg == "" ? <IoMdWallet/> :<> <MdLogout className='text-xl group-hover:opacity-100 opacity-0 duration-200 text-white absolute z-[10000]'/><Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
+          {pathName.split("/")[1] !== "register" && !isLoadingAvatar && <button className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" && ensImg == "" ? <IoMdWallet/> :<> <MdLogout className='text-xl group-hover:opacity-100 opacity-0 duration-200 text-white absolute z-[10000]'/><Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
 
 
           <button onClick={()=>{setIsOpen(prev=>!prev)}} className='flex p-2 mr-2 flex-col gap-1'>
@@ -107,11 +103,11 @@ const Navbar = () => {
             </>}
             {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>{user?.username.slice(0,8)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
-            <button onClick={()=>{signOut()}} className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{ensImg == "" && user?.profileImage == "" ? <IoMdWallet/> :<> <MdLogout className='text-xl group-hover:opacity-100 opacity-0 duration-200 text-white absolute z-[10000]'/><Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>
+            <button onClick={()=>{signOut()}} className='text-gray-500 p-1 h-10 w-10 text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{!ensImg && user?.profileImage == "" && <MdLogout className='text-lg'/>}{ensImg !== "" && user?.profileImage == "" &&<div className='flex items-center justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={ensImg} alt='ensImg' width={1080} height={1080} className='group=hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='ensImg' width={1080} height={1080} className='group=hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}</button>
             {/* <div className={`${showLogout ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[40rem]"} duration-500 absolute right-4 top-16 flex flex-col items-end justify-end gap-2 `} >
               <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>
             </div> */}
-            </div>}
+            </div>} 
             
         {/* <button className='bg-[#eeeeee] hover:bg-[#d3d3d3] rounded-lg text-[#171717] h-10 font-semibold px-5'> Wallet Connect </button> */}
         </div>

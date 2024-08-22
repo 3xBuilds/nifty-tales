@@ -158,7 +158,7 @@ const Explore = () => {
       <div className='flex max-md:flex-col gap-4 w-full px-5 items-center justify-start'>
         <button onClick={()=>{setImageModal(true)}} className='rounded-full w-28 h-28 group border-4 border-black overflow-hidden flex items-center justify-center relative'>
           {/* @ts-ignore */}
-          <Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
+          <Image width={1080} height={1080} src={user?.profileImage == "" && !ensImg ? logo : user?.profileImage != "" ? user?.profileImage : ensImg } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
           <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
 
         </button>
