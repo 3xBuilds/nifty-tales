@@ -32,13 +32,31 @@ const Navbar = () => {
 
 
   const {user, ensImg, setEnsImg, getUser} = useGlobalContext();
+  const {data: session} = useSession();
+
 
   const { address, isConnected } = useAccount();
   const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: address});
   const { data: ensAvatar, isLoading: isLoadingAvatar } = useEnsAvatar({ name:ensName as string });
 
-  setEnsImg(ensAvatar as string)
-  console.log("THIS IS AVATAR", ensAvatar, ensName);
+  async function ensImageSetter(){
+    try{
+      setEnsImg(ensAvatar as string)
+      console.log("THIS IS AVATAR", ensAvatar, ensName);
+
+      await axios.patch("/api/user/"+session?.user?.email,{profileImage: ensName})
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+  useEffect(()=>{
+    console.log("ens fetcher use effect");
+    if(ensAvatar && session && user){
+      ensImageSetter();
+    }
+  },[ensAvatar, session, user])
 
   const[bringSearchBar, setBringSearchBar] = useState<boolean>(false);
   const[search, setSearch] = useState<string>("")
@@ -46,8 +64,6 @@ const Navbar = () => {
 
   const router = useRouter();
   const pathName = usePathname()
-
-  const {data: session} = useSession();
 
   async function setWallet(){
     await axios.post("/api/user/checkExistingWallet", {wallet: address, email:session?.user?.email}).then((res)=>{
