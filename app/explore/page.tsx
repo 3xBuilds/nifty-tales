@@ -168,7 +168,7 @@ const Explore = () => {
           </div>
       </div>
 
-        {/* <Highlights/> */}
+        <Highlights/>
         <PublicLibrary/>
     </div>
   )
