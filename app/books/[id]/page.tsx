@@ -225,7 +225,10 @@ export default function Page() {
 
 
         <div className="w-screen relative h-[40rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
-          <div className='absolute top-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</div>
+          <div className='absolute flex gap-2 items-center justify-center top-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >
+            <span className='border-r-[1px] pr-2 border-white text-white'>Readers: {bookDetails?.readers}</span>
+            <h2>Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</h2>
+            </div>
             <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
             </div>
@@ -243,7 +246,7 @@ export default function Page() {
                     <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>
-                      <span className='text-lg font-semibold text-white -ml-2'>Readers: {bookDetails?.readers}</span>
+            
                   </div>
                   <button onClick={()=>{setIsLoading(true);router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
                 </div>
@@ -255,7 +258,7 @@ export default function Page() {
                     </div>
                   ))}
                 </div>
-                <div className='flex gap-4'>
+                <div className='flex gap-2'>
                     <a target='_blank' className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' href={bookDetails?.pdf}>Read</a>
                     {/* @ts-ignore */}
                     <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Mint"}</button>
