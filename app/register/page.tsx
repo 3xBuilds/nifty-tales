@@ -9,10 +9,14 @@ import { WalletNotRegistered } from '@/components/popups/walletNotRegistered';
 import { IoMdArrowBack } from 'react-icons/io';
 import { WalletConnectRegister } from '@/components/buttons/WalletConnectRegister';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
+import { useAccount } from 'wagmi';
+import { useConnectModal } from '@rainbow-me/rainbowkit';
+
 
 const PreRegister = () => {
   const {data:session} = useSession();
   const router = useRouter()
+  const {address} = useAccount()
 
   const [userName, setUserName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -21,35 +25,7 @@ const PreRegister = () => {
   const [userNameExists, setUserNameExists] = useState<boolean>(false);
   const [userExists, setUserExists] = useState<boolean>(false);
 
-  // async function register(userName:string, email:string){
-  //   try{
-  //     await axios.post("/api/user/create", {username:userName, email:email})
-  //       .then((res)=>{
-  //         setFirst(true);
-  //       })
-  //       .catch((err)=>{
-  //         console.error(err);
-  //         if(err.response.status == 400){
-  //           setUserExists(true);
-  //         }
-  //         else if(err.response.status == 408){
-  //           setEmailExists(true)
-  //         }
-  //         else if(err.response.status == 409){
-  //           setUserNameExists(true);
-  //         }
-  //       });
-  //   }
-  //   catch(err){
-  //     console.error(err);
-  //   }
-  // }
-
-  // useEffect(()=>{
-  //   if(session){
-  //     router.push("/explore")
-  //   }
-  // },[session?.user])
+  const { openConnectModal } = useConnectModal();
 
   const {setIsLoading} = useLoading()
 
@@ -61,6 +37,8 @@ const PreRegister = () => {
     signIn('google')
   }
 
+  console.log("OPEN CONNECT MODAL",openConnectModal)
+
 
   useEffect(()=>{
     if(session){
@@ -69,6 +47,10 @@ const PreRegister = () => {
     }
   },[session])
 
+
+  useEffect(()=>{
+    console.log("THIS IS ADDRESS", address)
+  },[address])
   
 
   return (

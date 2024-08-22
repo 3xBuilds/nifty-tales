@@ -44,7 +44,7 @@ const Navbar = () => {
       setEnsImg(ensAvatar as string)
       console.log("THIS IS AVATAR", ensAvatar, ensName);
 
-      await axios.patch("/api/user/"+session?.user?.email,{profileImage: ensName})
+      await axios.patch("/api/user/"+session?.user?.email,{profileImage: ensAvatar})
     }
     catch(err){
       console.log(err);
