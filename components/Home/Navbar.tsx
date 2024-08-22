@@ -63,7 +63,7 @@ const Navbar = () => {
     if(user?.wallet == "" && address){
       setWallet()
     }
-  },[address, session, user])
+  },[address, session])
 
 
   function handleSignOut(){
