@@ -65,6 +65,8 @@ export default function Home(){
 
     const router = useRouter()
 
+    const defaultTags:Array<string> = ["story", "fiction", "sci-fi", "travel", "biography", "auto-biography", "fantasy", "thriller", "adventure", "journal", "horror", "historical", "romance", "poetry", "satire"]
+
     async function contractSetup(){
         try {
             //@ts-ignore
@@ -488,8 +490,14 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <input placeholder="Add tags to get noticed (Enter to create)" onKeyDown={(e)=>{if(e.key == "Enter" && tags.length<5){setTags((prev)=>[...prev, currentTag.toLowerCase()]); setCurrentTag("")};}} onChange={(e) => {setRequiredTags(false);if(tags.length<5)setCurrentTag(e.target.value) }} value={currentTag} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 ${requiredTags ? "border-red-500" : "border-gray-400"}`}></input>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (upto 5)<span className="text-red-500 ml-1" >*</span></h2>
+                        <div className="flex flex-wrap gap-1 my-2">
+                        {defaultTags.map((item:string)=>(
+                            <button disabled={tags.length == 5} onClick={()=>{if(!tags.includes(item))setTags((prev)=>[...prev, item])}} className={`py-2 w-32 px-2 rounded-xl flex gap-2 items-center justify-center ${tags.length ==5 && "opacity-60"} bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs`}>
+                            {item}
+                            </button>
+                        ))}
+                        </div>
+                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (select upto 5)<span className="text-red-500 ml-1" >*</span></h2>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {tags.map((item, i)=>(
                                 <div className="py-2 min-w-20 px-2 rounded-xl flex gap-2 items-center justify-center bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs">
