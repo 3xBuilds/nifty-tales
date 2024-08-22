@@ -75,6 +75,8 @@ export async function PATCH(req:any){
 }
 
 export async function DELETE(req: any) {
+        // Revalidate the path to update any static pages
+        revalidatePath('/', 'layout');
     try {
         // Connect to the database
         await connectToDB();
@@ -87,8 +89,8 @@ export async function DELETE(req: any) {
         }
 
         // Find the book and delete it
-        const deletedBook = await Book.findByIdAndDelete(id);
-
+        const deletedBook = await Book.findByIdAndDelete({_id: id});
+        console.log("DELETED BOOK",deletedBook);
         if (!deletedBook) {
             return NextResponse.json({ message: "Book not found" }, { status: 404 });
         }
@@ -98,14 +100,6 @@ export async function DELETE(req: any) {
             { yourBooks: id },
             { $pull: { yourBooks: id } }
         );
-
-        await User.updateMany(
-            { readlist: id },
-            { $pull: { readlist: id } }
-        );
-
-        // Revalidate the path to update any static pages
-        revalidatePath('/', 'layout');
 
         return NextResponse.json({ message: "Book deleted successfully and removed from users", data: deletedBook }, { status: 200 });
 

@@ -150,9 +150,8 @@ export default function Home(){
         catch(err){
             // console.log("BOOKID", bookId);
             toast.error("There was an error while publishing. Please try again!")
+            await axios.delete("/api/book/"+id);
             setLoading(false);
-            console.log("THIS IS A GOOD ID",id);
-            await axios.delete("/api/book/"+id).then((res)=>{console.log(res)});
             console.log(err);
         }
     }
@@ -252,7 +251,7 @@ export default function Home(){
         
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
-                
+                    setId(response.data.success._id)
                     contractPublishBook(response.data.success._id);
                     
                 }
@@ -284,7 +283,7 @@ export default function Home(){
         
                 const response = await axios.patch("/api/uploadBook", formData);
                 if(publish == "publish"){
-                
+                    setId(response.data.success._id)
                     contractPublishBook(response.data.success._id);
                     
                 }
@@ -315,7 +314,7 @@ export default function Home(){
         
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
-                
+                    setId(response.data.success._id)
                     contractPublishBook(response.data.success._id);
                     
                 }
@@ -346,7 +345,7 @@ export default function Home(){
         
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
-                
+                    setId(response.data.success._id)
                     contractPublishBook(response.data.success._id);
                     
                 }
@@ -378,6 +377,7 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
 
                 if(publish == "publish"){
+                    setId(response.data.success._id)
                     contractPublishBook(response.data.success._id);
                 }
                 else{
@@ -393,7 +393,6 @@ export default function Home(){
         catch(err){
             toast.error("Failed Interaction")
             setLoading(false);
-
             // await axios.patch("/api/book/"+id,{isPublished: false});
             console.log(err);
 
