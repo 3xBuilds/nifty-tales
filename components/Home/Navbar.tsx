@@ -52,7 +52,6 @@ const Navbar = () => {
   }
 
   useEffect(()=>{
-    console.log("ens fetcher use effect");
     if(ensAvatar && session && user){
       ensImageSetter();
     }

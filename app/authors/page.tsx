@@ -356,7 +356,7 @@ export default function Home(){
                     
                     <button onClick={()=>{setImageModal(true)}} className="rounded-full group relative duration-200 flex items-center justify-center">
                         <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
-                        <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-full" />
+                        <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     </button>
                     <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
