@@ -205,8 +205,13 @@ export default function Page() {
                 <h2 className='w-1/2 text-md font-semibold text-end'>{(Number(price)*amount).toFixed(4)} ETH</h2>
               </div>
               <div className='w-full flex my-2'>
-                <h2 className='w-1/2 text-sm'>Platform Fee</h2>
-                <h2 className='w-1/2 text-sm font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-xs'>Platform Fee</h2>
+                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
+              </div>
+
+              <div className='w-full text-black font-bold flex mb-2 mt-4'>
+                <h2 className='w-1/2 text-sm font-bold'>Total</h2>
+                <h2 className='w-1/2 text-sm font-bold text-end'>{(0.0007*amount+Number(price)*amount).toFixed(4)} ETH</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
