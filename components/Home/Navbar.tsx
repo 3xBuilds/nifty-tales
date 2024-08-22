@@ -16,6 +16,8 @@ import { AddEmail } from '../userChecker/addEmail'
 import { useAccount, useEnsName } from 'wagmi'
 import { useEnsAvatar } from 'wagmi'
 import { GetEnsNameReturnType, normalize } from 'viem/ens'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 
 
 const Navbar = () => {
@@ -29,7 +31,7 @@ const Navbar = () => {
   const [showLogout, setShowLogout] = useState<boolean>(false);
 
 
-  const {user, ensImg, setEnsImg, ens} = useGlobalContext();
+  const {user, ensImg, setEnsImg, getUser} = useGlobalContext();
 
   const { address, isConnected } = useAccount();
   const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: address});
@@ -47,6 +49,21 @@ const Navbar = () => {
 
   const {data: session} = useSession();
 
+  async function setWallet(){
+    await axios.post("/api/user/checkExistingWallet", {wallet: address, email:session?.user?.email}).then((res)=>{
+      getUser()
+    }).catch((err)=>{
+      console.log(err);
+      toast.error(err.message);
+    })
+  }
+
+  useEffect(()=>{
+    console.log(user?.wallet,"GAP", address, session?.user?.email)
+    if(user?.wallet == "" && address){
+      setWallet()
+    }
+  },[address, session, user])
 
 
   function handleSignOut(){
@@ -58,7 +75,7 @@ const Navbar = () => {
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
     {user?.email.includes("@wallet") && <AddEmail/>}
 
-    {user && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-96 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is linked to another account. <b className="block mt-5">Go to your wallet and connect {user.wallet}.</b> </div></div>}
+    {user && user?.wallet != "" && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-96 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is not linked to your account. <b className="block mt-5">Go to your wallet and connect {user?.wallet}.</b> </div></div>}
 
 
         <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='flex items-center'>
