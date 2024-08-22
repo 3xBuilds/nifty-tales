@@ -31,34 +31,34 @@ const getSiweMessageOptions:GetSiweMessageOptions = () => ({
   statement: 'Sign in to Nifty Tales',
 });
 
-const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
+// const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
 
-  const {setEnsImg} = useGlobalContext();
-  // const color = generateColorFromAddress(address);
-  if(ensImage){
-    console.log("THIS IS ENS IMAGE", ensImage)
-    setEnsImg(ensImage)
-  }
-  return ensImage ? (
-    <img
-      src={ensImage}
-      width={size}
-      height={size}
-      style={{ borderRadius: 999 }}
-    />
-  ) : (
-    <div
-      style={{
-        backgroundColor: `#284`,
-        borderRadius: 999,
-        height: size,
-        width: size,
-      }}
-    >
-      :^)
-    </div>
-  );
-};
+//   const {setEnsImg} = useGlobalContext();
+//   // const color = generateColorFromAddress(address);
+//   if(ensImage){
+//     console.log("THIS IS ENS IMAGE", ensImage)
+//     setEnsImg(ensImage)
+//   }
+//   return ensImage ? (
+//     <img
+//       src={ensImage}
+//       width={size}
+//       height={size}
+//       style={{ borderRadius: 999 }}
+//     />
+//   ) : (
+//     <div
+//       style={{
+//         backgroundColor: `#284`,
+//         borderRadius: 999,
+//         height: size,
+//         width: size,
+//       }}
+//     >
+//       :^)
+//     </div>
+//   );
+// };
 
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
@@ -77,7 +77,7 @@ const Rainbow = ({ children }: any) => {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
       <RainbowKitSiweNextAuthProvider getSiweMessageOptions={getSiweMessageOptions}>
-      <RainbowKitProvider coolMode avatar={CustomAvatar} >
+      <RainbowKitProvider coolMode >
         {children}
       </RainbowKitProvider>
       </RainbowKitSiweNextAuthProvider>
