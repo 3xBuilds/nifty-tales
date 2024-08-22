@@ -126,6 +126,7 @@ export default function Home(){
         }
         catch(err){
             // console.log("BOOKID", bookId);
+            toast.error("There was an error while publishing. Please try again!")
             setLoading(false);
             await axios.delete("/api/book/"+id);
             console.log(err);

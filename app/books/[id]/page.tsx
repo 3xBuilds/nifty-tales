@@ -92,7 +92,7 @@ export default function Page() {
         // console.log(contract);
         // console.log(bookDetails);
         console.log("txn made")
-        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String(bookDetails?.price))});
+        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))});
         txn.wait().then(async(res:any)=>{
           console.log(pathname.split("/")[2], user?._id)
           await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
@@ -143,6 +143,7 @@ export default function Page() {
               // console.log(res.data.user, res.data.book);
               toast.success("Added to Readlist!");
               getUser();
+              getBookDetails()
           });
       }
       catch(err){
@@ -201,7 +202,11 @@ export default function Page() {
             <div className='text-gray-400 w-full'>
               <div className='w-full flex'>
                 <h2 className='w-1/2 text-md'>Spending</h2>
-                <h2 className='w-1/2 text-md font-semibold text-end'>{Number(price)*amount} ETH</h2>
+                <h2 className='w-1/2 text-md font-semibold text-end'>{(Number(price)*amount).toFixed(4)} ETH</h2>
+              </div>
+              <div className='w-full flex my-2'>
+                <h2 className='w-1/2 text-sm'>Platform Fee</h2>
+                <h2 className='w-1/2 text-sm font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
@@ -228,7 +233,7 @@ export default function Page() {
               <div className='flex flex-col gap-6 md:w-[50%] max-md:w-[90%] '>
                 <div className='flex flex-col gap-2 items-start justify-start'>
                   <div className='flex items-center justify-center gap-4'>
-                    <h3 className='text-3xl text-white font-bold' >{bookDetails?.name}</h3>
+                    <h3 className='text-3xl text-white font-bold flex items-center gap-2' >{bookDetails?.name+" | "} <span className='text-lg font-semibold'>Readers: {bookDetails?.readers}</span></h3>
                     <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>

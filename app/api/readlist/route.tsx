@@ -10,6 +10,7 @@ export async function POST(req: any) {
         const { email, bookId } = body;
 
         const user = await User.findOne({ email: email });
+        
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
