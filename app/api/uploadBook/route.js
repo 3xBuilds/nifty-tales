@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  CreateMultipartUploadCommand,
+  UploadPartCommand,
+  CompleteMultipartUploadCommand,
+  AbortMultipartUploadCommand,
+} from "@aws-sdk/client-s3";
 
 import Book from "@/schemas/bookSchema";
 import { connectToDB } from "@/utils/db";
@@ -31,14 +37,33 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     // Upload Content (PDF)
 
     if(content){
-      const contentParams = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/content/${objectId}/book`,
-        Body: content,
-        ContentType: "application/pdf"
-      }
-      const contentCommand = new PutObjectCommand(contentParams);
-      await s3Client.send(contentCommand);
+      const uploadPromises = [];
+    // Multipart uploads require a minimum size of 5 MB per part.
+    const partSize = Math.ceil(buffer.length / 5);
+
+    // Upload each part.
+    for (let i = 0; i < 5; i++) {
+      const start = i * partSize;
+      const end = start + partSize;
+      uploadPromises.push(
+        s3Client
+          .send(
+            new UploadPartCommand({
+              Bucket: process.env.AWS_S3_BUCKET_NAME,
+              Key: `users/${wallet}/content/${objectId}/book`,
+              Body: content.subarray(start, end),
+              PartNumber: i + 1,
+            }),
+          )
+          .then((d) => {
+            console.log("Part", i + 1, "uploaded");
+            return d;
+          }),
+      );
+    }
+
+    const uploadResults = await Promise.all(uploadPromises);
+
     }
 
     if(cover && content){

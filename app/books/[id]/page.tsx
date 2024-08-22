@@ -235,10 +235,10 @@ export default function Page() {
                   <Book img={bookDetails?.cover} />
 
               </div>
-              <div className='flex flex-col gap-6 md:w-[50%] max-md:w-[90%] '>
+              <div className='flex flex-col max-md:items-center gap-6 md:w-[50%] max-md:w-[90%] '>
                 <div className='flex flex-col gap-2 items-start justify-start'>
                   <div className='flex items-center justify-center gap-4'>
-                    <h3 className='text-3xl text-white font-bold flex items-center gap-2' >{bookDetails?.name+" | "} <span className='text-lg font-semibold'>Readers: {bookDetails?.readers}</span></h3>
+                    <h3 className='text-3xl text-white font-bold flex max-md:flex-col items-center gap-2' >{bookDetails?.name+"  "} <span className='text-lg font-semibold'>Readers: {bookDetails?.readers}</span></h3>
                     <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>

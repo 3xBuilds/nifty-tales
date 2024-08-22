@@ -19,6 +19,7 @@ const Loader = () => {
       },100);
 
       if(!isLoading){
+        console.log("finished loading")
         setLength(0);
       }
     }
