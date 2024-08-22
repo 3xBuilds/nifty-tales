@@ -293,7 +293,8 @@ export default function Home(){
 
    
   useEffect(()=>{
-    setIsLoading(false)
+    setIsLoading(false);
+    getUser();
   },[])
 
     return(
