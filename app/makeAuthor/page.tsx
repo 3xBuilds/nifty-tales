@@ -15,6 +15,7 @@ import { CiImageOn } from "react-icons/ci";
 import { Loader } from "@/components/Global/Loader";
 import { toast } from "react-toastify";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function Home() {
 
@@ -183,7 +184,9 @@ export default function Home() {
                 <Navbar/>
             </div> */}
 
-            {loading && <Loader/>}
+            {loading && <div className="w-screen h-screen fixed top-0 left-0 backdrop-blur-xl flex items-center justify-center">
+                    <div className="bg-white shadow-xl shadow-black/30 w-80 h-20 font-semibold flex gap-4 items-center justify-center text-xl rounded-xl"><AiOutlineLoading className="animate-spin"/>Creating your Library</div>
+                </div>}
 
             {isDisconnected && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
                 <WalletConnectButton/>

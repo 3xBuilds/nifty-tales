@@ -65,7 +65,28 @@ export default function Home(){
 
     const router = useRouter()
 
-    const defaultTags:Array<string> = ["story", "fiction", "sci-fi", "travel", "biography", "auto-biography", "fantasy", "thriller", "adventure", "journal", "horror", "historical", "romance", "poetry", "satire"]
+    const defaultTags:Array<string> = [
+        "Adventure",
+        "Fantasy",
+        "Science Fiction",
+        "Mystery",
+        "Thriller",
+        "Romance",
+        "Historical Fiction",
+        "Young Adult",
+        "Children's Books",
+        "Non-Fiction",
+        "Self-Help",
+        "Biography",
+        "Graphic Novels",
+        "Horror",
+        "Poetry",
+        "Comedy",
+        "Education",
+        "Classics",
+        "Short Stories",
+        "Other"
+      ];
 
     async function contractSetup(){
         try {
@@ -130,7 +151,8 @@ export default function Home(){
             // console.log("BOOKID", bookId);
             toast.error("There was an error while publishing. Please try again!")
             setLoading(false);
-            await axios.delete("/api/book/"+id);
+            console.log("THIS IS A GOOD ID",id);
+            await axios.delete("/api/book/"+id).then((res)=>{console.log(res)});
             console.log(err);
         }
     }
@@ -205,8 +227,6 @@ export default function Home(){
                 setLoading(false);
                 return;
             }
-
-            console.log(cover, pdf, coverLink, fileLink);
 
             
             if(cover && pdf){
@@ -372,10 +392,10 @@ export default function Home(){
 
         catch(err){
             toast.error("Failed Interaction")
-
-            await axios.patch("/api/book/"+id,{isPublished: false});
-            console.log(err);
             setLoading(false);
+
+            // await axios.patch("/api/book/"+id,{isPublished: false});
+            console.log(err);
 
         }
 

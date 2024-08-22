@@ -21,6 +21,7 @@ import Icon from '@/components/Global/Icon';
 import { toast } from 'react-toastify';
 import { MdLibraryAddCheck } from 'react-icons/md';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
+import { SiOpensea } from "react-icons/si";
 
  
 export default function Page() {
@@ -238,10 +239,11 @@ export default function Page() {
               <div className='flex flex-col max-md:items-center gap-6 md:w-[50%] max-md:w-[90%] '>
                 <div className='flex flex-col gap-2 items-start justify-start'>
                   <div className='flex items-center justify-center gap-4'>
-                    <h3 className='text-3xl text-white font-bold flex max-md:flex-col items-center gap-2' >{bookDetails?.name+"  "} <span className='text-lg font-semibold'>Readers: {bookDetails?.readers}</span></h3>
+                    <h3 className='text-3xl text-white font-bold flex max-md:flex-col items-center gap-2' >{bookDetails?.name.slice(0,20)  }</h3>
                     <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>
+                      <span className='text-lg font-semibold text-white -ml-2'>Readers: {bookDetails?.readers}</span>
                   </div>
                   <button onClick={()=>{setIsLoading(true);router.push("/authors/"+userDetails?.wallet)}} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen/></span></button>
                 </div>
@@ -257,6 +259,7 @@ export default function Page() {
                     <a target='_blank' className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' href={bookDetails?.pdf}>Read</a>
                     {/* @ts-ignore */}
                     <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Mint"}</button>
+                    {bookDetails && bookDetails?.minted as number > 0 && <a target='_blank' className='w-10 h-10 py-1 px-2 flex items-center justify-center text-xl rounded-lg font-bold hover:-translate-y-1 duration-200 bg-[#2181e3] text-white' href={`https://opensea.io/assets/base/${bookDetails.contractAddress}/${bookDetails.tokenId}`} ><SiOpensea/></a>}
                 </div>
               </div>
             </div>

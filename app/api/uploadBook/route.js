@@ -36,34 +36,48 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
 
     // Upload Content (PDF)
 
-    if(content){
+    if (content) {
+      const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `users/${wallet}/content/${objectId}/book`,
+      }));
+
+      const uploadId = multipartUpload.UploadId;
+
+      const partSize = 5 * 1024 * 1024; // 5 MB
+      const numParts = Math.ceil(content.length / partSize);
       const uploadPromises = [];
-    // Multipart uploads require a minimum size of 5 MB per part.
-    const partSize = Math.ceil(buffer.length / 5);
 
-    // Upload each part.
-    for (let i = 0; i < 5; i++) {
-      const start = i * partSize;
-      const end = start + partSize;
-      uploadPromises.push(
-        s3Client
-          .send(
-            new UploadPartCommand({
-              Bucket: process.env.AWS_S3_BUCKET_NAME,
-              Key: `users/${wallet}/content/${objectId}/book`,
-              Body: content.subarray(start, end),
-              PartNumber: i + 1,
-            }),
-          )
-          .then((d) => {
-            console.log("Part", i + 1, "uploaded");
-            return d;
-          }),
-      );
-    }
+      for (let i = 0; i < numParts; i++) {
+        const start = i * partSize;
+        const end = Math.min(start + partSize, content.length);
+        const partNumber = i + 1;
 
-    const uploadResults = await Promise.all(uploadPromises);
+        const uploadPartCommand = new UploadPartCommand({
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Key: `users/${wallet}/content/${objectId}/book`,
+          UploadId: uploadId,
+          Body: content.slice(start, end),
+          PartNumber: partNumber,
+        });
 
+        uploadPromises.push(
+          s3Client.send(uploadPartCommand)
+            .then((data) => {
+              console.log(`Part ${partNumber} uploaded`);
+              return { ETag: data.ETag, PartNumber: partNumber };
+            })
+        );
+      }
+
+      const uploadResults = await Promise.all(uploadPromises);
+
+      await s3Client.send(new CompleteMultipartUploadCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `users/${wallet}/content/${objectId}/book`,
+        UploadId: uploadId,
+        MultipartUpload: { Parts: uploadResults },
+      }));
     }
 
     if(cover && content){
@@ -336,7 +350,7 @@ export async function PATCH(request){
 
   }
   catch(err){
-    // console.log(err);
+    
     return NextResponse.json({error: "Error Updating File"}, {status: 500});
 
   }
