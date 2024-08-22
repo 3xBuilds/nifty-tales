@@ -95,8 +95,8 @@ const Highlights = () => {
                             </div>
                         </div>
                         <div className='w-fit relative z-20 pl-5 pt-5 text-white flex flex-col items-start justify-start h-full'>
-                            <h2 className='text-2xl font-bold'>{highlight.item.name}</h2>
-                            <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.item.description?.substring(0,100)}...</p>
+                            <h2 className='text-2xl font-bold'>{highlight.item.name.slice(0,15)}{highlight.item.name.length>16 && "..."}</h2>
+                            <p className={ openSans.className + ' text-xs font-normal mt-2'}>{highlight.item.description?.substring(0,50)}{highlight.item.description.length>51 && "..."}</p>
                         </div>
                         <div className='w-full h-full absolute top-0 left-0 z-10 bg-black/30 backdrop-blur'></div>
                         <div className='w-full h-full absolute top-0 left-0 z-0'>
@@ -112,8 +112,6 @@ const Highlights = () => {
                         </>
                     
                 }
-                
-                
             </div>
         </div>
     </div>
