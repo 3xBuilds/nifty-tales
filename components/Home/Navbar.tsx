@@ -32,7 +32,7 @@ const Navbar = () => {
   const {user, ensImg, setEnsImg, ens} = useGlobalContext();
 
   const { address, isConnected } = useAccount();
-  const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: "0xD659cFE409c2F1AD906cf5D3Bcc6f481B8c588B9" as `0x${string}`});
+  const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: address});
   const { data: ensAvatar, isLoading: isLoadingAvatar } = useEnsAvatar({ name:ensName as string });
 
   setEnsImg(ensAvatar as string)
