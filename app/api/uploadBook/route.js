@@ -7,6 +7,9 @@ import {
   AbortMultipartUploadCommand,
 } from "@aws-sdk/client-s3";
 
+import { getToken } from "next-auth/jwt";
+
+
 import Book from "@/schemas/bookSchema";
 import { connectToDB } from "@/utils/db";
 import User from "@/schemas/userSchema";
@@ -128,6 +131,17 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
 
 export async function POST(request) {
   try {
+    console.log("UPLOAD FUNCTION HAS BEEN CALLED");
+
+    const session = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET
+  });
+  
+  if (!session) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
     const formData = await request.formData();
     connectToDB();
     
@@ -146,8 +160,6 @@ export async function POST(request) {
     const id = formData.get('id');
 
     const publishStatus = formData.get('publishStatus'); // publish | draft
-
-    // console.log("I AM PUBLISH STATUS", id, publishStatus, artist, name, description, tokenId, wallet, content, cover);
 
     console.log("COVER",cover, content)
     if( !name  || !tags || !tokenId || !wallet ) {

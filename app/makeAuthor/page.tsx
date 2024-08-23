@@ -51,7 +51,11 @@ export default function Home() {
 
 
                 await contract.deployed();
+                await axios.patch("/api/user/"+user?.email, {collectionName: collectionName})
                 await axios.patch(`/api/user/${user?.email}`, {contractAdd: contract.address});
+                getUser()
+                setIsLoading(true);
+                router.push("/authors/");
                 
                 return true;
             }
@@ -82,14 +86,6 @@ export default function Home() {
         }
 
         try {
-            // Deploy the contract
-            const contractAddress = await deployContract();
-
-            // console.log("Address", contractAddress);
-            //@ts-ignore
-            
-            if(contractAddress){
-                axios.patch("/api/user/"+user?.email, {collectionName: collectionName})
     
                 // Create FormData object
                 const formData = new FormData();
@@ -125,14 +121,12 @@ export default function Home() {
                     fileInputRef.current.value = "";
                 }
                 // console.log("timeout started")
-                await new Promise(resolve => setTimeout(resolve, 3000));
 
                 if(response.status == 200){
-                    getUser()
-                    setIsLoading(true);
-                    router.push("/authors/");
+                    await deployContract();
+            
                 }
-            }
+            
 
             else{
                 toast.error("Library Creation failed!");
