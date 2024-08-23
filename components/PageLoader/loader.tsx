@@ -16,7 +16,7 @@ const Loader = () => {
     if(isLoading){
       setLength(0);
       setInterval(()=>{
-        setLength((prev)=>prev+0.02);
+        setLength((prev)=>prev+0.015);
       },100);
     }
 
