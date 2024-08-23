@@ -106,7 +106,7 @@ const Navbar = () => {
             <FaSearch/>
           </button>
 
-          {pathName.split("/")[1] !== "register" && !isLoadingAvatar && <button className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" && ensImg == "" ? <IoMdWallet/> :<> <MdLogout className='text-xl group-hover:opacity-100 opacity-0 duration-200 text-white absolute z-[10000]'/><Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
+          {pathName.split("/")[1] !== "register" && !isLoadingAvatar && <button className='text-gray-500 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" && ensImg == "" ? <MdLogout/> :<> <MdLogout className='text-xl group-hover:opacity-100 opacity-0 duration-200 text-white absolute z-[10000]'/><Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
 
 
           <button onClick={()=>{setIsOpen(prev=>!prev)}} className='flex p-2 mr-2 flex-col gap-1'>
@@ -149,7 +149,7 @@ const Navbar = () => {
             <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/explore"); setIsOpen(false)}} >Explore</li>
             {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf"); setIsOpen(false)}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/makeAuthor"); setIsOpen(false)}} >Become an Author</li>: <li onClick={()=>{setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
-            <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>
+            {/* <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li> */}
           </ul>
         </div>
     </>
