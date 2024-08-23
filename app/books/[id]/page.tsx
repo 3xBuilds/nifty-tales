@@ -171,6 +171,14 @@ export default function Page() {
     setIsLoading(false)
   },[])
 
+  function setLocalStorage(){
+    localStorage.setItem('address', user?.wallet as string);
+    localStorage.setItem('id', String(bookDetails?.tokenId))
+    setIsLoading(true);
+
+    router.push("/read")
+  }
+
     return (
     <div className=''>
         {/* <div className="h-16 w-screen relative z-[1000]">
@@ -259,7 +267,7 @@ export default function Page() {
                   ))}
                 </div>
                 <div className='flex gap-2'>
-                    <a target='_blank' className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' href={bookDetails?.pdf}>Read</a>
+                    <button className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' onClick={()=>{setLocalStorage()}}>Read</button>
                     {/* @ts-ignore */}
                     <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Mint"}</button>
                     {bookDetails && bookDetails?.minted as number > 0 && <a target='_blank' className='w-10 h-10 py-1 px-2 flex items-center justify-center text-xl rounded-lg font-bold hover:-translate-y-1 duration-200 bg-[#2181e3] text-white' href={`https://opensea.io/assets/base/${bookDetails.contractAddress}/${bookDetails.tokenId}`} ><SiOpensea/></a>}

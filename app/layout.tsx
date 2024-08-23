@@ -7,6 +7,7 @@ import { poppins } from "@/utils/font";
 import { Bounce, Slide, ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
 export const metadata: Metadata = {
   title: "NiftyTales",
   description: "Empowering Authors, Engaging Readers",

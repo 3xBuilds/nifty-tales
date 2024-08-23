@@ -19,7 +19,7 @@ export const AddEmail = () => {
     const {address} = useAccount()
 
     getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
-        console.log("ENS NAMEEEE", ensName)
+        // console.log("ENS NAMEEEE", ensName)
         setEns(ensName as string);
     })
     .catch((error) => {
@@ -35,7 +35,9 @@ export const AddEmail = () => {
         catch(err){
             console.log(err);
 
-            if(ens == ""){
+            if(!ens){
+                console.log("Sexy af", user?.email);
+
                 await axios.patch("/api/user/"+user?.email, {email: newEmail}).then((res)=>{
                     signOut()
 

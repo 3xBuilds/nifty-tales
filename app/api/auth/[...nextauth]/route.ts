@@ -67,14 +67,14 @@ const handler = NextAuth({
           { userId: user.id, provider: account.provider },
           // @ts-ignore
           process.env.NEXTAUTH_SECRET,
-          { expiresIn: '1d' }
+          { expiresIn: '6h' }
         );
 
         const refreshToken = jwt.sign(
           { userId: user.id, provider: account.provider },
           // @ts-ignore
           process.env.NEXTAUTH_SECRET,
-          { expiresIn: '7d' }
+          { expiresIn: '6h' }
         );
         token.username = dbUser.username;
         token.role = dbUser.role || 'USER';

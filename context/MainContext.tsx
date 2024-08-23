@@ -146,7 +146,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     <GlobalContext.Provider value={{
       user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns
     }}>
-
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}
     </GlobalContext.Provider>

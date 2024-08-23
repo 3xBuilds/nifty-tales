@@ -14,14 +14,10 @@ const Loader = () => {
    useEffect(()=>{
 
     if(isLoading){
+      setLength(0);
       setInterval(()=>{
-        setLength((prev)=>prev+0.03);
+        setLength((prev)=>prev+0.02);
       },100);
-
-      if(!isLoading){
-        console.log("finished loading")
-        setLength(0);
-      }
     }
 
    },[isLoading]);

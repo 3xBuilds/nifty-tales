@@ -383,7 +383,7 @@ export default function Home(){
                             <h3 className="text-2xl font-bold">Your Books</h3>
                         </div>
                         <div className="w-1/2 flex justify-end">
-                            <button onClick={()=>{setIsLoading(true);router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
+                            <button onClick={()=>{setIsLoading(true);router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center max-md:-mr-2 justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
                         </div>
                     </div>
 
@@ -392,7 +392,7 @@ export default function Home(){
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
                             <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,12)}</h2>
+                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
                             </div>
                             <div className="absolute z-50 top-1  " >
                                 <button onClick={()=>{hide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
@@ -424,7 +424,7 @@ export default function Home(){
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
                             <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,12)}</h2>
+                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
                             </div>
                             <div className="absolute z-50 top-1  " >
                                 <button onClick={()=>{unHide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye/></button>
@@ -453,7 +453,7 @@ export default function Home(){
                 <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                 {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
                     <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                    <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,12)}</h2>
+                    <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
                             </div>
                             <div className="absolute z-50 top-1  " >
                                 <button onClick={()=>{deleteBook(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
