@@ -22,8 +22,11 @@ const s3Client = new S3Client({
 async function uploadFileToS3(cover, content, name, description, tokenId, objectId, wallet) {
   try {
     // Upload Cover
+    console.log("UPLOADING YOOOOOO");
+
 
     if(cover){
+      console.log("COVER MY ASS", cover);
       const coverParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
         Key: `users/${wallet}/content/${objectId}/cover`,
@@ -35,7 +38,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     }
 
     // Upload Content (PDF)
-
+    console.log("ABOUT TO ENTER CONTENT");
     if (content) {
       try {
         console.log("CONSOLE IS LOGINNGIN",content);
