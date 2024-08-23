@@ -35,6 +35,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
       }
       const coverCommand = new PutObjectCommand(coverParams);
       await s3Client.send(coverCommand);
+      console.log("COVER IS DONE", cover);
     }
 
     // Upload Content (PDF)
