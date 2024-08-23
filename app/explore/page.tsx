@@ -164,7 +164,6 @@ const Explore = () => {
           {/* @ts-ignore */}
           <Image width={1080} height={1080} src={user?.profileImage == "" && !ensImg ? logo : user?.profileImage != "" ? user?.profileImage : ensImg } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
           <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
-
         </button>
         <div className='flex gap-2 items-center justify-center'>
         <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0]}</h2>

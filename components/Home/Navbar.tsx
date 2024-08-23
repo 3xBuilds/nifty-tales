@@ -43,7 +43,6 @@ const Navbar = () => {
     try{
       setEnsImg(ensAvatar as string)
       console.log("THIS IS AVATAR", ensAvatar, ensName);
-
       await axios.patch("/api/user/"+session?.user?.email,{profileImage: ensAvatar})
     }
     catch(err){
@@ -52,7 +51,7 @@ const Navbar = () => {
   }
 
   useEffect(()=>{
-    if(ensAvatar && session && user){
+    if(ensName && ensAvatar && session && user){
       ensImageSetter();
     }
   },[ensAvatar, session, user])
