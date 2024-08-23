@@ -15,6 +15,11 @@ const nextConfig = {
         config.externals = [...config.externals, { canvas: "canvas" }];  // required to make Quill work
         return config;
       },
+      experimental: {
+        serverActions: {
+          bodySizeLimit: '5mb',
+        },
+      },
 };
 
 export default nextConfig;
