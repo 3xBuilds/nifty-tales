@@ -83,7 +83,7 @@ export default function Home(){
         "Poetry",
         "Comedy",
         "Education",
-        "Classics",
+        "Comics",
         "Short Stories",
         "Other"
       ];
