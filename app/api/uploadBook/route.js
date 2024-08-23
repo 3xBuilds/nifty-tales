@@ -37,49 +37,62 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     // Upload Content (PDF)
 
     if (content) {
-      const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/content/${objectId}/book`,
-        ContentType: 'application/pdf',
-        ContentDisposition: 'inline',
-      }));
+      try {
+        console.log("CONSOLE IS LOGINNGIN",content);
+        const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
+          Bucket: process.env.AWS_S3_BUCKET_NAME,
+          Key: `users/${wallet}/content/${objectId}/book`,
+          ContentType: 'application/pdf',
+          ContentDisposition: 'inline',
+        }));
     
-      const uploadId = multipartUpload.UploadId;
-      console.log("THIS IS CONTENT LENGTH", content.length);
-      const partSize = 5 * 1024 * 1024; // 5 MB
-      const numParts = Math.ceil(content.length / partSize);
-      const uploadPromises = [];
+        const uploadId = multipartUpload.UploadId;
+        console.log("Content length:", content.length);
     
-      for (let i = 0; i < numParts; i++) {
-        const start = i * partSize;
-        const end = Math.min(start + partSize, content.length);
-        const partNumber = i + 1;
+        const partSize = 5 * 1024 * 1024; // 5 MB
+        const numParts = Math.ceil(content.length / partSize);
+        const uploadPromises = [];
     
-        const uploadPartCommand = new UploadPartCommand({
+        for (let i = 0; i < numParts; i++) {
+          const start = i * partSize;
+          const end = Math.min(start + partSize, content.length);
+          const partNumber = i + 1;
+    
+          const uploadPartCommand = new UploadPartCommand({
+            Bucket: process.env.AWS_S3_BUCKET_NAME,
+            Key: `users/${wallet}/content/${objectId}/book`,
+            UploadId: uploadId,
+            Body: content.slice(start, end),
+            PartNumber: partNumber,
+          });
+    
+          uploadPromises.push(
+            s3Client.send(uploadPartCommand)
+              .then((data) => {
+                console.log(`Part ${partNumber} uploaded`);
+                return { ETag: data.ETag, PartNumber: partNumber };
+              })
+              .catch((error) => {
+                console.error(`Error uploading part ${partNumber}:`, error);
+                throw error;
+              })
+          );
+        }
+    
+        const uploadResults = await Promise.all(uploadPromises);
+    
+        await s3Client.send(new CompleteMultipartUploadCommand({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
           Key: `users/${wallet}/content/${objectId}/book`,
           UploadId: uploadId,
-          Body: content.slice(start, end),
-          PartNumber: partNumber,
-        });
+          MultipartUpload: { Parts: uploadResults },
+        }));
     
-        uploadPromises.push(
-          s3Client.send(uploadPartCommand)
-            .then((data) => {
-              console.log(`Part ${partNumber} uploaded`);
-              return { ETag: data.ETag, PartNumber: partNumber };
-            })
-        );
+        console.log("Multipart upload completed successfully");
+      } catch (error) {
+        console.error("Error in multipart upload:", error);
+        // Handle the error appropriately (e.g., retry, notify user, etc.)
       }
-    
-      const uploadResults = await Promise.all(uploadPromises);
-    
-      await s3Client.send(new CompleteMultipartUploadCommand({
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/content/${objectId}/book`,
-        UploadId: uploadId,
-        MultipartUpload: { Parts: uploadResults },
-      }));
     }
 
     if(cover && content){
