@@ -146,9 +146,9 @@ const Navbar = () => {
     <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
             {/* <li><WalletConnectButton/></li> */}
-            <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/explore")}} >Explore</li>
-            {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
-            {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/makeAuthor")}} >Become an Author</li>: <li onClick={()=>{setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
+            <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/explore"); setIsOpen(false)}} >Explore</li>
+            {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf"); setIsOpen(false)}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
+            {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{setIsLoading(true);router.push("/makeAuthor"); setIsOpen(false)}} >Become an Author</li>: <li onClick={()=>{setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
             <li onClick={()=>{handleSignOut()}} className='font-bold text-red-500'>Logout</li>
           </ul>
         </div>
