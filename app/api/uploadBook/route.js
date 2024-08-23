@@ -388,3 +388,11 @@ export async function PATCH(request){
 
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '20mb',
+    },
+  },
+};
