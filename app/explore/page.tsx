@@ -15,6 +15,7 @@ import Image, { StaticImageData } from 'next/image'
 import logo from "@/assets/logo.png"
 import { toast } from "react-toastify";
 import { useAccount } from 'wagmi'
+import { AiOutlineLoading } from 'react-icons/ai'
 
 
 const Explore = () => {
@@ -64,6 +65,8 @@ const Explore = () => {
   const [profileImg, setProfileImg] = useState<File | null>(null);
   const[profileImgLink, setProfileImgLink] = useState<string>("")
 
+  const[loading, setLoading] = useState<boolean>(false);
+
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -74,6 +77,7 @@ const Explore = () => {
   async function handleSubmit(e:any) {
     e.preventDefault();
 
+    setLoading(true);
     if(!user?.wallet){
         toast.error("Something went wrong. Please try again");
         return;
@@ -108,7 +112,7 @@ const Explore = () => {
         if(response.status == 200){
             window.location.reload();
         }
-
+        setLoading(false);
         // alert("Collection created successfully!");
     } catch (error) {
         toast.error("An error occurred while creating the collection. Please try again.");
@@ -120,7 +124,7 @@ const Explore = () => {
     <div className=''>
 
         <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
-                <div className="bg-white gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
+                <div className="bg-white shadow-xl shadow-black/30 gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
                     <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
                     <div>
                         <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
@@ -133,13 +137,13 @@ const Explore = () => {
                             <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
                         </label>
                     </div>
-                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Save</button>
+                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
                 </div>
             </div>
 
 
       <div className={`w-screen ${modal ? "h-screen":"h-0"} z-[100] flex flex-col items-center justify-center overflow-hidden fixed top-0 left-0 duration-200 backdrop-blur-xl`}>
-          <div className='w-80 p-4 bg-white rounded-xl'>
+          <div className='w-80 p-4 bg-white shadow-xl shadow-black/30 rounded-xl'>
             <div className='flex gap-2 items-center justify-start'>
               <h2 className='text-2xl font-bold w-[90%]'>Set a username</h2>
               <div className='w-[10%]'>
