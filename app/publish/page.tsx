@@ -141,7 +141,7 @@ export default function Home(){
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
             txn.wait().then(async (res:any)=>{
-                // console.log("THIS IS ID",id);
+                console.log("THIS IS res",res);
                 setLoading(false);
                 setIsLoading(true);
                 router.push("/authors")
@@ -492,12 +492,12 @@ export default function Home(){
                 <div className="flex flex-col w-full">
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input onKeyDown={(e)=>{if(characterName == 50 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => {e.preventDefault(); setRequiredName(false); if(characterName < 50){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                            <input onKeyDown={(e)=>{if(characterName == 50 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => {  setRequiredName(false); if(characterName < 50){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                             <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/50 chars</span><span className="text-red-500 ml-1" >*</span></h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
-                            <input placeholder="ISBN Number" onChange={(e) => {e.preventDefault(); setIsbn(e.target.value) }} value={isbn} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input placeholder="ISBN Number" onChange={(e) => {  setIsbn(e.target.value) }} value={isbn} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">ISBN</h2>
                         </div>
 
@@ -528,18 +528,18 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <input placeholder="Pablo Picasso" onKeyDown={(e)=>{e.preventDefault();if(characterArtist == 20 && e.key == "Backspace"){setCharacterArtist((prev)=>(prev-1))}}} onChange={(e) => { if(characterArtist < 20){setIllustrationArtist(e.target.value); setCharacterArtist(e.target.value.length) }}} value={illustrationArtist} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input placeholder="Pablo Picasso" onKeyDown={(e)=>{if(characterArtist == 20 && e.key == "Backspace"){setCharacterArtist((prev)=>(prev-1))}}} onChange={(e) => { if(characterArtist < 20){setIllustrationArtist(e.target.value); setCharacterArtist(e.target.value.length) }}} value={illustrationArtist} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                         <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist <span className="text-xs">{characterArtist}/20 chars</span></h2>
                     </div>
 
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {e.preventDefault(); setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {  setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
-                            <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => {e.preventDefault(); setMaxMints(Number(e.target.value)) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => {  setMaxMints(Number(e.target.value)) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Leave 0 for no limit)</h2>
                         </div>
                     </div>
