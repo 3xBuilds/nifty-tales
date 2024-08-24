@@ -140,17 +140,16 @@ export default function Home(){
 
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
-            txn.wait().then(async (res:any)=>{
+            txn.wait().then((res:any)=>{
+                router.push("/authors")
                 console.log("THIS IS res",res);
                 setLoading(false);
                 setIsLoading(true);
-                router.push("/authors")
             })
         }
         catch(err){
             // console.log("BOOKID", bookId);
             toast.error("There was an error while publishing. Please try again!")
-            await axios.delete("/api/book/"+id);
             setLoading(false);
             console.log(err);
         }
@@ -184,7 +183,6 @@ export default function Home(){
     const handleSubmit = async (publish:string, tokenId:string) => {
 
         try{
-
             if(bookName == ""){
                 setRequiredName(true);
                 setLoading(false);
@@ -226,6 +224,7 @@ export default function Home(){
                 setLoading(false);
                 return;
             }
+
 
             
             if(cover && pdf){
