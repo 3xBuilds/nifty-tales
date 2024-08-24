@@ -172,7 +172,7 @@ export default function Page() {
   },[])
 
   function setLocalStorage(){
-    localStorage.setItem('address', user?.wallet as string);
+    localStorage.setItem('address', userDetails?.wallet as string);
     localStorage.setItem('id', String(bookDetails?.tokenId))
     setIsLoading(true);
 
@@ -214,7 +214,7 @@ export default function Page() {
                 <h2 className='w-1/2 text-md font-semibold text-end'>{(Number(price)*amount).toFixed(4)} ETH</h2>
               </div>
               <div className='w-full flex my-2'>
-                <h2 className='w-1/2 text-xs'>Platform Fee</h2>
+                <h2 className='w-1/2 text-xs'>Platform Fee(0.0007ETH per mint)</h2>
                 <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
               </div>
 
