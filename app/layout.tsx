@@ -36,7 +36,7 @@ export default function RootLayout({
           transition={Slide}
             />
         <Providers>
-          <div className="flex w-screen z-[1000] justify-end absolute">
+          <div className="flex w-screen z-[1000] justify-end fixed top-0">
                <Navbar/>
             </div> 
             <div className="mt-16">

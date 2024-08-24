@@ -47,8 +47,6 @@ const Highlights = () => {
 
 
             });
-
-            
         }
         catch(err){
             console.log(err);

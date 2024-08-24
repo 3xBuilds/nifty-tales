@@ -24,7 +24,7 @@ export default function Home() {
     const [profileImg, setProfileImg] = useState<File | null>(null);
     const [bannerImg, setBannerImg] = useState<File | null>(null);
 
-    const { address, isDisconnected } = useAccount();
+    const { address, isDisconnected, isReconnecting, isConnecting } = useAccount();
     const {user, getUser} = useGlobalContext();
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -156,10 +156,8 @@ export default function Home() {
     };
 
     useEffect(()=>{
-        if(user?.contractAdd !== ""){
-            setLoading(true);
+        if(user && user?.contractAdd !== ""){
             setIsLoading(true);
-
             router.push("/authors");
         }
     },[user])
@@ -169,6 +167,24 @@ export default function Home() {
   useEffect(()=>{
     setIsLoading(false)
   },[])
+
+  async function tokenChecker() {
+    try {
+      const res = await axios.get("/api/tokenChecker");
+      console.log(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        console.log(error, "WTF BRO")
+        router.push('/register');
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
+  }
+  
+  useEffect(() => {
+    tokenChecker();
+  }, []);
 
 
     return (
@@ -182,9 +198,9 @@ export default function Home() {
                     <div className="bg-white shadow-xl shadow-black/30 w-80 h-20 font-semibold flex gap-4 items-center justify-center text-xl rounded-xl"><AiOutlineLoading className="animate-spin"/>Creating your Library</div>
                 </div>}
 
-            {isDisconnected && <div className="w-screen h-screen flex items-center justify-center flex-col gap-4 bg-black/50 absolute z-50 backdrop-blur-2xl top-0 left-0">
+            {isDisconnected && !isReconnecting && <div className="w-screen h-screen fixed flex items-center justify-center flex-col gap-4 z-50 backdrop-blur-2xl top-0 left-0">
                 <WalletConnectButton/>
-                <h3 className="font-semibold text-xl text-white">Connect Wallet to proceed</h3>
+                <h3 className="font-semibold text-xl text-black p-4 rounded-xl shadow-xl shadow-black/30 bg-white">Checking wallet connection</h3>
             </div>}
 
             <div className="w-full flex md:justify-start justify-center font-bold max-md:mt-16 mt-10">

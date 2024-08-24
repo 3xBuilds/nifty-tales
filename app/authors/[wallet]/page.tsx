@@ -144,6 +144,23 @@ export default function Home(){
     setIsLoading(false)
   },[])
 
+  async function tokenChecker() {
+    try {
+      const res = await axios.get("/api/tokenChecker");
+      console.log(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/register');
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
+  }
+
+  useEffect(() => {
+    tokenChecker();
+  }, []);
+
     return(
         <div className="">
             {/* <div className="h-16 w-screen relative z-[1000]">

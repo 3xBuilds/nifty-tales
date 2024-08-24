@@ -108,6 +108,24 @@ export default function Home(){
         }
     }
 
+    async function tokenChecker() {
+        try {
+          const res = await axios.get("/api/tokenChecker");
+          console.log(res.data);
+        } catch (error) {
+          if (axios.isAxiosError(error) && error.response?.status === 401) {
+            console.log(error, "WTF BRO")
+            router.push('/register');
+          } else {
+            console.error("An error occurred:", error);
+          }
+        }
+      }
+      
+      useEffect(() => {
+        tokenChecker();
+      }, []);
+
     return(
         <div className="h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-10 " >
             {/* <div className="flex w-screen z-[1000] justify-end absolute">

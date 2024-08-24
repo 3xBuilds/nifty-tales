@@ -10,6 +10,7 @@ import { ProgressBar } from '@react-pdf-viewer/core';
 
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';
+import axios from 'axios';
 
 
 export default function Home() {
@@ -29,6 +30,16 @@ export default function Home() {
         setWallet(localStorage.getItem('address') || "");
         setId(localStorage.getItem('id') || "")
     }, [])
+
+    async function tokenChecker(){
+        await axios.get("/api/tokenChecker").then((res)=>{
+            console.log(res);
+        });
+      }
+      
+      useEffect(()=>{
+        tokenChecker();
+      },[])
 
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.2.146/build/pdf.worker.min.js">

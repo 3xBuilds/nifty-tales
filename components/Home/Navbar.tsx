@@ -79,11 +79,6 @@ const Navbar = () => {
   },[address, session])
 
 
-  function handleSignOut(){
-    signOut()
-  }
-
-
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
     {user?.email.includes("@wallet") && <AddEmail/>}
@@ -133,7 +128,7 @@ const Navbar = () => {
             </>}
             {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username.slice(0,12)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
-            <button onClick={()=>{signOut()}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{!ensImg && user?.profileImage == "" && <MdLogout className='text-lg text-black'/>}{ensImg && user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={ensImg} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center  justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}</button>
+            <button onClick={()=>{signOut({callbackUrl:"/register"})}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{!ensImg && user?.profileImage == "" && <MdLogout className='text-lg text-black'/>}{ensImg && user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={ensImg} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center  justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}</button>
             {/* <div className={`${showLogout ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[40rem]"} duration-500 absolute right-4 top-16 flex flex-col items-end justify-end gap-2 `} >
               <button onClick={()=>{handleSignOut()}} className='bg-[#eeeeee] rounded-lg text-[#000000] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-32 max-md:mx-auto'> <IoIosLogOut className='text-xl'/> Logout </button>
             </div> */}
