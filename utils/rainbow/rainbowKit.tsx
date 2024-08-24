@@ -63,7 +63,7 @@ const getSiweMessageOptions:GetSiweMessageOptions = () => ({
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
   projectId: '5d10af3027c340310f3a3da64cbcedac',
-  chains: [base,mainnet],
+  chains: [base],
   ssr: true, // If your dApp uses server side rendering (SSR)
 });
 
