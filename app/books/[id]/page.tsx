@@ -94,8 +94,8 @@ export default function Page() {
         // console.log(bookDetails);
         console.log("txn made")
   
-        console.log(Number(ethers.utils.parseEther(String((bookDetails?.price as number + 0.00007) * amount))));
-        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.00007) * amount))});
+        console.log(Number(ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))));
+        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))});
         txn.wait().then(async(res:any)=>{
           console.log(pathname.split("/")[2], user?._id)
           await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
@@ -233,13 +233,13 @@ export default function Page() {
                 <h2 className='w-1/2 text-md font-semibold text-end'>{(Number(price)*amount).toFixed(4)} ETH</h2>
               </div>
               <div className='w-full flex my-2'>
-                <h2 className='w-1/2 text-xs'>Platform Fee(0.0007ETH per mint)</h2>
-                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.00007*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-xs'>Platform Fee</h2>
+                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
               </div>
 
               <div className='w-full text-black font-bold flex mb-2 mt-4'>
                 <h2 className='w-1/2 text-sm font-bold'>Total</h2>
-                <h2 className='w-1/2 text-sm font-bold text-end'>{(0.00007*amount+Number(price)*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-sm font-bold text-end'>{((0.0007+Number(price))*amount).toFixed(4)} ETH</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
