@@ -11,11 +11,14 @@ import { ProgressBar } from '@react-pdf-viewer/core';
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';
 import axios from 'axios';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 
 
 export default function Home() {
 
     const [wallet, setWallet] = useState("")
+    const router = useRouter();
     const [id, setId] = useState<string>("")
 
     const toolbarPluginInstance = toolbarPlugin({
@@ -41,19 +44,24 @@ export default function Home() {
         tokenChecker();
       },[])
 
+      const{data:session} = useSession()
+
+      if(session)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.2.146/build/pdf.worker.min.js">
-            <div className='relative flex items-center justify-center w-screen'>
-                <div className='fixed top-20 z-50 backdrop-blur-2xl p-2 flex items-center justify-center rounded-full w-[80%] border-2 border-black'>
+            <div className='relative flex items-center justify-center w-screen h-screen pt-20'>
+                <div className='fixed top-20 z-50 backdrop-blur-2xl h-16 px-4 flex items-center justify-center rounded-lg w-[80%] '>
                     <Toolbar />
                 </div>
-                <Viewer renderLoader={(percentages: number) => (
-                <div style={{ width: '240px' }}>
-                    <ProgressBar progress={Math.round(percentages)} />
-                </div>
-            )} plugins={[
-                toolbarPluginInstance,
-            ]} initialPage={2} defaultScale={0.9} fileUrl={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
+                {/* <div className='mt-20'> */}
+                    <Viewer renderLoader={(percentages: number) => (
+                    <div style={{ width: '300px', margin: "50px" }}>
+                        <ProgressBar progress={Math.round(percentages)} />
+                    </div>
+                )} plugins={[
+                    toolbarPluginInstance,
+                ]} initialPage={2} defaultScale={0.9} fileUrl={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
+                {/* </div> */}
             </div>
             
         </Worker>

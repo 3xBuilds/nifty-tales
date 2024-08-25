@@ -93,7 +93,9 @@ export default function Page() {
         // console.log(contract);
         // console.log(bookDetails);
         console.log("txn made")
-        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))});
+  
+        console.log(Number(ethers.utils.parseEther(String((bookDetails?.price as number + 0.00007) * amount))));
+        const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.00007) * amount))});
         txn.wait().then(async(res:any)=>{
           console.log(pathname.split("/")[2], user?._id)
           await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
@@ -232,12 +234,12 @@ export default function Page() {
               </div>
               <div className='w-full flex my-2'>
                 <h2 className='w-1/2 text-xs'>Platform Fee(0.0007ETH per mint)</h2>
-                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.00007*amount).toFixed(4)} ETH</h2>
               </div>
 
               <div className='w-full text-black font-bold flex mb-2 mt-4'>
                 <h2 className='w-1/2 text-sm font-bold'>Total</h2>
-                <h2 className='w-1/2 text-sm font-bold text-end'>{(0.0007*amount+Number(price)*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-sm font-bold text-end'>{(0.00007*amount+Number(price)*amount).toFixed(4)} ETH</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
@@ -260,14 +262,14 @@ export default function Page() {
 
             <div className='flex max-md:flex-col gap-8 object-center items-center max-md:py-10 md:h-full h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
               <div className="flex object-center items-center md:h-full md:px-10 md:w-60 h-full justify-center md:justify-start my-auto">
-
                   <Book img={bookDetails?.cover} />
-
               </div>
               <div className='flex flex-col max-md:items-center gap-6 md:w-[50%] max-md:w-[90%] '>
                 <div className='flex flex-col gap-2 items-start justify-start'>
                   <div className='flex items-center justify-center gap-4'>
-                    <h3 className='text-3xl text-white font-bold flex max-md:flex-col items-center gap-2' >{bookDetails?.name.slice(0,20)  }</h3>
+                    <h3 className='text-3xl text-white font-bold flex max-md:flex-col md:hidden items-center justify-center text-center gap-2' >{bookDetails?.name.slice(0,15)}{bookDetails?.name && bookDetails?.name?.length > 15 && "..."}</h3>
+                    <h3 className='text-3xl text-white font-bold flex max-md:flex-col max-md:hidden items-center gap-2' >{bookDetails?.name }</h3>
+
                     <button disabled={readListed} onClick={()=>{readlist(bookDetails?._id as string)}} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white'/>: <MdLibraryAddCheck className='text-green-500'/>}
                     </button>
