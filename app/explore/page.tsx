@@ -16,6 +16,7 @@ import logo from "@/assets/logo.png"
 import { toast } from "react-toastify";
 import { useAccount } from 'wagmi'
 import { AiOutlineLoading } from 'react-icons/ai'
+import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher'
 
 
 const Explore = () => {
@@ -79,7 +80,8 @@ const Explore = () => {
 
     setLoading(true);
     if(!user?.wallet){
-        toast.error("Something went wrong. Please try again");
+        setLoading(false);
+        toast.error("Connect your wallet to continue");
         return;
     }
 
@@ -115,6 +117,7 @@ const Explore = () => {
         setLoading(false);
         // alert("Collection created successfully!");
     } catch (error) {
+      setLoading(false);
         toast.error("An error occurred while creating the collection. Please try again.");
         // console.log(error);
     }
@@ -190,7 +193,7 @@ useEffect(() => {
       </div>
 
         <Highlights/>
-        <PublicLibrary/>
+       <RecommendedFetcher/>
     </div>
   )
 }

@@ -34,6 +34,7 @@ const Navbar = () => {
   const {user, ensImg, setEnsImg, getUser} = useGlobalContext();
   const {data: session} = useSession();
 
+  const [walletNotAvailable, setWalletNotAvailable] = useState(false);
 
   const { address, isConnected } = useAccount();
   const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: address});
@@ -65,18 +66,26 @@ const Navbar = () => {
 
   async function setWallet(){
     await axios.post("/api/user/checkExistingWallet", {wallet: address, email:session?.user?.email}).then((res)=>{
-      getUser()
+      getUser();
     }).catch((err)=>{
       console.log(err);
-      toast.error(err.message);
+      setWalletNotAvailable(true);
+      toast.error("Connect a different wallet!");
     })
   }
 
   useEffect(()=>{
     if(user?.wallet == "" && address){
       setWallet()
+      console.log(session?.user);
     }
-  },[address, session])
+    if(!address){
+      setWalletNotAvailable(true);
+    }
+    if(address){
+      setWalletNotAvailable(false);
+    }
+  },[address, session, isConnected])
 
 
   return (<>
@@ -123,12 +132,20 @@ const Navbar = () => {
 
 
           {session &&  <div className='flex gap-4 items-center justify-center'>
-            {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
-              { user && user?.contractAdd == "" ? <button onClick={()=>{setIsLoading(true);router.push("/makeAuthor")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{setIsLoading(true);router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}
-            </>}
+            <>{
+              walletNotAvailable ? <>
+                <WalletConnectButton/>
+              </>:<>
+                {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
+              { user && user?.contractAdd == "" ? <button onClick={()=>{setIsLoading(true);router.push("/makeAuthor")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{setIsLoading(true);router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}  
+              </>}
+              </>
+            }
+            
+            </>
             {pathName.split("/")[1] == "yourShelf" ? <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username.slice(0,12)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
 
-            <button onClick={()=>{signOut(); router.push("/register")}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{!ensImg && user?.profileImage == "" && <MdLogout className='text-lg text-black'/>}{ensImg && user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={ensImg} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center  justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}</button>
+            <button onClick={()=>{signOut({callbackUrl: "/register"});}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{!ensImg && user?.profileImage == "" && <MdLogout className='text-lg text-black'/>}{ensImg && user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={ensImg} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><MdLogout className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 object-fill object-center duration-200 rounded-full w-full group-hover:scale-105' /></div>}</button>
             
             </div>} 
             
