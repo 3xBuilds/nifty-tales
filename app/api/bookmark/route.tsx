@@ -26,18 +26,15 @@ export async function POST(req: any) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
 
-        if (user.readlist.includes(bookId)) {
-            return NextResponse.json({ message: "Book already in readlist" }, { status: 400 });
-        }
-
         const book = await Book.findById(bookId);
+
         if (!book) {
             return NextResponse.json({ message: "Book not found" }, { status: 404 });
         }
 
-        const oldBookmark = await Bookmarks.findOne({book: bookId});
+        const oldBookmark = await Bookmarks.findOne({book: bookId, user:user._id});
 
-        if(oldBookmark){
+        if(oldBookmark && oldBookmark){
             await Bookmarks.findOneAndDelete({book: bookId});
         }
 

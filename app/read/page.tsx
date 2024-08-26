@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation';
 import { CiBookmarkPlus } from 'react-icons/ci';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { toast } from 'react-toastify';
+import { useGlobalContext } from '@/context/MainContext';
 
 
 export default function Home() {
@@ -27,6 +28,8 @@ export default function Home() {
     const [id, setId] = useState<string>("")
     const [currentPage, setCurrentPage] = useState(0);
     const [bookId, setBookId] = useState("");
+
+    const {user} = useGlobalContext();
 
     const [page, setPage] = useState<number>();
 
@@ -58,7 +61,7 @@ export default function Home() {
       useEffect(()=>{
         if(bookId != "")
         getBookMark();
-      },[bookId])
+      },[bookId, user])
 
       async function addBookmark(){
         try{
@@ -73,7 +76,7 @@ export default function Home() {
 
       async function getBookMark(){
         try{
-            axios.get("/api/bookmark/"+bookId).then((res)=>{
+            await axios.get("/api/bookmark/"+bookId+"-"+user?._id).then((res)=>{
                 console.log(res.data.data)
                 setPage(res.data.data.page);
             })
@@ -84,7 +87,7 @@ export default function Home() {
         }
       }
 
-      if(session && page)
+      if(session && page!= undefined)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.2.146/build/pdf.worker.min.js">
             <div className='relative flex items-center justify-center w-screen h-screen pt-20'>
