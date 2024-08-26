@@ -54,6 +54,7 @@ export const AddEmail = () => {
 
   return (
     <div className="w-screen h-screen z-[10000000000000] fixed top-0 left-0 backdrop-blur-xl flex flex-col items-center justify-center" >
+        <button onClick={()=>{signOut()}} className='h-10 bg-nifty-white text-nifty-gray-1 hover:-translate-y-1 duration-200 w-32 absolute right-4 top-4 shadow-xl shadow-black/30 rounded-lg font-semibold border-2 border-nifty-gray-1' >Sign out</button>
         <div className='w-80 bg-white shadow-xl shadow-black/30 rounded-lg p-5'>
             <h2 className='text-2xl font-bold' >First Time Setup</h2>
             <h2 className='text-lg font-semibold text-gray-400'>Welcome to Nifty Tales!</h2>
