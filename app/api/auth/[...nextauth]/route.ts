@@ -4,6 +4,8 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
 import { walletAuthProvider } from "../../walletAuthProvider/credsProvider";
+import { revalidatePath } from "next/cache";
+
 
 const handler = NextAuth({
   providers: [
@@ -16,6 +18,8 @@ const handler = NextAuth({
   callbacks: {
 
     async signIn( {user, account} : {user:any, account:any} ) {
+      revalidatePath('/', 'layout') 
+
       await connectToDB();
 
       if (account.provider === "google") {
@@ -28,18 +32,29 @@ const handler = NextAuth({
            return true;
          }
          else{
-            // console.log('----creating user in db');
-            await User.create({
-              email,
-              username: name,
-            });
+            const user = await User.findOne({name});
+            console.log('----creating user in db');
+            if(user){
+              const newName = name+Math.ceil(Math.random()*10)+Math.ceil(Math.random()*10)+Math.ceil(Math.random()*10)
+              await User.create({
+                email,
+                username: newName,
+              });
+            }
+            else{
+              await User.create({
+                email,
+                username: name,
+              });
+            }
             return true;
          }
       }
-   
+      
       return true;
     },
     async jwt({ token, user, account }) {
+
       const dbUser = await User.findOne({
         $or: [
           { email: token.email },
@@ -48,6 +63,7 @@ const handler = NextAuth({
       });
 
       if(!dbUser){
+        // console.log('----user not found in db');
         return token;
       }
 
@@ -56,8 +72,6 @@ const handler = NextAuth({
         token.provider = account.provider;
         token.id = user.id;
         if (user && 'address' in user) {
-          console.log("BROTHER WTF IS GOING ON BROTHER")
-
           token.walletAddress = user.address;
         }
 

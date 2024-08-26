@@ -432,7 +432,7 @@ export default function Home(){
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         console.log(error, "WTF BRO")
-        router.push('/register');
+        router.push('/connect');
       } else {
         console.error("An error occurred:", error);
       }

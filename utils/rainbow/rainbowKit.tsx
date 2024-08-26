@@ -10,10 +10,6 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { WagmiProvider } from 'wagmi';
 import {
-  mainnet,
-  polygon,
-  optimism,
-  arbitrum,
   base,
 } from 'wagmi/chains';
 import {
@@ -25,40 +21,10 @@ import {
   RainbowKitSiweNextAuthProvider,
   GetSiweMessageOptions,
 } from '@rainbow-me/rainbowkit-siwe-next-auth';
-import { useGlobalContext } from '@/context/MainContext';
 
 const getSiweMessageOptions:GetSiweMessageOptions = () => ({
   statement: 'Sign in to Nifty Tales',
 });
-
-// const CustomAvatar: AvatarComponent = ({ address, ensImage, size }) => {
-
-//   const {setEnsImg} = useGlobalContext();
-//   // const color = generateColorFromAddress(address);
-//   if(ensImage){
-//     console.log("THIS IS ENS IMAGE", ensImage)
-//     setEnsImg(ensImage)
-//   }
-//   return ensImage ? (
-//     <img
-//       src={ensImage}
-//       width={size}
-//       height={size}
-//       style={{ borderRadius: 999 }}
-//     />
-//   ) : (
-//     <div
-//       style={{
-//         backgroundColor: `#284`,
-//         borderRadius: 999,
-//         height: size,
-//         width: size,
-//       }}
-//     >
-//       :^)
-//     </div>
-//   );
-// };
 
 const config = getDefaultConfig({
   appName: 'My RainbowKit App',
@@ -86,6 +52,5 @@ const Rainbow = ({ children }: any) => {
   );
 };
 
-// export const useWalletId = () => useContext(WalletIdContext);
 
 export default Rainbow;

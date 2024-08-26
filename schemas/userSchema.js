@@ -26,7 +26,6 @@ const UserSchema = new Schema({
     username: {
         type: String,
         required: true,
-        unique: true
     },
     readlist: [{
         type: mongoose.Schema.Types.ObjectId,

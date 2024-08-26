@@ -200,7 +200,7 @@ export default function Page() {
       console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push('/register');
+        router.push('/connect');
       } else {
         console.error("An error occurred:", error);
       }

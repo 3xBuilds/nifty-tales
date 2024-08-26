@@ -483,6 +483,6 @@ export default function Home(){
     )
 
     else{
-        router.push("/register")
+        router.push("/connect")
     }
 }

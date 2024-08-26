@@ -18,15 +18,6 @@ const PreRegister = () => {
   const router = useRouter()
   const {address} = useAccount()
 
-  const [userName, setUserName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [first, setFirst] = useState<boolean>(false);
-  const [emailExists, setEmailExists] = useState<boolean>(false);
-  const [userNameExists, setUserNameExists] = useState<boolean>(false);
-  const [userExists, setUserExists] = useState<boolean>(false);
-
-  const { openConnectModal } = useConnectModal();
-
   const {setIsLoading} = useLoading()
 
   useEffect(()=>{
@@ -57,7 +48,7 @@ const PreRegister = () => {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         console.log(error, "WTF BRO")
-        router.push('/register');
+        router.push('/connect');
       } else {
         console.error("An error occurred:", error);
       }
@@ -70,9 +61,9 @@ const PreRegister = () => {
   
 
   return (
-    <div className='w-screen h-screen fixed top-0 flex flex-col items-center justify-center overflow-y-hidden object-contain'>
+    <div className='w-screen h-screen fixed top-0 flex flex-col items-center justify-center overflow-y-hidden object-contain -my-10 '>
 
-      <button onClick={()=>{setIsLoading(true);router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute top-16 left-5'>
+      <button onClick={()=>{setIsLoading(true);router.push("/")}} className='bg-nifty-white shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute z-[100] top-16 left-5'>
         <IoMdArrowBack/>
       </button>
 
