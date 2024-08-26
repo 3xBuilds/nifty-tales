@@ -28,7 +28,7 @@ export default function Home() {
     const [currentPage, setCurrentPage] = useState(0);
     const [bookId, setBookId] = useState("");
 
-    const [page, setPage] = useState(0);
+    const [page, setPage] = useState(null);
 
     const toolbarPluginInstance = toolbarPlugin({
         searchPlugin: {
@@ -79,11 +79,12 @@ export default function Home() {
             })
         }
         catch(err){
+            setPage(0);
             console.log(err);
         }
       }
 
-      if(session)
+      if(session && page)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.2.146/build/pdf.worker.min.js">
             <div className='relative flex items-center justify-center w-screen h-screen pt-20'>
