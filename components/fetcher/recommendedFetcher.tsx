@@ -21,93 +21,8 @@ export const RecommendedFetcher = () => {
   useEffect(()=>{
     setIsLoading(false)
   },[])
-    const [publishedBooks, setPublishedBooks] = useState([])
-    const [recentBooks, setRecentBooks] = useState([])
-
-    const[slicer, setSlicer] = useState(0);
-
-    const {user, getUser} = useGlobalContext()
-
-    const {data:session} = useSession();
-
-    const [readListed, setReadListed] = useState<Array<boolean>>([]);
-
-    async function getAllBooks(){
-        try{
-          const books = await axios.get("/api/book/");
-  
-          var arr1:any= []
-          var subArr1:any = []
-
-          var arr2:any= books.data.data
-          books.data.data.reverse().map((item:any, i:number)=>{
-            if(item.isPublished && !item.isHidden){
-                subArr1.push(item);
-            }
-            if(subArr1.length == slicer || i == books.data.data.length-1){
-              if(subArr1.length>0)
-                arr1.push(subArr1);
-                subArr1 = []
-            }
-        })
-
-        //@ts-ignore
-        arr2.sort((a:BookType, b:BookType) => b.readers - a.readers)
-        var arr3:any= []
-        var subArr3:any = []
-
-          arr2.map((item:any, i:number)=>{
-            if(item.isPublished && !item.isHidden){
-                subArr3.push(item);
-            }
-            if(subArr3.length == slicer || i == books.data.data.length-1){
-              if(subArr3.length>0)
-                arr3.push(subArr3);
-                subArr3 = []
-            }
-        })
-
-        setRecentBooks(arr3);
-  
-          //@ts-ignore
-          setPublishedBooks(arr1);
-  
-        }
-        catch(err){
-          console.log(err);
-        }
-      }
-
-    useEffect(()=>{
-        const screenWidth = window.innerWidth;
-  
-        if(screenWidth > 1100){
-            setSlicer(5);
-        } else if(screenWidth <= 1100){
-            setSlicer(4);
-        }
-      },[])
-
-
-    useEffect(()=>{
-      //@ts-ignore
-      const arr = [];
-      user?.readlist.map((item:any)=>{
-        //@ts-ignore
-        if(item._id == publishedBooks?._id){
-          arr.push(true);
-        }
-        else{
-          arr.push(false);
-        }
-      })
-      //@ts-ignore
-      setReadListed(arr);
-    },[user, publishedBooks])
-  
-      useEffect(()=>{
-        getAllBooks();
-    },[slicer])
+    
+    const {recentBooks, publishedBooks} = useGlobalContext()
 
     const [type, setType] = useState('Trending');
 
@@ -123,7 +38,7 @@ export const RecommendedFetcher = () => {
             </div>
 
           {type == "Trending" && <>
-            {recentBooks.slice(0,11).map((item:any, i)=>(
+            {recentBooks && recentBooks.slice(0,11).map((item:any, i)=>(
                 <div className="w-full mb-5">
                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                 {item.map((item2:any)=>(<div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer flex-col relative group items-center px-2 md:px-10 mt-2 justify-center gap-4">
@@ -144,7 +59,7 @@ export const RecommendedFetcher = () => {
           </>}
 
           {type == "Latest" && <>
-            {publishedBooks.slice(0,11).map((item:any, i)=>(
+            {publishedBooks && publishedBooks.slice(0,11).map((item:any, i)=>(
                 <div className="w-full mb-5">
                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                 {item.map((item2:any)=>(<div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer flex-col relative group items-center px-2 md:px-10 mt-2 justify-center gap-4">

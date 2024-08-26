@@ -1,5 +1,6 @@
 import User from "@/schemas/userSchema";
 import { connectToDB } from "@/utils/db";
+import { getToken } from "next-auth/jwt";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -46,6 +47,15 @@ export async function PATCH(req:any){
             //     status: 400,
             // });
         // }
+
+        const session = await getToken({
+            req: req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+        
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         const email = req.nextUrl.pathname.split("/")[3];
 

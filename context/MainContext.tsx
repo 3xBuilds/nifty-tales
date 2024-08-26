@@ -34,6 +34,10 @@ type GlobalContextType = {
   setEnsImg: Dispatch<SetStateAction<string | "">>;
   ens: string | "";
   setEns: Dispatch<SetStateAction<string | "">>;
+  publishedBooks: Array<BookType> | null;
+  setPublishedBooks: Dispatch<SetStateAction<any | "">>;
+  recentBooks: Array<BookType> | null;
+  setRecentBooks: Dispatch<SetStateAction<any | "">>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -47,15 +51,22 @@ const GlobalContext = createContext<GlobalContextType>({
   ensImg: "",
   setEnsImg: () =>{ },
   ens: "",
-  setEns: () =>{ }
-
+  setEns: () =>{ },
+  publishedBooks : [],
+  setPublishedBooks: () =>{},
+  recentBooks : [],
+  setRecentBooks: () =>{}
 });
 
 export const GlobalContextProvider = ({ children } : { children: ReactNode}) => {
 
   const {data: session} = useSession();
 
+  const [publishedBooks, setPublishedBooks] = useState([])
+  const [recentBooks, setRecentBooks] = useState([])
+
   const [ensImg, setEnsImg] = useState<string>("")
+  const[slicer, setSlicer] = useState(0);
 
   const {address} = useAccount();
   const pathname = usePathname();
@@ -63,28 +74,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const router = useRouter()
   const [user, setUser] = useState<UserType | null>(null);
   const [ens, setEns] = useState<string>("")
-
-
-  // getEnsName(config, { address: address as `0x${string}`}).then((ensName) => {
-  //   console.log("ENS NAMEEEE", ensName)
-  //   setEns(ensName as string);
-  // })
-  // .catch((error) => {
-  //   console.error(`Error getting ENS name: ${error}`);
-  // });
-
-
-  // async function getEnsData(){
-  
-
-  // }
-
-
-  // useEffect(()=>{
-  //   if(user)
-  //   getEnsData()
-  // },[user])
-
 
   async function getUser(){
     try{
@@ -141,10 +130,70 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   },[pathname])
 
+  async function getAllBooks(){
+    try{
+      const books = await axios.get("/api/book/");
+
+      var arr1:any= []
+      var subArr1:any = []
+
+      var arr2:any= books.data.data
+      books.data.data.reverse().map((item:any, i:number)=>{
+        if(item.isPublished && !item.isHidden){
+            subArr1.push(item);
+        }
+        if(subArr1.length == slicer || i == books.data.data.length-1){
+          if(subArr1.length>0)
+            arr1.push(subArr1);
+            subArr1 = []
+        }
+    })
+
+    //@ts-ignore
+    arr2.sort((a:BookType, b:BookType) => b.readers - a.readers)
+    var arr3:any= []
+    var subArr3:any = []
+
+      arr2.map((item:any, i:number)=>{
+        if(item.isPublished && !item.isHidden){
+            subArr3.push(item);
+        }
+        if(subArr3.length == slicer || i == books.data.data.length-1){
+          if(subArr3.length>0)
+            arr3.push(subArr3);
+            subArr3 = []
+        }
+    })
+
+    setRecentBooks(arr3);
+
+      //@ts-ignore
+      setPublishedBooks(arr1);
+
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+useEffect(()=>{
+    const screenWidth = window.innerWidth;
+
+    if(screenWidth > 1100){
+        setSlicer(5);
+    } else if(screenWidth <= 1100){
+        setSlicer(4);
+    }
+  },[])
+
+  useEffect(()=>{
+    getAllBooks();
+},[slicer])
+
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns
+      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

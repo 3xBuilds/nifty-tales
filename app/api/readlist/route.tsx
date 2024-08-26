@@ -2,12 +2,22 @@ import { NextResponse } from "next/server";
 import { connectToDB } from "@/utils/db";
 import User from "@/schemas/userSchema";
 import Book from "@/schemas/bookSchema";
+import { getToken } from "next-auth/jwt";
 
 export async function POST(req: any) {
     try {
         await connectToDB();
         const body = await req.json();
         const { email, bookId } = body;
+
+        const session = await getToken({
+            req: req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+        
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         const user = await User.findOne({ email: email });
         
@@ -46,6 +56,15 @@ export async function DELETE(req: any) {
         await connectToDB();
         const body = await req.json();
         const { email, bookId } = body;
+
+        const session = await getToken({
+            req: req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+        
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         // console.log(`Attempting to remove book ${bookId} from readlist of user ${email}`);
 

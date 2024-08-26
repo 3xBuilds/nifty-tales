@@ -1,5 +1,6 @@
 import User from "@/schemas/userSchema";
 import { connectToDB } from "@/utils/db";
+import { getToken } from "next-auth/jwt";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -9,6 +10,15 @@ export async function POST(req) {
         const {username, ...rest } = body;
         
         await connectToDB();
+
+        const session = await getToken({
+            req: req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+        
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         const userNameExists = await User.findOne({
             username

@@ -2,6 +2,7 @@ import Book from "@/schemas/bookSchema";
 import Transactions from "@/schemas/transactionSchema"
 import User from "@/schemas/userSchema";
 import { connectToDB } from "@/utils/db";
+import { getToken } from "next-auth/jwt";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -10,6 +11,15 @@ export async function POST(req: NextRequest) {
 
         const body = await req.json();
         const { txnHash, bookId, userId, value } = body;
+
+        const session = await getToken({
+            req: req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+        
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         if (!txnHash || !bookId || !userId) {
             return NextResponse.json({ error: "Missing required fields" }, { status: 400 });

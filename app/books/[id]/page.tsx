@@ -173,6 +173,7 @@ export default function Page() {
   function setLocalStorage(){
     localStorage.setItem('address', userDetails?.wallet as string);
     localStorage.setItem('id', String(bookDetails?.tokenId))
+    localStorage.setItem('bookId', String(bookDetails?._id));
     setIsLoading(true);
 
     router.push("/read")
@@ -180,7 +181,7 @@ export default function Page() {
 
   const getTickerPrice = async () => {
     try{
-        const priceFetch = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT`);
+        const priceFetch = await fetch(`https://api.binance.us/api/v3/ticker/price?symbol=ETHUSDT`);
         const priceBody = await priceFetch.json();
         setEthPrice(Math.round(priceBody.price));
     }catch(error){
@@ -191,7 +192,7 @@ export default function Page() {
 
     useEffect(()=>{
       getTickerPrice()
-    },[amount])
+    },[])
 
   async function tokenChecker() {
     try {

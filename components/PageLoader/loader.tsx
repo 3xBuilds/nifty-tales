@@ -20,6 +20,10 @@ const Loader = () => {
       },100);
     }
 
+    if(!isLoading){
+      setLength(0)
+    }
+
    },[isLoading]);
 
   return (

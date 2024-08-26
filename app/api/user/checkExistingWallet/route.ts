@@ -1,5 +1,6 @@
 import User from "@/schemas/userSchema";
 import { connectToDB } from "@/utils/db";
+import { getToken } from "next-auth/jwt";
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 
@@ -9,6 +10,15 @@ export async function POST(req:any){
         const body = await req.json();
         
         const {wallet, email} = body;
+
+        const session = await getToken({
+            req: req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+        
+        if (!session) {
+            return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
 
         await connectToDB();
 
