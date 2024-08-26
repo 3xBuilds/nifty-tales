@@ -17,6 +17,7 @@ import { CiBookmarkPlus } from 'react-icons/ci';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { toast } from 'react-toastify';
 import { useGlobalContext } from '@/context/MainContext';
+import { IoIosBookmark } from 'react-icons/io';
 
 
 export default function Home() {
@@ -93,7 +94,7 @@ export default function Home() {
             <div className='relative flex items-center justify-center w-screen h-screen pt-20'>
                 <div className='fixed top-20 z-50 bg-white h-16 px-4 flex items-center justify-center rounded-lg w-[80%] '>
                     <Toolbar />
-                    <button onClick={()=>{addBookmark()}} className=' hover:bg-nifty-white rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'><CiBookmarkPlus/></button>
+                    <button onClick={()=>{addBookmark()}} className=' bg-white hover:bg-nifty-white text-black rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'><IoIosBookmark/></button>
 
                 </div>
                 {/* <div className='mt-20'> */}
