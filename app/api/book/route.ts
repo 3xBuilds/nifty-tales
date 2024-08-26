@@ -1,6 +1,8 @@
 import Book from "@/schemas/bookSchema"
 import { connectToDB } from "@/utils/db";
 import { NextRequest, NextResponse } from "next/server"
+import { revalidatePath } from "next/cache";
+
 
 type BookType = {
     name: string;
@@ -21,6 +23,7 @@ type BookType = {
 
 // get all books route
 export async function GET(req: NextRequest) {
+    revalidatePath('/', 'layout') 
 
     try {
         await connectToDB();
