@@ -159,7 +159,7 @@ export async function POST(request) {
     const wallet = formData.get('wallet');
     const id = formData.get('id');
 
-    const publishStatus = formData.get('publishStatus'); // publish | draft
+    const publishStatus = false; 
 
     console.log("COVER",cover, content)
     if( !name  || !tags || !tokenId || !wallet ) {
@@ -354,7 +354,7 @@ export async function PATCH(request){
     const tokenId = formData.get('tokenId');
     const wallet = formData.get('wallet');
     const id = formData.get("id");
-    const publishStatus = formData.get('publishStatus');
+    const publishStatus = false;
 
     if(!name || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 400});
@@ -368,14 +368,7 @@ export async function PATCH(request){
         book.artist = artist;
         book.price = price;
         book.tokenId = tokenId;
-
-        book.maxMint = maxMint;
-        if(publishStatus == "draft"){
-          book.isPublished = false;
-        }
-        else{
-          book.isPublished = true;
-        }
+        book.isPublished = false;
         book.createdAt = Date.now();
         await book.save();
         return NextResponse.json({success: book});

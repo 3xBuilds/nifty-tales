@@ -20,6 +20,7 @@ export default function Home() {
     const [wallet, setWallet] = useState("")
     const router = useRouter();
     const [id, setId] = useState<string>("")
+    const [currentPage, setCurrentPage] = useState(0);
 
     const toolbarPluginInstance = toolbarPlugin({
         searchPlugin: {
@@ -54,13 +55,13 @@ export default function Home() {
                     <Toolbar />
                 </div>
                 {/* <div className='mt-20'> */}
-                    <Viewer renderLoader={(percentages: number) => (
+                    <Viewer onPageChange={(e)=>{console.log(e.currentPage)}} renderLoader={(percentages: number) => (
                     <div style={{ width: '300px', margin: "50px" }}>
                         <ProgressBar progress={Math.round(percentages)} />
                     </div>
                 )} plugins={[
                     toolbarPluginInstance,
-                ]} initialPage={2} defaultScale={0.9} fileUrl={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
+                ]} initialPage={0} defaultScale={0.9} fileUrl={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
                 {/* </div> */}
             </div>
             

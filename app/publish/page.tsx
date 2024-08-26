@@ -18,13 +18,17 @@ import { toast } from "react-toastify"
 import { TbCircleDashedNumber1, TbCircleDashedNumber2 } from "react-icons/tb"
 import { AiOutlineLoading } from "react-icons/ai"
 import { useLoading } from "@/components/PageLoader/LoadingContext"
+import { useExitAlert } from "@/components/alert/alert"
 
 export default function Home(){
+
+    useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
+
 
     const {address} = useAccount();
     const {user, setUser} = useGlobalContext();
 
-    const[loading, setLoading] = useState<boolean>(false);
+    const[loading, setLoading] = useState<string>("");
 
     const[bookName, setBookName] = useState<string>("");
     const[bookDesc, setBookDesc] = useState<string>("");
@@ -34,7 +38,6 @@ export default function Home(){
     const [cover, setCover] = useState<File | null>(null);
 
     const[requiredName, setRequiredName] = useState(false);
-    const[requiredTags, setRequiredTags] = useState(false);
     const[requiredPdf, setRequiredPdf] = useState(false);
 
 
@@ -55,13 +58,11 @@ export default function Home(){
     const[option, setOption] = useState<string>("Upload PDF")
 
     const[tags, setTags] = useState<Array<string>>([]);
-    const[currentTag, setCurrentTag] = useState<string>("");
 
     const[step, setStep] = useState<number>(0);
 
     const[agree, setAgree] = useState<boolean>(false);
 
-    const[bookId, setBookId] = useState<string>("")
 
     const router = useRouter()
 
@@ -141,16 +142,18 @@ export default function Home(){
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
             txn.wait().then((res:any)=>{
-                router.push("/authors")
+                axios.patch("/api/book/"+id,{isPublished: true});
                 console.log("THIS IS res",res);
-                setLoading(false);
+                setLoading("");
                 setIsLoading(true);
+                router.push("/authors")
             })
         }
         catch(err){
             // console.log("BOOKID", bookId);
             toast.error("There was an error while publishing. Please try again!")
-            setLoading(false);
+            setLoading("");
+            setStep(0);
             console.log(err);
         }
     }
@@ -185,43 +188,42 @@ export default function Home(){
         try{
             if(bookName == ""){
                 setRequiredName(true);
-                setLoading(false);
+                setLoading("");
                 return;
             }
 
             if(tags.length == 0){
-                setRequiredTags(true);
-                setLoading(false);
+                setLoading("");
                 return;
             }
 
             if(!pdf && fileLink == ""){
                 setRequiredPdf(true);
-                setLoading(false);
+                setLoading("");
                 return;
             }
 
             if(publish=="publish" && !cover && coverLink == ""){
                 toast.error("Upload a cover image!");
-                setLoading(false);
+                setLoading("");
                 return;
             }
 
             if(!agree){
                 toast.error("Please agree to the terms");
-                setLoading(false);
+                setLoading("");
                 return;
             }
     
             if(!tokenId){
                 toast.error("Token ID not found");
-                setLoading(false);
+                setLoading("");
                 return;
             }
     
             if(!address){
                 toast.error("Please connect wallet");
-                setLoading(false);
+                setLoading("");
                 return;
             }
 
@@ -278,7 +280,6 @@ export default function Home(){
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
                 formData.append('wallet', address.toString() as string);
-                formData.append('publishStatus', publish);
         
                 const response = await axios.patch("/api/uploadBook", formData);
                 if(publish == "publish"){
@@ -309,7 +310,6 @@ export default function Home(){
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
                 formData.append('wallet', address.toString() as string);
-                formData.append('publishStatus', publish);
         
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
@@ -340,7 +340,6 @@ export default function Home(){
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
                 formData.append('wallet', address.toString() as string);
-                formData.append('publishStatus', publish);
         
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
@@ -371,7 +370,6 @@ export default function Home(){
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
                 formData.append('wallet', address.toString() as string);
-                formData.append('publishStatus', publish);
         
                 const response = await axios.post("/api/uploadBook", formData);
 
@@ -381,7 +379,6 @@ export default function Home(){
                 }
                 else{
                     setIsLoading(true);
-
                     router.push("/authors")
                 }
             }
@@ -391,8 +388,7 @@ export default function Home(){
 
         catch(err){
             toast.error("Failed Interaction")
-            setLoading(false);
-            // await axios.patch("/api/book/"+id,{isPublished: false});
+            setLoading("");
             console.log(err);
 
         }
@@ -454,16 +450,16 @@ export default function Home(){
                <Navbar/>
             </div> */}
 
-            {loading && <div className="w-screen fixed top-0 left-0 z-[10] h-screen backdrop-blur-xl flex items-center justify-center">
+            {loading != "" && <div className="w-screen fixed top-0 left-0 z-[10] h-screen backdrop-blur-xl flex items-center justify-center">
                     <div className="bg-white w-96 shadow-xl shadow-black/30 rounded-xl p-4">
                         <h2 className="text-2xl font-bold" >Steps</h2>
                         {step == 0 ? <ul className="my-2 flex flex-col gap-4">
                             <li><h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span></h2></li>
-                            <li> <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2></li>
+                            {loading == "publish" && <li> <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2></li>}
 
                         </ul> : <ul className="my-2 flex flex-col gap-4">
                             <li>{step == 1 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Files successfully upload!</span></h2>}</li>
-                            <li>{step == 2 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2>}</li>
+                            {loading == "publish" && <li>{step == 2 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2>}</li>}
 
                         </ul>}
                     </div>
@@ -528,7 +524,7 @@ export default function Home(){
                     <div className="w-full text-start flex flex-col">
                         <div className="flex flex-wrap gap-1 my-2">
                         {defaultTags.map((item:string)=>(
-                            <button disabled={tags.length == 5} onClick={()=>{if(!tags.includes(item))setTags((prev)=>[...prev, item])}} className={`py-2 w-32 px-2 rounded-xl flex gap-2 items-center justify-center ${tags.length ==5 && "opacity-60"} bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs`}>
+                            <button disabled={tags.length == 5} onClick={()=>{if(!tags.includes(item))setTags((prev)=>[...prev, item])}} className={`py-2 w-32 px-2 hover:scale-105 duration-200 ${tags.includes(item) && "brightness-125"} hover:brightness-105 rounded-xl flex gap-2 items-center justify-center ${tags.length ==5 && "opacity-60"} bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs`}>
                             {item}
                             </button>
                         ))}
@@ -552,7 +548,7 @@ export default function Home(){
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
                             <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {  setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price (Leave 0 for free mint)</h2>
+                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
@@ -606,8 +602,8 @@ export default function Home(){
                     </button>
                     <h2 className="text-start max-md:w-full" >I agree that have the rights of everything I am publishing</h2>
                 </div>
-                <button onClick={()=>{setLoading(true); getContractDetails("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
-                <button onClick={()=>{setLoading(true); getContractDetails("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
+                <button onClick={()=>{setLoading("draft"); getContractDetails("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
+                <button onClick={()=>{setLoading("publish"); getContractDetails("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
             </div>
 
             

@@ -16,7 +16,6 @@ const handler = NextAuth({
   callbacks: {
 
     async signIn( {user, account} : {user:any, account:any} ) {
-
       await connectToDB();
 
       if (account.provider === "google") {
@@ -37,11 +36,10 @@ const handler = NextAuth({
             return true;
          }
       }
-      
+   
       return true;
     },
     async jwt({ token, user, account }) {
-
       const dbUser = await User.findOne({
         $or: [
           { email: token.email },
@@ -50,7 +48,6 @@ const handler = NextAuth({
       });
 
       if(!dbUser){
-        // console.log('----user not found in db');
         return token;
       }
 
@@ -59,6 +56,8 @@ const handler = NextAuth({
         token.provider = account.provider;
         token.id = user.id;
         if (user && 'address' in user) {
+          console.log("BROTHER WTF IS GOING ON BROTHER")
+
           token.walletAddress = user.address;
         }
 

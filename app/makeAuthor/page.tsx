@@ -16,8 +16,12 @@ import { Loader } from "@/components/Global/Loader";
 import { toast } from "react-toastify";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { AiOutlineLoading } from "react-icons/ai";
+import { useExitAlert } from "@/components/alert/alert";
 
 export default function Home() {
+
+    useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
+
 
     const [collectionName, setCollectionName] = useState<string>("");
     const [symbol, setSymbol] = useState<string>("");
@@ -188,7 +192,7 @@ export default function Home() {
 
 
     return (
-        <div className=" gap-10 w-screen min-h-screen md:p-10 p-4">
+        <div className=" gap-10 w-screen min-h-screen md:p-10 p-4 -mt-16">
         
             {/* <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <Navbar/>
