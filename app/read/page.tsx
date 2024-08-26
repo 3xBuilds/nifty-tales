@@ -28,7 +28,7 @@ export default function Home() {
     const [currentPage, setCurrentPage] = useState(0);
     const [bookId, setBookId] = useState("");
 
-    const [page, setPage] = useState(null);
+    const [page, setPage] = useState<number>();
 
     const toolbarPluginInstance = toolbarPlugin({
         searchPlugin: {
