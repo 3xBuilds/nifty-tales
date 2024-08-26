@@ -25,23 +25,20 @@ import { SiOpensea } from "react-icons/si";
 
  
 export default function Page() {
+
     const pathname = usePathname();
+    
+    const router = useRouter()
+
     const [readListed, setReadListed] = useState<boolean>(false);
     const[bookDetails, setBookDetails] = useState<BookType>();
-
-
     const[price, setPrice] = useState<string>("0");
-
     const{user, getUser} = useGlobalContext();
-
     const [userDetails, setUserDetails] = useState<UserType>()
-
     const[amount, setAmount] = useState(0);
     const[showModal, setShowModal] = useState(false);
-
     const[loading, setLoading] = useState(false);
-
-    const router = useRouter()
+    const [ethPrice, setEthPrice] = useState(0);
 
     async function getBookDetails(){
       try{
@@ -181,6 +178,21 @@ export default function Page() {
     router.push("/read")
   }
 
+  const getTickerPrice = async () => {
+    try{
+        const priceFetch = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=ETHUSDT`);
+        const priceBody = await priceFetch.json();
+        setEthPrice(Math.round(priceBody.price));
+    }catch(error){
+        console.error("Error", error);
+        throw error;
+    }
+}
+
+    useEffect(()=>{
+      getTickerPrice()
+    },[amount])
+
   async function tokenChecker() {
     try {
       const res = await axios.get("/api/tokenChecker");
@@ -229,17 +241,17 @@ export default function Page() {
             </div>
             <div className='text-gray-400 w-full'>
               <div className='w-full flex'>
-                <h2 className='w-1/2 text-md'>Spending</h2>
-                <h2 className='w-1/2 text-md font-semibold text-end'>{(Number(price)*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/3 text-sm'>Spending</h2>
+                <h2 className='w-2/3 text-sm font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(4)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>
               </div>
               <div className='w-full flex my-2'>
                 <h2 className='w-1/2 text-xs'>Platform Fee</h2>
-                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH (${(amount*ethPrice*0.0007).toFixed(2)})</h2>
               </div>
 
               <div className='w-full text-black font-bold flex mb-2 mt-4'>
                 <h2 className='w-1/2 text-sm font-bold'>Total</h2>
-                <h2 className='w-1/2 text-sm font-bold text-end'>{((0.0007+Number(price))*amount).toFixed(4)} ETH</h2>
+                <h2 className='w-1/2 text-sm font-bold text-end text-nowrap'>{((0.0007+Number(price))*amount).toFixed(4)} ETH (${(amount*ethPrice*(0.0007+Number(price))).toFixed(2)})</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
