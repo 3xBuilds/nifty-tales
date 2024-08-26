@@ -32,7 +32,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
       console.log("COVER MY ASS", cover);
       const coverParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/content/${objectId}/cover`,
+        Key: `users/${wallet}/content/${tokenId}/cover`,
         Body: cover,
         ContentType: "image/png"
       }
@@ -48,7 +48,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
         console.log("CONSOLE IS LOGINNGIN",content);
         const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: `users/${wallet}/content/${objectId}/book`,
+          Key: `users/${wallet}/content/${tokenId}/book`,
           ContentType: 'application/pdf',
           ContentDisposition: 'inline',
         }));
@@ -67,7 +67,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     
           const uploadPartCommand = new UploadPartCommand({
             Bucket: process.env.AWS_S3_BUCKET_NAME,
-            Key: `users/${wallet}/content/${objectId}/book`,
+            Key: `users/${wallet}/content/${tokenId}/book`,
             UploadId: uploadId,
             Body: content.slice(start, end),
             PartNumber: partNumber,
@@ -90,7 +90,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     
         await s3Client.send(new CompleteMultipartUploadCommand({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: `users/${wallet}/content/${objectId}/book`,
+          Key: `users/${wallet}/content/${tokenId}/book`,
           UploadId: uploadId,
           MultipartUpload: { Parts: uploadResults },
         }));
@@ -109,8 +109,8 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
         name,
         description: description + ". Visit https://niftytales.xyz/books/"+objectId,
         tokenId,
-        image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/cover`,
-        content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${objectId}/book`
+        image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`,
+        content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`
       }
       const metadataParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
@@ -184,11 +184,11 @@ export async function POST(request) {
 
     if(publishStatus == "draft" && content && !cover && id==""){
       const contentArrayBuffer = await content.arrayBuffer();
-        const contentBuffer = Buffer.from(contentArrayBuffer);
-      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, tokenId, wallet);
+      const contentBuffer = Buffer.from(contentArrayBuffer);
+      const book = await Book.create(bookdData);
+      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, book._id, wallet);
 
       if(status){
-        const book = await Book.create(bookdData);
         author.yourBooks.push(book._id);
         await author.save();
         
@@ -202,15 +202,18 @@ export async function POST(request) {
         }
 
       }
+
+      else{
+        await Book.findOneAndDelete({_id:book._id});
+      }
     }
 
 
     if(cover && !content && id !== ""){
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
-      const status = await uploadFileToS3(coverBuffer, null, name, description, tokenId, tokenId, wallet);
+      const status = await uploadFileToS3(coverBuffer, null, name, description, tokenId, id, wallet);
 
       if(status === false) {
-
         return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
       }
 
@@ -243,7 +246,7 @@ export async function POST(request) {
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
 
-      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, tokenId, wallet);
+      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, id, wallet);
 
       if(status === false) {
         return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
@@ -278,14 +281,11 @@ export async function POST(request) {
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
-      const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, tokenId, wallet);
-
       const newBook = await Book.create(bookdData);
-      author.yourBooks.push(newBook._id);
-      await author.save();
-
-
+      const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, newBook._id, wallet);
+      
       if(status === true){
+        author.yourBooks.push(newBook._id);
         // console.log("Hellooooooo");
         // console.log("NEW BOOK",newBook)
         newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`;
@@ -293,6 +293,9 @@ export async function POST(request) {
 
         await newBook.save();
         return NextResponse.json({success: newBook});
+      }
+      else{
+        await Book.findOneAndDelete({_id:newBook._id});
       }
     }
 
@@ -302,7 +305,7 @@ export async function POST(request) {
       const contentBuffer = Buffer.from(contentArrayBuffer);
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
 
-      const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, tokenId, wallet);
+      const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, id, wallet);
 
       if(status === true){
         
@@ -327,10 +330,8 @@ export async function POST(request) {
         await book.save();
         return NextResponse.json({success: book});
 
-
       }
     }
-   
 
   } catch(e) {
     console.error(e);
@@ -354,7 +355,6 @@ export async function PATCH(request){
     const tokenId = formData.get('tokenId');
     const wallet = formData.get('wallet');
     const id = formData.get("id");
-    const publishStatus = false;
 
     if(!name || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 400});

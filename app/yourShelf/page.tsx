@@ -24,7 +24,7 @@ export default function Home(){
     setIsLoading(false)
   },[])
 
-    const[toggle, setToggle] = useState<string>("Readlist");
+    const[toggle, setToggle] = useState<string>("Bookmarks");
 
     const {data:session} = useSession()
 
