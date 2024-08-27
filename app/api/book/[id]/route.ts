@@ -71,6 +71,12 @@ export async function PATCH(req:any){
             { new: true, runValidators: true } 
         );
 
+        // const author = updatedBook.author;
+
+        // const updatedAuthor = await User.findById(author);
+        // updatedAuthor.yourBooks.push(updatedBook._id);
+        // await updatedAuthor.save();
+
         // console.log(updatedBook);
 
         return NextResponse.json({

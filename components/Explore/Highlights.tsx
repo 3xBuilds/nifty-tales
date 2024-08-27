@@ -85,7 +85,7 @@ const Highlights = () => {
                         <>
                         {highlights?.slice(0,5).map((highlight:any, i)=>(
                     <div className='md:w-[450px] max-md:w-[20rem] max-md:h-[28rem] p-8 bg-gray-200 flex flex-row max-md:flex-col items-center justify-start overflow-hidden relative rounded-xl'>
-                        <div onClick={()=>{setIsLoading(true);(`/books/${highlight.item._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
+                        <div onClick={()=>{setIsLoading(true);router.push(`/books/${highlight.item._id}`)}} className="md:w-40 md:h-[16.5rem] max-md:w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center duration-200 justify-center " >
                             <div className="w-40 h-52 max-md:w-32 max-md:h-44 overflow-hidden rounded-lg relative z-30">
                                 <Image src={highlight.item.cover as string} alt="cover" width={1080} height={1080} className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
                             </div>

@@ -168,6 +168,10 @@ export async function POST(request) {
 
     const author = await User.findOne({wallet});
 
+    if(!author){
+      return NextResponse.json({message:"Author not found"},{status:404});
+    }
+
     let bookdData = {
       name,
       isPublished: publishStatus === "publish" || false,
@@ -235,8 +239,11 @@ export async function POST(request) {
           book.isPublished = true
         }
         book.createdAt = Date.now();
-
+        
         await book.save();
+
+        author.yourBooks.push(id);
+        await author.save()
         return NextResponse.json({success: book});
       }
 
@@ -272,6 +279,9 @@ export async function POST(request) {
         }        
         book.createdAt = Date.now();
         await book.save();
+
+        author.yourBooks.push(id);
+        await author.save()
         return NextResponse.json({success: book});
       }
     }
@@ -286,12 +296,14 @@ export async function POST(request) {
       
       if(status === true){
         author.yourBooks.push(newBook._id);
+        await author.save()
         // console.log("Hellooooooo");
         // console.log("NEW BOOK",newBook)
         newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`;
         newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`;
 
         await newBook.save();
+
         return NextResponse.json({success: newBook});
       }
       else{
@@ -328,6 +340,11 @@ export async function POST(request) {
         }        
         book.createdAt = Date.now();
         await book.save();
+
+
+          author.yourBooks.push(id);
+          await author.save()
+
         return NextResponse.json({success: book});
 
       }
@@ -363,6 +380,7 @@ export async function PATCH(request){
     const book = await Book.findById(id);
         book.name = name;
         book.isbn = isbn
+        book.maxMint = maxMint;
         book.description = description;
         book.tags = tags;
         book.artist = artist;
