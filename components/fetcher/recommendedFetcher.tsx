@@ -26,11 +26,11 @@ export const RecommendedFetcher = () => {
 
     const [type, setType] = useState('Trending');
 
-
   return (
     <div className="flex flex-col items-start mt-8 justify-center md:px-5 px-4">
 
-            {boosted && boosted?.length > 0 && <div className='mb-20'>
+
+            {boosted && boosted?.length > 0 && <div className='mb-16 w-full'>
               <div className="w-full my-2">
                   <h3 className="text-2xl font-bold bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"><span className='text-black'>Nifty</span> Picks ✨</h3>
               </div>
