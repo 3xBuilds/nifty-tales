@@ -256,7 +256,7 @@ export default function Page() {
               </div>
               <div className='w-full flex my-2'>
                 <h2 className='w-1/2 text-[0.7rem]'>Platform Fee</h2>
-                <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(0.0007*amount).toFixed(3)} ETH (${(amount*ethPrice*0.0007).toFixed(2)})</h2>
+                <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH (${(amount*ethPrice*0.0007).toFixed(2)})</h2>
               </div>
 
               <div className='w-full text-black font-bold flex mb-2 mt-4'>
