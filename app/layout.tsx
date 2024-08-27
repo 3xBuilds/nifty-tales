@@ -20,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={poppins.className + " bg-white  "}>
+      <body className={poppins.className + " bg-white overflow-x-hidden w-screen "}>
         {/* <Navbar/> */}
         <ToastContainer
           position="bottom-right"
