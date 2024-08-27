@@ -222,7 +222,7 @@ export default function Page() {
       <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
           <div className='bg-white rounded-xl flex flex-col shadow-xl shadow-black/30 gap-4 justify-center items-start p-5'>
             <h2 className='text-2xl font-bold' >Mint</h2>
-            <h2 className='text-lg text-gray-400' >Choose number of mints</h2>
+            <h2 className='text-lg text-nifty-gray' >Choose number of mints</h2>
 
             <div className='flex rounded-xl items-center justify-center gap-4 w-full h-28 border-[1px] border-gray-300' >
               <button onClick={()=>{
@@ -240,7 +240,7 @@ export default function Page() {
                 }
               }} className='hover:scale-105 duration-200'><TiPlus className='text-2xl text-black rotate-180'/></button>
             </div>
-            <div className='text-gray-400 w-full'>
+            <div className='text-nifty-gray w-full'>
               <div className='w-full flex'>
                 <h2 className='w-1/3 text-sm'>Spending</h2>
                 <h2 className='w-2/3 text-sm font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(4)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>

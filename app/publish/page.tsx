@@ -454,12 +454,12 @@ export default function Home(){
                     <div className="bg-white w-96 shadow-xl shadow-black/30 rounded-xl p-4">
                         <h2 className="text-2xl font-bold" >Steps</h2>
                         {step == 0 ? <ul className="my-2 flex flex-col gap-4">
-                            <li><h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span></h2></li>
-                            {loading == "publish" && <li> <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2></li>}
+                            <li><h2 className="flex gap-2 text-md text-nifty-gray font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span></h2></li>
+                            {loading == "publish" && <li> <h2 className="flex gap-2 text-md text-nifty-gray font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2></li>}
 
                         </ul> : <ul className="my-2 flex flex-col gap-4">
-                            <li>{step == 1 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Files successfully upload!</span></h2>}</li>
-                            {loading == "publish" && <li>{step == 2 ? <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-gray-400 font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2>}</li>}
+                            <li>{step == 1 ? <h2 className="flex gap-2 text-md text-nifty-gray font-semibold items-center w-full justify-center" ><TbCircleDashedNumber1 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Uploading Files</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-nifty-gray font-semibold items-center w-full justify-center" ><FaRegCircleCheck className="w-[10%] text-green-500 text-2xl" /><span className="w-[90%] flex justify-start" >Files successfully upload!</span></h2>}</li>
+                            {loading == "publish" && <li>{step == 2 ? <h2 className="flex gap-2 text-md text-nifty-gray font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span> <AiOutlineLoading className="w-[20%] text-black animate-spin text-2xl" /> </h2>: <h2 className="flex gap-2 text-md text-nifty-gray font-semibold items-center w-full justify-center" ><TbCircleDashedNumber2 className="w-[10%] text-2xl"/> <span className="w-[70%] flex justify-start">Publishing Book</span></h2>}</li>}
 
                         </ul>}
                     </div>
@@ -506,19 +506,19 @@ export default function Home(){
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
                             <input onKeyDown={(e)=>{if(characterName == 50 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Book Name..." onChange={(e) => {  setRequiredName(false); if(characterName < 50){setBookName(e.target.value); setCharacterName(e.target.value.length) }}} value={bookName} className={`p-2 placeholder:text-gray-300 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/50 chars</span><span className="text-red-500 ml-1" >*</span></h2>
+                            <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Name <span className="text-xs">{characterName}/50 chars</span><span className="text-red-500 ml-1" >*</span></h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
                             <input placeholder="ISBN Number" onChange={(e) => {  setIsbn(e.target.value) }} value={isbn} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">ISBN</h2>
+                            <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">ISBN</h2>
                         </div>
 
                     </div>
 
                     <div className="w-full text-start flex flex-col">
                         <textarea onKeyDown={(e)=>{if(characterDesc == 250 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 250){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 border-gray-400"></textarea>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/250 chars</span></h2>
+                        <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Book Description <span className="text-xs">{characterDesc}/250 chars</span></h2>
                     </div>
 
                     <div className="w-full text-start flex flex-col">
@@ -529,7 +529,7 @@ export default function Home(){
                             </button>
                         ))}
                         </div>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (select upto 5)<span className="text-red-500 ml-1" >*</span></h2>
+                        <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Tags (select upto 5)<span className="text-red-500 ml-1" >*</span></h2>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {tags.map((item, i)=>(
                                 <div className="py-2 min-w-20 px-2 rounded-xl flex gap-2 items-center justify-center bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs">
@@ -542,23 +542,23 @@ export default function Home(){
 
                     <div className="w-full text-start flex flex-col">
                         <input placeholder="Pablo Picasso" onKeyDown={(e)=>{if(characterArtist == 20 && e.key == "Backspace"){setCharacterArtist((prev)=>(prev-1))}}} onChange={(e) => { if(characterArtist < 20){setIllustrationArtist(e.target.value); setCharacterArtist(e.target.value.length) }}} value={illustrationArtist} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist <span className="text-xs">{characterArtist}/20 chars</span></h2>
+                        <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Illustration Artist <span className="text-xs">{characterArtist}/20 chars</span></h2>
                     </div>
 
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
                             <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {  setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH (Leave 0 for free mint)</h2>
+                            <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
                             <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => {  setMaxMints(Number(e.target.value)) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
-                            <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Leave 0 for no limit)</h2>
+                            <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Leave 0 for no limit)</h2>
                         </div>
                     </div>
 
                     <div className="flex flex-col items-start justify-center md:justify-start md:w-[40%]">
-                        <h2 className="text-sm text-semibold text-gray-400 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Upload Pdf<span className="text-red-500 ml-1" >*</span></h2>
+                        <h2 className="text-sm text-semibold text-nifty-gray order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Upload Pdf<span className="text-red-500 ml-1" >*</span></h2>
 
                             <div>
                                 <label htmlFor="dropzone-file" className={`flex flex-col items-center justify-center w-48 h-48 border-2 ${requiredPdf ? "border-red-500"  : "border-jel-gray-3" } border-dashed group rounded-xl mt-2 cursor-pointer hover:bg-jel-gray-1`}>
@@ -580,7 +580,7 @@ export default function Home(){
                         </div> 
                 </div>
 
-                <div className=" w-[23rem] h-full border-l-2 border-dashed border-gray-300 text-gray-400 text-sm pl-6">
+                <div className=" w-[23rem] h-full border-l-2 border-dashed border-gray-300 text-nifty-gray text-sm pl-6">
                     <ul className="list-disc flex flex-col gap-10">
                         <li>
                             <h2><b>Creating</b> a draft requires a pdf</h2>
@@ -594,7 +594,7 @@ export default function Home(){
             </div>
 
             <div className="w-full flex max-md:flex-col max-md:items-center max-md:justify-center gap-6 mt-20 pb-10 items-center justify-center md:justify-end">
-                <div className="flex gap-2 items-center justify-center text-gray-400">
+                <div className="flex gap-2 items-center justify-center text-nifty-gray">
                     <button onClick={()=>{
                         setAgree((prev)=>(!prev));
                     }} className="border-[1px] h-8 w-8 flex items-center justify-center border-gray-400 rounded-md">

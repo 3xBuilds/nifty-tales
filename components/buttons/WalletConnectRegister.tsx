@@ -27,7 +27,7 @@ export const WalletConnectRegister = () => {
 
           if (!ready) {
             return (
-              <div className='w-[15.2rem] h-10 bg-nifty-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center text-gray-400 text-md animate-pulse'>
+              <div className='w-[15.2rem] h-10 bg-nifty-white px-6 py-3 rounded-xl font-semibold flex items-center justify-center text-nifty-gray text-md animate-pulse'>
                 Loading...
               </div>
             );

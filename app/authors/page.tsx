@@ -298,8 +298,24 @@ export default function Home(){
   },[])
 
 
+  async function tokenChecker() {
+    try {
+      const res = await axios.get("/api/tokenChecker");
+      console.log(res.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 401) {
+        router.push('/connect');
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
+  }
 
-  if(session)
+  useEffect(() => {
+    tokenChecker();
+  }, []);
+
+
     return(
         <div className="">
             {/* <div className="h-16 w-screen relative z-[1000]">
@@ -334,8 +350,8 @@ export default function Home(){
                         <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
                             <div className="flex flex-col items-center h-32 w-full p-2 overflow-hidden justify-center rounded-lg">
                                 {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
-                                        <CiImageOn className="text-xl text-gray-400" />
-                                        <h3 className="text-xs text-gray-400 text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                        <CiImageOn className="text-xl text-nifty-gray" />
+                                        <h3 className="text-xs text-nifty-gray text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
                                     </div> :
                                     <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
                             </div>
@@ -482,7 +498,4 @@ export default function Home(){
         </div>
     )
 
-    else{
-        router.push("/connect")
-    }
 }

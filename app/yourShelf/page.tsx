@@ -204,7 +204,7 @@ export default function Home(){
                 
                 {toggle == "Readlist" && <div className="w-full h-80 flex flex-col text-center items-center justify-center">
                         <h3 className="text-xl font-semibold text-gray-500 mb-3">Your shelf seems empty</h3>
-                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Add some books from <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                        <h3 className="text-lg font-medium text-nifty-gray mb-5 flex max-md:flex-col gap-2 items-center">Add some books from <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
                 </>
@@ -234,7 +234,7 @@ export default function Home(){
                     <>
                         {toggle == "Bookmarks" && <div className="w-full text-center h-80 flex flex-col items-center justify-center">
                             <h3 className="text-xl font-semibold text-gray-500 mb-3">Seems like you haven't bookmarked anything</h3>
-                            <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Find a book to read <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                            <h3 className="text-lg font-medium text-nifty-gray mb-5 flex max-md:flex-col gap-2 items-center">Find a book to read <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                             
                         </div>}
                     </>
@@ -264,7 +264,7 @@ export default function Home(){
                     <>
                     {toggle == "Minted" && <div className="w-full text-center h-80 flex flex-col items-center justify-center">
                         <h3 className="text-xl font-semibold text-gray-500 mb-3">Seems like you haven't minted anything</h3>
-                        <h3 className="text-lg font-medium text-gray-400 mb-5 flex max-md:flex-col gap-2 items-center">Find an author to support <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
+                        <h3 className="text-lg font-medium text-nifty-gray mb-5 flex max-md:flex-col gap-2 items-center">Find an author to support <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
                     </>

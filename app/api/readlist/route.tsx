@@ -3,6 +3,7 @@ import { connectToDB } from "@/utils/db";
 import User from "@/schemas/userSchema";
 import Book from "@/schemas/bookSchema";
 import { getToken } from "next-auth/jwt";
+import Readlists from "@/schemas/readlistSchema"
 
 export async function POST(req: any) {
     try {
@@ -39,6 +40,8 @@ export async function POST(req: any) {
 
         user.readlist.push(bookId);
         await user.save();
+
+        await Readlists.create({user:user._id, book: bookId});
 
         return NextResponse.json({
             message: "Book Added to Readlist! successfully",
@@ -96,6 +99,8 @@ export async function DELETE(req: any) {
             book.readers -= 1;
         }
         await book.save();
+
+        await Readlists.findOneAndDelete({book: bookId})
 
         // console.log(`Book ${bookId} removed from readlist and reader count updated`);
         return NextResponse.json({ message: "Book removed from readlist and reader count updated" }, { status: 200 });

@@ -57,8 +57,8 @@ export const AddEmail = () => {
         <button onClick={()=>{signOut()}} className='h-10 bg-nifty-white text-nifty-gray-1 hover:-translate-y-1 duration-200 w-32 absolute right-4 top-4 shadow-xl shadow-black/30 rounded-lg font-semibold border-2 border-nifty-gray-1' >Sign out</button>
         <div className='w-80 bg-white shadow-xl shadow-black/30 rounded-lg p-5'>
             <h2 className='text-2xl font-bold' >First Time Setup</h2>
-            <h2 className='text-lg font-semibold text-gray-400'>Welcome to Nifty Tales!</h2>
-            <h2 className='text-sm text-gray-400 mt-5'> Kindly register your <b>Gmail</b> which will be used to link accounts when <b>logging in across different platforms.</b></h2>
+            <h2 className='text-lg font-semibold text-nifty-gray'>Welcome to Nifty Tales!</h2>
+            <h2 className='text-sm text-nifty-gray mt-5'> Kindly register your <b>Gmail</b> which will be used to link accounts when <b>logging in across different platforms.</b></h2>
             <input placeholder="Enter Email..." onChange={(e) => { setNewEmail(e.target.value); }} value={newEmail} className={`p-2 placeholder:text-gray-300 my-2 w-full peer focus:outline-none  focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
 
 
