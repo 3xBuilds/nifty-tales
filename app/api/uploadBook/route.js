@@ -25,11 +25,11 @@ const s3Client = new S3Client({
 async function uploadFileToS3(cover, content, name, description, tokenId, objectId, wallet) {
   try {
     // Upload Cover
-    console.log("UPLOADING YOOOOOO");
+    // console.log("UPLOADING YOOOOOO");
 
 
     if(cover){
-      console.log("COVER MY ASS", cover);
+      // console.log("COVER MY ASS", cover);
       const coverParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
         Key: `users/${wallet}/content/${tokenId}/cover`,
@@ -38,14 +38,14 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
       }
       const coverCommand = new PutObjectCommand(coverParams);
       await s3Client.send(coverCommand);
-      console.log("COVER IS DONE", cover);
+      // console.log("COVER IS DONE", cover);
     }
 
     // Upload Content (PDF)
-    console.log("ABOUT TO ENTER CONTENT");
+    // console.log("ABOUT TO ENTER CONTENT");
     if (content) {
       try {
-        console.log("CONSOLE IS LOGINNGIN",content);
+        // console.log("CONSOLE IS LOGINNGIN",content);
         const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
           Key: `users/${wallet}/content/${tokenId}/book`,
@@ -54,7 +54,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
         }));
     
         const uploadId = multipartUpload.UploadId;
-        console.log("Content length:", content.length);
+        // console.log("Content length:", content.length);
     
         const partSize = 5 * 1024 * 1024; // 5 MB
         const numParts = Math.ceil(content.length / partSize);
@@ -76,7 +76,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
           uploadPromises.push(
             s3Client.send(uploadPartCommand)
               .then((data) => {
-                console.log(`Part ${partNumber} uploaded`);
+                // console.log(`Part ${partNumber} uploaded`);
                 return { ETag: data.ETag, PartNumber: partNumber };
               })
               .catch((error) => {
@@ -95,7 +95,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
           MultipartUpload: { Parts: uploadResults },
         }));
     
-        console.log("Multipart upload completed successfully");
+        // console.log("Multipart upload completed successfully");
       } catch (error) {
         console.error("Error in multipart upload:", error);
         // Handle the error appropriately (e.g., retry, notify user, etc.)
@@ -131,7 +131,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
 
 export async function POST(request) {
   try {
-    console.log("UPLOAD FUNCTION HAS BEEN CALLED");
+    // console.log("UPLOAD FUNCTION HAS BEEN CALLED");
 
     const session = await getToken({
       req: request,
@@ -161,7 +161,7 @@ export async function POST(request) {
 
     const publishStatus = false; 
 
-    console.log("COVER",cover, content)
+    // console.log("COVER",cover, content)
     if( !name  || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 401});
     }

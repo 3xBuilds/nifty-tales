@@ -89,14 +89,14 @@ export default function Page() {
         const contract = await contractSetup();
         // console.log(contract);
         // console.log(bookDetails);
-        console.log("txn made")
+        // console.log("txn made")
   
-        console.log(Number(ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))));
+        // console.log(Number(ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))));
         const txn = await contract?.mint(amount, bookDetails?.tokenId, {value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))});
         txn.wait().then(async(res:any)=>{
-          console.log(pathname.split("/")[2], user?._id)
+          // console.log(pathname.split("/")[2], user?._id)
           await axios.post("/api/transaction/create", {txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number*amount}).then(async(res)=>{
-            console.log("TXN CREATE RES", res);
+            // console.log("TXN CREATE RES", res);
             getBookDetails()
             setShowModal(false); 
             setLoading(false);
@@ -129,7 +129,7 @@ export default function Page() {
         const contract = await contractSetup();
 
         const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
-        console.log(ethers.utils.formatEther(String(price)));
+        // console.log(ethers.utils.formatEther(String(price)));
         setPrice(ethers.utils.formatEther(String(price)));
       }
       catch(err){
@@ -197,7 +197,7 @@ export default function Page() {
   async function tokenChecker() {
     try {
       const res = await axios.get("/api/tokenChecker");
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         router.push('/connect');
@@ -222,7 +222,7 @@ export default function Page() {
       <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
           <div className='bg-white rounded-xl flex flex-col shadow-xl shadow-black/30 gap-4 justify-center items-start p-5'>
             <h2 className='text-2xl font-bold' >Mint</h2>
-            <h2 className='text-lg text-nifty-gray' >Choose number of mints</h2>
+            <h2 className='text-lg text-nifty-gray-1' >Choose number of mints</h2>
 
             <div className='flex rounded-xl items-center justify-center gap-4 w-full h-28 border-[1px] border-gray-300' >
               <button onClick={()=>{
@@ -240,7 +240,7 @@ export default function Page() {
                 }
               }} className='hover:scale-105 duration-200'><TiPlus className='text-2xl text-black rotate-180'/></button>
             </div>
-            <div className='text-nifty-gray w-full'>
+            <div className='text-nifty-gray-1 w-full'>
               <div className='w-full flex'>
                 <h2 className='w-1/3 text-[0.85rem]'>Book Price</h2>
                 <h2 className='w-2/3 text-[0.85rem] font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(3)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>

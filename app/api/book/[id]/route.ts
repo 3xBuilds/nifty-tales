@@ -106,7 +106,7 @@ export async function DELETE(req: any) {
 
         // Find the book and delete it
         const deletedBook = await Book.findByIdAndDelete({_id: id});
-        console.log("DELETED BOOK",deletedBook);
+        // console.log("DELETED BOOK",deletedBook);
         if (!deletedBook) {
             return NextResponse.json({ message: "Book not found" }, { status: 404 });
         }

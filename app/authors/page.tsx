@@ -168,7 +168,7 @@ export default function Home(){
 
     function handleDraft(item:any){
         setIsLoading(true);
-        console.log(item.cover, item.pdf, item.name, item.tags);
+        // console.log(item.cover, item.pdf, item.name, item.tags);
         localStorage.setItem("name", item.name);
         localStorage.setItem("id", item._id);
 
@@ -232,7 +232,7 @@ export default function Home(){
 
             //@ts-ignore
             if(bannerImg && !profileImg && user){
-                console.log("brooo")
+                // console.log("brooo")
                 formData.append("bannerImage", bannerImg);
                 formData.append("wallet", user?.wallet);
             }
@@ -259,7 +259,7 @@ export default function Home(){
         } catch (error) {
             toast.error("An error occurred while creating the collection. Please try again.");
             console.log(error);
-            console.log(session);
+            // console.log(session);
         }
     }
 
@@ -383,19 +383,19 @@ export default function Home(){
           <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
             <h2 className='text-2xl font-bold mb-5'>Duration</h2>
               <div className='flex gap-2 flex-wrap items-center justify-center'>
-                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>1 Day</h2>
                       <h2 className='font-bold text-sm'>0.001 ETH</h2>
                     </button>
-                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>3 Days</h2>
                       <h2 className='font-bold text-sm'>0.0025 ETH</h2>
                     </button>
-                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>1 Week</h2>
                       <h2 className='font-bold text-sm'>0.005 ETH</h2>
                     </button>
-                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>1 Month</h2>
                       <h2 className='font-bold text-sm'>0.015 ETH</h2>
                     </button>
@@ -436,8 +436,8 @@ export default function Home(){
                         <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
                             <div className="flex flex-col items-center h-32 w-full p-2 overflow-hidden justify-center rounded-lg">
                                 {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
-                                        <CiImageOn className="text-xl text-nifty-gray" />
-                                        <h3 className="text-xs text-nifty-gray text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                        <CiImageOn className="text-xl text-nifty-gray-1" />
+                                        <h3 className="text-xs text-nifty-gray-1 text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
                                     </div> :
                                     <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
                             </div>
@@ -501,7 +501,7 @@ export default function Home(){
                             </div>
                             <div className="absolute z-50 top-1 flex gap-2 " >
                                 <button onClick={()=>{hide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
-                                <button onClick={()=>{setId(item2._id);setBoostModal(true)}} className="bg-gray-200 text-nifty-gray-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket/></button>
+                                <button onClick={()=>{setId(item2._id);setBoostModal(true)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket/></button>
                             </div>
                             <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                                 <Book img={item2.cover} />

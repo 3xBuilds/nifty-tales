@@ -33,7 +33,7 @@ const handler = NextAuth({
          }
          else{
             const user = await User.findOne({name});
-            console.log('----creating user in db');
+            // console.log('----creating user in db');
             if(user){
               const newName = name+Math.ceil(Math.random()*10)+Math.ceil(Math.random()*10)+Math.ceil(Math.random()*10)
               await User.create({

@@ -45,7 +45,7 @@ const ClientQuill: React.FC<ClientQuillProps> = ({ value, onChange }) => {
     return null;
   }
 
-  console.log(value)
+  // console.log(value)
 
   return <ReactQuill value={value} onChange={onChange} modules={modules} formats={formats} theme="snow" style={{height: '80vh'}}></ReactQuill> ;
 };

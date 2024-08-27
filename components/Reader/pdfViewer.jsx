@@ -20,7 +20,7 @@ function PDFViewer() {
   async function pdfFetcher(){
     try{
       const res = await axios.get(`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`);
-      console.log(res);
+      // console.log(res);
     }
     catch(err){
       console.log(err);

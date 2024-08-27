@@ -11,7 +11,7 @@ export async function GET(req:any){
         const id = req.nextUrl.pathname.split("/")[3].split("-")[0];
         const userId = req.nextUrl.pathname.split("/")[3].split("-")[1];
 
-        console.log(id, userId)
+        // console.log(id, userId)
 
         const book = await Book.findById(id);
         const user = await User.findById(userId)

@@ -50,7 +50,7 @@ export async function PATCH(request){
         const profileImage = formData.get('profileImage');
         const wallet = formData.get('wallet');
 
-        console.log("WALLET", wallet);
+        // console.log("WALLET", wallet);
 
         
         if(!wallet){
@@ -67,7 +67,7 @@ export async function PATCH(request){
         }
         
         const user = await User.findOne({wallet: wallet});
-        console.log("USER", user, "WALLET", wallet);
+        // console.log("USER", user, "WALLET", wallet);
         if(!user){
             return NextResponse.json({error: "User not found."}, {status: 404})
         }
@@ -80,6 +80,7 @@ export async function PATCH(request){
             const buffer = Buffer.from(await profileImage.arrayBuffer());
             const status = await uploadFileToS3(buffer, wallet);
 
+            // console.log("HELLO I AM STATUS");
             if(status == true){
                 user.profileImage = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/info/dp`;
                 await user.save();

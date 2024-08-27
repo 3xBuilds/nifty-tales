@@ -147,7 +147,7 @@ export default function Home(){
   async function tokenChecker() {
     try {
       const res = await axios.get("/api/tokenChecker");
-      console.log(res.data);
+    //   console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         router.push('/connect');

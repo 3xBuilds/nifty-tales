@@ -38,13 +38,13 @@ const PreRegister = () => {
 
 
   useEffect(()=>{
-    console.log("THIS IS ADDRESS", address)
+    // console.log("THIS IS ADDRESS", address)
   },[address])
 
   async function tokenChecker() {
     try {
       const res = await axios.get("/api/tokenChecker");
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         console.log(error, "WTF BRO")

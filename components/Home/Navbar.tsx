@@ -46,7 +46,7 @@ const Navbar = () => {
   async function ensImageSetter(){
     try{
       setEnsImg(ensAvatar as string)
-      console.log("THIS IS AVATAR", ensAvatar, ensName);
+      // console.log("THIS IS AVATAR", ensAvatar, ensName);
       await axios.patch("/api/user/"+session?.user?.email,{profileImage: ensAvatar})
     }
     catch(err){
@@ -78,11 +78,13 @@ const Navbar = () => {
   }
 
   useEffect(()=>{
+    // console.log("Address",address);
     if(user?.wallet == "" && address){
       setWallet()
-      console.log(session?.user);
+      // console.log(session?.user);
     }
-    if(!address){
+    if(!address && session){
+      // console.log("SHOULD BE SHOWING WALLET BUTTON");
       setWalletNotAvailable(true);
     }
     if(address){

@@ -24,7 +24,7 @@ export async function POST(req:any){
 
         const user = await User.findOne({wallet: wallet});
 
-        console.log("FIRST USER FETCHED", user)
+        // console.log("FIRST USER FETCHED", user)
 
         if(user){
             return new NextResponse(JSON.stringify({
@@ -32,12 +32,12 @@ export async function POST(req:any){
             }), { status: 400 });
         }
 
-        console.log("FIRST USER FETCHED")
+        // console.log("FIRST USER FETCHED")
         
         if(!user){
             const newUser = await User.findOne({email:email});
             if(newUser.wallet == ""){
-                console.log("THIS IS THE USER", newUser)
+                // console.log("THIS IS THE USER", newUser)
                 newUser.wallet = wallet;
                 await newUser.save()
                 return new NextResponse(JSON.stringify({

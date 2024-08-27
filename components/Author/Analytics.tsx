@@ -239,7 +239,7 @@ export const Analytics = () => {
         const amount1 = totalPrice.mul(80).div(100); // 80%
         const amount2 = totalPrice.mul(20).div(100); // 20%
   
-        console.log("PRICE", ethers.utils.formatEther(totalPrice));
+        // console.log("PRICE", ethers.utils.formatEther(totalPrice));
   
         const tx1 = await signer.sendTransaction({
           to: "0x1DbCE30361C2cb8445d02b67A75A97f1700D90A9",
@@ -311,19 +311,19 @@ export const Analytics = () => {
           <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
             <h2 className='text-2xl font-bold mb-5'>Duration</h2>
               <div className='flex gap-2 flex-wrap items-center justify-center'>
-                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>1 Day</h2>
                       <h2 className='font-bold text-sm'>0.001 ETH</h2>
                     </button>
-                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>3 Days</h2>
                       <h2 className='font-bold text-sm'>0.0025 ETH</h2>
                     </button>
-                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>1 Week</h2>
                       <h2 className='font-bold text-sm'>0.005 ETH</h2>
                     </button>
-                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
                       <h2 className='font-bold text-md'>1 Month</h2>
                       <h2 className='font-bold text-sm'>0.015 ETH</h2>
                     </button>
@@ -342,17 +342,17 @@ export const Analytics = () => {
 
       <div className='my-10 flex flex-wrap gap-2 items-center justify-center w-full' >
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
-          <h2 className='text-xl text-nifty-gray'>Total Revenue</h2>
+          <h2 className='text-xl text-nifty-gray-1'>Total Revenue</h2>
           <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalRev}{option == "Weekly" && weeklyStats?.totalRev}{option == "Monthly" && monthlyStats?.totalRev}{option == "All Time" && allTimeStats?.totalRev} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/60 animate-pulse w-24'></div>} ETH</h2>
         </div>
 
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
-          <h2 className='text-xl text-nifty-gray'>Books Minted</h2>
+          <h2 className='text-xl text-nifty-gray-1'>Books Minted</h2>
           <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalMinted}{option == "Weekly" && weeklyStats?.totalMinted}{option == "Monthly" && monthlyStats?.totalMinted}{option == "All Time" && allTimeStats?.totalMinted} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/60 animate-pulse w-24'></div>}</h2>
         </div>
 
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
-          <h2 className='text-xl text-nifty-gray'>Total Readers</h2>
+          <h2 className='text-xl text-nifty-gray-1'>Total Readers</h2>
           <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalReaders}{option == "Weekly" && weeklyStats?.totalReaders}{option == "Monthly" && monthlyStats?.totalReaders}{option == "All Time" && allTimeStats?.totalReaders} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/60 animate-pulse w-24'></div>}</h2>
         </div>
       </div>
@@ -362,22 +362,22 @@ export const Analytics = () => {
           <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
             <div className='border-[1px] rounded-t-lg border-gray-300'>
               <div className='flex text-center py-2'>
-                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray'>
+                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2>ID</h2>
                 </div>
-                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray'>
+                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2>Book</h2>
                 </div>
-                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray'>
+                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2>Revenue</h2>
                 </div>
-                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray'>
+                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2>Minted</h2>
                 </div>
-                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray'>
+                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2>Readers</h2>
                 </div>
-                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray'>
+                <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2></h2>
                 </div>
               </div>
