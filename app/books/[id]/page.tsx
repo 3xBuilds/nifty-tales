@@ -242,21 +242,21 @@ export default function Page() {
             </div>
             <div className='text-nifty-gray w-full'>
               <div className='w-full flex'>
-                <h2 className='w-1/3 text-sm'>Spending</h2>
-                <h2 className='w-2/3 text-sm font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(4)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>
+                <h2 className='w-1/3 text-[0.85rem]'>Book Price</h2>
+                <h2 className='w-2/3 text-[0.85rem] font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(3)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>
               </div>
               <div className='w-full flex my-2'>
-                <h2 className='w-1/2 text-xs'>Platform Fee</h2>
-                <h2 className='w-1/2 text-xs font-semibold text-end'>{(0.0007*amount).toFixed(4)} ETH (${(amount*ethPrice*0.0007).toFixed(2)})</h2>
+                <h2 className='w-1/2 text-[0.7rem]'>Platform Fee</h2>
+                <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(0.0007*amount).toFixed(3)} ETH (${(amount*ethPrice*0.0007).toFixed(2)})</h2>
               </div>
 
               <div className='w-full text-black font-bold flex mb-2 mt-4'>
-                <h2 className='w-1/2 text-sm font-bold'>Total</h2>
-                <h2 className='w-1/2 text-sm font-bold text-end text-nowrap'>{((0.0007+Number(price))*amount).toFixed(4)} ETH (${(amount*ethPrice*(0.0007+Number(price))).toFixed(2)})</h2>
+                <h2 className='w-1/2 text-[0.85rem] font-bold'>Total</h2>
+                <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((0.0007+Number(price))*amount).toFixed(3)} ETH (${(amount*ethPrice*(0.0007+Number(price))).toFixed(2)})</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
-                <button disabled={loading} onClick={()=>{ setLoading(true); mint()}} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Minting</h2></div>: "Mint"}</button>
+                <button disabled={loading} onClick={()=>{ setLoading(true); mint()}} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div>: "Collect"}</button>
                 <button onClick={()=>{setLoading(false); setShowModal(false)}} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
             </div>
           </div>
@@ -301,7 +301,7 @@ export default function Page() {
                 <div className='flex gap-2'>
                     <button className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' onClick={()=>{setLocalStorage()}}>Read</button>
                     {/* @ts-ignore */}
-                    <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Mint"}</button>
+                    <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={()=>{setShowModal(true)}} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Collect"}</button>
                     {bookDetails && bookDetails?.minted as number > 0 && <a target='_blank' className='w-10 h-10 py-1 px-2 flex items-center justify-center text-xl rounded-lg font-bold hover:-translate-y-1 duration-200 bg-[#2181e3] text-white' href={`https://opensea.io/assets/base/${bookDetails.contractAddress}/${bookDetails.tokenId}`} ><SiOpensea/></a>}
                 </div>
               </div>

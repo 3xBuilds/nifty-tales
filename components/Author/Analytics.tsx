@@ -4,6 +4,11 @@ import axios from 'axios';
 import User from '@/schemas/userSchema';
 import { useSession } from 'next-auth/react';
 import { useGlobalContext } from '@/context/MainContext';
+import { ethers } from 'ethers';
+import { useAccount } from 'wagmi';
+import { toast } from 'react-toastify';
+import { SiAwselasticloadbalancing } from 'react-icons/si';
+import { RiLoader5Line } from 'react-icons/ri';
 
 type StatsType = {
   totalRev: number;
@@ -25,11 +30,22 @@ export const Analytics = () => {
   const[monthlyStats, setMonthlyStats] = useState<StatsType>();
   const[allTimeStats, setAllTimeStats] = useState<StatsType>();
 
+  const[addtime, setAddtime] = useState("");
+
+  const[loading, setLoading] = useState(false);
+
+  const[id, setId] = useState("");
+  const[price, setPrice] = useState("");
+
+  const[boostModal, setBoostModal] = useState(false);
+
   const { data: session } = useSession();
   const { user } = useGlobalContext();
 
+  const{address} = useAccount();
 
-  async function fetchDailyAnalytics() {
+
+  async function fetchDailyAnalytics(){
     try {
       setDailyArr([]);
       //@ts-ignore
@@ -37,8 +53,8 @@ export const Analytics = () => {
       var totalRev = 0;
       var totalMinted = 0;
       var totalReaders = 0;
+      var arr:any = []
       res.data.allBooks.map((item: any) => {
-        console.log(item)
         const dayFiltered = item.transactions.filter((obj: any) => {
           const date = new Date(obj.createdAt);
           const milliseconds = date.getTime();
@@ -56,6 +72,7 @@ export const Analytics = () => {
         })
 
         const name = dayFiltered[0].book.name;
+        const boost = dayFiltered[0].book.isBoosted > Date.now();
         const id = dayFiltered[0].book._id;
         const revenue = dayFiltered[0].value * dayFiltered.length;
         totalRev += revenue;
@@ -63,8 +80,9 @@ export const Analytics = () => {
         totalMinted += minted;
         const readers = dayFilteredReaders.length
         totalReaders += readers
-        setDailyArr((prev) => [...prev, { name, revenue, minted, readers, id }])
+        arr.push({ name, revenue, minted, readers, id, boost })
       })
+      setDailyArr(arr)
       setDailyStats({totalRev, totalMinted, totalReaders});
     }
     catch (err) {
@@ -72,7 +90,7 @@ export const Analytics = () => {
     }
   }
 
-  async function fetchWeeklyAnalytics() {
+  async function fetchWeeklyAnalytics(){
     try {
       setWeeklyArr([]);
       //@ts-ignore
@@ -80,6 +98,7 @@ export const Analytics = () => {
       var totalRev = 0;
       var totalMinted = 0;
       var totalReaders = 0;
+      var arr:any = []
       res.data.allBooks.map((item: any) => {
 
         const weekFiltered = item.transactions.filter((obj: any) => {
@@ -101,6 +120,7 @@ export const Analytics = () => {
         })
 
         const name = weekFiltered[0].book.name;
+        const boost = weekFiltered[0].book.isBoosted > Date.now();
         const id = weekFiltered[0].book._id;
         const revenue = weekFiltered[0].value * weekFiltered.length;
         totalRev += revenue;
@@ -108,8 +128,10 @@ export const Analytics = () => {
         totalMinted += minted;
         const readers = weekFilteredReaders.length
         totalReaders += readers
-        setWeeklyArr((prev) => [...prev, { name, revenue, minted, readers, id }])
+
+        arr.push({ name, revenue, minted, readers, id, boost })
       })
+      setWeeklyArr(arr)
       setWeeklyStats({totalRev, totalMinted, totalReaders});
 
     }
@@ -118,7 +140,7 @@ export const Analytics = () => {
     }
   }
 
-  async function fetchMonthlyAnalytics() {
+  async function fetchMonthlyAnalytics(){
     try {
       setMonthlyArr([]);
       //@ts-ignore
@@ -126,6 +148,7 @@ export const Analytics = () => {
       var totalRev = 0;
       var totalMinted = 0;
       var totalReaders = 0;
+      var arr:any = [];
       res.data.allBooks.map((item: any) => {
 
         const monthFiltered = item.transactions.filter((obj: any) => {
@@ -147,6 +170,7 @@ export const Analytics = () => {
         })
 
         const name = monthFiltered[0].book.name;
+        const boost = monthFiltered[0].book.isBoosted > Date.now();
         const id = monthFiltered[0].book._id;
         const revenue = monthFiltered[0].value * monthFiltered.length;
         totalRev += revenue;
@@ -154,8 +178,9 @@ export const Analytics = () => {
         totalMinted += minted;
         const readers = monthFilteredReaders.length
         totalReaders += readers;
-        setMonthlyArr((prev) => [...prev, { name, revenue, minted, readers, id }])
+        arr.push({ name, revenue, minted, readers, id, boost });
       })
+      setMonthlyArr(arr)
       setMonthlyStats({totalRev, totalMinted, totalReaders});
 
     }
@@ -164,7 +189,7 @@ export const Analytics = () => {
     }
   }
 
-  async function fetchAllTimeAnalytics() {
+  async function fetchAllTimeAnalytics(){
     try {
       setAllTimeArr([]);
       //@ts-ignore
@@ -172,9 +197,13 @@ export const Analytics = () => {
       var totalRev = 0;
       var totalMinted = 0;
       var totalReaders = 0;
+      var arr:any = [];
+
       res.data.allBooks.map((item: any) => {
 
         const name = item.transactions[0].book.name;
+        const boost = item.transactions[0].book.isBoosted > Date.now();
+
         const id = item.transactions[0].book._id;
         const revenue = item.transactions[0].value * item.transactions.length;
         totalRev += revenue
@@ -182,8 +211,9 @@ export const Analytics = () => {
         totalMinted += minted;
         const readers = item.readlists.length
         totalReaders += readers;
-        setAllTimeArr((prev) => [...prev, { name, revenue, minted, readers, id }])
+        arr.push({ name, revenue, minted, readers, id, boost });
       })
+      setAllTimeArr(arr)
       setAllTimeStats({totalRev, totalMinted, totalReaders});
 
     }
@@ -192,12 +222,46 @@ export const Analytics = () => {
     }
   }
 
-  async function handleBoost(id:string){
-    try{
-      console.log("Boosting", id);
-    }
-    catch(err){
-      console.log(err);
+  
+
+  async function handleBoost() {
+    try {
+      setLoading(true);
+      if (typeof window.ethereum !== 'undefined') {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+  
+        const totalPrice = ethers.BigNumber.from(price);
+        const amount1 = totalPrice.mul(80).div(100); // 80%
+        const amount2 = totalPrice.mul(20).div(100); // 20%
+  
+        console.log("PRICE", ethers.utils.formatEther(totalPrice));
+  
+        const tx1 = await signer.sendTransaction({
+          to: "0x1DbCE30361C2cb8445d02b67A75A97f1700D90A9",
+          value: amount1
+        });
+  
+        await tx1.wait();
+  
+        const tx2 = await signer.sendTransaction({
+          to: "0x705b8f77d90Ebab24C1934B49724686b8ee27f5F",
+          value: amount2
+        });
+  
+        await tx2.wait();
+  
+        await axios.patch("/api/book/"+id, {isBoosted: String(Date.now()+Number(addtime))});
+        toast.success("Book boosted");
+        setLoading(false);
+        setBoostModal(false);
+      } 
+    } catch (err) {
+      setLoading(false);
+      await axios.patch("/api/book/"+id, {isBoosted: null});
+      toast.error("An error occured")
+      console.error(err);
     }
   }
 
@@ -216,6 +280,36 @@ export const Analytics = () => {
 
   return (
     <div id="analytics" className='flex flex-col mx-4 md:mx-10 overflow-x-hidden items-start mt-5 pt-10 border-t-[1px] border-gray-300 justify-start'>
+
+      <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
+          <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
+            <h2 className='text-2xl font-bold mb-5'>Duration</h2>
+              <div className='flex gap-2 flex-wrap items-center justify-center'>
+                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>1 Day</h2>
+                      <h2 className='font-bold text-sm'>0.001 ETH</h2>
+                    </button>
+                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>3 Days</h2>
+                      <h2 className='font-bold text-sm'>0.0025 ETH</h2>
+                    </button>
+                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>1 Week</h2>
+                      <h2 className='font-bold text-sm'>0.005 ETH</h2>
+                    </button>
+                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>1 Month</h2>
+                      <h2 className='font-bold text-sm'>0.015 ETH</h2>
+                    </button>
+              </div>
+
+              <div className='w-full flex gap-2 items-center justify-center mt-5'>
+                <button onClick={handleBoost} className="bg-black text-white font-semibold  h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >{loading ?<div className='w-full flex items-center justify-center'><RiLoader5Line className="animate-spin text-xl" /></div> : "Confirm"}</button>
+                <button onClick={()=>{setBoostModal(false)}} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+              </div>
+          </div>
+        </div>
+
       <h2 className='text-2xl font-bold' >Analytics</h2>
 
       <OptionToggle options={["Daily", "Weekly", "Monthly", "All Time"]} selectedOption={option} setOption={setOption} />
@@ -282,7 +376,7 @@ export const Analytics = () => {
                     <h2>{item.readers}</h2>
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button onClick={()=>{handleBoost(item.id)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
                       Boost
                     </button>
                   </div>
@@ -307,7 +401,7 @@ export const Analytics = () => {
                     <h2>{item.readers}</h2>
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button onClick={()=>{handleBoost(item.id)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
                       Boost
                     </button>
                   </div>
@@ -332,7 +426,7 @@ export const Analytics = () => {
                     <h2>{item.readers}</h2>
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button onClick={()=>{handleBoost(item.id)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
                       Boost
                     </button>
                   </div>
@@ -357,7 +451,7 @@ export const Analytics = () => {
                     <h2>{item.readers}</h2>
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button onClick={()=>{handleBoost(item.id)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
                       Boost
                     </button>
                   </div>

@@ -86,7 +86,7 @@ const BookSchema = new Schema({
     },
     isBoosted:{
         type: String,
-        default: null
+        default: ""
     },
     createdAt:{
         type: Date,

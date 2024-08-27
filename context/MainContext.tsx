@@ -38,6 +38,8 @@ type GlobalContextType = {
   setPublishedBooks: Dispatch<SetStateAction<any | "">>;
   recentBooks: Array<BookType> | null;
   setRecentBooks: Dispatch<SetStateAction<any | "">>;
+  boosted: Array<BookType> | null;
+  setBoosted: Dispatch<SetStateAction<any | "">>;
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -55,7 +57,9 @@ const GlobalContext = createContext<GlobalContextType>({
   publishedBooks : [],
   setPublishedBooks: () =>{},
   recentBooks : [],
-  setRecentBooks: () =>{}
+  setRecentBooks: () =>{},
+  boosted : [],
+  setBoosted: () =>{}
 });
 
 export const GlobalContextProvider = ({ children } : { children: ReactNode}) => {
@@ -64,9 +68,11 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   const [publishedBooks, setPublishedBooks] = useState([])
   const [recentBooks, setRecentBooks] = useState([])
+  const [boosted, setBoosted] = useState([])
 
   const [ensImg, setEnsImg] = useState<string>("")
   const[slicer, setSlicer] = useState(0);
+
 
   const {address} = useAccount();
   const pathname = usePathname();
@@ -137,11 +143,26 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       var arr1:any= []
       var subArr1:any = []
 
+      var arr4:any = [];
+      var subArr4:any = [];
+
       var arr2:any= books.data.data
+
       books.data.data.reverse().map((item:any, i:number)=>{
         if(item.isPublished && !item.isHidden){
             subArr1.push(item);
         }
+
+        if(item.isBoosted && Number(item.isBoosted) > Date.now()){
+          subArr4.push(item);
+        }
+
+        if(subArr4.length == slicer || i == books.data.data.length-1){
+          if(subArr4.length>0)
+            arr4.push(subArr4);
+          subArr4 = [];
+        }
+
         if(subArr1.length == slicer || i == books.data.data.length-1){
           if(subArr1.length>0)
             arr1.push(subArr1);
@@ -166,7 +187,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     })
 
     setRecentBooks(arr3);
-
+    setBoosted(arr4);
       //@ts-ignore
       setPublishedBooks(arr1);
 
@@ -193,7 +214,7 @@ useEffect(()=>{
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks
+      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

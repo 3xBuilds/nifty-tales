@@ -21,8 +21,6 @@ export async function GET(req:any){
             return {transactions: transactions, readlists: readlists};
         }));
 
-        console.log("ARR", arr);
-
         return NextResponse.json({allBooks:arr}, {status:200});
     }
     catch(err){
