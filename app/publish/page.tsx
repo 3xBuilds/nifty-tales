@@ -121,7 +121,7 @@ export default function Home(){
             // console.log('contract is here broooo: ', contract);
             const id = await contract?.BOOK();
             // console.log("heheh id: ", id);
-            setTokenId(Number(id).toString());
+            setTokenId(String(id));
             // console.log(id);
             if(id){
                 setStep(1);
@@ -129,7 +129,6 @@ export default function Home(){
             }
         }
         catch(err){
-
             console.error(err);
         }
     }
@@ -139,6 +138,7 @@ export default function Home(){
             setStep(2);
             const contract = await contractSetup();
 
+            console.log(String(tokenId), String(ethers.utils.parseEther(String(mintPrice))));
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
             txn.wait().then((res:any)=>{

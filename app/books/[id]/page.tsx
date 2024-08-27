@@ -137,6 +137,15 @@ export default function Page() {
       }
     }
 
+    async function fetchHolders(){
+      try{
+        const contract = await contractSetup()
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+
     const readlist = async (id:string) => {
       try{
           await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
@@ -306,6 +315,11 @@ export default function Page() {
                 </div>
               </div>
             </div>
+        </div>
+        
+        <div className='px-5 mt-5'>
+          <h2 className='text-2xl font-bold'>Holders</h2>
+          <div className='h-40 w-full mt-5 bg-nifty-gray-1/40 rounded-xl animate-pulse flex items-center justify-center text-nifty-gray-2 font-bold'>No Holders Yet</div>
         </div>
 
         <RecommendedFetcher/>
