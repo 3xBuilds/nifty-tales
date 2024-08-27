@@ -9,6 +9,7 @@ import { useAccount } from 'wagmi';
 import { toast } from 'react-toastify';
 import { SiAwselasticloadbalancing } from 'react-icons/si';
 import { RiLoader5Line } from 'react-icons/ri';
+import { useExitAlert } from '../alert/alert';
 
 type StatsType = {
   totalRev: number;
@@ -72,7 +73,7 @@ export const Analytics = () => {
         })
 
         const name = dayFiltered[0].book.name;
-        const boost = dayFiltered[0].book.isBoosted > Date.now();
+        const boost = dayFiltered[0].book.isBoosted;
         const id = dayFiltered[0].book._id;
         const revenue = dayFiltered[0].value * dayFiltered.length;
         totalRev += revenue;
@@ -120,7 +121,7 @@ export const Analytics = () => {
         })
 
         const name = weekFiltered[0].book.name;
-        const boost = weekFiltered[0].book.isBoosted > Date.now();
+        const boost = weekFiltered[0].book.isBoosted;
         const id = weekFiltered[0].book._id;
         const revenue = weekFiltered[0].value * weekFiltered.length;
         totalRev += revenue;
@@ -170,7 +171,7 @@ export const Analytics = () => {
         })
 
         const name = monthFiltered[0].book.name;
-        const boost = monthFiltered[0].book.isBoosted > Date.now();
+        const boost = monthFiltered[0].book.isBoosted;
         const id = monthFiltered[0].book._id;
         const revenue = monthFiltered[0].value * monthFiltered.length;
         totalRev += revenue;
@@ -202,7 +203,7 @@ export const Analytics = () => {
       res.data.allBooks.map((item: any) => {
 
         const name = item.transactions[0].book.name;
-        const boost = item.transactions[0].book.isBoosted > Date.now();
+        const boost = item.transactions[0].book.isBoosted;
 
         const id = item.transactions[0].book._id;
         const revenue = item.transactions[0].value * item.transactions.length;
@@ -228,6 +229,8 @@ export const Analytics = () => {
     try {
       setLoading(true);
       if (typeof window.ethereum !== 'undefined') {
+        useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
+
         await window.ethereum.request({ method: 'eth_requestAccounts' });
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner();
@@ -259,11 +262,34 @@ export const Analytics = () => {
       } 
     } catch (err) {
       setLoading(false);
-      await axios.patch("/api/book/"+id, {isBoosted: null});
+      // await axios.patch("/api/book/"+id, {isBoosted: null});
       toast.error("An error occured")
       console.error(err);
     }
   }
+
+  function formatTimeDifference(boost:any) {
+    const now = Date.now();
+    if (boost <= now) {
+        return "Boost";
+    }
+
+    const timeDiff = boost - now;
+    
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+    
+    if (days > 0) {
+        return `${days}d`;
+    } else if (hours > 0) {
+        return `${hours}h`;
+    } else if (minutes > 0) {
+        return `${minutes}m`;
+    } else {
+        return "< 1m";
+    }
+}
 
   useEffect(() => {
     if (user) {
@@ -376,8 +402,8 @@ export const Analytics = () => {
                     <h2>{item.readers}</h2>
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
-                      Boost
+                    <button disabled={item.boost > Date.now()} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                      {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
                 </div>
@@ -402,7 +428,7 @@ export const Analytics = () => {
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
                     <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
-                      Boost
+                    {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
                 </div>
@@ -427,7 +453,7 @@ export const Analytics = () => {
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
                     <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
-                      Boost
+                    {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
                 </div>
@@ -452,7 +478,7 @@ export const Analytics = () => {
                   </div>
                   <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
                     <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
-                      Boost
+                      {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
                 </div>

@@ -6,7 +6,7 @@ import abi from "@/utils/abis/templateABI"
 import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { IoMdTrash } from "react-icons/io";
+import { IoIosRocket, IoMdTrash } from "react-icons/io";
 
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
@@ -20,6 +20,8 @@ import { Analytics } from "@/components/Author/Analytics";
 import Link from "next/link";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { useSession } from "next-auth/react";
+import { useExitAlert } from "@/components/alert/alert";
+import { RiLoader5Line } from "react-icons/ri";
 
 export default function Home(){
 
@@ -35,6 +37,15 @@ export default function Home(){
     const[hiddenBooks, setHiddenBooks] = useState([])
 
     const[slicer, setSlicer] = useState<number>(4);
+
+    const[addtime, setAddtime] = useState("");
+
+    const[loading, setLoading] = useState(false);
+  
+    const[id, setId] = useState("");
+    const[price, setPrice] = useState("");
+  
+    const[boostModal, setBoostModal] = useState(false);
 
     const[name, setName] = useState<string>("")
 
@@ -297,6 +308,49 @@ export default function Home(){
     getUser();
   },[])
 
+  async function handleBoost() {
+    try {
+      setLoading(true);
+      if (typeof window.ethereum !== 'undefined') {
+        useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
+
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+  
+        const totalPrice = ethers.BigNumber.from(price);
+        const amount1 = totalPrice.mul(80).div(100); // 80%
+        const amount2 = totalPrice.mul(20).div(100); // 20%
+  
+        console.log("PRICE", ethers.utils.formatEther(totalPrice));
+  
+        const tx1 = await signer.sendTransaction({
+          to: "0x1DbCE30361C2cb8445d02b67A75A97f1700D90A9",
+          value: amount1
+        });
+  
+        await tx1.wait();
+  
+        const tx2 = await signer.sendTransaction({
+          to: "0x705b8f77d90Ebab24C1934B49724686b8ee27f5F",
+          value: amount2
+        });
+  
+        await tx2.wait();
+  
+        await axios.patch("/api/book/"+id, {isBoosted: String(Date.now()+Number(addtime))});
+        toast.success("Book boosted");
+        setLoading(false);
+        setBoostModal(false);
+      } 
+    } catch (err) {
+      setLoading(false);
+    //   await axios.patch("/api/book/"+id, {isBoosted: null});
+      toast.error("An error occured")
+      console.error(err);
+    }
+  }
+
 
   async function tokenChecker() {
     try {
@@ -315,12 +369,44 @@ export default function Home(){
     tokenChecker();
   }, []);
 
+  
+
 
     return(
         <div className="">
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
+
+        {/* BOOST MODAL */}
+        <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
+          <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
+            <h2 className='text-2xl font-bold mb-5'>Duration</h2>
+              <div className='flex gap-2 flex-wrap items-center justify-center'>
+                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>1 Day</h2>
+                      <h2 className='font-bold text-sm'>0.001 ETH</h2>
+                    </button>
+                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>3 Days</h2>
+                      <h2 className='font-bold text-sm'>0.0025 ETH</h2>
+                    </button>
+                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>1 Week</h2>
+                      <h2 className='font-bold text-sm'>0.005 ETH</h2>
+                    </button>
+                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-2/80`}>
+                      <h2 className='font-bold text-md'>1 Month</h2>
+                      <h2 className='font-bold text-sm'>0.015 ETH</h2>
+                    </button>
+              </div>
+
+              <div className='w-full flex gap-2 items-center justify-center mt-5'>
+                <button onClick={handleBoost} className="bg-black text-white font-semibold  h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >{loading ?<div className='w-full flex items-center justify-center'><RiLoader5Line className="animate-spin text-xl" /></div> : "Confirm"}</button>
+                <button onClick={()=>{setBoostModal(false)}} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+              </div>
+          </div>
+        </div>
 
 
             {/* Image Modal */}
@@ -413,8 +499,9 @@ export default function Home(){
                             <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
                             </div>
-                            <div className="absolute z-50 top-1  " >
+                            <div className="absolute z-50 top-1 flex gap-2 " >
                                 <button onClick={()=>{hide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
+                                <button onClick={()=>{setId(item2._id);setBoostModal(true)}} className="bg-gray-200 text-nifty-gray-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket/></button>
                             </div>
                             <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                                 <Book img={item2.cover} />
