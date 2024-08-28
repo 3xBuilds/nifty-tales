@@ -35,7 +35,7 @@ jobs:
           set -e
           echo "Initial directory:"
           pwd
-          echo "Changing to target directory"
+          echo "Changing to target directory again"
           cd $TARGET
           echo "Current working directory:"
           pwd
