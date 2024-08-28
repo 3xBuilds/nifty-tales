@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { BookFetcher } from '@/components/fetcher/bookFetcher';
-import axios from 'axios';
+
  
 type Props = {
   params: { id: string }
@@ -15,15 +15,15 @@ export async function generateMetadata(
   const id = params.id
   // console.log(id);
 
-  const book = await fetch(`https://niftytales.vercel.app/api/book/${id}`).then((res) => res.json())
+  const book = await fetch(`https://niftytales.xyz/api/book/${id}`).then((res) => res.json())
   // console.log("BOOK DATA",book.data);
  
   return {
     title: book?.data?.name,
     openGraph: {
       title: book?.data?.name,
-      description: 'Empowering Authors, Engaging Readers',
-      url: `https://niftytales.vercel.app/books/${id}`,
+      description: book?.data?.description,
+      url: `https://niftytales.xyz/books/${id}`,
       siteName: 'Nifty Tales',
       images: [
         {
