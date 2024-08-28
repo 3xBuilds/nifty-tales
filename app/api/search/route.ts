@@ -14,8 +14,24 @@ export async function GET(req: any) {
             return new NextResponse(JSON.stringify({ error: "Search query is required" }), { status: 400 });
         }
 
-        const result1 = await User.find({ username: { $regex: searchString, $options: 'i' } }).populate('yourBooks');
-        const result2 = await Book.find({ name: { $regex: searchString, $options: 'i' } })
+        var result1 = await User.find({$or: [
+            { name: { $regex: searchString, $options: 'i' } },
+            { collectionName: { $regex: searchString, $options: 'i' } }
+
+        ] }).populate('yourBooks');
+
+        const result2 = await Book.find({
+            $or: [
+                { name: { $regex: searchString, $options: 'i' } },
+                { tags: { $in: [new RegExp(searchString, 'i')] } }
+            ]
+        });
+        console.log("Before",result1)
+
+
+        result1 = result1.filter(user => user.collectionName && user.collectionName !== "")
+
+        console.log("After",result1)
 
         const slicedResult1 = result1?.slice(0, 2) || [];
         const slicedResult2 = result2?.slice(0, 2) || [];

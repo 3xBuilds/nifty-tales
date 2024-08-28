@@ -107,7 +107,7 @@ type Props = {
 
    return (
     <div className={`w-screen backdrop-blur-xl absolute left-0 flex flex-col items-center top-0 justify-start duration-200 transition-all overflow-hidden ${bringSearchBar ? "z-50 h-screen opacity-100": "z-[-50] h-0 opacity-0"} `} >
-        <input placeholder='Search authors & books..' className='py-2 px-4 outline-none pointer-events-auto rounded-full w-[50%] border-[1px] border-gray-400 mt-4 relative z-10 focus:ring-0 focus:border-2 focus:border-black duration-200 max-md:w-[90%] shadow-inner' onChange={(e)=>{setSearch(e.target.value)}} value={search} ></input>
+        <input placeholder='Search authors, books, traits & collections...' className='py-2 px-4 outline-none pointer-events-auto rounded-full w-[50%] border-[1px] border-gray-400 mt-4 relative z-10 focus:ring-0 focus:border-2 focus:border-black duration-200 max-md:w-[90%] shadow-inner' onChange={(e)=>{setSearch(e.target.value)}} value={search} ></input>
         <div onClick={()=>{setBringSearchBar(false)}} className='h-full absolute z-0 w-full'></div>
 
         <div className='flex flex-col w-[50%] max-md:w-[90%] bg-black/30 mt-2 rounded-xl'>

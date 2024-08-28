@@ -145,7 +145,7 @@ const Navbar = () => {
 
             {session &&  <div className='flex gap-4 items-center justify-center'>
               <>{
-                walletNotAvailable ? <>
+                walletNotAvailable && (pathName.split("/")[0] == "" || pathName.split("/")[1] == "connect") ? <>
                   <WalletConnectButton/>
                 </>:<>
                   {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>

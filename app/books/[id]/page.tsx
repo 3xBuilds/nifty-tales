@@ -319,7 +319,7 @@ export default function Page() {
         
         <div className='px-5 mt-5'>
           <h2 className='text-2xl font-bold'>Holders</h2>
-          <div className='h-40 w-full mt-5 bg-nifty-gray-1/40 rounded-xl animate-pulse flex items-center justify-center text-nifty-gray-2 font-bold'>No Holders Yet</div>
+          <div className='h-40 w-full mt-5 bg-nifty-gray-1/40 rounded-xl flex items-center justify-center text-nifty-gray-2 font-bold'>No Holders Yet</div>
         </div>
 
         <RecommendedFetcher/>
