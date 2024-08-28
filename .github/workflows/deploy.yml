@@ -17,12 +17,6 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: root
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PVT_KEY }}
-          script: |
-            cd nifty-tales
-            echo $(whoami) is now in $(pwd)
-            git pull
-            npm install
-            npm run build
-            pm2 restart nifty-tales
+          script: sh /home/deploy.sh
