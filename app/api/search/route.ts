@@ -9,15 +9,16 @@ export async function GET(req: any) {
         await connectToDB();
         const url = new URL(req.url);
         const searchString = url.searchParams.get('query');
+        const email = url.searchParams.get('user');
+
 
         if (!searchString) {
             return new NextResponse(JSON.stringify({ error: "Search query is required" }), { status: 400 });
         }
 
         var result1 = await User.find({$or: [
-            { name: { $regex: searchString, $options: 'i' } },
+            { username: { $regex: searchString, $options: 'i' } },
             { collectionName: { $regex: searchString, $options: 'i' } }
-
         ] }).populate('yourBooks');
 
         const result2 = await Book.find({
@@ -26,16 +27,17 @@ export async function GET(req: any) {
                 { tags: { $in: [new RegExp(searchString, 'i')] } }
             ]
         });
-        console.log("Before",result1)
 
-
-        result1 = result1.filter(user => user.collectionName && user.collectionName !== "")
-
-        console.log("After",result1)
+        result1 = result1.filter(user => user.collectionName !== "")
 
         const slicedResult1 = result1?.slice(0, 2) || [];
         const slicedResult2 = result2?.slice(0, 2) || [];
 
+        const user = await User.findOne({email:email});
+
+        if(!user){
+            return NextResponse.json({error: "USER NOT FOUND"}, {status: 404});
+        }
 
         const session = await getToken({
             req,
@@ -46,7 +48,7 @@ export async function GET(req: any) {
             return new NextResponse(JSON.stringify({ history: null, user: slicedResult1, book: slicedResult2}), { status: 200 });
         }
 
-        return new NextResponse(JSON.stringify({user: slicedResult1, book: slicedResult2}), { status: 200 });
+        return new NextResponse(JSON.stringify({user: slicedResult1, book: slicedResult2, history: user.searchHistory}), { status: 200 });
     } catch (error) {
         console.error("Error in GET request:", error);
         return new NextResponse(JSON.stringify({ error: "Internal Server Error" }), { status: 500 });
