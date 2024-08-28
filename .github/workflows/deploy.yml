@@ -1,4 +1,4 @@
-name: Sync to Contabo Server
+name: Deploy to Server
 
 on:
   push:
@@ -6,50 +6,34 @@ on:
       - main
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
 
-    - name: Install SSH key
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+
+    - run: npm install
+    - run: npm run build
+
+    - name: Install SSH Key
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.SSH_PVT_KEY }}
-        known_hosts: ${{ secrets.KNOWN_HOSTS }}
+        known_hosts: unnecessary
+    
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.SSH_KNOWN_HOSTS }} >> ~/.ssh/known_hosts
 
-    - name: Sync repository
-      env:
-        HOST: ${{ secrets.SERVER_HOST }}
-        USER: ${{ secrets.SERVER_USER }}
-        TARGET: ${{ secrets.SERVER_PATH }}
-      run: |
-        rsync -avz --delete ./ $USER@$HOST:$TARGET
-
-    - name: Restart PM2 process
-      env:
-        HOST: ${{ secrets.SERVER_HOST }}
-        USER: ${{ secrets.SERVER_USER }}
-      run: |
-        ssh $USER@$HOST << EOF
-          set -e
-          echo "Initial directory:"
-          pwd
-          echo "Changing to target directory again"
-          cd $TARGET
-          echo "Current working directory:"
-          pwd
-          echo "Directory contents:"
-          ls -la
-          if [ ! -f package.json ]; then
-            echo "Error: package.json not found in $TARGET"
-            exit 1
-          fi
-          echo "Attempting to install dependencies"
+    - name: Deploy to Server
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USER }}
+        key: ${{ secrets.SSH_PVT_KEY }}
+        script: |
+          cd nifty-tales
+          git pull
           npm i
-          echo "Building the project"
           PORT=3003 npm run build
-          echo "Restarting PM2 process"
-          pm2 restart 6
-          echo "Deployment completed"
-        EOF
+          pm2 restart nifty-tales
