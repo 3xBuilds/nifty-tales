@@ -98,7 +98,7 @@ export default function Home(){
             // console.log("checking");
             if( user?.contractAdd == ""){
                 setIsLoading(true);
-                router.push("/makeAuthor");
+                router.push("/makeCollection");
             }
             setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage?v="+Date.now());
             setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage?v="+Date.now());

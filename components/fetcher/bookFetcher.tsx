@@ -219,7 +219,7 @@ export const BookFetcher = () => {
       console.log(date.getFullYear());
       console.log(date.getDate());
       console.log(date.getMonth());
-      setCreated(String(date.getDate())+"/"+String(date.getMonth())+"/"+String(date.getFullYear()))
+      setCreated(String(date.getMonth())+"/"+String(date.getDate())+"/"+String(date.getFullYear()))
     }
   },[bookDetails])
 
@@ -311,7 +311,7 @@ export const BookFetcher = () => {
               <p className='text-sm text-white' >{bookDetails?.description?.substring(0, 200)}</p>
               <div className='flex flex-wrap gap-2'>
                 {bookDetails?.tags?.map((item) => (
-                  <div className='min-w-20 px-2 py-2 bg-white/10 flex items-center justify-center text-white text-sm font-semibold border-[1px] border-white rounded-lg'>
+                  <div className='min-w-20 px-2 py-2 bg-white/10 flex items-center justify-center text-white text-xs font-semibold border-[1px] border-white rounded-lg'>
                     {item}
                   </div>
                 ))}

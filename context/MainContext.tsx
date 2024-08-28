@@ -216,7 +216,7 @@ useEffect(()=>{
     <GlobalContext.Provider value={{
       user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
     }}>
-      {walletNotRegistered && (pathname.split("/")[2] == "makeAuthor" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
+      {walletNotRegistered && (pathname.split("/")[2] == "makeCollection" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}
     </GlobalContext.Provider>
   );

@@ -48,7 +48,7 @@ const Explore = () => {
 
  useEffect(()=>{
   if(user?.contractAdd == ""){
-    router.prefetch("/makeAuthor");
+    router.prefetch("/makeCollection");
   }
   else{
     router.prefetch("/authors");

@@ -123,9 +123,9 @@ export async function POST(request) {
 
         const wallet = formData.get('wallet');
         
-        if(!profileImage){
-            return NextResponse.json({error: "File is required."}, {status: 400})
-        }
+        // if(!profileImage){
+        //     return NextResponse.json({error: "File is required."}, {status: 400})
+        // }
         if(!bannerImage){
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
@@ -153,11 +153,19 @@ export async function POST(request) {
         }
         
         const buffer = Buffer.from(await profileImage.arrayBuffer());
-        const bannerBuffer = Buffer.from(await bannerImage.arrayBuffer());
 
-        const status = await uploadFileToS3(buffer, wallet, bannerBuffer);
+        if(bannerImage){
+            const bannerBuffer = Buffer.from(await bannerImage.arrayBuffer());
+            const status = await uploadFileToS3(buffer, wallet, bannerBuffer);
+            return NextResponse.json({success: status});
 
-        return NextResponse.json({success: status});
+        }
+
+        if(!bannerImage){
+            const status = await uploadFileToS3(buffer, wallet, null);
+            return NextResponse.json({success: status});
+        }
+
     }
     catch(e){
         return NextResponse.json({error: "Error Uploading File"}, {status: 500})

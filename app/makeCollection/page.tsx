@@ -83,7 +83,7 @@ export default function Home() {
             return;
         }
 
-        if (!collectionName || !symbol || !profileImg || !bannerImg) {
+        if (!collectionName || !symbol || !profileImg) {
             toast.error("Please fill in all fields and upload an image.");
             setLoading(false);
             return;
@@ -94,11 +94,13 @@ export default function Home() {
                 // Create FormData object
                 const formData = new FormData();
     
+                if(bannerImg){
+                    formData.append("bannerImage", bannerImg);
+                }
                 formData.append("profileImage", profileImg);
                 formData.append("wallet", String(address));
     
                 //@ts-ignore
-                formData.append("bannerImage", bannerImg);
     
     
                 // Upload to S3 using the API route
@@ -208,7 +210,7 @@ export default function Home() {
             </div>}
 
             <div className="w-full flex md:justify-start justify-center font-bold max-md:mt-16 mt-10">
-                <h2 className="text-3xl">Become an Author</h2>
+                <h2 className="text-3xl">Create a Collection</h2>
             </div>
 
             {user?.contractAdd == "" && <div className="flex max-md:flex-col">
