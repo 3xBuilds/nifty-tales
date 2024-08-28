@@ -6,6 +6,8 @@ import Navbar from "@/components/Home/Navbar";
 import { poppins } from "@/utils/font";
 import { Bounce, Slide, ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Head from "next/head";
+import { useGlobalContext } from "@/context/MainContext";
 
 
 export const metadata: Metadata = {
@@ -18,8 +20,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
+     
       <body className={poppins.className + " bg-white overflow-x-hidden w-screen "}>
         {/* <Navbar/> */}
         <ToastContainer

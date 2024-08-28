@@ -7,9 +7,6 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ethers } from 'ethers';
 import abi from "@/utils/abis/templateABI"
-import { ImArrowLeft } from 'react-icons/im';
-import { IoIosArrowBack } from 'react-icons/io';
-import { Loader } from '@/components/Global/Loader';
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
 import { FaBookOpen, FaLocationArrow } from 'react-icons/fa';
@@ -22,6 +19,38 @@ import { toast } from 'react-toastify';
 import { MdLibraryAddCheck } from 'react-icons/md';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
+
+import { Metadata } from 'next'; // if using TypeScript
+import Head from 'next/head';
+
+
+// export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+//   console.log("THIS IS PARAMS", params)
+
+//   return {
+//     openGraph: {
+//       title: 'Next.js', // You might want to use book.title here
+//       description: 'The React Framework for the Web', // You might want to use book.description here
+//       url: `https://niftytales.vercel.app/books/${id}`,
+//       siteName: 'NiftyTales',
+//       images: [
+//         {
+//           url: `https://niftytales.vercel.app/api/og?id=${id}`,
+//           width: 800,
+//           height: 600,
+//         },
+//         {
+//           url: `https://niftytales.vercel.app/api/og?id=${id}`,
+//           width: 1800,
+//           height: 1600,
+//           alt: 'My custom alt',
+//         },
+//       ],
+//       locale: 'en_US',
+//       type: 'website',
+//     },
+//   };
+// }
 
  
 export default function Page() {
@@ -221,6 +250,22 @@ export default function Page() {
   }, []);
 
     return (
+      <>
+      <Head>
+        <meta property="og:title" content="Next.js" />
+        <meta property="og:description" content="The React Framework for the Web" />
+        <meta property="og:url" content={`https://niftytales.vercel.app${pathname.split("/")[2]}`} />
+        <meta property="og:site_name" content="NiftyTales" />
+        <meta property="og:image" content={bookDetails?.cover as string} />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="600" />
+        <meta property="og:image" content={bookDetails?.cover as string} />
+        <meta property="og:image:width" content="1800" />
+        <meta property="og:image:height" content="1600" />
+        <meta property="og:image:alt" content="My custom alt" />
+        <meta property="og:locale" content="en_US" />
+        <meta property="og:type" content="website" />
+      </Head>
     <div className=''>
         {/* <div className="h-16 w-screen relative z-[1000]">
             <Navbar/>
@@ -324,5 +369,6 @@ export default function Page() {
 
         <RecommendedFetcher/>
     </div>
+      </>
   )
 }

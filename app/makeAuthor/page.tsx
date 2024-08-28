@@ -278,8 +278,8 @@ export default function Home() {
 
                 <div className="md:w-[40%] md:px-10 px-3 flex items-center text-nifty-gray-2">
                     <ul className="flex flex-col gap-2 list-disc max-md:my-5">
-                        <li>By becoming an author, you are giving niftytales.xyz access to your photos and pdf</li>
-                        <li>You are agreeing to share a part of your earning as platform fee (0.0007 ETH per mint) </li>
+                        <li>By becoming an author, you are giving niftytales.xyz access to your uploaded images and pdfs</li>
+                        <li>Each book minted will have a platform fee (0.0007 ETH) attached which is independant of what you earn from each mint.</li>
 
                     </ul>
                 </div>
