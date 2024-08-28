@@ -93,7 +93,7 @@ const Navbar = () => {
   },[address, session, isConnected])
 
 
-  if(pathName.split("/")[1] !== "connect")
+  if(pathName.split("/")[1] !== "connect" && pathName.split("/")[1] !== "")
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
     {user?.email.includes("@wallet") && <AddEmail/>}
