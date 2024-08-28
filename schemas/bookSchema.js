@@ -49,7 +49,12 @@ const BookSchema = new Schema({
     },
     artist: {
         type: String,
-        default: null,
+        default: "",
+        unique: false
+    },
+    mintEnds:{
+        type: String,
+        default: "",
         unique: false
     },
     tokenId:{

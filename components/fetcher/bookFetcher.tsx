@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 import abi from "@/utils/abis/templateABI"
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
-import { FaBookOpen, FaLocationArrow } from 'react-icons/fa';
+import { FaBookOpen, FaCrown, FaLocationArrow } from 'react-icons/fa';
 import Book from '@/components/Global/Book';
 import { useSession } from 'next-auth/react';
 import { TiMinus, TiPlus } from 'react-icons/ti';
@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { MdContentCopy, MdLibraryAddCheck } from 'react-icons/md';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
+import { CiShare2 } from 'react-icons/ci';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
@@ -34,6 +35,8 @@ export const BookFetcher = () => {
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [ethPrice, setEthPrice] = useState(0);
+
+  const[holders, setHolders] = useState([]);
 
   async function getBookDetails() {
     try {
@@ -134,12 +137,42 @@ export const BookFetcher = () => {
 
   async function fetchHolders() {
     try {
-      const contract = await contractSetup()
+      const contract = await contractSetup();
+      const holders = await contract?.returnHolders(bookDetails?.tokenId);
+
+      var arr:any = []
+
+      if(holders.length > 0){
+        holders.map((item:any)=>{
+          arr.push(item[0]);
+        })
+  
+        const res = await axios.post("/api/getAllUsers",{array:arr});
+        
+        var arr1:any = [];
+
+        res.data.arr.map((item:any, i:number)=>{
+          const username = item;
+          const holding = Number(holders[i][1]);
+          arr1.push({username, holding})
+        })
+
+        arr1 = arr1.sort((a:any,b:any)=>{b.holding - a.holding});
+
+        setHolders(arr1);
+      }
+
     }
     catch (err) {
       console.log(err);
     }
   }
+
+  useEffect(()=>{
+    if(bookDetails){
+      fetchHolders();
+    }
+  },[bookDetails])
 
   const readlist = async (id: string) => {
     try {
@@ -216,9 +249,6 @@ export const BookFetcher = () => {
   useEffect(()=>{
     if(bookDetails){
       const date = new Date(String(bookDetails?.createdAt));
-      console.log(date.getFullYear());
-      console.log(date.getDate());
-      console.log(date.getMonth());
       setCreated(String(date.getMonth())+"/"+String(date.getDate())+"/"+String(date.getFullYear()))
     }
   },[bookDetails])
@@ -284,7 +314,7 @@ export const BookFetcher = () => {
           </div>
 
           <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/books/" + pathname.split("/")[2]); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
-            <MdContentCopy />
+            <CiShare2 />
           </button>
 
           <div className="w-screen absolute h-full overflow-hidden">
@@ -339,39 +369,62 @@ export const BookFetcher = () => {
                     </div>
 
                     <div className='w-1/2'>
-                      <h2 className='text-nifty-gray-2 font-bold text-sm'>ISBN</h2>
-                      <h2 className='text-black font-semibold text-xl'>{bookDetails?.ISBN ? bookDetails?.ISBN : <div className='h-6 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                      <h2 className='text-nifty-gray-2 font-bold text-sm'>Mint Price</h2>
+                      <h2 className='text-black font-semibold text-xl'>{price} ETH</h2>
                     </div>
                   </div>
 
-                  <div className='mt-2'>
-                      <h2 className='text-nifty-gray-2 font-bold text-sm'>Illustration Artist</h2>
-                      <h2 className='text-black font-semibold text-2xl'>{bookDetails?.artist ? bookDetails?.artist.slice(0,15) : <div className='h-10 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                  <div className='flex gap-2 w-full mt-2'>
+                    <div className='w-1/2'>
+                      <h2 className='text-nifty-gray-2 font-bold text-sm'>ISBN</h2>
+                      <h2 className='text-black font-semibold text-xl'>{bookDetails?.ISBN ? bookDetails?.ISBN : <div className='h-10 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                    </div>
+                    <div className='w-1/2'>
+                        <h2 className='text-nifty-gray-2 font-bold text-sm'>Illustration Artist</h2>
+                        <h2 className='text-black font-semibold text-2xl'>{bookDetails?.artist ? bookDetails?.artist.slice(0,15) : <div className='h-10 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                    </div>
                   </div>
 
                 </div>
             </div>
             <div className='md:w-2/3 w-full'>
-              <h2 className='text-2xl font-bold mb-2'>Holders</h2>
+              <h2 className='text-2xl font-bold mb-2'>Collectors</h2>
               <div className='overflow-x-auto '>
                 <div className='min-w-[300px] w-[100%]'>
 
                   <div className='border-[1px] rounded-t-lg border-gray-300'>
-                    <div className='flex text-center py-2'>
-                      <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-2'>
+                    <div className='flex text-center py-2 bg-nifty-gray-1/20 '>
+                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-semibold text-md text-black'>
                         <h2>Rank</h2>
                       </div>
-                      <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-2'>
+                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-semibold text-md text-black'>
                         <h2>Username</h2>
                       </div>
-                      <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-2'>
-                        <h2>Holding</h2>
+                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-semibold text-md text-black'>
+                        <h2>Collected</h2>
                       </div>
                       
                     </div>
                   </div>
 
-                  {/* DATA */}
+                  <div className='border-x-[1px] border-b-[1px] rounded-b-lg border-gray-300 h-[8.5rem] overflow-y-scroll'>
+                    {holders.length > 0 && holders.map((item:any, i)=>(
+                      <div className='flex text-center py-2 border-b-[1px] border-gray-300'>
+                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-sm '>
+                        <h2 className={`flex gap-2 items-center justify-center font-semibold ${i+1==1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i+1==2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i+1==3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i <= 3 && <FaCrown className={`${i+1 == 1 && "text-yellow-500"} ${i+1 == 2 && "text-gray-400"} ${i+1 == 3 && "text-orange-700"}`}/>}{i+1}</h2>
+                      </div>
+                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-sm text-nifty-gray-2'>
+                        <h2>{item.username}</h2>
+                      </div>
+                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-sm text-nifty-gray-2'>
+                        <h2>{item.holding}</h2>
+                      </div>
+                      
+                    </div>
+                    ))
+                      
+                    }
+                  </div>
 
                 </div>
               </div>

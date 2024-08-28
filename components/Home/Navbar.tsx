@@ -101,7 +101,7 @@ const Navbar = () => {
   return (<>
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
 
-    <div className={` w-40 flex flex-col items-center justify-center rounded-l-xl absolute right-0 top-16 ${bringModal ? "translate-x-0" : "translate-x-[30rem]"} absolute duration-200 bg-nifty-gray-1/30 border-2 border-nifty-gray-2/30 text-nifty-gray-2 `}>
+    <div className={` w-40 flex flex-col items-center justify-center rounded-l-xl absolute right-0 top-16 ${bringModal ? "translate-x-0" : "translate-x-[30rem]"} absolute duration-200 bg-gray-200 border-2 border-nifty-gray-2/30 text-nifty-gray-2 `}>
       <button className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'><IoIosSettings/>Settings</button>
       <button onClick={()=>{signOut({callbackUrl: "/connect"})}} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'><MdLogout/>Logout</button>
     </div>
@@ -111,7 +111,7 @@ const Navbar = () => {
     {user && user?.wallet != "" && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-80 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is not linked to your account. <b className="block mt-5">Go to your wallet and connect {user?.wallet.slice(0,32)}...</b> </div></div>}
 
 
-        <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='flex items-center'>
+        <button onClick={()=>{setIsLoading(true);router.push("/")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
         </button>

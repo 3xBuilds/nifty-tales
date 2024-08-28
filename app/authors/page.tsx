@@ -14,7 +14,7 @@ import { FaChartLine, FaEdit, FaEye, FaEyeSlash, FaPen, FaPlusCircle } from "rea
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose, IoTrashBin } from "react-icons/io5";
-import { CiImageOn } from "react-icons/ci";
+import { CiImageOn, CiShare2 } from "react-icons/ci";
 import Book from "@/components/Global/Book";
 import { Analytics } from "@/components/Author/Analytics";
 import Link from "next/link";
@@ -460,8 +460,9 @@ export default function Home(){
 
                     <Image width={1080} height={1080} src={bannerLink || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
-                <button onClick={()=>{navigator.clipboard.writeText("https://niftytales.xyz/authors/"+address); toast.success("Successfully copied link!")}} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
-                    <MdContentCopy/>
+               
+                <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/authors/"+address); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
+                    <CiShare2 />
                 </button>
                 <div className="flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto relative z-50 backdrop-blur-xl">
                     
