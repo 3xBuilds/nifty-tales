@@ -23,7 +23,6 @@ async function uploadFileToS3 (file, wallet, bannerImage) {
     
     try{
         if(file){
-        
             const params = {
                 Bucket: process.env.AWS_S3_BUCKET_NAME,
                 Key: `users/${wallet}/info/profileImage`,
@@ -123,12 +122,12 @@ export async function POST(request) {
 
         const wallet = formData.get('wallet');
         
-        // if(!profileImage){
-        //     return NextResponse.json({error: "File is required."}, {status: 400})
-        // }
-        if(!bannerImage){
+        if(!profileImage){
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
+        // if(!bannerImage){
+        //     return NextResponse.json({error: "File is required."}, {status: 400})
+        // }
         if(!wallet){
             return NextResponse.json({error: "File is required."}, {status: 400})
         }
@@ -152,9 +151,9 @@ export async function POST(request) {
             return NextResponse.json({error: "Unauthorized"}, {status: 401})
         }
         
-        const buffer = Buffer.from(await profileImage.arrayBuffer());
-
+        
         if(bannerImage){
+            const buffer = Buffer.from(await profileImage.arrayBuffer());
             const bannerBuffer = Buffer.from(await bannerImage.arrayBuffer());
             const status = await uploadFileToS3(buffer, wallet, bannerBuffer);
             return NextResponse.json({success: status});
@@ -162,6 +161,9 @@ export async function POST(request) {
         }
 
         if(!bannerImage){
+            console.log("NO BANNER", wallet);
+            const buffer = Buffer.from(await profileImage.arrayBuffer());
+            console.log(buffer);
             const status = await uploadFileToS3(buffer, wallet, null);
             return NextResponse.json({success: status});
         }

@@ -24,6 +24,8 @@ import { useExitAlert } from "@/components/alert/alert";
 import { RiLoader5Line } from "react-icons/ri";
 import { MdContentCopy } from "react-icons/md";
 
+import placeholder from "@/assets/og.png"
+
 export default function Home(){
 
     const router = useRouter()
@@ -100,8 +102,8 @@ export default function Home(){
                 setIsLoading(true);
                 router.push("/makeCollection");
             }
-            setProfileImgLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/profileImage?v="+Date.now());
-            setBannerLink("https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage?v="+Date.now());
+            setProfileImgLink("https://niftytales.s3.us-east-1.amazonaws.com/users/" + user.wallet + "/info/profileImage?v="+Date.now());
+            setBannerLink("https://niftytales.s3.us-east-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage?v="+Date.now());
             getContractDetails();
 
 
@@ -458,7 +460,7 @@ export default function Home(){
                 <div className="w-screen flex item-center justify-center group absolute h-full overflow-hidden">
                     <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-black/30 h-12 w-12 relative z-[70] mt-4 max-md:text-sm flex items-center justify-center text-white font-bold gap-2 rounded-full hover:-translate-y-1 duration-200"><FaEdit/></button>
 
-                    <Image width={1080} height={1080} src={bannerLink || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
+                    <Image width={1080} height={1080} src={bannerLink ? bannerLink : placeholder} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
                
                 <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/authors/"+address); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>

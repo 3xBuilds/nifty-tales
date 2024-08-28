@@ -117,10 +117,7 @@ export default function Home() {
                     return;
                 }
     
-                // Reset form fields
-                setCollectionName("");
-                setSymbol("");
-                setProfileImg(null);
+                
                 if (fileInputRef.current) {
     
                     //@ts-ignore
@@ -130,7 +127,6 @@ export default function Home() {
 
                 if(response.status == 200){
                     await deployContract();
-            
                 }
             
 
@@ -222,7 +218,7 @@ export default function Home() {
 
                     <div className="flex max-md:flex-col md:items-start items-center justify-center gap-4" >
                         <div className="flex flex-col items-center justify-center md:justify-start md:w-[40%]">
-                            <h2 className="text-sm text-nifty-gray-2">Upload a Photo</h2>
+                            <h2 className="text-sm text-nifty-gray-2">Upload a Photo<span className="text-red-500 font-semibold ml-1">*</span></h2>
 
                             <div>
                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-xl cursor-pointer hover:bg-jel-gray-1">
@@ -240,12 +236,12 @@ export default function Home() {
                         <div className="md:w-[60%]">
                             <div className="w-full text-start flex flex-col">
                                 <input placeholder="John's Collection" onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-nifty-gray-1/40"></input>
-                                <h2 className="text-sm text-semibold text-nifty-gray-2 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Name your collection</h2>
+                                <h2 className="text-sm text-semibold text-nifty-gray-2 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Name your collection <span className="text-red-500 font-semibold ml-1">*</span></h2>
                             </div>
 
                             <div className="w-full text-start flex flex-col">
                                 <input placeholder="JCN" onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-nifty-gray-1/40"></input>
-                                <h2 className="text-sm text-semibold text-nifty-gray-2 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Collection Symbol</h2>
+                                <h2 className="text-sm text-semibold text-nifty-gray-2 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Collection Symbol <span className="text-red-500 font-semibold ml-1">*</span></h2>
                             </div>
 
                         </div>

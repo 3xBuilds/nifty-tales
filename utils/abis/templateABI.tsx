@@ -347,6 +347,19 @@ export default [
 	},
 	{
 		"inputs": [],
+		"name": "outsideContract",
+		"outputs": [
+			{
+				"internalType": "contract IContract",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
@@ -374,6 +387,16 @@ export default [
 				"internalType": "uint256",
 				"name": "maxMints",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "contractAdd",
+				"type": "address"
 			}
 		],
 		"name": "publishBook",
@@ -532,6 +555,16 @@ export default [
 				"internalType": "uint256",
 				"name": "maxMints",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "time",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "contractAdd",
+				"type": "address"
 			}
 		],
 		"name": "setPrice",
@@ -566,6 +599,25 @@ export default [
 				"internalType": "string",
 				"name": "",
 				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenIdLastMintingTime",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -647,6 +699,25 @@ export default [
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "tokenIdRestrictedToContract",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
