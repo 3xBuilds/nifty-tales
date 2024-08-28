@@ -1,33 +1,34 @@
-name: Deploy to Contabo Server
+name: Sync to Contabo Server
 
 on:
   push:
     branches:
-      - main  # Trigger on push to the main branch
+      - main  # or your default branch name
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v2
 
-    - name: Install SSH Key
+    - name: Install SSH key
       uses: shimataro/ssh-key-action@v2
       with:
         key: ${{ secrets.SSH_PVT_KEY }}
-        known_hosts: github.com
-    
-    - name: Use SSH
-      run: git remote set-url origin git@github.com:3xBuilds/nifty-tales.git
+        known_hosts: ${{ secrets.KNOWN_HOSTS }}
 
-    - name: Sync with Contabo Server
+    - name: Sync repository
+      env:
+        HOST: ${{ secrets.SERVER_HOST }}
+        USER: ${{ secrets.SERVER_USER }}
+        TARGET: ${{ secrets.SERVER_PATH }}
       run: |
-        ssh -o StrictHostKeyChecking=no root@62.146.226.137 <<EOF
-          cd nifty-tales
-          git pull origin main
-          npm install
-          PORT=3003 npm run build
-          pm2 restart 6
-        EOF
+        rsync -avz --delete ./ $USER@$HOST:$TARGET
+
+    - name: Restart PM2 process
+      env:
+        HOST: ${{ secrets.SERVER_HOST }}
+        USER: ${{ secrets.SERVER_USER }}
+      run: |
+        ssh $USER@$HOST "cd ${{ secrets.SERVER_PATH }} && pm2 restart all"
