@@ -3,7 +3,7 @@ name: The Deployment Workflow
 on:
   push:
     branches:
-      - your-branch-name
+      - main
 
 jobs:
   deploy:
