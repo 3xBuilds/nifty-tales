@@ -10,10 +10,10 @@ import Head from "next/head";
 import { useGlobalContext } from "@/context/MainContext";
 
 
-export const metadata: Metadata = {
-  title: "NiftyTales",
-  description: "Empowering Authors, Engaging Readers",
-};
+// export const metadata: Metadata = {
+//   title: "NiftyTales",
+//   description: "Empowering Authors, Engaging Readers",
+// };
 
 export default function RootLayout({
   children,
