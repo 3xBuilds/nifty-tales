@@ -32,5 +32,5 @@ type UserType = {
     pdf: string;
     readers?: number;
     isBoosted?: string | null;
-    createdAt?: Date;
+    createdAt?: Date | null;
   }

@@ -27,12 +27,12 @@ export async function generateMetadata(
       siteName: 'Nifty Tales',
       images: [
         {
-          url: book.data.cover, // Must be an absolute URL
+          url: book?.data?.cover, // Must be an absolute URL
           width: 800,
           height: 600,
         },
         {
-          url: book.data.cover, // Must be an absolute URL
+          url: book?.data?.cover, // Must be an absolute URL
           width: 1800,
           height: 1600,
           alt: 'My custom alt',

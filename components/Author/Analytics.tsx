@@ -343,17 +343,17 @@ export const Analytics = () => {
       <div className='my-10 flex flex-wrap gap-2 items-center justify-center w-full' >
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
           <h2 className='text-xl text-nifty-gray-1'>Total Revenue</h2>
-          <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalRev}{option == "Weekly" && weeklyStats?.totalRev}{option == "Monthly" && monthlyStats?.totalRev}{option == "All Time" && allTimeStats?.totalRev} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/60 animate-pulse w-24'></div>} ETH</h2>
+          <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalRev}{option == "Weekly" && weeklyStats?.totalRev}{option == "Monthly" && monthlyStats?.totalRev}{option == "All Time" && allTimeStats?.totalRev} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/40 animate-pulse w-24'></div>} ETH</h2>
         </div>
 
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
           <h2 className='text-xl text-nifty-gray-1'>Books Minted</h2>
-          <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalMinted}{option == "Weekly" && weeklyStats?.totalMinted}{option == "Monthly" && monthlyStats?.totalMinted}{option == "All Time" && allTimeStats?.totalMinted} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/60 animate-pulse w-24'></div>}</h2>
+          <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalMinted}{option == "Weekly" && weeklyStats?.totalMinted}{option == "Monthly" && monthlyStats?.totalMinted}{option == "All Time" && allTimeStats?.totalMinted} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/40 animate-pulse w-24'></div>}</h2>
         </div>
 
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
           <h2 className='text-xl text-nifty-gray-1'>Total Readers</h2>
-          <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalReaders}{option == "Weekly" && weeklyStats?.totalReaders}{option == "Monthly" && monthlyStats?.totalReaders}{option == "All Time" && allTimeStats?.totalReaders} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/60 animate-pulse w-24'></div>}</h2>
+          <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalReaders}{option == "Weekly" && weeklyStats?.totalReaders}{option == "Monthly" && monthlyStats?.totalReaders}{option == "All Time" && allTimeStats?.totalReaders} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/40 animate-pulse w-24'></div>}</h2>
         </div>
       </div>
 

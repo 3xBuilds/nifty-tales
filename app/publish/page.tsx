@@ -142,7 +142,7 @@ export default function Home(){
             const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
             
             txn.wait().then((res:any)=>{
-                axios.patch("/api/book/"+id,{isPublished: true});
+                axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
                 // console.log("THIS IS res",res);
                 setLoading("");
                 setIsLoading(true);
