@@ -88,8 +88,7 @@ export default function AuthorFetcher(){
 
     useEffect(()=>{
         if(user){
-            setProfileImgLink("https://niftytales.s3.us-east-1.amazonaws.com/users/" + user?.wallet + "/info/profileImage?v="+Date.now());
-            setBannerLink("https://niftytales.s3.us-east-1.amazonaws.com/users/" + user?.wallet + "/info/bannerImage?v="+Date.now());
+            
             getContractDetails();
         }
     },[user])
@@ -169,10 +168,10 @@ export default function AuthorFetcher(){
             </div> */}
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
                 <div className="w-screen absolute h-full overflow-hidden">
-                    <Image width={1080} height={1080} src={bannerLink ? bannerLink : placeholder} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
+                <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner as string : placeholder}  alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
                 <div className="flex gap-8 max-md:gap-4 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl">
-                    <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
+                    <Image width={1080} height={1080} src={user?.collectionImage || ""} alt="dp" className="md:w-[10rem] md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     <div className="flex flex-col gap-1">
 
                         <h2 className="md:text-5xl text-2xl font-bold text-white">{user?.collectionName}</h2>

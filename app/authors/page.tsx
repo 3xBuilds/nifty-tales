@@ -102,8 +102,7 @@ export default function Home(){
                 setIsLoading(true);
                 router.push("/makeCollection");
             }
-            setProfileImgLink("https://niftytales.s3.us-east-1.amazonaws.com/users/" + user.wallet + "/info/profileImage?v="+Date.now());
-            setBannerLink("https://niftytales.s3.us-east-1.amazonaws.com/users/" + user.wallet + "/info/bannerImage?v="+Date.now());
+            
             getContractDetails();
 
 
@@ -460,7 +459,7 @@ export default function Home(){
                 <div className="w-screen flex item-center justify-center group absolute h-full overflow-hidden">
                     <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-black/30 h-12 w-12 relative z-[70] mt-4 max-md:text-sm flex items-center justify-center text-white font-bold gap-2 rounded-full hover:-translate-y-1 duration-200"><FaEdit/></button>
 
-                    <Image width={1080} height={1080} src={bannerLink ? bannerLink : placeholder} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
+                    <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner as string : placeholder} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
                
                 <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/authors/"+address); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
@@ -470,7 +469,7 @@ export default function Home(){
                     
                     <button onClick={()=>{setImageModal(true)}} className="rounded-full group relative duration-200 flex items-center justify-center">
                         <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
-                        <Image width={1080} height={1080} src={profileImgLink || ""} alt="dp" className="md:w-[10rem] group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
+                        <Image width={1080} height={1080} src={user?.collectionImage || ""} alt="dp" className="md:w-[10rem] group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     </button>
                     <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>

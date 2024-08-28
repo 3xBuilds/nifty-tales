@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react'
 import OptionToggle from '../Global/OptionToggle';
 import axios from 'axios';
@@ -7,7 +9,6 @@ import { useGlobalContext } from '@/context/MainContext';
 import { ethers } from 'ethers';
 import { useAccount } from 'wagmi';
 import { toast } from 'react-toastify';
-import { SiAwselasticloadbalancing } from 'react-icons/si';
 import { RiLoader5Line } from 'react-icons/ri';
 import { useExitAlert } from '../alert/alert';
 

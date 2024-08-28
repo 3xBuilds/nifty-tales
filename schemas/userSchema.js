@@ -18,6 +18,16 @@ const UserSchema = new Schema({
         default: "",
         unique: false
     },
+    collectionImage:{
+        type: String,
+        default: "",
+        unique: false
+    },
+    banner:{
+        type: String,
+        default: "",
+        unique: false
+    },
     email:{
         type:String,
         unique: true,

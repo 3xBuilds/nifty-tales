@@ -156,6 +156,12 @@ export async function POST(request) {
             const buffer = Buffer.from(await profileImage.arrayBuffer());
             const bannerBuffer = Buffer.from(await bannerImage.arrayBuffer());
             const status = await uploadFileToS3(buffer, wallet, bannerBuffer);
+
+            if(status){
+                user.banner = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/info/bannerImage`
+                user.collectionImage = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/info/profileImage`
+                await user.save();
+            }
             return NextResponse.json({success: status});
 
         }
@@ -165,6 +171,10 @@ export async function POST(request) {
             const buffer = Buffer.from(await profileImage.arrayBuffer());
             console.log(buffer);
             const status = await uploadFileToS3(buffer, wallet, null);
+            if(status){
+                user.collectionImage = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/info/profileImage`
+                await user.save();
+            }
             return NextResponse.json({success: status});
         }
 
