@@ -20,7 +20,7 @@ jobs:
         key: ${{ secrets.SSH_PVT_KEY }}
         script: |
           cd nifty-tales
-          whoami
+          echo $(whoami) is now in $(pwd)
           git pull
           npm i
           PORT=3003 npm run build
