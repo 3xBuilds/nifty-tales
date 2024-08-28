@@ -20,7 +20,7 @@ jobs:
         known_hosts: github.com
     
     - name: Use SSH
-      run: git remote set-url origin git@github.com:3xBuildz/nifty-tales.git
+      run: git remote set-url origin git@github.com:3xBuilds/nifty-tales.git
 
     - name: Sync with Contabo Server
       run: |
