@@ -3,7 +3,7 @@ name: Sync to Contabo Server
 on:
   push:
     branches:
-      - main  # or your default branch name
+      - main
 
 jobs:
   deploy:
@@ -31,4 +31,7 @@ jobs:
         HOST: ${{ secrets.SERVER_HOST }}
         USER: ${{ secrets.SERVER_USER }}
       run: |
-        ssh $USER@$HOST "cd ${{ secrets.SERVER_PATH }} && pm2 restart 6"
+        ssh $USER@$HOST "cd ${{ secrets.SERVER_TARGET }} && \
+        npm i && \
+        PORT=3003 npm run build && \
+        pm2 restart 6"
