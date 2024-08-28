@@ -16,7 +16,7 @@ import { TiMinus, TiPlus } from 'react-icons/ti';
 import { AiOutlineLoading } from 'react-icons/ai';
 import Icon from '@/components/Global/Icon';
 import { toast } from 'react-toastify';
-import { MdLibraryAddCheck } from 'react-icons/md';
+import { MdContentCopy, MdLibraryAddCheck } from 'react-icons/md';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
 
@@ -218,10 +218,6 @@ export const BookFetcher = () => {
     return (
       <>
     <div className=''>
-        {/* <div className="h-16 w-screen relative z-[1000]">
-            <Navbar/>
-        </div> */}
-
 
       {/* MINTING MODAL */}
       <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
@@ -274,6 +270,11 @@ export const BookFetcher = () => {
             <span className='border-r-[1px] pr-2 border-white text-white'>Readers: {bookDetails?.readers}</span>
             <h2>Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/"+bookDetails?.maxMint}</h2>
             </div>
+
+              <button onClick={()=>{navigator.clipboard.writeText("https://niftytales.xyz/books/"+pathname.split("/")[2]); toast.success("Successfully copied link!")}} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
+                <MdContentCopy/>
+              </button>
+
             <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
             </div>

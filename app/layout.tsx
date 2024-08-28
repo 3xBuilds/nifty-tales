@@ -10,10 +10,29 @@ import Head from "next/head";
 import { useGlobalContext } from "@/context/MainContext";
 
 
-// export const metadata: Metadata = {
-//   title: "NiftyTales",
-//   description: "Empowering Authors, Engaging Readers",
-// };
+export const metadata: Metadata = {
+  title: "NiftyTales",
+  description: "Empowering Authors, Engaging Readers",
+  openGraph: {
+    title: "NiftyTales",
+  description: "Empowering Authors, Engaging Readers",
+    url: 'https://niftytales.xyz',
+    siteName: 'Nifty Tales',
+    images: [
+      {
+        url: 'https://niftytales.xyz/og.png', // Must be an absolute URL
+        width: 800,
+        height: 600,
+      },
+      {
+        url: 'https://niftytales.xyz/og.png', // Must be an absolute URL
+        width: 1800,
+        height: 1600,
+        alt: 'My custom alt',
+      },
+    ]
+  }
+}
 
 export default function RootLayout({
   children,
