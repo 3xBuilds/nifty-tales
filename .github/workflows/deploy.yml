@@ -20,8 +20,7 @@ jobs:
         key: ${{ secrets.SSH_PVT_KEY }}
         script: |
           cd nifty-tales
-          echo $(whoami) is now in $(pwd)
-          git pull
-          npm i
-          PORT=3003 npm run build
-          pm2 restart nifty-tales
+          sudo git pull
+          sudo npm i
+          sudo PORT=3003 npm run build
+          sudo pm2 restart nifty-tales
