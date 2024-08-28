@@ -97,6 +97,9 @@ type Props = {
 
     useEffect(()=>{
         if(debouncedSearch ){
+            setSearchResults([]);
+            setBookHistory([]);
+            setHistory([]);
             getSearchResults();
             // getBookResults();
         }

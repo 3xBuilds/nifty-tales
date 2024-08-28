@@ -248,7 +248,7 @@ export const BookFetcher = () => {
             <div className='text-nifty-gray-1 w-full'>
               <div className='w-full flex'>
                 <h2 className='w-1/3 text-[0.85rem]'>Book Price</h2>
-                <h2 className='w-2/3 text-[0.85rem] font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(3)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>
+                <h2 className='w-2/3 text-[0.85rem] font-semibold text-end text-nowrap'>{(Number(price)*amount).toFixed(4)} ETH (${(amount*ethPrice*Number(price)).toFixed(2)})</h2>
               </div>
               <div className='w-full flex my-2'>
                 <h2 className='w-1/2 text-[0.7rem]'>Platform Fee</h2>
@@ -257,7 +257,7 @@ export const BookFetcher = () => {
 
               <div className='w-full text-black font-bold flex mb-2 mt-4'>
                 <h2 className='w-1/2 text-[0.85rem] font-bold'>Total</h2>
-                <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((0.0007+Number(price))*amount).toFixed(3)} ETH (${(amount*ethPrice*(0.0007+Number(price))).toFixed(2)})</h2>
+                <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((0.0007+Number(price))*amount).toFixed(4)} ETH (${(amount*ethPrice*(0.0007+Number(price))).toFixed(2)})</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
