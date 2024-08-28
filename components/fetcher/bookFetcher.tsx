@@ -330,7 +330,7 @@ export const BookFetcher = () => {
           <div className='w-full max-w-full overflow-x-auto mx-auto mb-10 flex max-md:flex-col gap-5'>
             <div className='md:w-1/3 w-full'>
                 <h2 className='text-2xl font-bold mb-2'>Details</h2>
-                <div className='h-44 bg-nifty-gray-1/30 w-full rounded-xl p-4'>
+                <div className='h-44 bg-nifty-gray-1/30 w-full flex flex-col items-start justify-center rounded-xl p-6'>
 
                   <div className='flex gap-2 w-full'>
                     <div className='w-1/2'>
