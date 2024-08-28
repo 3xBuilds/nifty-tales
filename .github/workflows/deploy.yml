@@ -27,6 +27,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no root@62.146.226.137 <<EOF
           cd nifty-tales
           git pull origin main
+          npm install
           PORT=3003 npm run build
           pm2 restart 6
         EOF
