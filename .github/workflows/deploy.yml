@@ -31,17 +31,23 @@ jobs:
         HOST: ${{ secrets.SERVER_HOST }}
         USER: ${{ secrets.SERVER_USER }}
       run: |
-        ssh $USER@$HOST "
-        echo 'Current directory:' && pwd && \
-        echo 'Directory contents:' && ls -la && \
-        echo 'Changing to target directory' && \
-        cd ${{ secrets.SERVER_TARGET }} && \
-        echo 'New current directory:' && pwd && \
-        echo 'New directory contents:' && ls -la && \
-        echo 'Attempting to install dependencies' && \
-        npm i && \
-        echo 'Building the project' && \
-        PORT=3003 npm run build && \
-        echo 'Restarting PM2 process' && \
-        pm2 restart 6 && \
-        echo 'Deployment completed'
+        ssh $USER@$HOST << EOF
+          set -e
+          echo "Current directory:"
+          pwd
+          echo "Directory contents:"
+          ls -la
+          echo "Changing to target directory"
+          cd $TARGET
+          echo "New current directory:"
+          pwd
+          echo "New directory contents:"
+          ls -la
+          echo "Attempting to install dependencies"
+          npm i
+          echo "Building the project"
+          PORT=3003 npm run build
+          echo "Restarting PM2 process"
+          pm2 restart 6
+          echo "Deployment completed"
+        EOF
