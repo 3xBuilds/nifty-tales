@@ -139,7 +139,7 @@ export default function Home(){
             const contract = await contractSetup();
 
             console.log(String(tokenId), String(ethers.utils.parseEther(String(mintPrice))));
-            const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints);
+            const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000");
             
             txn.wait().then((res:any)=>{
                 axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
@@ -151,6 +151,7 @@ export default function Home(){
         }
         catch(err){
             // console.log("BOOKID", bookId);
+            router.push("/authors")
             toast.error("There was an error while publishing. Please try again!")
             setLoading("");
             setStep(0);
