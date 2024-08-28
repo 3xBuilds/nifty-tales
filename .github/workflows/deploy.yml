@@ -33,16 +33,18 @@ jobs:
       run: |
         ssh $USER@$HOST << EOF
           set -e
-          echo "Current directory:"
+          echo "Initial directory:"
+          pwd
+          echo "Changing to target directory"
+          cd $TARGET
+          echo "Current working directory:"
           pwd
           echo "Directory contents:"
           ls -la
-          echo "Changing to target directory"
-          cd $TARGET
-          echo "New current directory:"
-          pwd
-          echo "New directory contents:"
-          ls -la
+          if [ ! -f package.json ]; then
+            echo "Error: package.json not found in $TARGET"
+            exit 1
+          fi
           echo "Attempting to install dependencies"
           npm i
           echo "Building the project"
