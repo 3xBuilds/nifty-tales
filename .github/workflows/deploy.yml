@@ -31,4 +31,4 @@ jobs:
         HOST: ${{ secrets.SERVER_HOST }}
         USER: ${{ secrets.SERVER_USER }}
       run: |
-        ssh $USER@$HOST "cd ${{ secrets.SERVER_PATH }} && pm2 restart all"
+        ssh $USER@$HOST "cd ${{ secrets.SERVER_PATH }} && pm2 restart 6"
