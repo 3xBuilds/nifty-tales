@@ -18,11 +18,14 @@ jobs:
       with:
         key: ${{ secrets.SSH_PVT_KEY }}
         known_hosts: github.com
-
+    
+    -name: Use SSH
+      run: git remote set-url origin git@github.com:3xBuildz/nifty-tales.git
     - name: Sync with Contabo Server
       run: |
         ssh -o StrictHostKeyChecking=no root@62.146.226.137 <<EOF
           cd nifty-tales
           git pull origin main
+          PORT=3003 npm run build
           pm2 restart 6
         EOF
