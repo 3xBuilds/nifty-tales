@@ -1,4 +1,4 @@
-name: The Deployment Workflow 10
+name: The Deployment Workflow 11
 
 on:
   push:
@@ -20,5 +20,5 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PVT_KEY }}
           script: |
-            cd /root
+            cd /root/nifty-tales-deployment
             pm2 deploy ecosystem.config.js production --force
