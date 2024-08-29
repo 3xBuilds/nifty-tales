@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 import abi from "@/utils/abis/templateABI"
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
-import { FaBookOpen, FaCrown, FaLocationArrow } from 'react-icons/fa';
+import { FaBookOpen, FaCrown, FaInfinity, FaLocationArrow } from 'react-icons/fa';
 import Book from '@/components/Global/Book';
 import { useSession } from 'next-auth/react';
 import { TiMinus, TiPlus } from 'react-icons/ti';
@@ -21,6 +21,7 @@ import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
 import { CiShare2 } from 'react-icons/ci';
 import { RiLoader5Line, RiLoaderFill } from 'react-icons/ri';
+import { useAccount } from 'wagmi';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
@@ -38,6 +39,7 @@ export const BookFetcher = () => {
   const [ethPrice, setEthPrice] = useState(0);
   const[loadingHolders, setLoadingHolders] = useState(false);
   const[holders, setHolders] = useState([]);
+  const[userMinted, setUserMinted] = useState<number>(0);
 
   async function getBookDetails() {
     try {
@@ -86,19 +88,15 @@ export const BookFetcher = () => {
   async function mint() {
     try {
       const contract = await contractSetup();
-      // console.log(contract);
-      // console.log(bookDetails);
-      // console.log("txn made")
-
-      // console.log(Number(ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount))));
+     
       const txn = await contract?.mint(amount, bookDetails?.tokenId, { value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount)) });
       txn.wait().then(async (res: any) => {
-        // console.log(pathname.split("/")[2], user?._id)
+
         await axios.post("/api/transaction/create", { txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number * amount }).then(async (res) => {
-          // console.log("TXN CREATE RES", res);
           getBookDetails()
           setShowModal(false);
           setLoading(false);
+          toast.error("Error occured while minting");
 
           //@ts-ignore
           axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
@@ -123,12 +121,15 @@ export const BookFetcher = () => {
     getBookDetails();
   }, [])
 
+  const {address} = useAccount();
+
   async function setMintPrice() {
     try {
       const contract = await contractSetup();
 
       const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
-      // console.log(ethers.utils.formatEther(String(price)));
+      const minted = await contract?.tokenIdMintedByAddress(bookDetails?.tokenId, address);
+      setUserMinted(Number(minted))
       setPrice(ethers.utils.formatEther(String(price)));
     }
     catch (err) {
@@ -167,7 +168,7 @@ export const BookFetcher = () => {
 
     }
     catch (err) {
-      setLoading(false);
+      setLoadingHolders(false);
       console.log(err);
     }
   }
@@ -261,6 +262,7 @@ export const BookFetcher = () => {
     tokenChecker();
   }, []);
 
+
   return (
     <>
       <div className=''>
@@ -279,7 +281,8 @@ export const BookFetcher = () => {
               }} className='hover:scale-105 duration-200' ><TiMinus className='text-2xl text-black' /></button>
               <h3 className='text-2xl font-bold w-24 text-center'>{amount}</h3>
               <button onClick={() => {
-                if (bookDetails?.maxMint == 0 || bookDetails?.minted as number + amount != bookDetails?.maxMint) {
+                //@ts-ignore
+                if ((bookDetails?.maxMint == 0 || bookDetails?.minted as number + amount != bookDetails?.maxMint) && userMinted + amount != bookDetails?.maxMintsPerWallet) {
                   setAmount((prev) => (prev + 1))
                 }
                 else {
@@ -374,7 +377,7 @@ export const BookFetcher = () => {
 
                     <div className='w-1/2'>
                       <h2 className='text-nifty-gray-2 font-bold text-sm'>Mint Price</h2>
-                      <h2 className='text-black font-semibold text-xl'>{price} ETH</h2>
+                      <h2 className='text-black font-semibold text-xl'>{Number(price) > 0 ? price + " ETH" : "Free Mint" }</h2>
                     </div>
                   </div>
 
@@ -393,6 +396,10 @@ export const BookFetcher = () => {
                     <div className='w-1/2'>
                         <h2 className='text-nifty-gray-2 font-bold text-sm'>Wallet Limit</h2>
                         <h2 className='text-black font-semibold text-2xl'>{bookDetails?.maxMintsPerWallet != 0 ? bookDetails?.maxMintsPerWallet : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                    </div>
+                    <div className='w-1/2'>
+                        <h2 className='text-nifty-gray-2 font-bold text-sm'>Max Quantity</h2>
+                        <h2 className='text-black font-semibold text-2xl'>{bookDetails?.maxMint != 0 ? bookDetails?.maxMintsPerWallet : <FaInfinity/>}</h2>
                     </div>
                   </div>
 
