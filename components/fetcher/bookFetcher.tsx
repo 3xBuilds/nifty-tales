@@ -96,7 +96,6 @@ export const BookFetcher = () => {
           getBookDetails()
           setShowModal(false);
           setLoading(false);
-          toast.error("Error occured while minting");
 
           //@ts-ignore
           axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
@@ -108,10 +107,11 @@ export const BookFetcher = () => {
         setShowModal(false);
         setLoading(false);
 
-
+        window.location.reload();
       })
     }
     catch (err) {
+      toast.error("Error occured while minting");
       setLoading(false);
       console.log(err);
     }
