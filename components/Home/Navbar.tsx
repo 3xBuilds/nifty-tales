@@ -114,7 +114,9 @@ const Navbar = () => {
         <button onClick={()=>{setIsLoading(true);router.push("/")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
-            <h2 className='text-xs text-nifty-gray-1/70 ml-2' >BETA</h2>
+            {/* <h2 className='text-xs text-nifty-gray-1/70 ml-2' >BETA</h2> */}
+            <h2 className='text-xs text-red-500 ml-2' >BETA</h2>
+
         </button>
 
 
