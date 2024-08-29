@@ -6,12 +6,32 @@ import { IoMdWallet } from 'react-icons/io';
 import Image from 'next/image';
 import { useAccount } from 'wagmi';
 import { useGlobalContext } from '@/context/MainContext';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import axios from 'axios';
+import { useSession } from 'next-auth/react';
 
 export const WalletConnectButton = () => {
 
   const {address} = useAccount();
   const {user} = useGlobalContext();
+  const {data:session} = useSession()
 
+  async function updateWallet(){
+    try{
+      if(user?.wallet == ""){
+        await axios.patch("/api/user/"+session?.user?.email, {wallet: address});
+      }
+    }
+    catch(err){
+      toast.error("Could not update user wallet")
+      console.log(err);
+    }
+  }
+
+  useEffect(()=>{
+    updateWallet()
+  },[address])
 
   return (
     <div className=''>
