@@ -1,4 +1,4 @@
-name: The Deployment Workflow 12
+name: The Deployment Workflow 13
 
 on:
   push:
@@ -17,7 +17,7 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
+          username: root
           key: ${{ secrets.SSH_PVT_KEY }}
           script: |
             cd /root/nifty-tales-deployment
