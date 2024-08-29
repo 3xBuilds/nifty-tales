@@ -35,4 +35,7 @@ type BookType = {
   readers?: number;
   isBoosted?: string | null;
   createdAt?: Date | null;
+  mintEnds?: string;
+  maxMintsPerWallet?: number;
+  mintExclusiveTo?: string;
 }

@@ -19,7 +19,7 @@ function PDFViewer() {
 
   async function pdfFetcher(){
     try{
-      const res = await axios.get(`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`);
+      const res = await axios.get(`https://niftytales.s3.us-east-1.amazonaws.com/users/${wallet}/content/${id}/book`);
       // console.log(res);
     }
     catch(err){
@@ -36,7 +36,7 @@ function PDFViewer() {
   return (
     <div>
       <Document
-        file={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`}
+        file={`https://niftytales.s3.us-east-1.amazonaws.com/users/${wallet}/content/${id}/book`}
         onLoadSuccess={onDocumentLoadSuccess}
       >
         {Array.from(new Array(numPages), (el, index) => (

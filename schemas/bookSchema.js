@@ -57,13 +57,23 @@ const BookSchema = new Schema({
         default: "",
         unique: false
     },
+    maxMintsPerWallet:{
+        type: Number,
+        default: 0,
+        unique: false,
+    },
     tokenId:{
         type: Number,
         required: false
     },
     contractAddress: {
         type: String,
-        default: null,
+        default: "",
+        required: false
+    },
+    mintExclusiveTo: {
+        type: String,
+        default: "",
         required: false
     },
     ISBN:{

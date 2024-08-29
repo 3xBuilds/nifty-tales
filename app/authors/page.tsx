@@ -25,6 +25,7 @@ import { RiLoader5Line } from "react-icons/ri";
 import { MdContentCopy } from "react-icons/md";
 
 import placeholder from "@/assets/og.png"
+import { AiOutlineLoading } from "react-icons/ai";
 
 export default function Home(){
 
@@ -36,6 +37,7 @@ export default function Home(){
 
     const[profileImgLink, setProfileImgLink] = useState<string>("")
     const[bannerLink, setBannerLink] = useState<string>("")
+    const [mintPrice, setMintPrice] = useState<number>(0);
 
     const[publishedBooks, setPublishedBooks] = useState([])
     const[draftBooks, setDraftBooks] = useState([])
@@ -46,7 +48,7 @@ export default function Home(){
     const[addtime, setAddtime] = useState("");
 
     const[loading, setLoading] = useState(false);
-  
+    const[priceModal, setPriceModal] = useState(false);
     const[id, setId] = useState("");
     const[price, setPrice] = useState("");
   
@@ -184,7 +186,7 @@ export default function Home(){
         localStorage.setItem("description", item.description);
         localStorage.setItem("tags", JSON.stringify(item.tags));
         localStorage.setItem("pdf", item.pdf);
-        
+        localStorage.setItem("maxMintsPerWallet", item.maxMintsPerWallet);
 
         router.push("/publish")
     }
@@ -215,6 +217,7 @@ export default function Home(){
 
 
     async function handleSubmit(e:any) {
+        setLoading(true);
         e.preventDefault();
 
         if(!user?.wallet){
@@ -250,17 +253,20 @@ export default function Home(){
 
 
             if (response.status !== 200) {
+                setLoading(false);
                 toast.error("An error occurred while uploading.");
                 return;
             }
 
             // Reset form fields
             if(response.status == 200){
+                setLoading(false);
                 window.location.reload();
             }
 
             // alert("Collection created successfully!");
         } catch (error) {
+            setLoading(false);
             toast.error("An error occurred while creating the collection. Please try again.");
             console.log(error);
             // console.log(session);
@@ -373,6 +379,26 @@ export default function Home(){
     tokenChecker();
   }, []);
 
+  const [tokenId, setTokenId] = useState<number>(0);
+
+  async function handlePriceChange(){
+    try{
+        setLoading(true);
+        const contract = await contractSetup();
+        const txn = await contract?.changePrice(tokenId, ethers.utils.parseEther(String(mintPrice)));
+
+        await txn.wait()
+
+        await axios.patch("/api/book/"+id, {price: mintPrice}).then((res)=>{
+            setLoading(false);
+            setPriceModal(false);
+        })
+    }
+    catch(err){
+        setLoading(false);
+        console.log(err);
+    }
+  }
   
 
 
@@ -428,9 +454,27 @@ export default function Home(){
                             <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
                         </label>
                     </div>
-                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">Save</button>
+                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
                 </div>
             </div>
+
+
+            {/* Update Price Modal */}
+            <div className={` ${priceModal ? "translate-y-0" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[110] justify-center fixed top-0 left-0 w-screen h-screen`}>
+                <div className="bg-white rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2">
+                    <h3 className="text-xl font-bold">Update New Price</h3>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number(e.target.value))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH</h2>
+                    </div>
+                    <div className="flex gap-2 w-full">
+                        <button onClick={handlePriceChange} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
+                        <button onClick={()=>{setPriceModal(false)}} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+
 
             {/* Banner Modal */}
             <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${bannerModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
@@ -469,7 +513,7 @@ export default function Home(){
                     
                     <button onClick={()=>{setImageModal(true)}} className="rounded-full group relative duration-200 flex items-center justify-center">
                         <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
-                        <Image width={1080} height={1080} src={user?.collectionImage || ""} alt="dp" className="md:w-[10rem] group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
+                        <Image width={1080} height={1080} src={user?.collectionImage || ""} alt="dp" className="md:w-[10rem] object-cover object-center group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     </button>
                     <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
@@ -503,12 +547,13 @@ export default function Home(){
                     {publishedBooks.map((item:any)=>(
                         <div className="w-full mb-5">
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                        {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                        {item.map((item2:BookType)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
                             <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
                                 <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
                             </div>
                             <div className="absolute z-50 top-1 flex gap-2 " >
                                 <button onClick={()=>{hide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
+                                <button onClick={()=>{setPriceModal(true); setTokenId(item2.tokenId); setId(item2._id)}} className="bg-black text-white p-3 text-md rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md"/></button>
                                 <button onClick={()=>{setId(item2._id);setBoostModal(true)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket/></button>
                             </div>
                             <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >

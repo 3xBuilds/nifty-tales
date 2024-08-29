@@ -118,7 +118,7 @@ type Props = {
                 <button onClick={()=>{setHistoryData("U"+item.email) ;setIsLoading(true);router.push("/authors/"+item.wallet); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
                     <div className='flex items-center justify-start gap-2'>
                         {/* {console.log(item.profileImage)} */}
-                        <Image src={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${item?.wallet}/info/profileImage`} alt='img' width={1080} height={1080} className='w-10 border-[1px] border-white h-10 rounded-full' />
+                        <Image src={`https://niftytales.s3.us-east-1.amazonaws.com/users/${item?.wallet}/info/profileImage`} alt='img' width={1080} height={1080} className='w-10 border-[1px] border-white h-10 rounded-full' />
                         <div className='flex flex-col items-start justify-center'>
                             <h2 className='text-md font-bold'>{item?.username}</h2>
                             <h3 className='text-xs font-semibold'>Library: {item.collectionName}</h3>
@@ -153,7 +153,7 @@ type Props = {
                 <button onClick={()=>{setHistoryData("U"+item.email) ;setIsLoading(true);router.push("/authors/"+item.wallet); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
                     <div className='flex items-center justify-start gap-2'>
                         {/* {console.log(item.profileImage)} */}
-                        <Image src={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${item?.wallet}/info/profileImage`} alt='img' width={1080} height={1080} className='w-10 border-[1px] border-white h-10 rounded-full' />
+                        <Image src={`https://niftytales.s3.us-east-1.amazonaws.com/users/${item?.wallet}/info/profileImage`} alt='img' width={1080} height={1080} className='w-10 border-[1px] border-white h-10 rounded-full' />
                         <div className='flex flex-col items-start justify-center'>
                                 <h2 className='text-md font-bold'>{item?.username}</h2>
                             <h3 className='text-xs font-semibold'>Library: {item.collectionName}</h3>

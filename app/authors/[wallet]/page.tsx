@@ -25,12 +25,12 @@ export async function generateMetadata(
       siteName: 'Nifty Tales',
       images: [
         {
-          url: `https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${id}/info/profileImage`, // Must be an absolute URL
+          url: `https://niftytales.s3.us-east-1.amazonaws.com/users/${id}/info/profileImage`, // Must be an absolute URL
           width: 800,
           height: 600,
         },
         {
-          url: `https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${id}/info/profileImage`, // Must be an absolute URL
+          url: `https://niftytales.s3.us-east-1.amazonaws.com/users/${id}/info/profileImage`, // Must be an absolute URL
           width: 1800,
           height: 1600,
           alt: 'My custom alt',

@@ -52,6 +52,7 @@ export default function Home(){
 
     const [mintPrice, setMintPrice] = useState<number>(0);
     const [maxMints, setMaxMints] = useState<number>(0);
+    const [maxMintsPerWallet, setMaxMintsPerWallet] = useState<number>(0);
 
     const [tokenId, setTokenId] = useState<string>("");
 
@@ -139,7 +140,7 @@ export default function Home(){
             const contract = await contractSetup();
 
             console.log(String(tokenId), String(ethers.utils.parseEther(String(mintPrice))));
-            const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000");
+            const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000", maxMintsPerWallet);
             
             txn.wait().then((res:any)=>{
                 axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
@@ -241,6 +242,7 @@ export default function Home(){
                 formData.append('artist', illustrationArtist);
                 formData.append('price', mintPrice.toString());
                 formData.append('maxMint', maxMints.toString());
+                formData.append('maxMintsPerWallet', maxMintsPerWallet.toString());
                 formData.append('content', pdf as Blob);
                 formData.append('cover', cover as Blob);
                 formData.append('contractAdd', String(user?.contractAdd) as string);
@@ -277,6 +279,7 @@ export default function Home(){
                 formData.append('artist', illustrationArtist);
                 formData.append('price', mintPrice.toString());
                 formData.append('maxMint', maxMints.toString());
+                formData.append('maxMintsPerWallet', maxMintsPerWallet.toString());
                 formData.append('id', id.toString());
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
@@ -307,6 +310,7 @@ export default function Home(){
                 formData.append('artist', illustrationArtist);
                 formData.append('price', mintPrice.toString());
                 formData.append('maxMint', maxMints.toString());
+                formData.append('maxMintsPerWallet', maxMintsPerWallet.toString());
                 formData.append('id', id.toString());
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
@@ -336,6 +340,7 @@ export default function Home(){
                 formData.append('artist', illustrationArtist);
                 formData.append('price', mintPrice.toString());
                 formData.append('maxMint', maxMints.toString());
+                formData.append('maxMintsPerWallet', maxMintsPerWallet.toString());
                 formData.append('id', id);
                 formData.append('cover', cover as Blob);
                 formData.append('contractAdd', String(user?.contractAdd) as string);
@@ -366,6 +371,7 @@ export default function Home(){
                 formData.append('artist', illustrationArtist);
                 formData.append('price', mintPrice.toString());
                 formData.append('maxMint', maxMints.toString());
+                formData.append('maxMintsPerWallet', maxMintsPerWallet.toString());
                 formData.append('id', id);
                 formData.append('content', pdf as Blob);
                 formData.append('contractAdd', String(user?.contractAdd) as string);
@@ -416,7 +422,8 @@ export default function Home(){
 
         //@ts-ignore
         setMaxMints(localStorage.getItem("maxMints") || 0);
-
+        //@ts-ignore
+        setMaxMintsPerWallet(localStorage.getItem("maxMintsPerWallet") || 0);
 
     },[])
 
@@ -469,7 +476,7 @@ export default function Home(){
 
             <h3 className="text-3xl font-bold">Publish Your Book</h3>
 
-            <OptionToggle options={["Upload PDF", "Write your Own"]} selectedOption={option} setOption={setOption} />
+            <OptionToggle options={["Upload PDF"]} selectedOption={option} setOption={setOption} />
 
             <div className="md:w-[100%] flex max-md:items-center max-md:justify-center max-md:flex-col gap-10 mt-5">
                 <div className="relative w-44">
@@ -549,14 +556,19 @@ export default function Home(){
 
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {  setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number(e.target.value))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-nifty-gray-1 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
-                            <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => {  setMaxMints(Number(e.target.value)) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => { setMaxMints(Number(e.target.value))}} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-nifty-gray-1 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Leave 0 for no limit)</h2>
                         </div>
+                    </div>
+
+                    <div className="w-full text-start flex flex-col">
+                        <input type="number" min={0} placeholder={`Leave 0 if no wallet limit`} onChange={(e) => { setMaxMintsPerWallet(Number(e.target.value))}} value={maxMintsPerWallet} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <h2 className="text-sm text-semibold text-nifty-gray-1 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints Per Wallet (Leave 0 for no limit)</h2>
                     </div>
 
                     <div className="flex flex-col items-start justify-center md:justify-start md:w-[40%]">
@@ -586,6 +598,9 @@ export default function Home(){
                     <ul className="list-disc flex flex-col gap-10">
                         <li>
                             <h2><b>Creating</b> a draft requires a pdf</h2>
+                        </li>
+                        <li>
+                            <h2><b>Platform fee of 0.0007 ETH</b> is charged per mint of a book which is independant of the author's earnings</h2>
                         </li>
                         <li>
                             <h2>After creating a draft you can edit it as many times you want</h2>

@@ -158,6 +158,7 @@ export async function POST(request) {
     const tokenId = formData.get('tokenId');
     const wallet = formData.get('wallet');
     const id = formData.get('id');
+    const maxMintsPerWallet = formData.get('maxMintsPerWallet');
 
     const publishStatus = false; 
 
@@ -177,10 +178,11 @@ export async function POST(request) {
       isPublished: publishStatus === "publish" || false,
       tokenId,
       contractAddress: contractAdd,
+      maxMintsPerWallet,
       price,
       maxMint,
       author: author._id,
-      artist: artist || null,
+      artist: artist || "",
       ISBN: isbn || "",
       description,
       tags: tags || []
@@ -232,6 +234,8 @@ export async function POST(request) {
         book.price = price;
         book.tokenId = tokenId;
         book.maxMint = maxMint;
+        book.maxMintsPerWallet = maxMintsPerWallet;
+
         if(publishStatus == "draft"){
           book.isPublished = false;
         }
@@ -271,6 +275,7 @@ export async function POST(request) {
         book.price = price;
         book.tokenId = tokenId;
         book.maxMint = maxMint;
+        book.maxMintsPerWallet = maxMintsPerWallet;
         if(publishStatus == "draft"){
           book.isPublished = false;
         }
@@ -332,6 +337,8 @@ export async function POST(request) {
         book.price = price;
         book.tokenId = tokenId;
         book.maxMint = maxMint;
+        book.maxMintsPerWallet = maxMintsPerWallet;
+
         if(publishStatus == "draft"){
           book.isPublished = false;
         }
@@ -372,6 +379,8 @@ export async function PATCH(request){
     const tokenId = formData.get('tokenId');
     const wallet = formData.get('wallet');
     const id = formData.get("id");
+    const maxMintsPerWallet = formData.get('maxMintsPerWallet');
+
 
     if(!name || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 400});
@@ -388,6 +397,7 @@ export async function PATCH(request){
         book.tokenId = tokenId;
         book.isPublished = false;
         book.createdAt = Date.now();
+        book.maxMintsPerWallet = maxMintsPerWallet;
         await book.save();
         return NextResponse.json({success: book});
 

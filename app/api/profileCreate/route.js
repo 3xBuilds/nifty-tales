@@ -99,6 +99,8 @@ export async function PATCH(request){
 
         if(bannerImage){
             const bannerBuffer = Buffer.from(await bannerImage.arrayBuffer());
+            user.banner = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/info/bannerImage`
+            await user.save()
             const status = await uploadFileToS3(null, wallet, bannerBuffer);
             return NextResponse.json({success: status});
         }

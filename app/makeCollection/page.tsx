@@ -48,7 +48,7 @@ export default function Home() {
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
 
-                const uri = "https://nifty-tales.s3.ap-south-1.amazonaws.com/users/" + address + "/metadata/";
+                const uri = "https://niftytales.s3.us-east-1.amazonaws.com/users/" + address + "/metadata/";
 
                 const factory = new ethers.ContractFactory(abi, bytecode, signer);
                 const contract = await factory.deploy(collectionName, symbol, uri);
