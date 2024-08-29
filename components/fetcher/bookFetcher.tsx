@@ -398,7 +398,7 @@ export const BookFetcher = () => {
                         <h2 className='text-black font-semibold text-2xl'>{bookDetails?.maxMintsPerWallet != 0 ? bookDetails?.maxMintsPerWallet : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                     </div>
                     <div className='w-1/2'>
-                        <h2 className='text-nifty-gray-2 font-bold text-sm'>Max Quantity</h2>
+                        <h2 className='text-nifty-gray-2 font-bold text-sm'>Supply</h2>
                         <h2 className='text-black font-semibold text-2xl'>{bookDetails?.maxMint != 0 ? bookDetails?.maxMintsPerWallet : <FaInfinity/>}</h2>
                     </div>
                   </div>
