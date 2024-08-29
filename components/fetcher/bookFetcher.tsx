@@ -107,7 +107,7 @@ export const BookFetcher = () => {
         setShowModal(false);
         setLoading(false);
 
-        window.location.reload();
+        window.location.reload()
       })
     }
     catch (err) {
@@ -325,7 +325,7 @@ export const BookFetcher = () => {
           </button>
 
           <div className="w-screen absolute h-full overflow-hidden">
-            <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2" />
+            {bookDetails?.cover && <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2" />}
           </div>
 
           <div className='flex max-md:flex-col gap-8 object-center items-center max-md:py-10 md:h-full h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
@@ -372,34 +372,34 @@ export const BookFetcher = () => {
                   <div className='flex gap-3 w-full'>
                     <div className='w-1/2'>
                       <h2 className='text-nifty-gray-2 font-bold text-sm'>Published On</h2>
-                      <h2 className='text-black font-semibold text-xl'>{created}</h2>
+                      <h2 className='text-black font-semibold text-lg'>{created}</h2>
                     </div>
 
                     <div className='w-1/2'>
                       <h2 className='text-nifty-gray-2 font-bold text-sm'>Mint Price</h2>
-                      <h2 className='text-black font-semibold text-xl'>{Number(price) > 0 ? price + " ETH" : "Free Mint" }</h2>
+                      <h2 className='text-black font-semibold text-lg'>{Number(price) > 0 ? price + " ETH" : "Free Mint" }</h2>
                     </div>
                   </div>
 
                   <div className='flex gap-3 w-full mt-2'>
                     <div className='w-1/2'>
                       <h2 className='text-nifty-gray-2 font-bold text-sm'>ISBN</h2>
-                      <h2 className='text-black font-semibold text-xl'>{bookDetails?.ISBN ? bookDetails?.ISBN : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                      <h2 className='text-black font-semibold text-lg'>{bookDetails?.ISBN ? bookDetails?.ISBN : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                     </div>
                     <div className='w-1/2'>
                         <h2 className='text-nifty-gray-2 font-bold text-sm'>Illustration Artist</h2>
-                        <h2 className='text-black font-semibold text-2xl'>{bookDetails?.artist ? bookDetails?.artist.slice(0,15) : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                        <h2 className='text-black font-semibold text-lg'>{bookDetails?.artist ? bookDetails?.artist.slice(0,15) : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                     </div>
                   </div>
 
                   <div className='flex gap-3 w-full mt-2'>
                     <div className='w-1/2'>
                         <h2 className='text-nifty-gray-2 font-bold text-sm'>Wallet Limit</h2>
-                        <h2 className='text-black font-semibold text-2xl'>{bookDetails?.maxMintsPerWallet != 0 ? bookDetails?.maxMintsPerWallet : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                        <h2 className='text-black font-semibold text-lg'>{bookDetails?.maxMintsPerWallet != 0 ? bookDetails?.maxMintsPerWallet : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                     </div>
                     <div className='w-1/2'>
                         <h2 className='text-nifty-gray-2 font-bold text-sm'>Supply</h2>
-                        <h2 className='text-black font-semibold text-2xl'>{bookDetails?.maxMint != 0 ? bookDetails?.maxMintsPerWallet : <FaInfinity/>}</h2>
+                        <h2 className='text-black font-semibold text-lg'>{bookDetails?.maxMint != 0 ? bookDetails?.maxMintsPerWallet : <FaInfinity/>}</h2>
                     </div>
                   </div>
 
@@ -408,17 +408,17 @@ export const BookFetcher = () => {
             <div className='md:w-2/3 w-full'>
               <h2 className='text-2xl font-bold mb-2'>Collectors</h2>
               <div className='overflow-x-auto '>
-                <div className='min-w-[400px] w-[100%]'>
+                <div className=' w-[100%]'>
 
                   <div className='border-[1px] rounded-t-lg border-gray-300'>
                     <div className='flex text-center py-2 bg-nifty-gray-1/20 '>
-                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-semibold text-md text-black'>
+                      <div className='flex-shrink-0 w-[33.3%] font-semibold text-md max-md:text-sm text-black'>
                         <h2>Rank</h2>
                       </div>
-                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-semibold text-md text-black'>
+                      <div className='flex-shrink-0 w-[33.3%] font-semibold text-md max-md:text-sm text-black'>
                         <h2>Username</h2>
                       </div>
-                      <div className='flex-shrink-0 min-w-32 w-[33.3%] font-semibold text-md text-black'>
+                      <div className='flex-shrink-0 w-[33.3%] font-semibold text-md max-md:text-sm text-black'>
                         <h2>Collected</h2>
                       </div>
                       
@@ -433,13 +433,13 @@ export const BookFetcher = () => {
                     <>
                       {holders.length > 0 && holders.map((item:any, i)=>(
                         <div className='flex text-center py-2 border-b-[1px] border-gray-300'>
-                        <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-sm '>
+                        <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs '>
                           <h2 className={`flex gap-2 items-center justify-center font-semibold ${i+1==1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i+1==2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i+1==3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i <= 3 && <FaCrown className={`${i+1 == 1 && "text-yellow-500"} ${i+1 == 2 && "text-gray-400"} ${i+1 == 3 && "text-orange-700"}`}/>}{i+1}</h2>
                         </div>
-                        <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-sm text-nifty-gray-2'>
+                        <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs text-nifty-gray-2'>
                           <h2>{item.username}</h2>
                         </div>
-                        <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-sm text-nifty-gray-2'>
+                        <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs text-nifty-gray-2'>
                           <h2>{item.holding}</h2>
                         </div>
                         
