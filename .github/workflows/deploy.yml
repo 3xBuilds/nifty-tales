@@ -7,26 +7,18 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Change directory
-        run: | 
-          echo $(pwd)
-          cd ~/nifty-tales
-          echo $(pwd)
-
-      - name: Git Pull
-        run: git pull
-      
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build the project
-        run: npm run build
-      
-      - name: Restart pm2
-        run: pm2 restart nifty-tales
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PVT_KEY }}
+          script: |
+            cd /root
+            pm2 deploy ecosystem.config.js production
