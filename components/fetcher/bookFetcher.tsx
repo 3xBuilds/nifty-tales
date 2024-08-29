@@ -249,7 +249,7 @@ export const BookFetcher = () => {
   useEffect(()=>{
     if(bookDetails){
       const date = new Date(String(bookDetails?.createdAt));
-      setCreated(String(date.getMonth())+"/"+String(date.getDate())+"/"+String(date.getFullYear()))
+      setCreated(String(date.getMonth()+1)+"/"+String(date.getDate())+"/"+String(date.getFullYear()))
     }
   },[bookDetails])
 
@@ -390,7 +390,7 @@ export const BookFetcher = () => {
             <div className='md:w-2/3 w-full'>
               <h2 className='text-2xl font-bold mb-2'>Collectors</h2>
               <div className='overflow-x-auto '>
-                <div className='min-w-[300px] w-[100%]'>
+                <div className='min-w-[400px] w-[100%]'>
 
                   <div className='border-[1px] rounded-t-lg border-gray-300'>
                     <div className='flex text-center py-2 bg-nifty-gray-1/20 '>
