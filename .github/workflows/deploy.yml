@@ -14,7 +14,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Change directory
-        run: cd ~/nifty-tales
+        run: | 
+          echo $(pwd)
+          cd ~/nifty-tales
+          echo $(pwd)
 
       - name: Git Pull
         run: git pull
