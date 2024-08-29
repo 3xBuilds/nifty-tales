@@ -104,7 +104,7 @@ export default function Home() {
                     </div>
                 )} plugins={[
                     toolbarPluginInstance,
-                ]} initialPage={page} defaultScale={0.9} fileUrl={`https://nifty-tales.s3.ap-south-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
+                ]} initialPage={page} defaultScale={0.9} fileUrl={`https://niftytales.s3.us-east-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
                 {/* </div> */}
             </div>
             
