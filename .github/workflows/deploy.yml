@@ -21,4 +21,4 @@ jobs:
           key: ${{ secrets.SSH_PVT_KEY }}
           script: |
             cd /root
-            pm2 deploy ecosystem.config.js production
+            pm2 deploy ecosystem.config.js production --force
