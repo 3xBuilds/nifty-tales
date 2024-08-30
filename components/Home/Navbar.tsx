@@ -67,22 +67,19 @@ const Navbar = () => {
   const router = useRouter();
   const pathName = usePathname()
 
-  async function setWallet(){
-    await axios.post("/api/user/checkExistingWallet", {wallet: address, email:session?.user?.email}).then((res)=>{
-      getUser();
-    }).catch((err)=>{
-      console.log(err);
-      setWalletNotAvailable(true);
-      toast.error("Connect a different wallet!");
-    })
-  }
+  // async function setWallet(){
+  //   await axios.post("/api/user/checkExistingWallet", {wallet: address, email:session?.user?.email}).then((res)=>{
+  //     getUser();
+  //   }).catch((err)=>{
+  //     console.log(err);
+  //     setWalletNotAvailable(true);
+  //     toast.error("Connect a different wallet!");
+  //   })
+  // }
 
   useEffect(()=>{
     // console.log("Address",address);
-    if(user?.wallet == "" && address){
-      setWallet()
-      // console.log(session?.user);
-    }
+
     if(!address && session){
       // console.log("SHOULD BE SHOWING WALLET BUTTON");
       setWalletNotAvailable(true);
@@ -154,7 +151,7 @@ const Navbar = () => {
             </button>
 
             {!pathName.split("/").includes("explore") && <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='text-black text-md font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200'>Explore</button>}
-            
+
 
             {session &&  <div className='flex gap-4 items-center justify-center'>
               <>{
