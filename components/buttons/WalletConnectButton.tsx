@@ -14,13 +14,15 @@ import { useSession } from 'next-auth/react';
 export const WalletConnectButton = () => {
 
   const {address} = useAccount();
-  const {user} = useGlobalContext();
+  const {user, getUser} = useGlobalContext();
   const {data:session} = useSession()
 
   async function updateWallet(){
     try{
       if(user?.wallet == ""){
-        await axios.patch("/api/user/"+session?.user?.email, {wallet: address});
+        await axios.patch("/api/user/"+session?.user?.email, {wallet: address}).then((res)=>{
+          getUser();
+        });
       }
     }
     catch(err){
