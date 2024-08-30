@@ -90,25 +90,23 @@ export const BookFetcher = () => {
       const contract = await contractSetup();
      
       const txn = await contract?.mint(amount, bookDetails?.tokenId, { value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount)) });
-      txn.wait().then(async (res: any) => {
+      
+      await txn.wait();
 
-        await axios.post("/api/transaction/create", { txnHash: res.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number * amount }).then(async (res) => {
+        await axios.post("/api/transaction/create", { txnHash: txn.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number * amount }).then(async (res) => {
           getBookDetails()
           setShowModal(false);
           setLoading(false);
 
-          //@ts-ignore
-          axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
         }).catch((err) => {
           console.log(err);
         })
 
-        getBookDetails()
-        setShowModal(false);
-        setLoading(false);
+        //@ts-ignore
+        await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
 
         window.location.reload()
-      })
+      
     }
     catch (err) {
       toast.error("Error occured while minting");
@@ -399,7 +397,7 @@ export const BookFetcher = () => {
                     </div>
                     <div className='w-1/2'>
                         <h2 className='text-nifty-gray-2 font-bold text-sm'>Supply</h2>
-                        <h2 className='text-black font-semibold text-lg'>{bookDetails?.maxMint != 0 ? bookDetails?.maxMintsPerWallet : <FaInfinity/>}</h2>
+                        <h2 className='text-black font-semibold text-lg'>{bookDetails?.maxMint != 0 ? bookDetails?.maxMint : <FaInfinity/>}</h2>
                     </div>
                   </div>
 
