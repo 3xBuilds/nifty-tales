@@ -195,8 +195,10 @@ export async function POST(request) {
       const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, book._id, wallet);
 
       if(status){
-        author.yourBooks.push(book._id);
-        await author.save();
+        if(!author.yourBooks.includes(book._id)){
+          author.yourBooks.push(book._id);
+          await author.save();
+        }
         
   
         if(status === true){ 
@@ -245,9 +247,11 @@ export async function POST(request) {
         book.createdAt = Date.now();
         
         await book.save();
-
+        
+        if(!author.yourBooks.includes(id)){
         author.yourBooks.push(id);
         await author.save()
+        }
         return NextResponse.json({success: book});
       }
 
@@ -285,8 +289,10 @@ export async function POST(request) {
         book.createdAt = Date.now();
         await book.save();
 
-        author.yourBooks.push(id);
-        await author.save()
+        if(!author.yourBooks.includes(id)){
+          author.yourBooks.push(id);
+          await author.save()
+          }
         return NextResponse.json({success: book});
       }
     }
@@ -300,8 +306,10 @@ export async function POST(request) {
       const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, newBook._id, wallet);
       
       if(status === true){
-        author.yourBooks.push(newBook._id);
-        await author.save()
+        if(!author.yourBooks.includes(newBook._id)){
+          author.yourBooks.push(newBook._id);
+          await author.save()
+          }
         // console.log("Hellooooooo");
         // console.log("NEW BOOK",newBook)
         newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`;
@@ -349,8 +357,10 @@ export async function POST(request) {
         await book.save();
 
 
+        if(!author.yourBooks.includes(id)){
           author.yourBooks.push(id);
           await author.save()
+          }
 
         return NextResponse.json({success: book});
 
