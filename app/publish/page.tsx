@@ -149,20 +149,17 @@ export default function Home(){
 
             const res = await axios.post("/api/generateMetadata", formData);
 
-            if(res.data.success){
+            if(res?.data?.success){
                 setStep(2);
                 const contract = await contractSetup();
-    
-                console.log(String(tokenId), String(ethers.utils.parseEther(String(mintPrice))));
                 const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000", maxMintsPerWallet);
                 
-                txn.wait().then((res:any)=>{
-                    // console.log("THIS IS res",res);
+                await txn.wait();
+                await axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()}).then((res)=>{
                     setLoading("");
                     setIsLoading(true);
                     router.push("/authors")
-                })
-                await axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
+                });
             }
 
         }

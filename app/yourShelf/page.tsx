@@ -60,10 +60,10 @@ export default function Home(){
             setReadList(arr1);
         }
         user?.mintedBooks.reverse().map((item:any, i)=>{
-            if(item.isPublished && !item.isHidden){
+            if(item?.isPublished && !item?.isHidden){
                 subArr2.push(item);
             }
-            if(subArr2.length == slicer || i == user.mintedBooks.length-1){
+            if(subArr2.length == slicer || i == user?.mintedBooks.length-1){
                 if(subArr2.length>0)
                 arr2.push(subArr2);
                 subArr2 = []
@@ -101,10 +101,10 @@ export default function Home(){
                 var subArr1:any = []
     
                 bookmarked.reverse().map((item:any, i)=>{
-                    if(item.isPublished && !item.isHidden){
+                    if(item?.isPublished && !item?.isHidden){
                         subArr1.push(item);
                     }
-                    if(subArr1.length == slicer || i == bookmarked.length-1){
+                    if(subArr1.length == slicer || i == bookmarked?.length-1){
                         if(subArr1.length>0)
                         arr1.push(subArr1);
                         subArr1 = []
