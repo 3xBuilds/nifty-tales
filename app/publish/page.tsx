@@ -42,7 +42,7 @@ export default function Home(){
 
 
     const[id, setId] = useState("");
-
+    const [date, setDate] = useState("");
     const[characterDesc, setCharacterDesc] = useState(0)
     const[characterName, setCharacterName] = useState(0)
     const[characterArtist, setCharacterArtist] = useState(0)
@@ -121,7 +121,7 @@ export default function Home(){
             const contract = await contractSetup();
             // console.log('contract is here broooo: ', contract);
             const id = await contract?.BOOK();
-            // console.log("heheh id: ", id);
+            console.log("heheh id: ", String(id));
             setTokenId(String(id));
             // console.log(id);
             if(id){
@@ -136,21 +136,35 @@ export default function Home(){
         }
     }
 
-    async function contractPublishBook(id:string){
+    async function contractPublishBook(id:string, tokenId:string){
         try{
-            setStep(2);
-            const contract = await contractSetup();
+            const formData = new FormData()
+            console.log("Inside Publish",tokenId);
+            formData.append('name', bookName);
+            formData.append('description', bookDesc);
+            formData.append('tokenId', tokenId);
+            formData.append('wallet', address?.toString() as string);
+            formData.append('date', date);
+            formData.append('id', id);
 
-            console.log(String(tokenId), String(ethers.utils.parseEther(String(mintPrice))));
-            const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000", maxMintsPerWallet);
-            
-            txn.wait().then((res:any)=>{
-                axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
-                // console.log("THIS IS res",res);
-                setLoading("");
-                setIsLoading(true);
-                router.push("/authors")
-            })
+            const res = await axios.post("/api/generateMetadata", formData);
+
+            if(res.data.success){
+                setStep(2);
+                const contract = await contractSetup();
+    
+                console.log(String(tokenId), String(ethers.utils.parseEther(String(mintPrice))));
+                const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000", maxMintsPerWallet);
+                
+                txn.wait().then((res:any)=>{
+                    axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
+                    // console.log("THIS IS res",res);
+                    setLoading("");
+                    setIsLoading(true);
+                    router.push("/authors")
+                })
+            }
+
         }
         catch(err){
             // console.log("BOOKID", bookId);
@@ -162,9 +176,6 @@ export default function Home(){
         }
     }
 
-    // useEffect(()=>{
-    //     getContractDetails();
-    // }, [user])
 
     const removeTag = (indexToRemove: number) => {
         setTags(prevTags => prevTags.filter((_, index) => index !== indexToRemove));
@@ -258,7 +269,9 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    contractPublishBook(response.data.success._id);
+                    setDate(response.data.success?.cover.split("/")[6])
+                    setTokenId(response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
                     
                 }
                 else{
@@ -286,11 +299,13 @@ export default function Home(){
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
                 formData.append('wallet', address.toString() as string);
-        
+                console.log("GONNA HIT PATCH REAL HARD");
                 const response = await axios.patch("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    contractPublishBook(response.data.success._id);
+                    setDate(response.data.success?.cover.split("/")[6]);
+                    setTokenId(response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
                     
                 }
                 else{
@@ -321,7 +336,9 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    contractPublishBook(response.data.success._id);
+                    setDate(response.data.success?.cover.split("/")[6]);
+                    setTokenId(response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
                     
                 }
                 else{
@@ -352,7 +369,9 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    contractPublishBook(response.data.success._id);
+                    setDate(response.data.success?.cover.split("/")[6]);
+                    setTokenId(response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
                     
                 }
                 else{
@@ -384,7 +403,9 @@ export default function Home(){
 
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    contractPublishBook(response.data.success._id);
+                    setDate(response.data.success?.cover.split("/")[6]);
+                    setTokenId(response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
                 }
                 else{
                     setIsLoading(true);
@@ -426,6 +447,8 @@ export default function Home(){
         setMaxMints(localStorage.getItem("maxMints") || 0);
         //@ts-ignore
         setMaxMintsPerWallet(localStorage.getItem("maxMintsPerWallet") || 0);
+        setDate(localStorage.getItem('date') || "");
+        // setTokenId(localStorage.getItem('tokenId') || "");
 
     },[])
 

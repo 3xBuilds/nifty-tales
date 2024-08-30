@@ -77,6 +77,7 @@ export const Analytics = () => {
         const boost = dayFiltered[0]?.book?.isBoosted;
         const id = dayFiltered[0]?.book?._id;
         const revenue = dayFiltered[0]?.value * dayFiltered?.length;
+        if(revenue)
         totalRev += revenue;
         const minted = dayFiltered?.length;
         totalMinted += minted;
@@ -88,7 +89,7 @@ export const Analytics = () => {
         }
       })
       setDailyArr(arr)
-      if(totalRev )
+      if(totalRev>=0)
       setDailyStats({totalRev, totalMinted, totalReaders});
     }
     catch (err) {
@@ -128,7 +129,9 @@ export const Analytics = () => {
         const name = weekFiltered[0]?.book?.name;
         const boost = weekFiltered[0]?.book?.isBoosted;
         const id = weekFiltered[0]?.book?._id;
+        
         const revenue = weekFiltered[0]?.value * weekFiltered?.length;
+        if(revenue)
         totalRev += revenue;
         const minted = weekFiltered?.length;
         totalMinted += minted;
@@ -140,7 +143,7 @@ export const Analytics = () => {
         }
       })
       setWeeklyArr(arr)
-      if(totalRev )
+      if(totalRev>=0)
       setWeeklyStats({totalRev, totalMinted, totalReaders});
 
     }
@@ -182,6 +185,7 @@ export const Analytics = () => {
         const boost = monthFiltered[0]?.book?.isBoosted;
         const id = monthFiltered[0]?.book?._id;
         const revenue = monthFiltered[0]?.value * monthFiltered?.length;
+        if(revenue)
         totalRev += revenue;
         const minted = monthFiltered?.length;
         totalMinted += minted;
@@ -192,7 +196,7 @@ export const Analytics = () => {
         }
       })
       setMonthlyArr(arr)
-      if(totalRev )
+      if(totalRev>=0)
       setMonthlyStats({totalRev, totalMinted, totalReaders});
 
     }
@@ -218,6 +222,7 @@ export const Analytics = () => {
 
         const id = item.transactions[0]?.book?._id;
         const revenue = item.transactions[0]?.value * item?.transactions?.length;
+        if(revenue)
         totalRev += revenue
         const minted = item.transactions?.length;
         totalMinted += minted;
@@ -230,7 +235,7 @@ export const Analytics = () => {
       console.log("ALL TIME", arr);
       setAllTimeArr(arr)
 
-      if(totalRev )
+      if(totalRev>=0)
       setAllTimeStats({totalRev, totalMinted, totalReaders});
 
     }

@@ -187,6 +187,8 @@ export default function Home(){
         localStorage.setItem("tags", JSON.stringify(item.tags));
         localStorage.setItem("pdf", item.pdf);
         localStorage.setItem("maxMintsPerWallet", item.maxMintsPerWallet);
+        localStorage.setItem("date", item.cover.split("/")[6])
+        localStorage.setItem("tokenId", item.tokenId);
 
         router.push("/publish")
     }

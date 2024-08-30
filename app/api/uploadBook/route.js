@@ -22,7 +22,7 @@ const s3Client = new S3Client({
   }
 });
 
-async function uploadFileToS3(cover, content, name, description, tokenId, objectId, wallet) {
+async function uploadFileToS3(cover, content, wallet, date) {
   try {
     // Upload Cover
     // console.log("UPLOADING YOOOOOO");
@@ -32,7 +32,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
       // console.log("COVER MY ASS", cover);
       const coverParams = {
         Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/content/${tokenId}/cover`,
+        Key: `users/${wallet}/content/${date}/cover`,
         Body: cover,
         ContentType: "image/png"
       }
@@ -48,7 +48,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
         // console.log("CONSOLE IS LOGINNGIN",content);
         const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: `users/${wallet}/content/${tokenId}/book`,
+          Key: `users/${wallet}/content/${date}/book`,
           ContentType: 'application/pdf',
           ContentDisposition: 'inline',
         }));
@@ -67,7 +67,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     
           const uploadPartCommand = new UploadPartCommand({
             Bucket: process.env.AWS_S3_BUCKET_NAME,
-            Key: `users/${wallet}/content/${tokenId}/book`,
+            Key: `users/${wallet}/content/${date}/book`,
             UploadId: uploadId,
             Body: content.slice(start, end),
             PartNumber: partNumber,
@@ -90,7 +90,7 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
     
         await s3Client.send(new CompleteMultipartUploadCommand({
           Bucket: process.env.AWS_S3_BUCKET_NAME,
-          Key: `users/${wallet}/content/${tokenId}/book`,
+          Key: `users/${wallet}/content/${date}/book`,
           UploadId: uploadId,
           MultipartUpload: { Parts: uploadResults },
         }));
@@ -100,26 +100,6 @@ async function uploadFileToS3(cover, content, name, description, tokenId, object
         console.error("Error in multipart upload:", error);
         // Handle the error appropriately (e.g., retry, notify user, etc.)
       }
-    }
-
-    if(cover && content){
-
-      // Create a json file with metadata
-      const metadata = {
-        name,
-        description: description + ". Visit https://niftytales.xyz/books/"+objectId,
-        tokenId,
-        image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`,
-        content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`
-      }
-      const metadataParams = {
-        Bucket: process.env.AWS_S3_BUCKET_NAME,
-        Key: `users/${wallet}/metadata/${tokenId}`,
-        Body: JSON.stringify(metadata),
-        ContentType: "application/json"
-      }
-      const metadataCommand = new PutObjectCommand(metadataParams);
-      await s3Client.send(metadataCommand);
     }
 
     return true;
@@ -167,6 +147,8 @@ export async function POST(request) {
       return NextResponse.json({error: "All fields are required."}, {status: 401});
     }
 
+    const date = Date.now();
+
     const author = await User.findOne({wallet});
 
     if(!author){
@@ -188,11 +170,11 @@ export async function POST(request) {
       tags: tags || []
     }
 
-    if(publishStatus == "draft" && content && !cover && id==""){
+    if( content && !cover && id==""){
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
       const book = await Book.create(bookdData);
-      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, book._id, wallet);
+      const status = await uploadFileToS3(null, contentBuffer, wallet, date);
 
       if(status){
         if(!author.yourBooks.includes(book._id)){
@@ -202,7 +184,7 @@ export async function POST(request) {
         
   
         if(status === true){ 
-          book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`;
+          book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/book`;
           book.isPublished = false;
           book.createdAt = Date.now();
           await book.save();
@@ -219,7 +201,7 @@ export async function POST(request) {
 
     if(cover && !content && id !== ""){
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
-      const status = await uploadFileToS3(coverBuffer, null, name, description, tokenId, id, wallet);
+      const status = await uploadFileToS3(coverBuffer, null, wallet, date);
 
       if(status === false) {
         return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
@@ -228,8 +210,8 @@ export async function POST(request) {
       if(status === true){
         const book = await Book.findById(id);
         book.name = name;
-        book.isbn = isbn
-        book.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`;
+        book.ISBN = isbn
+        book.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/cover`;
         book.description = description;
         book.tags = tags;
         book.artist = artist;
@@ -261,7 +243,7 @@ export async function POST(request) {
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
 
-      const status = await uploadFileToS3(null, contentBuffer, name, description, tokenId, id, wallet);
+      const status = await uploadFileToS3(null, contentBuffer, wallet, date);
 
       if(status === false) {
         return NextResponse.json({error: "Something went wrong while uploading"}, {status: 501});
@@ -270,10 +252,10 @@ export async function POST(request) {
       if(status === true){
         const book = await Book.findById(id);
         book.name = name;
-        book.isbn = isbn
+        book.ISBN = isbn
         book.description = description;
         book.tags = tags;
-        book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`;
+        book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/book`;
 
         book.artist = artist;
         book.price = price;
@@ -303,7 +285,7 @@ export async function POST(request) {
       const contentBuffer = Buffer.from(contentArrayBuffer);
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
       const newBook = await Book.create(bookdData);
-      const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, newBook._id, wallet);
+      const status = await uploadFileToS3(coverBuffer, contentBuffer, wallet, date);
       
       if(status === true){
         if(!author.yourBooks.includes(newBook._id)){
@@ -312,8 +294,8 @@ export async function POST(request) {
           }
         // console.log("Hellooooooo");
         // console.log("NEW BOOK",newBook)
-        newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/cover`;
-        newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`;
+        newBook.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/cover`;
+        newBook.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/book`;
 
         await newBook.save();
 
@@ -330,13 +312,13 @@ export async function POST(request) {
       const contentBuffer = Buffer.from(contentArrayBuffer);
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
 
-      const status = await uploadFileToS3(coverBuffer, contentBuffer, name, description, tokenId, id, wallet);
+      const status = await uploadFileToS3(coverBuffer, contentBuffer, wallet, date);
 
       if(status === true){
         
         const book = await Book.findById(id);
         book.name = name;
-        book.isbn = isbn
+        book.ISBN = isbn
         book.description = description;
         book.tags = tags;
         book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`;
@@ -398,7 +380,7 @@ export async function PATCH(request){
 
     const book = await Book.findById(id);
         book.name = name;
-        book.isbn = isbn
+        book.ISBN = isbn
         book.maxMint = maxMint;
         book.description = description;
         book.tags = tags;
