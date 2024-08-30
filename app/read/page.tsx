@@ -29,6 +29,7 @@ export default function Home() {
     const [id, setId] = useState<string>("")
     const [currentPage, setCurrentPage] = useState(0);
     const [bookId, setBookId] = useState("");
+    const[pdf, setPdf] = useState<string>("")
 
     const {user} = useGlobalContext();
 
@@ -44,7 +45,7 @@ export default function Home() {
 
     useEffect(() => {
         setWallet(localStorage.getItem('address') || "");
-        setId(localStorage.getItem('id') || "");
+        setPdf(localStorage.getItem('pdf') || "");
         setBookId(localStorage.getItem('bookId') || "");
     }, [])
 
@@ -104,7 +105,7 @@ export default function Home() {
                     </div>
                 )} plugins={[
                     toolbarPluginInstance,
-                ]} initialPage={page} defaultScale={0.9} fileUrl={`https://niftytales.s3.us-east-1.amazonaws.com/users/${wallet}/content/${id}/book`} />
+                ]} initialPage={page} defaultScale={0.9} fileUrl={pdf} />
                 {/* </div> */}
             </div>
             

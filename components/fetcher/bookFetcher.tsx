@@ -212,7 +212,7 @@ export const BookFetcher = () => {
 
   function setLocalStorage() {
     localStorage.setItem('address', userDetails?.wallet as string);
-    localStorage.setItem('id', String(bookDetails?.tokenId))
+    localStorage.setItem('pdf', String(bookDetails?.pdf))
     localStorage.setItem('bookId', String(bookDetails?._id));
     setIsLoading(true);
 
