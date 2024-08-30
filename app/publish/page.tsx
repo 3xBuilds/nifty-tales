@@ -157,12 +157,12 @@ export default function Home(){
                 const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000", maxMintsPerWallet);
                 
                 txn.wait().then((res:any)=>{
-                    axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
                     // console.log("THIS IS res",res);
                     setLoading("");
                     setIsLoading(true);
                     router.push("/authors")
                 })
+                await axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()});
             }
 
         }
@@ -299,7 +299,7 @@ export default function Home(){
                 formData.append('contractAdd', String(user?.contractAdd) as string);
                 formData.append('tokenId', tokenId);
                 formData.append('wallet', address.toString() as string);
-                console.log("GONNA HIT PATCH REAL HARD");
+
                 const response = await axios.patch("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)

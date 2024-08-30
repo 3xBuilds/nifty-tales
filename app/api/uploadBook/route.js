@@ -188,7 +188,7 @@ export async function POST(request) {
           book.isPublished = false;
           book.createdAt = Date.now();
           await book.save();
-          return NextResponse.json({success: book});
+          return NextResponse.json({success: book}, {status:200});
         }
 
       }
@@ -234,7 +234,7 @@ export async function POST(request) {
         author.yourBooks.push(id);
         await author.save()
         }
-        return NextResponse.json({success: book});
+        return NextResponse.json({success: book}, {status:200});
       }
 
     }
@@ -275,8 +275,8 @@ export async function POST(request) {
           author.yourBooks.push(id);
           await author.save()
           }
-        return NextResponse.json({success: book});
-      }
+          return NextResponse.json({success: book}, {status:200});
+        }
     }
 
 
@@ -299,7 +299,7 @@ export async function POST(request) {
 
         await newBook.save();
 
-        return NextResponse.json({success: newBook});
+        return NextResponse.json({success: newBook}, {status:200});
       }
       else{
         await Book.findOneAndDelete({_id:newBook._id});
@@ -344,7 +344,7 @@ export async function POST(request) {
           await author.save()
           }
 
-        return NextResponse.json({success: book});
+        return NextResponse.json({success: book}, {status:200});
 
       }
     }
