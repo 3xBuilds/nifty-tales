@@ -130,6 +130,8 @@ export default function Home(){
             }
         }
         catch(err){
+            getContractDetails(type);
+            await delay(200);
             console.error(err);
         }
     }
