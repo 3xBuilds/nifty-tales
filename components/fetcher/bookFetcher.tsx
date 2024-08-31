@@ -92,8 +92,9 @@ export const BookFetcher = () => {
       const txn = await contract?.mint(amount, bookDetails?.tokenId, { value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount)) });
       
       await txn.wait();
+      console.log(txn);
 
-        await axios.post("/api/transaction/create", { txnHash: txn.transactionHash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number * amount }).then(async (res) => {
+        await axios.post("/api/transaction/create", { txnHash: txn.hash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number * amount }).then(async (res) => {
           getBookDetails()
           setShowModal(false);
           setLoading(false);
@@ -135,6 +136,10 @@ export const BookFetcher = () => {
     }
   }
 
+  function delay(ms:number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   async function fetchHolders() {
     try {
       setLoadingHolders(true);
@@ -158,7 +163,7 @@ export const BookFetcher = () => {
           arr1.push({username, holding})
         })
 
-        arr1 = arr1.sort((a:any,b:any)=>{b.holding - a.holding});
+        arr1.sort((a:any,b:any)=>b.holding - a.holding);
 
         setHolders(arr1);
       }
@@ -166,6 +171,8 @@ export const BookFetcher = () => {
 
     }
     catch (err) {
+      fetchHolders();
+      await delay(500);
       setLoadingHolders(false);
       console.log(err);
     }
