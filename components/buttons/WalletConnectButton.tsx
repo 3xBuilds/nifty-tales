@@ -78,22 +78,21 @@ export const WalletConnectButton = () => {
               }
               if (chain.unsupported) {
                 return (
+                  <div className='w-screen h-screen fixed top-0 left-0 backdrop-blur-xl flex items-center justify-center z-[100000]'>
                   <button onClick={openChainModal} type="button" className='text-white bg-red-500 hover:bg-red-400 font-bold rounded-lg hover:-translate-y-1 px-3 h-10 transform transition duration-200 ease-in-out flex-col flex items-center justify-center gap-2'>
                     Wrong network
                   </button>
+                  </div>
                 );
               }
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
                   
-                  <button title='Click to view address' onClick={openAccountModal} type="button" className='flex bg-white font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center text-black rounded-lg max-md:text-md text-lg border-2 border-black px-3 py-1 transform transition '>
+                  <button title='Click to view address' onClick={openAccountModal} type="button" className='flex bg-white font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center text-black rounded-lg max-md:w-full text-sm border-2 h-10 border-black px-3 py-1 transform transition '>
                     {/* <Image src={wallet} alt="stickerGen" className='w-10'/>
                      */}
                      <IoMdWallet/>
-                     {account.ensName? account.ensName : account.displayName} | 
-                    {account.displayBalance
-                      ? ` ${account.displayBalance}`
-                      : ''}
+                     {account.ensName? account.ensName : account.displayName} 
                   </button>
                 </div>
               );

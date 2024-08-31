@@ -442,7 +442,7 @@ export const BookFetcher = () => {
                           <h2 className={`flex gap-2 items-center justify-center font-semibold ${i+1==1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i+1==2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i+1==3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i <= 3 && <FaCrown className={`${i+1 == 1 && "text-yellow-500"} ${i+1 == 2 && "text-gray-400"} ${i+1 == 3 && "text-orange-700"}`}/>}{i+1}</h2>
                         </div>
                         <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs text-nifty-gray-2'>
-                          <h2>{item.username}</h2>
+                          <h2>{item.username.slice(0,10)}{item.username.length>10 && "..."}</h2>
                         </div>
                         <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs text-nifty-gray-2'>
                           <h2>{item.holding}</h2>
