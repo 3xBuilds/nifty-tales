@@ -42,8 +42,8 @@ export default function Home(){
 
 
     const[id, setId] = useState("");
-    const [coverDate, setCoverDate] = useState("");
-    const [pdfDate, setPdfDate] = useState("");
+    // const [coverDate, setCoverDate] = useState("");
+    // const [pdfDate, setPdfDate] = useState("");
     const[characterDesc, setCharacterDesc] = useState(0)
     const[characterName, setCharacterName] = useState(0)
     const[characterArtist, setCharacterArtist] = useState(0)
@@ -137,73 +137,84 @@ export default function Home(){
         }
     }
 
-    async function contractPublishBook(id: string, tokenId: string) {
+    async function contractPublishBook(id: string, tokenId: string, coverDate:string, pdfDate:string) {
         try {
             const formData = new FormData()
-            console.log("Inside Publish", tokenId);
-            formData.append('name', bookName);
-            formData.append('description', bookDesc);
-            formData.append('tokenId', tokenId);
-            formData.append('wallet', address?.toString() as string);
-            formData.append('coverDate', coverDate);
-            formData.append('pdfDate', pdfDate);
-            formData.append('id', id);
+
+            if(pdfDate !== "" && coverDate !== ""){
+                console.log("Inside Publish", tokenId);
+                formData.append('name', bookName);
+                formData.append('description', bookDesc);
+                formData.append('tokenId', tokenId);
+                formData.append('wallet', address?.toString() as string);
+                formData.append('coverDate', coverDate);
+                formData.append('pdfDate', pdfDate);
+                formData.append('id', id);
     
-            const res = await axios.post("/api/generateMetadata", formData);
+                console.log(coverDate, pdfDate);
+        
+                const res = await axios.post("/api/generateMetadata", formData);
+        
+                if (res?.data?.success) {
+                    setStep(2);
+                    const contract = await contractSetup();
+                    
+                    // Estimate gas
+                    const gasEstimate = await contract?.estimateGas.publishBook(
+                        Number(tokenId),
+                        ethers.utils.parseEther(String(mintPrice)),
+                        maxMints,
+                        0,
+                        "0x0000000000000000000000000000000000000000",
+                        maxMintsPerWallet
+                    );
+        
+                    // Add 20% buffer to the gas estimate
+                    const gasLimit = gasEstimate?.mul(120).div(100);
+        
+                    // Get current gas price
+                    const gasPrice = await contract?.provider.getGasPrice();
+        
+                    //@ts-ignore
+                    const gasCostWei = gasLimit.mul(gasPrice);
+        
+                    // Convert gas cost to ether
+                    const gasCostEther = ethers.utils.formatEther(gasCostWei);
+        
+                    console.log(`Estimated gas cost: ${gasCostEther} ETH`);
+        
+                    // Execute the transaction with the estimated gas
+                    const txn = await contract?.publishBook(
+                        Number(tokenId),
+                        ethers.utils.parseEther(String(mintPrice)),
+                        maxMints,
+                        0,
+                        "0x0000000000000000000000000000000000000000",
+                        maxMintsPerWallet,
+                        {
+                            gasLimit: gasLimit,
+                            gasPrice: gasPrice
+                        }
+                    );
+        
+                    await txn.wait();
     
-            if (res?.data?.success) {
-                setStep(2);
-                const contract = await contractSetup();
-                
-                // Estimate gas
-                const gasEstimate = await contract?.estimateGas.publishBook(
-                    Number(tokenId),
-                    ethers.utils.parseEther(String(mintPrice)),
-                    maxMints,
-                    0,
-                    "0x0000000000000000000000000000000000000000",
-                    maxMintsPerWallet
-                );
-    
-                // Add 20% buffer to the gas estimate
-                const gasLimit = gasEstimate?.mul(120).div(100);
-    
-                // Get current gas price
-                const gasPrice = await contract?.provider.getGasPrice();
-    
-                //@ts-ignore
-                const gasCostWei = gasLimit.mul(gasPrice);
-    
-                // Convert gas cost to ether
-                const gasCostEther = ethers.utils.formatEther(gasCostWei);
-    
-                console.log(`Estimated gas cost: ${gasCostEther} ETH`);
-    
-                // Execute the transaction with the estimated gas
-                const txn = await contract?.publishBook(
-                    Number(tokenId),
-                    ethers.utils.parseEther(String(mintPrice)),
-                    maxMints,
-                    0,
-                    "0x0000000000000000000000000000000000000000",
-                    maxMintsPerWallet,
-                    {
-                        gasLimit: gasLimit,
-                        gasPrice: gasPrice
+                    // setPdfDate("");
+                    // setCoverDate("");
+        
+                    console.log(txn);
+        
+                    if (txn) {
+                        await axios.patch("/api/book/"+id, {isPublished: true, createdAt: Date.now()}).then((res) => {
+                            setLoading("");
+                            setIsLoading(true);
+                            router.push("/authors")
+                        });
                     }
-                );
-    
-                await txn.wait();
-    
-                console.log(txn);
-    
-                if (txn) {
-                    await axios.patch("/api/book/"+id, {isPublished: true, createdAt: Date.now()}).then((res) => {
-                        setLoading("");
-                        setIsLoading(true);
-                        router.push("/authors")
-                    });
                 }
+            }
+            else{
+                toast.error("Cannot get cover/pdf. Please try again later.")
             }
         } catch (err) {
             router.push("/authors")
@@ -307,10 +318,11 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    setCoverDate(response.data.success?.cover.split("/")[6])
-                    setPdfDate(response.data.success?.pdf.split("/")[6])
+                    console.log("DOWN",response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
+                    // setCoverDate(response.data.success?.cover.split("/")[6])
+                    // setPdfDate(response.data.success?.pdf.split("/")[6])
                     setTokenId(response.data.success?.tokenId);
-                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId, response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
                     
                 }
                 else{
@@ -342,10 +354,10 @@ export default function Home(){
                 const response = await axios.patch("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    setCoverDate(response.data.success?.cover.split("/")[6])
-                    setPdfDate(response.data.success?.pdf.split("/")[6])
+                    // setCoverDate(response.data.success?.cover.split("/")[6])
+                    // setPdfDate(response.data.success?.pdf.split("/")[6])
                     setTokenId(response.data.success?.tokenId);
-                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId, response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
                     
                 }
                 else{
@@ -376,10 +388,10 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    setCoverDate(response.data.success?.cover.split("/")[6])
-                    setPdfDate(response.data.success?.pdf.split("/")[6])
+                    // setCoverDate(response.data.success?.cover.split("/")[6])
+                    // setPdfDate(response.data.success?.pdf.split("/")[6])
                     setTokenId(response.data.success?.tokenId);
-                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId, response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
                     
                 }
                 else{
@@ -410,10 +422,10 @@ export default function Home(){
                 const response = await axios.post("/api/uploadBook", formData);
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    setCoverDate(response.data.success?.cover.split("/")[6])
-                    setPdfDate(response.data.success?.pdf.split("/")[6])
+                    
                     setTokenId(response.data.success?.tokenId);
-                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId, response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
+
                     
                 }
                 else{
@@ -445,11 +457,10 @@ export default function Home(){
 
                 if(publish == "publish"){
                     setId(response.data.success._id)
-                    console.log(response.data.success, "COVER", response.data.success?.cover.split("/")[6], "DATE", response.data.success?.pdf.split("/")[6])
-                    setCoverDate(response.data.success?.cover.split("/")[6])
-                    setPdfDate(response.data.success?.pdf.split("/")[6])
+                    // console.log(response.data.success, "COVER", response.data.success?.cover.split("/")[6], "DATE", response.data.success?.pdf.split("/")[6])
+                    
                     setTokenId(response.data.success?.tokenId);
-                    contractPublishBook(response.data.success._id, response.data.success?.tokenId);
+                    contractPublishBook(response.data.success._id, response.data.success?.tokenId, response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
                 }
                 else{
                     setIsLoading(true);
@@ -491,8 +502,7 @@ export default function Home(){
         setMaxMints(localStorage.getItem("maxMint") || 0);
         //@ts-ignore
         setMaxMintsPerWallet(localStorage.getItem("maxMintsPerWallet") || 0);
-        setCoverDate(localStorage.getItem('coverDate') || "");
-        setPdfDate(localStorage.getItem('coverDate') || "");
+        
         // setTokenId(localStorage.getItem('tokenId') || "");
 
     },[])

@@ -135,6 +135,10 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       localStorage.removeItem("pdf");
       localStorage.removeItem("maxMintsPerWallet");
 
+      localStorage.removeItem("coverDate");
+      localStorage.removeItem("pdfDate");
+
+
     }
   },[pathname])
 
