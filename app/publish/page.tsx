@@ -137,10 +137,10 @@ export default function Home(){
         }
     }
 
-    async function contractPublishBook(id:string, tokenId:string){
-        try{
+    async function contractPublishBook(id: string, tokenId: string) {
+        try {
             const formData = new FormData()
-            console.log("Inside Publish",tokenId);
+            console.log("Inside Publish", tokenId);
             formData.append('name', bookName);
             formData.append('description', bookDesc);
             formData.append('tokenId', tokenId);
@@ -148,30 +148,64 @@ export default function Home(){
             formData.append('coverDate', coverDate);
             formData.append('pdfDate', pdfDate);
             formData.append('id', id);
-
+    
             const res = await axios.post("/api/generateMetadata", formData);
-
-            if(res?.data?.success){
+    
+            if (res?.data?.success) {
                 setStep(2);
                 const contract = await contractSetup();
-                const txn = await contract?.publishBook(Number(tokenId), ethers.utils.parseEther(String(mintPrice)), maxMints, 0, "0x0000000000000000000000000000000000000000", maxMintsPerWallet);
                 
+                // Estimate gas
+                const gasEstimate = await contract?.estimateGas.publishBook(
+                    Number(tokenId),
+                    ethers.utils.parseEther(String(mintPrice)),
+                    maxMints,
+                    0,
+                    "0x0000000000000000000000000000000000000000",
+                    maxMintsPerWallet
+                );
+    
+                // Add 20% buffer to the gas estimate
+                const gasLimit = gasEstimate?.mul(120).div(100);
+    
+                // Get current gas price
+                const gasPrice = await contract?.provider.getGasPrice();
+    
+                //@ts-ignore
+                const gasCostWei = gasLimit.mul(gasPrice);
+    
+                // Convert gas cost to ether
+                const gasCostEther = ethers.utils.formatEther(gasCostWei);
+    
+                console.log(`Estimated gas cost: ${gasCostEther} ETH`);
+    
+                // Execute the transaction with the estimated gas
+                const txn = await contract?.publishBook(
+                    Number(tokenId),
+                    ethers.utils.parseEther(String(mintPrice)),
+                    maxMints,
+                    0,
+                    "0x0000000000000000000000000000000000000000",
+                    maxMintsPerWallet,
+                    {
+                        gasLimit: gasLimit,
+                        gasPrice: gasPrice
+                    }
+                );
+    
                 await txn.wait();
-
+    
                 console.log(txn);
-
-                if(txn){
-                    await axios.patch("/api/book/"+id,{isPublished: true, createdAt: Date.now()}).then((res)=>{
+    
+                if (txn) {
+                    await axios.patch("/api/book/"+id, {isPublished: true, createdAt: Date.now()}).then((res) => {
                         setLoading("");
                         setIsLoading(true);
                         router.push("/authors")
                     });
                 }
             }
-
-        }
-        catch(err){
-            // console.log("BOOKID", bookId);
+        } catch (err) {
             router.push("/authors")
             toast.error("There was an error while publishing. Please try again!")
             setLoading("");
@@ -454,7 +488,7 @@ export default function Home(){
         setMintPrice(localStorage.getItem("price") || 0)
 
         //@ts-ignore
-        setMaxMints(localStorage.getItem("maxMints") || 0);
+        setMaxMints(localStorage.getItem("maxMint") || 0);
         //@ts-ignore
         setMaxMintsPerWallet(localStorage.getItem("maxMintsPerWallet") || 0);
         setCoverDate(localStorage.getItem('coverDate') || "");

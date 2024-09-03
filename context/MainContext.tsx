@@ -133,6 +133,8 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       localStorage.removeItem("description");
       localStorage.removeItem("tags");
       localStorage.removeItem("pdf");
+      localStorage.removeItem("maxMintsPerWallet");
+
     }
   },[pathname])
 
