@@ -88,29 +88,59 @@ export const BookFetcher = () => {
   async function mint() {
     try {
       const contract = await contractSetup();
-     
-      const txn = await contract?.mint(amount, bookDetails?.tokenId, { value: ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount)) });
+      
+      // Calculate the value to send with the transaction
+      const valueToSend = ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount));
+  
+      // Estimate gas
+      const gasEstimate = await contract?.estimateGas.mint(amount, bookDetails?.tokenId, { value: valueToSend });
+  
+      // Add a 20% buffer to the gas estimate
+      const gasLimit = gasEstimate?.mul(120).div(100);
+  
+      // Get current gas price
+      const gasPrice = await contract?.provider.getGasPrice();
+  
+      // Calculate total gas cost in wei
+
+      //@ts-ignore
+      const gasCostWei = gasLimit.mul(gasPrice);
+  
+      // Convert gas cost to ether
+      const gasCostEther = ethers.utils.formatEther(gasCostWei);
+  
+      console.log(`Estimated gas cost: ${gasCostEther} ETH`);
+  
+      // Execute the transaction with the estimated gas
+      const txn = await contract?.mint(amount, bookDetails?.tokenId, {
+        value: valueToSend,
+        gasLimit: gasLimit,
+        gasPrice: gasPrice
+      });
       
       await txn.wait();
       console.log(txn);
-
-        await axios.post("/api/transaction/create", { txnHash: txn.hash, bookId: pathname.split("/")[2], userId: user?._id, value: bookDetails?.price as number * amount }).then(async (res) => {
-          getBookDetails()
-          setShowModal(false);
-          setLoading(false);
-
-        }).catch((err) => {
-          console.log(err);
-        })
-
-        //@ts-ignore
-        await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
-
-        window.location.reload()
+  
+      await axios.post("/api/transaction/create", {
+        txnHash: txn.hash,
+        bookId: pathname.split("/")[2],
+        userId: user?._id,
+        value: bookDetails?.price as number * amount
+      }).then(async (res) => {
+        getBookDetails()
+        setShowModal(false);
+        setLoading(false);
+      }).catch((err) => {
+        console.log(err);
+      })
+  
+      //@ts-ignore
+      await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
+  
+      window.location.reload()
       
-    }
-    catch (err) {
-      toast.error("Error occured while minting");
+    } catch (err) {
+      toast.error("Error occurred while minting");
       setLoading(false);
       console.log(err);
     }
@@ -287,7 +317,7 @@ export const BookFetcher = () => {
               <h3 className='text-2xl font-bold w-24 text-center'>{amount}</h3>
               <button onClick={() => {
                 //@ts-ignore
-                if ((bookDetails?.maxMint == 0 || bookDetails?.minted as number + amount != bookDetails?.maxMint) && userMinted + amount != bookDetails?.maxMintsPerWallet) {
+                if ((bookDetails?.maxMint == 0 || bookDetails?.minted as number + amount != bookDetails?.maxMint) &&(bookDetails?.maxMintsPerWallet == 0 || userMinted + amount != bookDetails?.maxMintsPerWallet)) {
                   setAmount((prev) => (prev + 1))
                 }
                 else {
