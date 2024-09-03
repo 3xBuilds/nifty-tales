@@ -17,7 +17,7 @@ export async function GET(req:any){
 
         const arr = await Promise.all(user.yourBooks.map(async (item: any) => {
             const transactions = await Transactions.find({ book: item }).populate("book");
-            const readlists = await Readlists.find({ book: item });
+            const readlists = await Readlists.find({ book: item }).populate("book");
             return {transactions: transactions, readlists: readlists};
         }));
 

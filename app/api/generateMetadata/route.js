@@ -28,16 +28,17 @@ export async function POST(request){
         const description = formData.get('description') || "";
         const tokenId = formData.get('tokenId');
         const wallet = formData.get('wallet');
-        const date = formData.get('date');
+        const coverDate = formData.get('coverDate');
+        const pdfDate = formData.get('pdfDate');
         const objectId = formData.get('id');
 
         console.log("||||||||||||||||||||||||||||||||")
         console.log("--------------------------------")
-        console.log(name, description, tokenId, wallet, date, objectId)
+        console.log(name, description, tokenId, wallet, coverDate, pdfDate, objectId)
         console.log("--------------------------------")
         console.log("||||||||||||||||||||||||||||||||")
 
-        if(!name || !tokenId || !wallet || !date || !objectId){
+        if(!name || !tokenId || !wallet || !coverDate || !pdfDate || !objectId){
             return NextResponse.json({message: "missing"}, {status:404})
         }
 
@@ -45,8 +46,8 @@ export async function POST(request){
             name,
             description: description + ". Visit https://niftytales.xyz/books/"+objectId,
             tokenId,
-            image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/cover`,
-            content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/book`
+            image: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${coverDate}/cover`,
+            content: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${pdfDate}/book`
           }
           const metadataParams = {
             Bucket: process.env.AWS_S3_BUCKET_NAME,

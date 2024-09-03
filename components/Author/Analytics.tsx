@@ -73,18 +73,18 @@ export const Analytics = () => {
           return difference < 86400000;
         })
 
-        const name = dayFiltered[0]?.book?.name;
-        const boost = dayFiltered[0]?.book?.isBoosted;
+        const name = dayFiltered[0]?.book?.name || dayFilteredReaders[0]?.book?.name;
+        const boost = dayFiltered[0]?.book?.isBoosted || dayFilteredReaders[0]?.book?.isBoosted;
         const id = dayFiltered[0]?.book?._id;
-        const revenue = dayFiltered[0]?.value * dayFiltered?.length;
+        const revenue:number = dayFiltered[0]?.value * dayFiltered?.length || 0;
         if(revenue)
         totalRev += revenue;
-        const minted = dayFiltered?.length;
+        const minted:number = dayFiltered?.length || 0;
         totalMinted += minted;
-        const readers = dayFilteredReaders?.length
+        const readers:number = dayFilteredReaders?.length || 0;
         totalReaders += readers
 
-        if(minted>0){
+        if(minted>0 || readers>0){
           arr.push({ name, revenue, minted, readers, id, boost })
         }
       })
@@ -126,19 +126,19 @@ export const Analytics = () => {
 
         })
 
-        const name = weekFiltered[0]?.book?.name;
-        const boost = weekFiltered[0]?.book?.isBoosted;
+        const name = weekFiltered[0]?.book?.name || weekFilteredReaders[0]?.book?.name;
+        const boost = weekFiltered[0]?.book?.isBoosted || weekFilteredReaders[0]?.book?.isBoosted;
         const id = weekFiltered[0]?.book?._id;
         
-        const revenue = weekFiltered[0]?.value * weekFiltered?.length;
+        const revenue:number = weekFiltered[0]?.value * weekFiltered?.length || 0;
         if(revenue)
         totalRev += revenue;
-        const minted = weekFiltered?.length;
+        const minted:number = weekFiltered?.length || 0;
         totalMinted += minted;
-        const readers = weekFilteredReaders?.length
+        const readers:number = weekFilteredReaders?.length || 0;
         totalReaders += readers
 
-        if(minted>0){
+        if(minted>0 || readers>0){
           arr.push({ name, revenue, minted, readers, id, boost })
         }
       })
@@ -181,17 +181,17 @@ export const Analytics = () => {
 
         })
 
-        const name = monthFiltered[0]?.book?.name;
-        const boost = monthFiltered[0]?.book?.isBoosted;
+        const name = monthFiltered[0]?.book?.name || monthFilteredReaders[0]?.book?.name;
+        const boost = monthFiltered[0]?.book?.isBoosted || monthFilteredReaders[0]?.book?.isBoosted;
         const id = monthFiltered[0]?.book?._id;
-        const revenue = monthFiltered[0]?.value * monthFiltered?.length;
+        const revenue:number = monthFiltered[0]?.value * monthFiltered?.length || 0;
         if(revenue)
         totalRev += revenue;
-        const minted = monthFiltered?.length;
+        const minted:number = monthFiltered?.length || 0;
         totalMinted += minted;
-        const readers = monthFilteredReaders?.length
+        const readers:number = monthFilteredReaders?.length||0;
         totalReaders += readers;
-        if(minted>0){
+        if(minted>0 || readers>0){
           arr.push({ name, revenue, minted, readers, id, boost })
         }
       })
@@ -217,18 +217,18 @@ export const Analytics = () => {
 
       res.data.allBooks.map((item: any) => {
 
-        const name = item.transactions[0]?.book?.name;
-        const boost = item.transactions[0]?.book?.isBoosted;
+        const name = item.transactions[0]?.book?.name || item.readlists[0]?.book?.name;
+        const boost = item.transactions[0]?.book?.isBoosted || item.readlists[0]?.book?.isBoosted;
 
         const id = item.transactions[0]?.book?._id;
-        const revenue = item.transactions[0]?.value * item?.transactions?.length;
+        const revenue:number = item.transactions[0]?.value * item?.transactions?.length || 0;
         if(revenue)
         totalRev += revenue
-        const minted = item.transactions?.length;
+        const minted:number = item.transactions?.length || 0;
         totalMinted += minted;
-        const readers = item.readlists?.length
+        const readers:number = item.readlists?.length||0;
         totalReaders += readers;
-        if(minted>0){
+        if(minted>0 || readers>0){
           arr.push({ name, revenue, minted, readers, id, boost })
         }
       })

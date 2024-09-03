@@ -262,12 +262,7 @@ export async function POST(request) {
         book.tokenId = tokenId;
         book.maxMint = maxMint;
         book.maxMintsPerWallet = maxMintsPerWallet;
-        if(publishStatus == "draft"){
-          book.isPublished = false;
-        }
-        else{
-          book.isPublished = true
-        }        
+        book.isPublished = false  
         book.createdAt = Date.now();
         await book.save();
 
@@ -329,12 +324,7 @@ export async function POST(request) {
         book.maxMint = maxMint;
         book.maxMintsPerWallet = maxMintsPerWallet;
 
-        if(publishStatus == "draft"){
-          book.isPublished = false;
-        }
-        else{
-          book.isPublished = true
-        }        
+        book.isPublished = false  
         book.createdAt = Date.now();
         await book.save();
 
