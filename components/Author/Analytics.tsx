@@ -399,7 +399,7 @@ export const Analytics = () => {
                   <h2>Readers</h2>
                 </div>
                 <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
-                  <h2></h2>
+                  <h2>Status</h2>
                 </div>
               </div>
             </div>

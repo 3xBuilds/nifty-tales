@@ -92,13 +92,13 @@ export const BookFetcher = () => {
 
       // Calculate the value to send with the transaction
       const valueToSend = ethers.utils.parseEther(String(((bookDetails?.price as number + 0.0007) * amount).toFixed(4)));
-      console.log("hello2");
+      console.log("hello2", String(valueToSend));
 
       // Estimate gas
       const gasEstimate = await contract?.estimateGas.mint(amount, bookDetails?.tokenId, { value: valueToSend });
   
       // Add a 20% buffer to the gas estimate
-      const gasLimit = gasEstimate?.mul(120).div(100);
+      const gasLimit = gasEstimate?.mul(130).div(100);
   
       // Get current gas price
       const gasPrice = await contract?.provider.getGasPrice();
@@ -112,24 +112,26 @@ export const BookFetcher = () => {
       
       await txn.wait();
       console.log(txn);
-  
-      await axios.post("/api/transaction/create", {
-        txnHash: txn.hash,
-        bookId: pathname.split("/")[2],
-        userId: user?._id,
-        value: bookDetails?.price as number * amount
-      }).then(async (res) => {
-        getBookDetails()
-        setShowModal(false);
-        setLoading(false);
-      }).catch((err) => {
-        console.log(err);
-      })
-  
-      //@ts-ignore
-      await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
-  
-      window.location.reload()
+      
+      if(txn){
+        await axios.post("/api/transaction/create", {
+          txnHash: txn.hash,
+          bookId: pathname.split("/")[2],
+          userId: user?._id,
+          value: bookDetails?.price as number * amount
+        }).then(async (res) => {
+          getBookDetails()
+          setShowModal(false);
+          setLoading(false);
+        }).catch((err) => {
+          console.log(err);
+        })
+    
+        //@ts-ignore
+        await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
+    
+        window.location.reload()
+      }
       
     } catch (err) {
       toast.error("Error occurred while minting");

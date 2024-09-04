@@ -267,6 +267,12 @@ export default function Home(){
                 return;
             }
 
+            if(mintPrice > 0 && mintPrice<0.0001){
+                toast.error("Mint price should be greater than 0.0001 ETH")
+                setLoading("");
+                return;
+            }
+
             if(publish=="publish" && !cover && coverLink == ""){
                 toast.error("Upload a cover image!");
                 setLoading("");
