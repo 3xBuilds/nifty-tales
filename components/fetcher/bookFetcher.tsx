@@ -88,10 +88,12 @@ export const BookFetcher = () => {
   async function mint() {
     try {
       const contract = await contractSetup();
-      
+      console.log("hello", bookDetails?.price);
+
       // Calculate the value to send with the transaction
-      const valueToSend = ethers.utils.parseEther(String((bookDetails?.price as number + 0.0007) * amount));
-  
+      const valueToSend = ethers.utils.parseEther(String(((bookDetails?.price as number + 0.0007) * amount).toFixed(4)));
+      console.log("hello2");
+
       // Estimate gas
       const gasEstimate = await contract?.estimateGas.mint(amount, bookDetails?.tokenId, { value: valueToSend });
   
@@ -105,12 +107,12 @@ export const BookFetcher = () => {
 
       //@ts-ignore
       const gasCostWei = gasLimit.mul(gasPrice);
-  
+      console.log("hello");
       // Convert gas cost to ether
       const gasCostEther = ethers.utils.formatEther(gasCostWei);
   
       console.log(`Estimated gas cost: ${gasCostEther} ETH`);
-  
+      console.log(valueToSend);
       // Execute the transaction with the estimated gas
       const txn = await contract?.mint(amount, bookDetails?.tokenId, {
         value: valueToSend,
