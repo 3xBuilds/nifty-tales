@@ -365,11 +365,13 @@ export default function Home(){
           })
         
         await res.wait();
-  
-        await axios.patch("/api/book/"+id, {isBoosted: String(Date.now()+Number(addtime))});
-        toast.success("Book boosted");
-        setLoading(false);
-        setBoostModal(false);
+          
+        if(res){
+            await axios.patch("/api/book/"+id, {isBoosted: String(Date.now()+Number(addtime))});
+            toast.success("Book boosted");
+            setLoading(false);
+            setBoostModal(false);
+        }
       } 
     } catch (err) {
       setLoading(false);
