@@ -353,7 +353,7 @@ export default function Home() {
                 const gasEstimate = await contract?.estimateGas.boostBook({ value: price }).catch((err)=>{console.log(err)});
                 console.log("hello2", gasEstimate);
                 // Add a 20% buffer to the gas estimate
-                const gasLimit = gasEstimate?.mul(120).div(100);
+                const gasLimit = gasEstimate?.mul(130).div(100);
                 
                 // Get current gas price
                 const gasPrice = await contract?.provider.getGasPrice();

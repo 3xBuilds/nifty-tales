@@ -170,7 +170,7 @@ export default function Home(){
                     );
         
                     // Add 20% buffer to the gas estimate
-                    const gasLimit = gasEstimate?.mul(120).div(100);
+                    const gasLimit = gasEstimate?.mul(130).div(100);
         
                     // Get current gas price
                     const gasPrice = await contract?.provider.getGasPrice();
