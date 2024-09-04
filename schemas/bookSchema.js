@@ -11,6 +11,14 @@ const BookSchema = new Schema({
         unique: false,
         required: true
     },
+    isAdminRemoved: {
+        type:Boolean,
+        default:false
+    },
+    isPaused:{
+        type:Boolean,
+        default: false,
+    },
     isPublished: {
         type: Boolean,
         default: false,
@@ -106,6 +114,10 @@ const BookSchema = new Schema({
     createdAt:{
         type: Date,
         default: Date.now
+    },
+    reportedBy:{
+        type:Number,
+        default:0
     }
     
   }, {collection: "books"})

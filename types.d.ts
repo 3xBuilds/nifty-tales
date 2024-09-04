@@ -19,6 +19,8 @@ type BookType = {
   _id:string;
   name: string;
   isPublished?: boolean;
+  isAdminRemoved?: boolean;
+  isPaused?:boolean;
   isHidden?: boolean;
   price?: number;
   tokenId: number;

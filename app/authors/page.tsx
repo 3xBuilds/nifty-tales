@@ -10,7 +10,7 @@ import { IoIosRocket, IoMdTrash } from "react-icons/io";
 import masterABI from "@/utils/abis/masterABI";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaChartLine, FaEdit, FaEye, FaEyeSlash, FaPen, FaPlusCircle } from "react-icons/fa";
+import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaPen, FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose, IoTrashBin } from "react-icons/io5";
@@ -101,7 +101,7 @@ export default function Home() {
             }
 
             getContractDetails();
-
+            getReports();
 
         }
     }, [user])
@@ -346,15 +346,15 @@ export default function Home() {
         try {
             setLoading(true);
             if (typeof window.ethereum !== 'undefined') {
-                
+
                 const contract = await masterContractSetup();
-                
+
                 console.log("hello", contract, price);
-                const gasEstimate = await contract?.estimateGas.boostBook({ value: price }).catch((err)=>{console.log(err)});
+                const gasEstimate = await contract?.estimateGas.boostBook({ value: price }).catch((err) => { console.log(err) });
                 console.log("hello2", gasEstimate);
                 // Add a 20% buffer to the gas estimate
                 const gasLimit = gasEstimate?.mul(130).div(100);
-                
+
                 // Get current gas price
                 const gasPrice = await contract?.provider.getGasPrice();
                 console.log(price);
@@ -422,7 +422,18 @@ export default function Home() {
         }
     }
 
+    const [reportedArr, setReportedArr] = useState([]);
 
+    async function getReports() {
+        try {
+            const res = await axios.get("/api/author/reported/" + user?.email);
+            console.log(res.data.array);
+            setReportedArr(res.data.array);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     return (
         <div className="">
@@ -655,6 +666,65 @@ export default function Home() {
                     </div>}
                 </>
             }
+            {reportedArr.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                <h2 className="text-2xl font-bold">Reports</h2>
+                <h2 className="mt-4 text-sm text-nifty-gray-1">These are your books which have been reported by readers. To resolve an issue or report a misunderstanding, please contact us.</h2>
+                <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
+                    <div className='overflow-x-auto '>
+                        <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
+                            <div className='border-[1px] rounded-t-lg border-gray-300'>
+                                <div className='flex text-center py-2 border-b-[1px] border-gray-300 text-black'>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>ID</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Book</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Reports</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Status</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Contact</h2>
+                                    </div>
+                                </div>
+
+                                <div className="my-4 flex w-full justify-center items-center">
+                                    {reportedArr.map((item, i) => (
+                                        <div className="flex w-full text-center items-center justify-center">
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                <h2>{i+1}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2>{item.name}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2>{item.reportNum}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2>{item.status ? "Disabled" : "Live"}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[20%] font-medium text-md text-black'>
+                                                <a href="https://www.3xbuilds.com" target="_blank" ><FaDiscord></FaDiscord></a>
+                                            </div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                
+            </div>}
 
             <Analytics />
         </div>

@@ -16,12 +16,13 @@ import { TiMinus, TiPlus } from 'react-icons/ti';
 import { AiOutlineLoading } from 'react-icons/ai';
 import Icon from '@/components/Global/Icon';
 import { toast } from 'react-toastify';
-import { MdContentCopy, MdLibraryAddCheck } from 'react-icons/md';
+import { MdContentCopy, MdLibraryAddCheck, MdReport } from 'react-icons/md';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
 import { CiShare2 } from 'react-icons/ci';
 import { RiLoader5Line, RiLoaderFill } from 'react-icons/ri';
 import { useAccount } from 'wagmi';
+import { ImCross } from 'react-icons/im';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
@@ -291,10 +292,74 @@ export const BookFetcher = () => {
     tokenChecker();
   }, []);
 
+  const[openReportModal, setOpenReportModal] = useState(false);
+  const[tags, setTags] = useState<Array<string>>([]);
+
+  const defaultTags:Array<string> = [
+    "Inappropriate Content",
+    "Hate Speech",
+    "Graphic Violence",
+    "Pornographic",
+    "Plagiarism"
+  ];
+
+  const removeTag = (indexToRemove: number) => {
+    setTags(prevTags => prevTags.filter((_, index) => index !== indexToRemove));
+};
+
+async function makeReport(){
+  try{
+    if(tags.length == 0){
+      toast.error("Select a tag!");
+      return ;
+    }
+    await axios.post("/api/book/report",{bookId: pathname.split("/")[2], email: user?.email, tag: tags[0]}).then((res:any)=>{
+      console.log(res);
+      toast.success("Reported book!");
+      setOpenReportModal(false);
+    });
+  }
+  catch(err){
+    console.log(err);
+    toast.error("Error while making report");
+    setOpenReportModal(false);
+  }
+}
 
   return (
     <>
       <div className=''>
+
+        {/* REPORT MODAL */}
+        <div className={`${openReportModal ? "translate-y-0": "-translate-y-[300rem]"} duration-200 h-screen w-screen backdrop-blur-xl fixed top-0 left-0 z-[500] flex items-center justify-center`} >
+          <div className='w-80 rounded-xl shadow-xl shadow-black/30 bg-white p-4'>
+            <div className='flex '>
+              <h2 className='text-xl font-bold w-1/2'>Report Book</h2>
+              <button onClick={()=>{setOpenReportModal(false)}} className='text-black hover:text-red-500 duration-200 w-1/2 flex justify-end items-center' ><ImCross/></button>
+            </div>
+            <div className='mt-4'>
+              <h2 className='text-sm text-nifty-gray-2'>Select a reason:</h2>
+              <div className="w-full text-start flex flex-col">
+                  <div className="flex flex-wrap items-center justify-center gap-1 my-2">
+                  {defaultTags.map((item:string)=>(
+                      <button disabled={tags.length == 1} onClick={()=>{if(!tags.includes(item))setTags((prev)=>[...prev, item])}} className={`py-2 min-w-32 px-2 hover:scale-105 duration-200 ${tags.includes(item) && "brightness-125"} hover:brightness-105 rounded-xl flex gap-2 items-center justify-center ${tags.length ==5 && "opacity-60"} bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs`}>
+                      {item}
+                      </button>
+                  ))}
+                  </div>
+                  <div className="flex flex-wrap gap-2 mt-2">
+                      {tags.map((item, i)=>(
+                          <div className="py-2 min-w-20 px-2 rounded-xl flex gap-2 items-center justify-center bg-gray-300 border-2 border-gray-500 font-semibold text-center text-gray-500 text-xs">
+                              {item}
+                              <button onClick={()=>{removeTag(i)}} className="hover:text-white duration-200" ><ImCross/></button>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+              <button onClick={()=>{makeReport()}} className='w-full h-10 mt-4 text-lg font-bold hover:-translate-y-1 duration-200 bg-black text-white rounded-lg'>Submit</button>
+            </div>
+          </div>
+        </div>
 
         {/* MINTING MODAL */}
         <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
@@ -336,14 +401,12 @@ export const BookFetcher = () => {
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
               <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
-              <button onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
+              <button disabled={loading} onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
             </div>
           </div>
         </div>
 
-
-
-        <div className="w-screen relative h-[40rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
+        <div className="w-screen relative h-[47rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
           <div className='absolute flex gap-2 items-center justify-center top-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >
             <span className='border-r-[1px] pr-2 border-white text-white'>Readers: {bookDetails?.readers}</span>
             <h2>Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/" + bookDetails?.maxMint}</h2>
@@ -361,20 +424,25 @@ export const BookFetcher = () => {
             <div className="flex object-center items-center md:h-full md:px-10 md:w-60 h-full justify-center md:justify-start my-auto">
               <Book img={bookDetails?.cover} />
             </div>
-            <div className='flex flex-col max-md:items-center gap-6 md:w-[50%] max-md:w-[90%] '>
-              <div className='flex flex-col gap-2 items-start justify-start'>
-                <div className='flex items-center justify-center gap-4'>
-                  <h3 className='text-3xl text-white font-bold flex max-md:flex-col md:hidden items-center justify-center text-center gap-2' >{bookDetails?.name.slice(0, 15)}{bookDetails?.name && bookDetails?.name?.length > 15 && "..."}</h3>
+            <div className='flex flex-col max-md:items-center max-md:justify-center gap-6 md:w-[50%] max-md:w-[90%] '>
+              <div className='flex flex-col gap-2 md:items-start md:justify-start items-center justify-center'>
+                <div className='flex items-center justify-center max-md:flex-col gap-4'>
+                  <h3 className='text-3xl text-white font-bold flex max-md:flex-col md:hidden items-center justify-center text-center gap-2' >{bookDetails?.name.slice(0, 20)}{bookDetails?.name && bookDetails?.name?.length > 20 && "..."}</h3>
                   <h3 className='text-3xl text-white font-bold flex max-md:flex-col max-md:hidden items-center gap-2' >{bookDetails?.name}</h3>
 
-                  <button disabled={readListed} onClick={() => { readlist(bookDetails?._id as string) }} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
-                    {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white' /> : <MdLibraryAddCheck className='text-green-500' />}
-                  </button>
+                  <div className='flex gap-2'>
+                    <button disabled={readListed} onClick={() => { readlist(bookDetails?._id as string) }} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
+                      {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white' /> : <MdLibraryAddCheck className='text-green-500' />}
+                    </button>
+                    <button onClick={()=>{setOpenReportModal(true)}} className='bg-gray-300 h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
+                        <MdReport className='text-black text-xl'/>
+                    </button>
+                  </div>
 
                 </div>
                 <button onClick={() => { setIsLoading(true); router.push("/authors/" + userDetails?.wallet) }} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen /></span></button>
               </div>
-              <p className='text-sm text-white' >{bookDetails?.description?.substring(0, 200)}</p>
+              <p className='text-sm text-white max-md:text-center' >{bookDetails?.description?.substring(0, 200)}</p>
               <div className='flex flex-wrap gap-2'>
                 {bookDetails?.tags?.map((item) => (
                   <div className='min-w-20 px-2 py-2 bg-white/10 flex items-center justify-center text-white text-xs font-semibold border-[1px] border-white rounded-lg'>

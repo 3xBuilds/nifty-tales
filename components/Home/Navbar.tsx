@@ -19,6 +19,7 @@ import { GetEnsNameReturnType, normalize } from 'viem/ens'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister'
+import { ImCross } from 'react-icons/im'
 
 
 const Navbar = () => {
@@ -29,9 +30,8 @@ const Navbar = () => {
   useEffect(()=>{
     setIsLoading(false)
   },[])
-  const [showLogout, setShowLogout] = useState<boolean>(false);
 
-
+  const[openSettingsModal, setOpenSettingsModal] = useState(false);
   const {user, ensImg, setEnsImg, getUser} = useGlobalContext();
   const {data: session} = useSession();
 
@@ -40,7 +40,7 @@ const Navbar = () => {
   const { address, isConnected, isReconnecting } = useAccount();
   const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: address});
   const { data: ensAvatar, isLoading: isLoadingAvatar } = useEnsAvatar({ name:ensName as string });
-
+  const [confirmBox, setConfirmBox] = useState(false);
   const [bringModal, setBringModal] = useState<boolean>(false);
 
   async function ensImageSetter(){
@@ -67,21 +67,9 @@ const Navbar = () => {
   const router = useRouter();
   const pathName = usePathname()
 
-  // async function setWallet(){
-  //   await axios.post("/api/user/checkExistingWallet", {wallet: address, email:session?.user?.email}).then((res)=>{
-  //     getUser();
-  //   }).catch((err)=>{
-  //     console.log(err);
-  //     setWalletNotAvailable(true);
-  //     toast.error("Connect a different wallet!");
-  //   })
-  // }
-
   useEffect(()=>{
-    // console.log("Address",address);
 
     if(!address && session){
-      // console.log("SHOULD BE SHOWING WALLET BUTTON");
       setWalletNotAvailable(true);
     }
     if(address){
@@ -91,7 +79,22 @@ const Navbar = () => {
 
   useEffect(()=>{
     setIsOpen(false);
+    setBringModal(false);
   },[pathName])
+
+  async function deleteUser(){
+    try{
+      await axios.delete("/api/user/delete/"+session?.user?.email).then((res)=>{
+        toast.success("User successfully deleted");
+        signOut();
+        router.push("/connect");
+      });
+    }
+    catch(err){
+      console.log(err);
+      toast.error("Error while deleting user!");
+    }
+  }
 
 
   if(pathName.split("/")[1] !== "connect" && pathName.split("/")[1] !== "")
@@ -99,8 +102,40 @@ const Navbar = () => {
     <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
 
     <div className={` w-40 flex flex-col items-center justify-center rounded-l-xl absolute right-0 top-16 ${bringModal ? "translate-x-0" : "translate-x-[30rem]"} absolute duration-200 bg-gray-200 border-2 border-nifty-gray-2/30 text-nifty-gray-2 `}>
-      <button className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'><IoIosSettings/>Settings</button>
+      <button onClick={()=>{
+        setOpenSettingsModal(true);
+      }} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'><IoIosSettings/>Settings</button>
       <button onClick={()=>{signOut({callbackUrl: "/connect"})}} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'><MdLogout/>Logout</button>
+    </div>
+
+    {/* SETTINGS */}
+    <div className={` ${openSettingsModal ? "translate-y-0" : "-translate-y-[300rem]"} flex items-center justify-center duration-200 fixed h-screen w-screen backdrop-blur-xl top-0 left-0 z-[500]`}>
+      <div className='w-80 shadow-xl shadow-black/30 bg-white rounded-xl p-4'>
+        <div className='flex'>
+          <h2 className='text-black w-1/2 text-2xl font-bold'>Settings</h2>
+          <button onClick={()=>{setOpenSettingsModal(false)}} className='w-1/2 flex justify-end items-center text-black hover:text-red-600 duration-200'><ImCross/></button>
+        </div>
+        <div className='flex flex-col mt-4 items-center h-full gap-2'>
+          <button onClick={()=>{setConfirmBox(true)}} className='w-full h-10 text-xl bg-red-500 hover:brightness-105 duration-200 text-white font-bold rounded-lg'>Delete Account</button>
+          <h2 className='text-red-500 font-bold animate-bounce'>DESTRUCTIVE ACTION!</h2>
+          <h2 className='text-sm text-left w-full text-nifty-gray-2'>Use this action only if</h2>
+          <ul className='list-disc ml-4 text-nifty-gray-1'>
+            <li><h2 className='text-xs text-nifty-gray-1'>You have to connect the associated email/wallet to another account</h2></li>
+            <li><h2 className='text-xs text-nifty-gray-1'>You don't have published books on this account.</h2></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {/* CONFIRM DELETE BOX */}
+    <div className={` ${confirmBox ? "translate-y-0" : "-translate-y-[300rem]"} flex items-center justify-center duration-200 fixed h-screen w-screen backdrop-blur-xl top-0 left-0 z-[501]`}>
+      <div className='w-80 bg-white rounded-lg shadow-xl shadow-black/30 p-4 flex flex-col gap-2 items-center justify-center'>
+        <h2 className='text-nifty-gray-2 text-xs'>This action is <b>IRREVERSIBLE!</b></h2>
+        <div className='flex gap-2 items-center justify-center w-full'>
+          <button onClick={()=>{deleteUser()}} className='bg-red-500 hover:-translate-y-1 duration-200 text-white font-semibold rounded-lg w-1/2 h-10'>Delete</button>
+          <button onClick={()=>{setConfirmBox(false); setOpenSettingsModal(false)}} className='bg-gray-200 hover:-translate-y-1 font-semibold w-1/2 rounded-lg h-10 duration-200 '>Go Back</button>
+        </div>
+      </div>
     </div>
 
     {user?.email.includes("@wallet") && <AddEmail/>}
@@ -183,7 +218,7 @@ const Navbar = () => {
             <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/explore");}} >Explore</li>
             {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/yourShelf");}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsOpen(false);setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/makeCollection");}} >Become an Author</li>: <li onClick={()=>{setIsOpen(false);setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
-            <li className='border-b-[1px] border-gray-300' ><button className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'>Settings</button></li>
+            <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{setOpenSettingsModal(true)}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'>Settings</button></li>
             <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{signOut({callbackUrl: "/connect"})}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'>Logout</button></li>
             <li className='' ><WalletConnectButton/></li>
           </ul>
