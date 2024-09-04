@@ -7,7 +7,7 @@ import { useAccount } from "wagmi";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { IoIosRocket, IoMdTrash } from "react-icons/io";
-
+import masterABI from "@/utils/abis/masterABI";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
 import { FaChartLine, FaEdit, FaEye, FaEyeSlash, FaPen, FaPlusCircle } from "react-icons/fa";
@@ -317,35 +317,54 @@ export default function Home(){
     getUser();
   },[])
 
+  async function masterContractSetup(){
+    try {
+        //@ts-ignore
+        if (typeof window.ethereum !== 'undefined') {
+            const masterAdd = "0xE98C64778fA9ff408af6f00C4eAF76A1997a3Ae7";
+
+            //@ts-ignore
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+            //@ts-ignore
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            //@ts-ignore
+            const contract = new ethers.Contract(masterAdd, masterABI, signer);
+
+        return contract;
+
+        }
+
+    }
+    catch (err) {
+        console.error(err);
+    }
+}
+
   async function handleBoost() {
     try {
-      setLoading(true);
-      if (typeof window.ethereum !== 'undefined') {
-        useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
+        setLoading(true);
+        if (typeof window.ethereum !== 'undefined') {
+            useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
 
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
+        const contract = await masterContractSetup();
+
+        const gasEstimate = await contract?.estimateGas.boostBook({ value: price });
   
-        const totalPrice = ethers.BigNumber.from(price);
-        const amount1 = totalPrice.mul(80).div(100); // 80%
-        const amount2 = totalPrice.mul(20).div(100); // 20%
-  
-        console.log("PRICE", ethers.utils.formatEther(totalPrice));
-  
-        const tx1 = await signer.sendTransaction({
-          to: "0x1DbCE30361C2cb8445d02b67A75A97f1700D90A9",
-          value: amount1
-        });
-  
-        await tx1.wait();
-  
-        const tx2 = await signer.sendTransaction({
-          to: "0x705b8f77d90Ebab24C1934B49724686b8ee27f5F",
-          value: amount2
-        });
-  
-        await tx2.wait();
+        // Add a 20% buffer to the gas estimate
+        const gasLimit = gasEstimate?.mul(120).div(100);
+    
+        // Get current gas price
+        const gasPrice = await contract?.provider.getGasPrice();
+
+        const res = await contract?.boostBook({
+            value: price,
+            gasLimit: gasLimit,
+            gasPrice: gasPrice
+          })
+        
+        await res.wait();
   
         await axios.patch("/api/book/"+id, {isBoosted: String(Date.now()+Number(addtime))});
         toast.success("Book boosted");
