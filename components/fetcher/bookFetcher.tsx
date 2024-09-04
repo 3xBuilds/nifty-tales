@@ -103,16 +103,6 @@ export const BookFetcher = () => {
       // Get current gas price
       const gasPrice = await contract?.provider.getGasPrice();
   
-      // Calculate total gas cost in wei
-
-      //@ts-ignore
-      const gasCostWei = gasLimit.mul(gasPrice);
-      console.log("hello");
-      // Convert gas cost to ether
-      const gasCostEther = ethers.utils.formatEther(gasCostWei);
-  
-      console.log(`Estimated gas cost: ${gasCostEther} ETH`);
-      console.log(valueToSend);
       // Execute the transaction with the estimated gas
       const txn = await contract?.mint(amount, bookDetails?.tokenId, {
         value: valueToSend,

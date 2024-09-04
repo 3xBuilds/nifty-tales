@@ -27,31 +27,31 @@ import { MdContentCopy } from "react-icons/md";
 import placeholder from "@/assets/og.png"
 import { AiOutlineLoading } from "react-icons/ai";
 
-export default function Home(){
+export default function Home() {
 
     const router = useRouter()
-    const {setIsLoading} = useLoading()
-    const {user, getUser} = useGlobalContext();
+    const { setIsLoading } = useLoading()
+    const { user, getUser } = useGlobalContext();
     const [mintPrice, setMintPrice] = useState<number>(0);
 
-    const[publishedBooks, setPublishedBooks] = useState([])
-    const[draftBooks, setDraftBooks] = useState([])
-    const[hiddenBooks, setHiddenBooks] = useState([])
+    const [publishedBooks, setPublishedBooks] = useState([])
+    const [draftBooks, setDraftBooks] = useState([])
+    const [hiddenBooks, setHiddenBooks] = useState([])
 
-    const[slicer, setSlicer] = useState<number>(4);
+    const [slicer, setSlicer] = useState<number>(4);
 
-    const[addtime, setAddtime] = useState("");
+    const [addtime, setAddtime] = useState("");
 
-    const[loading, setLoading] = useState(false);
-    const[priceModal, setPriceModal] = useState(false);
-    const[id, setId] = useState("");
-    const[price, setPrice] = useState("");
-  
-    const[boostModal, setBoostModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [priceModal, setPriceModal] = useState(false);
+    const [id, setId] = useState("");
+    const [price, setPrice] = useState("");
 
-    const[name, setName] = useState<string>("")
+    const [boostModal, setBoostModal] = useState(false);
 
-    async function contractSetup(){
+    const [name, setName] = useState<string>("")
+
+    async function contractSetup() {
         try {
             //@ts-ignore
             if (typeof window.ethereum !== 'undefined') {
@@ -65,7 +65,7 @@ export default function Home(){
                 //@ts-ignore
                 const contract = new ethers.Contract(user?.contractAdd, abi, signer);
 
-            return contract;
+                return contract;
 
             }
 
@@ -75,8 +75,8 @@ export default function Home(){
         }
     }
 
-    async function getContractDetails(){
-        try{
+    async function getContractDetails() {
+        try {
             const contract = await contractSetup();
             // console.log(contract?.address);
             const contractName = await contract?.name();
@@ -85,65 +85,65 @@ export default function Home(){
 
             setName(contractName);
         }
-        catch(err){
+        catch (err) {
             console.error(err);
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         // console.log(user)
 
-        if(user){
+        if (user) {
             // console.log("checking");
-            if( user?.contractAdd == ""){
+            if (user?.contractAdd == "") {
                 setIsLoading(true);
                 router.push("/makeCollection");
             }
-            
+
             getContractDetails();
 
 
         }
-    },[user])
+    }, [user])
 
-    useEffect(()=>{
-        if(user){
+    useEffect(() => {
+        if (user) {
 
-            var arr1:any= []
-            var subArr1:any = []
-            var arr2:any = []
-            var subArr2:any = []
+            var arr1: any = []
+            var subArr1: any = []
+            var arr2: any = []
+            var subArr2: any = []
 
             var arr3: any = []
-            var subArr3:any = []
+            var subArr3: any = []
 
 
-            user.yourBooks.reverse().map((item:any, i)=>{
-                if(item.isPublished && !item.isHidden){
-                    
+            user.yourBooks.reverse().map((item: any, i) => {
+                if (item.isPublished && !item.isHidden) {
+
                     subArr1.push(item);
                 }
-                if(subArr1.length == slicer || i == user.yourBooks.length-1){
-                    if(subArr1.length>0)
-                    arr1.push(subArr1);
+                if (subArr1.length == slicer || i == user.yourBooks.length - 1) {
+                    if (subArr1.length > 0)
+                        arr1.push(subArr1);
                     subArr1 = []
                 }
-                if(!item.isPublished){
+                if (!item.isPublished) {
                     subArr2.push(item);
                     // console.log(item);
                 }
-                if(subArr2.length == slicer || i == user.yourBooks.length-1){
-                    if(subArr2.length>0)
-                    arr2.push(subArr2);
+                if (subArr2.length == slicer || i == user.yourBooks.length - 1) {
+                    if (subArr2.length > 0)
+                        arr2.push(subArr2);
                     subArr2 = []
                 }
 
-                if(item.isPublished && item.isHidden){
+                if (item.isPublished && item.isHidden) {
                     subArr3.push(item);
                 }
-                if(subArr3.length == slicer || i == user.yourBooks.length-1){
-                    if(subArr3.length>0)
-                    arr3.push(subArr3);
+                if (subArr3.length == slicer || i == user.yourBooks.length - 1) {
+                    if (subArr3.length > 0)
+                        arr3.push(subArr3);
                     subArr3 = []
                 }
             })
@@ -156,18 +156,18 @@ export default function Home(){
             //@ts-ignore
             setDraftBooks(arr2);
         }
-    },[slicer, user])
+    }, [slicer, user])
 
-    useEffect(()=>{
+    useEffect(() => {
         const screenWidth = window.innerWidth;
 
-        if(screenWidth > 1100){
+        if (screenWidth > 1100) {
             setSlicer(5);
         }
 
-    },[])
+    }, [])
 
-    function handleDraft(item:any){
+    function handleDraft(item: any) {
         setIsLoading(true);
         // console.log(item.cover, item.pdf, item.name, item.tags);
         localStorage.setItem("name", item.name);
@@ -202,7 +202,7 @@ export default function Home(){
             setProfileImg(e.target.files[0]);
         }
     };
-    
+
     const handleBannerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files.length > 0) {
 
@@ -210,16 +210,16 @@ export default function Home(){
         }
     };
 
-    const {address} = useAccount();
+    const { address } = useAccount();
 
-    const {data:session} = useSession();
+    const { data: session } = useSession();
 
 
-    async function handleSubmit(e:any) {
+    async function handleSubmit(e: any) {
         setLoading(true);
         e.preventDefault();
 
-        if(!user?.wallet){
+        if (!user?.wallet) {
             toast.error("Somwthing went wrong. Please try again");
             return;
         }
@@ -230,14 +230,14 @@ export default function Home(){
             const formData = new FormData();
 
             //@ts-ignore
-            if(!bannerImg && profileImg && user){
+            if (!bannerImg && profileImg && user) {
                 formData.append("profileImage", profileImg);
                 formData.append("wallet", user?.wallet);
 
             }
 
             //@ts-ignore
-            if(bannerImg && !profileImg && user){
+            if (bannerImg && !profileImg && user) {
                 // console.log("brooo")
                 formData.append("bannerImage", bannerImg);
                 formData.append("wallet", user?.wallet);
@@ -258,7 +258,7 @@ export default function Home(){
             }
 
             // Reset form fields
-            if(response.status == 200){
+            if (response.status == 200) {
                 setLoading(false);
                 window.location.reload();
             }
@@ -272,197 +272,199 @@ export default function Home(){
         }
     }
 
-    async function deleteBook(id:string){
-        try{
+    async function deleteBook(id: string) {
+        try {
             // console.log(id);
-            await axios.delete("/api/book/"+id).then((res)=>{
+            await axios.delete("/api/book/" + id).then((res) => {
                 // console.log(res.data.data);
                 getUser();
             })
         }
-        catch(err){
+        catch (err) {
             // console.log(err);
         }
     }
 
-    async function unHide(id:string){
-        try{
+    async function unHide(id: string) {
+        try {
             // console.log(id);
-            await axios.patch("/api/book/"+id,{isHidden : false}).then((res)=>{
+            await axios.patch("/api/book/" + id, { isHidden: false }).then((res) => {
                 // console.log(res.data.data);
                 getUser();
             })
         }
-        catch(err){
+        catch (err) {
             // console.log(err);
         }
     }
 
-    async function hide(id:string){
-        try{
+    async function hide(id: string) {
+        try {
             // console.log(id);
-            await axios.patch("/api/book/"+id,{isHidden : true}).then((res)=>{
+            await axios.patch("/api/book/" + id, { isHidden: true }).then((res) => {
                 // console.log(res.data.data);
                 getUser();
             })
         }
-        catch(err){
+        catch (err) {
             // console.log(err);
         }
     }
 
-   
-  useEffect(()=>{
-    setIsLoading(false);
-    getUser();
-  },[])
 
-  async function masterContractSetup(){
-    try {
-        //@ts-ignore
-        if (typeof window.ethereum !== 'undefined') {
-            const masterAdd = "0xE98C64778fA9ff408af6f00C4eAF76A1997a3Ae7";
+    useEffect(() => {
+        setIsLoading(false);
+        getUser();
+    }, [])
 
+    async function masterContractSetup() {
+        try {
             //@ts-ignore
-            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            if (typeof window.ethereum !== 'undefined') {
+                const masterAdd = "0xE98C64778fA9ff408af6f00C4eAF76A1997a3Ae7";
 
-            //@ts-ignore
-            const provider = new ethers.providers.Web3Provider(window.ethereum);
-            const signer = provider.getSigner();
-            //@ts-ignore
-            const contract = new ethers.Contract(masterAdd, masterABI, signer);
+                //@ts-ignore
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
 
-        return contract;
+                //@ts-ignore
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                //@ts-ignore
+                const contract = new ethers.Contract(masterAdd, masterABI, signer);
+
+                return contract;
+
+            }
 
         }
-
+        catch (err) {
+            console.error(err);
+        }
     }
-    catch (err) {
-        console.error(err);
-    }
-}
 
-  async function handleBoost() {
-    try {
-        setLoading(true);
-        if (typeof window.ethereum !== 'undefined') {
-            useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
+    async function handleBoost() {
+        try {
+            setLoading(true);
+            if (typeof window.ethereum !== 'undefined') {
+                
+                const contract = await masterContractSetup();
+                
+                console.log("hello", contract, price);
+                const gasEstimate = await contract?.estimateGas.boostBook({ value: price }).catch((err)=>{console.log(err)});
+                console.log("hello2", gasEstimate);
+                // Add a 20% buffer to the gas estimate
+                const gasLimit = gasEstimate?.mul(120).div(100);
+                
+                // Get current gas price
+                const gasPrice = await contract?.provider.getGasPrice();
+                console.log(price);
+                const res = await contract?.boostBook({
+                    value: price,
+                    gasLimit: gasLimit,
+                    gasPrice: gasPrice
+                }).catch((err: any) => {
+                    console.log(err);
+                })
 
-        const contract = await masterContractSetup();
+                await res.wait();
 
-        const gasEstimate = await contract?.estimateGas.boostBook({ value: price });
-  
-        // Add a 20% buffer to the gas estimate
-        const gasLimit = gasEstimate?.mul(120).div(100);
-    
-        // Get current gas price
-        const gasPrice = await contract?.provider.getGasPrice();
-
-        const res = await contract?.boostBook({
-            value: price,
-            gasLimit: gasLimit,
-            gasPrice: gasPrice
-          })
-        
-        await res.wait();
-          
-        if(res){
-            await axios.patch("/api/book/"+id, {isBoosted: String(Date.now()+Number(addtime))});
-            toast.success("Book boosted");
+                if (res) {
+                    await axios.patch("/api/book/" + id, { isBoosted: String(Date.now() + Number(addtime)) });
+                    toast.success("Book boosted");
+                    setLoading(false);
+                    setBoostModal(false);
+                }
+            }
+        } catch (err) {
             setLoading(false);
-            setBoostModal(false);
+            //   await axios.patch("/api/book/"+id, {isBoosted: null});
+            toast.error("An error occured")
+            console.error(err);
         }
-      } 
-    } catch (err) {
-      setLoading(false);
-    //   await axios.patch("/api/book/"+id, {isBoosted: null});
-      toast.error("An error occured")
-      console.error(err);
     }
-  }
 
 
-  async function tokenChecker() {
-    try {
-      const res = await axios.get("/api/tokenChecker");
-      console.log(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push('/connect');
-      } else {
-        console.error("An error occurred:", error);
-      }
+    async function tokenChecker() {
+        try {
+            const res = await axios.get("/api/tokenChecker");
+            console.log(res.data);
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                router.push('/connect');
+            } else {
+                console.error("An error occurred:", error);
+            }
+        }
     }
-  }
 
-  useEffect(() => {
-    tokenChecker();
-  }, []);
+    useEffect(() => {
+        tokenChecker();
+    }, []);
 
-  const [tokenId, setTokenId] = useState<number>(0);
+    const [tokenId, setTokenId] = useState<number>(0);
 
-  async function handlePriceChange(){
-    try{
-        setLoading(true);
-        const contract = await contractSetup();
-        const txn = await contract?.changePrice(tokenId, ethers.utils.parseEther(String(mintPrice)));
+    async function handlePriceChange() {
+        try {
+            setLoading(true);
+            const contract = await contractSetup();
+            const txn = await contract?.changePrice(tokenId, ethers.utils.parseEther(String(mintPrice)));
 
-        await txn.wait()
+            await txn.wait()
 
-        await axios.patch("/api/book/"+id, {price: mintPrice}).then((res)=>{
+            await axios.patch("/api/book/" + id, { price: mintPrice }).then((res) => {
+                setLoading(false);
+                setPriceModal(false);
+            })
+        }
+        catch (err) {
             setLoading(false);
-            setPriceModal(false);
-        })
+            console.log(err);
+        }
     }
-    catch(err){
-        setLoading(false);
-        console.log(err);
-    }
-  }
-  
 
 
-    return(
+
+    return (
         <div className="">
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
 
-        {/* BOOST MODAL */}
-        <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
-          <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
-            <h2 className='text-2xl font-bold mb-5'>Duration</h2>
-              <div className='flex gap-2 flex-wrap items-center justify-center'>
-                    <button onClick={()=>{setPrice("1000000000000000"); setAddtime("86400000")}} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-1-2/80`}>
-                      <h2 className='font-bold text-md'>1 Day</h2>
-                      <h2 className='font-bold text-sm'>0.001 ETH</h2>
-                    </button>
-                    <button onClick={()=>{setPrice("2500000000000000"); setAddtime("259200000")}} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
-                      <h2 className='font-bold text-md'>3 Days</h2>
-                      <h2 className='font-bold text-sm'>0.0025 ETH</h2>
-                    </button>
-                    <button onClick={()=>{setPrice("5000000000000000"); setAddtime("604800000")}} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
-                      <h2 className='font-bold text-md'>1 Week</h2>
-                      <h2 className='font-bold text-sm'>0.005 ETH</h2>
-                    </button>
-                    <button onClick={()=>{setPrice("15000000000000000"); setAddtime("2419200000")}} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
-                      <h2 className='font-bold text-md'>1 Month</h2>
-                      <h2 className='font-bold text-sm'>0.015 ETH</h2>
-                    </button>
-              </div>
+            {/* BOOST MODAL */}
+            <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
+                <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
+                    <h2 className='text-2xl font-bold mb-5'>Duration</h2>
+                    <div className='flex gap-2 flex-wrap items-center justify-center'>
+                        <button onClick={() => { setPrice("1000000000000000"); setAddtime("86400000") }} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-1-2/80`}>
+                            <h2 className='font-bold text-md'>1 Day</h2>
+                            <h2 className='font-bold text-sm'>0.001 ETH</h2>
+                        </button>
+                        <button onClick={() => { setPrice("2500000000000000"); setAddtime("259200000") }} className={`flex flex-col ${price == "2500000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
+                            <h2 className='font-bold text-md'>3 Days</h2>
+                            <h2 className='font-bold text-sm'>0.0025 ETH</h2>
+                        </button>
+                        <button onClick={() => { setPrice("5000000000000000"); setAddtime("604800000") }} className={`flex flex-col ${price == "5000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
+                            <h2 className='font-bold text-md'>1 Week</h2>
+                            <h2 className='font-bold text-sm'>0.005 ETH</h2>
+                        </button>
+                        <button onClick={() => { setPrice("15000000000000000"); setAddtime("2419200000") }} className={`flex flex-col ${price == "15000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:brightness-110 p-2 rounded-lg duration-200 hover:scale-105 text-nifty-gray-1-2/80`}>
+                            <h2 className='font-bold text-md'>1 Month</h2>
+                            <h2 className='font-bold text-sm'>0.015 ETH</h2>
+                        </button>
+                    </div>
 
-              <div className='w-full flex gap-2 items-center justify-center mt-5'>
-                <button onClick={handleBoost} className="bg-black text-white font-semibold  h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >{loading ?<div className='w-full flex items-center justify-center'><RiLoader5Line className="animate-spin text-xl" /></div> : "Confirm"}</button>
-                <button onClick={()=>{setBoostModal(false)}} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
-              </div>
-          </div>
-        </div>
+                    <div className='w-full flex gap-2 items-center justify-center mt-5'>
+                        <button onClick={handleBoost} className="bg-black text-white font-semibold  h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >{loading ? <div className='w-full flex items-center justify-center'><RiLoader5Line className="animate-spin text-xl" /></div> : "Confirm"}</button>
+                        <button onClick={() => { setBoostModal(false) }} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+                    </div>
+                </div>
+            </div>
 
 
             {/* Image Modal */}
-            <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
+            <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0" : "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
                 <div className="bg-white gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
-                    <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div className="w-full items-end flex justify-end text-xl"><button onClick={() => { setImageModal(false) }} className="text-black hover:text-red-500 duration-200" ><IoClose /></button></div>
                     <div>
                         <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
                             <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
@@ -474,7 +476,7 @@ export default function Home(){
                             <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
                         </label>
                     </div>
-                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
+                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
                 </div>
             </div>
 
@@ -484,12 +486,12 @@ export default function Home(){
                 <div className="bg-white rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2">
                     <h3 className="text-xl font-bold">Update New Price</h3>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number(e.target.value))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH</h2>
                     </div>
                     <div className="flex gap-2 w-full">
-                        <button onClick={handlePriceChange} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
-                        <button onClick={()=>{setPriceModal(false)}} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+                        <button onClick={handlePriceChange} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
+                        <button onClick={() => { setPriceModal(false) }} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
                     </div>
 
                 </div>
@@ -497,16 +499,16 @@ export default function Home(){
 
 
             {/* Banner Modal */}
-            <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${bannerModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
+            <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${bannerModal ? "translate-y-0" : "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
                 <div className="bg-white gap-4 max-md:w-[90%] h-84 w-96 rounded-xl p-6 flex flex-col items-center justify-center" >
-                    <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setBannerModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
+                    <div className="w-full items-end flex justify-end text-xl"><button onClick={() => { setBannerModal(false) }} className="text-black hover:text-red-500 duration-200" ><IoClose /></button></div>
                     <div className="w-full h-full" >
                         <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
                             <div className="flex flex-col items-center h-32 w-full p-2 overflow-hidden justify-center rounded-lg">
                                 {!bannerImg ? <div className="w-full h-full bg-gray-200 rounded-xl flex flex-col items-center justify-center">
-                                        <CiImageOn className="text-xl text-nifty-gray-1" />
-                                        <h3 className="text-xs text-nifty-gray-1 text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
-                                    </div> :
+                                    <CiImageOn className="text-xl text-nifty-gray-1" />
+                                    <h3 className="text-xs text-nifty-gray-1 text-center font-semibold" >Upload a 1500x500 png image for best quality</h3>
+                                </div> :
                                     <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
                             </div>
                             <input id="banner-dropzone-file" type="file" accept='image/*' onChange={handleBannerChange} className="hidden" />
@@ -518,143 +520,143 @@ export default function Home(){
             </div>
 
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
-                
+
 
                 <div className="w-screen flex item-center justify-center group absolute h-full overflow-hidden">
-                    <button onClick={()=>{setBannerModal(true)}} className="py-2 bg-black/30 h-12 w-12 relative z-[70] mt-4 max-md:text-sm flex items-center justify-center text-white font-bold gap-2 rounded-full hover:-translate-y-1 duration-200"><FaEdit/></button>
+                    <button onClick={() => { setBannerModal(true) }} className="py-2 bg-black/30 h-12 w-12 relative z-[70] mt-4 max-md:text-sm flex items-center justify-center text-white font-bold gap-2 rounded-full hover:-translate-y-1 duration-200"><FaEdit /></button>
 
-                    <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner+"?v=2" as string : placeholder} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
+                    <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner + "?v=2" as string : placeholder} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2" />
                 </div>
-               
-                <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/authors/"+address); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
+
+                <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/authors/" + address); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
                     <CiShare2 />
                 </button>
                 <div className="flex gap-8 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto relative z-50 backdrop-blur-xl">
-                    
-                    <button onClick={()=>{setImageModal(true)}} className="rounded-full group relative duration-200 flex items-center justify-center">
+
+                    <button onClick={() => { setImageModal(true) }} className="rounded-full group relative duration-200 flex items-center justify-center">
                         <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
-                        <Image width={1080} height={1080} src={user?.collectionImage+"?v=2" || ""} alt="dp" className="md:w-[10rem] object-cover object-center group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
+                        <Image width={1080} height={1080} src={user?.collectionImage + "?v=2" || ""} alt="dp" className="md:w-[10rem] object-cover object-center group-hover:brightness-50 duration-200 md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     </button>
                     <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
-                        <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0,7)}...{user?.contractAdd.substring(user.contractAdd.length-7, user.contractAdd.length)}</a>
+                        <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0, 7)}...{user?.contractAdd.substring(user.contractAdd.length - 7, user.contractAdd.length)}</a>
                     </div>
                 </div>
 
                 <div className="absolute right-3 top-3 md:right-3 gap-4 flex items-end justify-end z-50">
-                        <Link href="#analytics" className="py-2 bg-white/10 md:w-40 max-md:text-sm w-12 h-10 border-[1px] border-white flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200" ><span className="max-md:hidden" >Analytics</span> <FaChartLine/></Link>                
-                        </div>
+                    <Link href="#analytics" className="py-2 bg-white/10 md:w-40 max-md:text-sm w-12 h-10 border-[1px] border-white flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200" ><span className="max-md:hidden" >Analytics</span> <FaChartLine /></Link>
+                </div>
             </div>
-            
 
-            { user && user?.yourBooks?.length == 0 && user?.contractAdd !== "" ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
+
+            {user && user?.yourBooks?.length == 0 && user?.contractAdd !== "" ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
                 <h2 className="text-xl font-bold">Publish your first book!</h2>
-                <button onClick={()=>{setIsLoading(true);router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-2 max-md:mx-auto'>Publish</button>
-            </div>: 
-            <>
+                <button onClick={() => { setIsLoading(true); router.push("/publish") }} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-2 max-md:mx-auto'>Publish</button>
+            </div> :
+                <>
 
-                {/* PUBLISHED BOOKS */}
-                {user && user?.contractAdd !== "" && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                    <div className="flex items-center justify-center w-full mb-5">
-                        <div className="w-1/2 flex items-start justify-start ">
-                            <h3 className="text-2xl font-bold">Your Books</h3>
+                    {/* PUBLISHED BOOKS */}
+                    {user && user?.contractAdd !== "" && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                        <div className="flex items-center justify-center w-full mb-5">
+                            <div className="w-1/2 flex items-start justify-start ">
+                                <h3 className="text-2xl font-bold">Your Books</h3>
+                            </div>
+                            <div className="w-1/2 flex justify-end">
+                                <button onClick={() => { setIsLoading(true); router.push("/publish") }} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center max-md:-mr-2 justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
+                            </div>
                         </div>
-                        <div className="w-1/2 flex justify-end">
-                            <button onClick={()=>{setIsLoading(true);router.push("/publish")}} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center max-md:-mr-2 justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
-                        </div>
-                    </div>
 
-                    {publishedBooks.map((item:any)=>(
-                        <div className="w-full mb-5">
-                        <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                        {item.map((item2:BookType)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
+                        {publishedBooks.map((item: any) => (
+                            <div className="w-full mb-5">
+                                <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
+                                    {item.map((item2: BookType) => (<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                                        <div onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
+                                            <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0, 15)}</h2>
+                                        </div>
+                                        <div className="absolute z-50 top-1 flex gap-2 " >
+                                            <button onClick={() => { hide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash /></button>
+                                            <button onClick={() => { setPriceModal(true); setTokenId(item2.tokenId); setId(item2._id) }} className="bg-black text-white p-3 text-md rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md" /></button>
+                                            <button onClick={() => { setId(item2._id); setBoostModal(true) }} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket /></button>
+                                        </div>
+                                        <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
+                                            <Book img={item2.cover} />
+                                        </button>
+                                    </div>
+                                    ))}
+                                </div>
+                                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
+                                </div>
                             </div>
-                            <div className="absolute z-50 top-1 flex gap-2 " >
-                                <button onClick={()=>{hide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash/></button>
-                                <button onClick={()=>{setPriceModal(true); setTokenId(item2.tokenId); setId(item2._id)}} className="bg-black text-white p-3 text-md rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md"/></button>
-                                <button onClick={()=>{setId(item2._id);setBoostModal(true)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket/></button>
-                            </div>
-                            <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
-                                <Book img={item2.cover} />
-                            </button>
-                        </div>
                         ))}
-                        </div>
-                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
-                            </div>
-                        </div>
-                    ))}
-
-                    
 
 
-                </div>}
 
-                {/* HIDDEN BOOKS */}
-                { hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                <div className="w-full mb-5">
-                    
-                        <h3 className="text-2xl font-bold ">Hidden</h3>
-                </div>
-                {hiddenBooks.map((item:any)=>(
+
+                    </div>}
+
+                    {/* HIDDEN BOOKS */}
+                    {hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                         <div className="w-full mb-5">
-                        <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                        {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                            <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
-                            </div>
-                            <div className="absolute z-50 top-1  " >
-                                <button onClick={()=>{unHide(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye/></button>
-                            </div>
-                            <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                                <Book img={item2.cover} />
-                            </button>
+
+                            <h3 className="text-2xl font-bold ">Hidden</h3>
                         </div>
+                        {hiddenBooks.map((item: any) => (
+                            <div className="w-full mb-5">
+                                <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
+                                    {item.map((item2: any) => (<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                                        <div onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
+                                            <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0, 15)}</h2>
+                                        </div>
+                                        <div className="absolute z-50 top-1  " >
+                                            <button onClick={() => { unHide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye /></button>
+                                        </div>
+                                        <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                                            <Book img={item2.cover} />
+                                        </button>
+                                    </div>
+                                    ))}
+                                </div>
+                                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
+                                </div>
+                            </div>
                         ))}
+                    </div>}
+
+                    {/* DRAFT BOOKS */}
+                    {draftBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                        <div className="w-full mb-4">
+
+                            <h3 className="text-2xl font-bold ">Drafts</h3>
                         </div>
-                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
+
+                        {draftBooks.map((item: any) => (
+                            <div className="w-full mb-5">
+                                <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
+                                    {item.map((item2: any) => (<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                                        <div onClick={() => { handleDraft(item2) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
+                                            <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0, 15)}</h2>
+                                        </div>
+                                        <div className="absolute z-50 top-1  " >
+                                            <button onClick={() => { deleteBook(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash /></button>
+                                        </div>
+
+                                        <button onClick={() => { handleDraft(item2) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                                            <Book img={item2.cover} />
+                                        </button>
+                                    </div>
+                                    ))}
+                                </div>
+                                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
+                                </div>
                             </div>
-                        </div>
-                    ))}
-                </div>}
-
-                {/* DRAFT BOOKS */}
-               { draftBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-            <div className="w-full mb-4">
-                
-                    <h3 className="text-2xl font-bold ">Drafts</h3>
-            </div>
-
-            {draftBooks.map((item:any)=>(
-                <div className="w-full mb-5">
-                <div className="w-full max-md:flex max-md:flex-col max-md:gap-6 md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                {item.map((item2:any)=>(<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                    <div onClick={()=>{handleDraft(item2)}} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                    <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,15)}</h2>
-                            </div>
-                            <div className="absolute z-50 top-1  " >
-                                <button onClick={()=>{deleteBook(item2._id)}} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoMdTrash/></button>
-                            </div>
-
-                    <button onClick={()=>{handleDraft(item2)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
-                        <Book img={item2.cover} />
-                    </button>
-                </div>
-                ))}
-                </div>
-                    <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
-                    </div>
-                </div>
-            ))}
+                        ))}
 
 
-        </div>}
-            </>
+                    </div>}
+                </>
             }
 
-            <Analytics/>
+            <Analytics />
         </div>
     )
 
