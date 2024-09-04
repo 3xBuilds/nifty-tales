@@ -672,46 +672,46 @@ export default function Home() {
                 <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
                     <div className='overflow-x-auto '>
                         <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
-                            <div className='border-[1px] rounded-t-lg border-gray-300'>
+                            <div className='border-t-[1px] border-x-[1px] rounded-t-lg border-gray-300'>
                                 <div className='flex text-center py-2 border-b-[1px] border-gray-300 text-black'>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
                                         <h2>ID</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Book</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Reports</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Status</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    {/* <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Contact</h2>
-                                    </div>
+                                    </div> */}
                                 </div>
 
-                                <div className="my-4 flex w-full justify-center items-center">
+                                <div className="my-4 flex flex-col w-full justify-center items-center">
                                     {reportedArr.map((item, i) => (
-                                        <div className="flex w-full text-center items-center justify-center">
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                        <div className="flex w-full text-center h-10 border-b-[1px] items-center justify-center">
+                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
                                                 <h2>{i+1}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.name}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.reportNum}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.status ? "Disabled" : "Live"}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[20%] font-medium text-md text-black'>
+                                            {/* <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[25%] font-medium text-md text-black'>
                                                 <a href="https://www.3xbuilds.com" target="_blank" ><FaDiscord></FaDiscord></a>
-                                            </div>
+                                            </div> */}
                                             
                                         </div>
                                     ))}

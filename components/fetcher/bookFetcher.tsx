@@ -416,6 +416,10 @@ async function makeReport(){
             <CiShare2 />
           </button>
 
+          <button onClick={()=>{setOpenReportModal(true)}} className='absolute top-0 left-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:left-0 rounded-br-xl border-b-[1px] hover:bg-white/20 duration-200 border-r-[1px] border-white'>
+              <MdReport className='text-white text-xl'/>
+          </button>
+
           <div className="w-screen absolute h-full overflow-hidden">
             {bookDetails?.cover && <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2" />}
           </div>
@@ -433,9 +437,6 @@ async function makeReport(){
                   <div className='flex gap-2'>
                     <button disabled={readListed} onClick={() => { readlist(bookDetails?._id as string) }} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white' /> : <MdLibraryAddCheck className='text-green-500' />}
-                    </button>
-                    <button onClick={()=>{setOpenReportModal(true)}} className='bg-gray-300 h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
-                        <MdReport className='text-black text-xl'/>
                     </button>
                   </div>
 
