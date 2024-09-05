@@ -16,6 +16,7 @@ export default function Home(){
     const {user} = useGlobalContext();
 
     const[reportedArr, setReportedArr] = useState([]);
+    const [authorArr, setAuthorArr] = useState([])
     const router = useRouter()
     const[loading, setLoading] = useState(false);
 
@@ -55,8 +56,21 @@ export default function Home(){
         }
     }
 
+    async function fetchAuthors(){
+        try{
+            await axios.get("/api/admin/getAuthors").then((res)=>{
+                setAuthorArr(res.data.array);
+                // console.log(res.data.array);
+            })
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     useEffect(()=>{
         fetchReported();
+        fetchAuthors()
     },[])
 
     async function pauseMint(tokenId:number, id:string, contractAdd:string){
@@ -215,6 +229,76 @@ export default function Home(){
                 </div>
                 
             </div>}
+
+            <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                <h2 className="text-2xl font-bold">Authors</h2>
+                
+
+                {authorArr &&
+                    <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
+                    <div className='overflow-x-auto '>
+                        <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
+                            <div className=''>
+                                <div className='flex text-center py-2 border-[1px] rounded-t-xl border-gray-300 text-black'>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>ID</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Name</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Collection</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Email</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Books</h2>
+                                    </div>
+                                    {/* <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Contact</h2>
+                                    </div> */}
+                                </div>
+
+                                <div className="flex flex-col w-full justify-center items-center">
+                                    {authorArr.map((item:UserType, i) => (
+                                        <div className={`flex w-full text-center border-gray-300 h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                <h2>{i+1}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2 >{item?.username.slice(0,10)}{item?.username.length > 10 && "..."}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <button className="hover:underline duration-200" onClick={()=>{router.push("/authors/"+item?.wallet)}} >{item?.collectionName}</button>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] flex items-center justify-center font-medium text-xs text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2>{item?.email}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2>{item?.yourBooks?.length}</h2>
+                                            </div>
+                                            {/* <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[25%] font-medium text-md text-black'>
+                                                <a href="https://www.3xbuilds.com" target="_blank" ><FaDiscord></FaDiscord></a>
+                                            </div> */}
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                
+                }
+            </div>
         </div>
     )
 }
