@@ -642,12 +642,12 @@ export default function Home(){
 
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
-                            <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number(e.target.value))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-nifty-gray-1 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
-                            <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => { setMaxMints(Number(e.target.value))}} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                            <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => { setMaxMints(Math.round(Number(e.target.value)))}} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                             <h2 className="text-sm text-semibold text-nifty-gray-1 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints (Leave 0 for no limit)</h2>
                         </div>
                     </div>

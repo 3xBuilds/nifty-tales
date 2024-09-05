@@ -9,7 +9,7 @@ import { ethers } from 'ethers';
 import abi from "@/utils/abis/templateABI"
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
-import { FaBookOpen, FaCrown, FaInfinity, FaLocationArrow } from 'react-icons/fa';
+import { FaBookOpen, FaCrown, FaInfinity, FaLocationArrow, FaPause } from 'react-icons/fa';
 import Book from '@/components/Global/Book';
 import { useSession } from 'next-auth/react';
 import { TiMinus, TiPlus } from 'react-icons/ti';
@@ -22,7 +22,7 @@ import { SiOpensea } from "react-icons/si";
 import { CiShare2 } from 'react-icons/ci';
 import { RiLoader5Line, RiLoaderFill } from 'react-icons/ri';
 import { useAccount } from 'wagmi';
-import { ImCross } from 'react-icons/im';
+import { ImCross, ImPause } from 'react-icons/im';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
@@ -454,7 +454,7 @@ async function makeReport(){
               <div className='flex gap-2'>
                 <button className='w-32 h-10 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' onClick={() => { setLocalStorage() }}>Read</button>
                 {/* @ts-ignore */}
-                <button disabled={bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted} onClick={() => { setShowModal(true) }} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Collect"}</button>
+                <button disabled={(bookDetails?.maxMint > 0 && bookDetails?.maxMint == bookDetails?.minted) || bookDetails?.isPaused} onClick={() => { setShowModal(true) }} className='text-black bg-gray-200 h-10 w-32 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>{bookDetails?.isPaused && <h2 className='flex gap-2 items-center justify-center'>Paused <FaPause/></h2> }{bookDetails?.maxMint > 0 && bookDetails?.minted < bookDetails?.maxMint && !bookDetails?.isPaused && "Mint"} {bookDetails?.maxMint > 0 && bookDetails?.minted >= bookDetails?.maxMint && "Minted Out!"} {bookDetails?.maxMint == 0 && "Collect"}</button>
                 {bookDetails && bookDetails?.minted as number > 0 && <a target='_blank' className='w-10 h-10 py-1 px-2 flex items-center justify-center text-xl rounded-lg font-bold hover:-translate-y-1 duration-200 bg-[#2181e3] text-white' href={`https://opensea.io/assets/base/${bookDetails.contractAddress}/${bookDetails.tokenId}`} ><SiOpensea /></a>}
               </div>
             </div>

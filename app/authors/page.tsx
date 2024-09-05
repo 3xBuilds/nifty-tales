@@ -10,7 +10,7 @@ import { IoIosRocket, IoMdTrash } from "react-icons/io";
 import masterABI from "@/utils/abis/masterABI";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaPen, FaPlusCircle } from "react-icons/fa";
+import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaPause, FaPen, FaPlusCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose, IoTrashBin } from "react-icons/io5";
@@ -21,7 +21,7 @@ import Link from "next/link";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { useSession } from "next-auth/react";
 import { useExitAlert } from "@/components/alert/alert";
-import { RiLoader5Line } from "react-icons/ri";
+import { RiLoader5Fill, RiLoader5Line } from "react-icons/ri";
 import { MdContentCopy } from "react-icons/md";
 
 import placeholder from "@/assets/og.png"
@@ -46,7 +46,7 @@ export default function Home() {
     const [priceModal, setPriceModal] = useState(false);
     const [id, setId] = useState("");
     const [price, setPrice] = useState("");
-
+    const [pausedBooks, setPausedBooks] = useState<Array<BookType>>([])
     const [boostModal, setBoostModal] = useState(false);
 
     const [name, setName] = useState<string>("")
@@ -117,8 +117,13 @@ export default function Home() {
             var arr3: any = []
             var subArr3: any = []
 
+            var pausedArr: any = []
+
 
             user.yourBooks.reverse().map((item: any, i) => {
+                if(item.isPaused){
+                    pausedArr.push(item)
+                }
                 if (item.isPublished && !item.isHidden) {
 
                     subArr1.push(item);
@@ -151,7 +156,7 @@ export default function Home() {
             //@ts-ignore
             // if(arr1[0].length > 0)
             setPublishedBooks(arr1);
-
+            setPausedBooks(pausedArr);
             setHiddenBooks(arr3);
             //@ts-ignore
             setDraftBooks(arr2);
@@ -435,6 +440,55 @@ export default function Home() {
         }
     }
 
+    const [loadingPause, setLoadingPause] = useState<boolean>(false);
+
+    async function pauseMint(tokenId:number, id:string){
+        try{
+            const contract = await contractSetup();
+
+            const txn = await contract?.pauseMint(tokenId);
+
+            await txn.wait();
+
+            if(txn){
+                await axios.patch("/api/book/"+id,{isPaused: true}).then((res)=>{
+                    toast.success("Mint paused for the book!");
+                    setLoadingPause(false)
+                    getUser();
+                });
+            }
+        }
+        catch(err){
+            console.log(err);
+            setLoadingPause(false)
+            toast.error("Error while pausing mint.");
+        }
+    }
+
+    async function unpauseMint(tokenId:number, id:string){
+        try{
+            const contract = await contractSetup();
+
+            const txn = await contract?.unpauseMint(tokenId);
+
+            await txn.wait();
+
+            if(txn){
+                await axios.patch("/api/book/"+id,{isPaused: false}).then((res)=>{
+                    toast.success("Mint un-paused for the book!");
+                    setLoadingPause(false);
+                    getUser();
+                });
+            }
+        }
+        catch(err){
+            console.log(err);
+            toast.error("Error while pausing mint.");
+            setLoadingPause(false);
+
+        }
+    }
+
     return (
         <div className="">
             {/* <div className="h-16 w-screen relative z-[1000]">
@@ -580,7 +634,7 @@ export default function Home() {
                         {publishedBooks.map((item: any) => (
                             <div className="w-full mb-5">
                                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
-                                    {item.map((item2: BookType) => (<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
+                                    {item.map((item2: BookType) => (<div className={`flex group relative flex-col ${item2.isPaused && "grayscale"} items-center px-2 md:px-10 mt-2 justify-center gap-4`}>
                                         <div onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
                                             <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0, 15)}</h2>
                                         </div>
@@ -588,6 +642,7 @@ export default function Home() {
                                             <button onClick={() => { hide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash /></button>
                                             <button onClick={() => { setPriceModal(true); setTokenId(item2.tokenId); setId(item2._id) }} className="bg-black text-white p-3 text-md rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md" /></button>
                                             <button onClick={() => { setId(item2._id); setBoostModal(true) }} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket /></button>
+                                            <button onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>
                                         </div>
                                         <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                                             <Book img={item2.cover} />
@@ -620,6 +675,7 @@ export default function Home() {
                                         </div>
                                         <div className="absolute z-50 top-1  " >
                                             <button onClick={() => { unHide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye /></button>
+                                            <button onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>
                                         </div>
                                         <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                                             <Book img={item2.cover} />
@@ -666,24 +722,81 @@ export default function Home() {
                     </div>}
                 </>
             }
+
+            {pausedBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                <h2 className="text-2xl font-bold">Paused Books</h2>
+                <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
+                    <div className='overflow-x-auto '>
+                        <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
+                            <div className=''>
+                                <div className='flex text-center py-2 border-[1px] rounded-t-lg border-gray-300 text-black'>
+                                    <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>ID</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Book</h2>
+                                    </div>
+                                    
+                                    <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Action</h2>
+                                    </div>
+                                    {/* <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Contact</h2>
+                                    </div> */}
+                                </div>
+
+                                <div className="flex flex-col w-full justify-center items-center">
+                                    {pausedBooks.map((item, i) => (
+                                        <div className={`flex w-full text-center h-12 border-b-[1px] border-x-[1px] border-gray-300 ${i+1 == pausedBooks.length && "rounded-b-xl"} items-center justify-center`}>
+                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-black'>
+                                                <h2>{i+1}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <h2>{item.name.slice(0,15)}{item.name.length > 15 && "..."}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-black'>
+                                                {/* @ts-ignore */}
+                                                <button onClick={()=>{setLoadingPause(true); unpauseMint(item.tokenId, item._id)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>{loadingPause ? <RiLoader5Fill className="animate-spin mx-auto text-xl"/> : "Unpause"}</button>
+                                            </div>
+                                            {/* <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[25%] font-medium text-md text-black'>
+                                                <a href="https://www.3xbuilds.com" target="_blank" ><FaDiscord></FaDiscord></a>
+                                            </div> */}
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>}
+
+
             {reportedArr.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                 <h2 className="text-2xl font-bold">Reports</h2>
                 <h2 className="mt-4 text-sm text-nifty-gray-1">These are your books which have been reported by readers. To resolve an issue or report a misunderstanding, please contact us.</h2>
                 <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
                     <div className='overflow-x-auto '>
                         <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
-                            <div className='border-t-[1px] border-x-[1px] rounded-t-lg border-gray-300'>
-                                <div className='flex text-center py-2 border-b-[1px] border-gray-300 text-black'>
-                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
+                            <div className=''>
+                                <div className='flex text-center py-2 border-[1px] rounded-t-xl border-gray-300 text-black'>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>ID</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Book</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Reports</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[40%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Reason</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Status</h2>
                                     </div>
                                     {/* <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
@@ -691,21 +804,29 @@ export default function Home() {
                                     </div> */}
                                 </div>
 
-                                <div className="my-4 flex flex-col w-full justify-center items-center">
+                                <div className="flex flex-col w-full justify-center items-center">
                                     {reportedArr.map((item, i) => (
-                                        <div className="flex w-full text-center h-10 border-b-[1px] items-center justify-center">
-                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
+                                        <div className={`flex w-full text-center h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 <h2>{i+1}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
-                                                <h2>{item.name}</h2>
+                                                <h2>{item.name.slice(0,10)}{item.name.length > 10 && "..."}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.reportNum}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[40%] flex items-center justify-center font-medium text-xs text-black'>
+                                                {/* @ts-ignore */}
+                                                {item.tagsArr.map((item2)=>(
+                                                    <div className={`py-2 w-24 px-2 hover:scale-105 duration-200 hover:brightness-105 rounded-xl flex gap-2 items-center justify-center bg-gray-200 border-2 border-gray-400 font-semibold text-center text-gray-400 text-[0.6rem]`}>
+                                                        {item2}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.status ? "Disabled" : "Live"}</h2>
                                             </div>

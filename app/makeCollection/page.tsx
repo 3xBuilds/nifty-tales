@@ -59,6 +59,7 @@ export default function Home() {
                 await axios.patch(`/api/user/${user?.email}`, {contractAdd: contract.address});
                 getUser()
                 setIsLoading(true);
+                toast.success("Welcome, author!")
                 router.push("/authors/");
                 
                 return true;
@@ -67,6 +68,7 @@ export default function Home() {
         }
         catch (err) {
             console.error(err);
+            toast.error("Library could not be created! Try again.")
             setLoading(false);
             return false;
 
