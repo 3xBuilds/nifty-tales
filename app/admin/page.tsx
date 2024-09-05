@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import abi from "@/utils/abis/templateABI"
 import { RiLoader5Fill } from "react-icons/ri";
 import { ethers } from "ethers";
+import { useRouter } from "next/navigation";
 
 export default function Home(){
 
@@ -15,7 +16,7 @@ export default function Home(){
     const {user} = useGlobalContext();
 
     const[reportedArr, setReportedArr] = useState([]);
-
+    const router = useRouter()
     const[loading, setLoading] = useState(false);
 
     async function contractSetup(add:string) {
@@ -180,7 +181,7 @@ export default function Home(){
                                             </div>
                                             <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
-                                                <h2>{item.name.slice(0,10)}{item.name.length > 10 && "..."}</h2>
+                                                <button className="hover:underline duration-200" onClick={()=>{router.push("/books/"+item.id)}} >{item.name.slice(0,10)}{item.name.length > 10 && "..."}</button>
                                             </div>
                                             <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
