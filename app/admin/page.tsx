@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import abi from "@/utils/abis/templateABI"
 import { RiLoader5Fill } from "react-icons/ri";
+import { ethers } from "ethers";
 
 export default function Home(){
 
@@ -24,13 +25,13 @@ export default function Home(){
 
                 //@ts-ignore
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
-
+                
+                console.log(add);
                 //@ts-ignore
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
                 //@ts-ignore
                 const contract = new ethers.Contract(add, abi, signer);
-
                 return contract;
 
             }
@@ -61,7 +62,7 @@ export default function Home(){
         try{
             setLoading(true);
             const contract = await contractSetup(contractAdd);
-
+            console.log(contract, contractAdd);
             const txn = await contract?.pauseMint(tokenId);
 
             await txn.wait();
@@ -195,7 +196,7 @@ export default function Home(){
                                             </div>
                                             <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
-                                                {!item.status ? <button className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md' onClick={()=>{pauseMint(item.tokenId, item.id, item.contractAdd)}} >{loading ? <RiLoader5Fill className="animate-spin text-xl"/> : "Disable"}</button> : <button className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md' onClick={()=>{unpauseMint(item.tokenId, item.id, item.contractAdd)}} >{loading ? <RiLoader5Fill className="animate-spin text-xl"/> : "Enable"}</button>}
+                                                {!item.status ? <button className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md' onClick={()=>{pauseMint(item.tokenId, item.id, item.contractAdd)}} >{loading ? <RiLoader5Fill className="animate-spin text-xl mx-auto"/> : "Disable"}</button> : <button className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md' onClick={()=>{unpauseMint(item.tokenId, item.id, item.contractAdd)}} >{loading ? <RiLoader5Fill className="animate-spin text-xl mx-auto"/> : "Enable"}</button>}
                                             </div>
                                             {/* <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[25%] font-medium text-md text-black'>
                                                 <a href="https://www.3xbuilds.com" target="_blank" ><FaDiscord></FaDiscord></a>

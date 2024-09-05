@@ -55,7 +55,7 @@ export async function GET(req:any){
                 if(plag > 0){
                     tagsArr.push("Plagiarism")
                 }
-                arr.push({name, status, reportNum, tagsArr, id, contractAdd});
+                arr.push({name, status, reportNum, tagsArr, id, tokenId, contractAdd});
             }
             return ;
         }))
