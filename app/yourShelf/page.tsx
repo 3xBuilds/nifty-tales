@@ -45,7 +45,7 @@ export default function Home(){
 
 
             user.readlist.reverse().map((item:any, i)=>{
-                if(item.isPublished && !item.isHidden){
+                if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
                     subArr1.push(item);
                 }
                 if(subArr1.length == slicer || i == user.readlist.length-1){
@@ -60,7 +60,7 @@ export default function Home(){
             setReadList(arr1);
         }
         user?.mintedBooks.reverse().map((item:any, i)=>{
-            if(item?.isPublished && !item?.isHidden){
+            if(item?.isPublished && !item?.isHidden && !item.isAdminRemoved){
                 subArr2.push(item);
             }
             if(subArr2.length == slicer || i == user?.mintedBooks.length-1){

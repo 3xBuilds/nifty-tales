@@ -38,7 +38,7 @@ const Highlights = () => {
                 var arr:any = []
 
                 res.data.data.map((item:BookType)=>{
-                    if(item.isPublished && !item.isHidden){
+                    if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
                         arr.push({item, readlisted: userNew?.readlist.includes(item._id)});
                     }
                 })

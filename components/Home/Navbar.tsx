@@ -142,7 +142,6 @@ const Navbar = () => {
 
     {user && user?.wallet != "" && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-80 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is not linked to your account. <b className="block mt-5">Go to your wallet and connect {user?.wallet.slice(0,32)}...</b> </div></div>}
 
-
         <button onClick={()=>{setIsLoading(true);router.push("/")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
             <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
@@ -150,6 +149,8 @@ const Navbar = () => {
             <h2 className='text-xs text-red-500 ml-2' >BETA</h2>
 
         </button>
+
+        {user?.role == "ADMIN" && <button onClick={()=>{router.push("/admin")}} className='text-xl text-black bg-gray-300 h-10 px-4 rounded-xl font-bold'>ADMIN</button>}
 
 
       {/* MOBILE NAVBAR */}

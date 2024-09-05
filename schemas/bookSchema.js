@@ -114,10 +114,6 @@ const BookSchema = new Schema({
     createdAt:{
         type: Date,
         default: Date.now
-    },
-    reportedBy:{
-        type:Number,
-        default:0
     }
     
   }, {collection: "books"})

@@ -537,12 +537,27 @@ export default function Home(){
     tokenChecker();
   }, []);
 
+  const [confirmPublishModal, setConfirmPublishModal] = useState(false);
+
 
     return(
         <div className="md:px-16 pt-10 max-md:px-4 w-screen h-screen flex flex-col items-start justify-start">
             {/* <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div> */}
+
+            <div className={` ${confirmPublishModal ? "translate-y-0" : "-translate-y-[300rem]"} z-[500] duration-200 w-screen h-screen fixed top-0 left-0 backdrop-blur-xl flex items-center justify-center`}>
+                <div className="w-80 p-4 rounded-xl shadow-xl shadow-black/30">
+                    <h2 className="text-xl font-bold">Confirm</h2>
+                    <h2 className="text-nifty-gray-1 text-sm my-4"><b>Note:</b> Once published, nothing but its price and mint details can be changed</h2>
+
+                    <div className="flex gap-2">
+                        <button className="bg-black text-white w-1/2 h-10 rounded-lg font-bold hover:-translate-y-1 duration-200" onClick={()=>{setConfirmPublishModal(false); setLoading("publish"); getContractDetails("publish")}}>Publish</button>
+                        <button className="bg-gray-200 text-black w-1/2 h-10 rounded-lg font-bold hover:-translate-y-1 duration-200" onClick={()=>{setConfirmPublishModal(false);}}>Cancel</button>
+                    </div>
+
+                </div>
+            </div>
 
             {loading != "" && <div className="w-screen fixed top-0 left-0 z-[10] h-screen backdrop-blur-xl flex items-center justify-center">
                     <div className="bg-white w-96 shadow-xl shadow-black/30 rounded-xl p-4">
@@ -653,7 +668,7 @@ export default function Home(){
                     </div>
 
                     <div className="w-full text-start flex flex-col">
-                        <input type="number" min={0} placeholder={`Leave 0 if no wallet limit`} onChange={(e) => { setMaxMintsPerWallet(Number(e.target.value))}} value={maxMintsPerWallet} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input type="number" min={0} placeholder={`Leave 0 if no wallet limit`} onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value)))}} value={maxMintsPerWallet} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints Per Wallet (Leave 0 for no limit)</h2>
                     </div>
 
@@ -706,7 +721,7 @@ export default function Home(){
                     <h2 className="text-start max-md:w-full" >I agree that have the rights of everything I am publishing</h2>
                 </div>
                 <button onClick={()=>{setLoading("draft"); getContractDetails("draft")}} className='text-black bg-gray-200 h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Save Draft</button>
-                <button onClick={()=>{setLoading("publish"); getContractDetails("publish")}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
+                <button onClick={()=>{setConfirmPublishModal(true)}} className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>Publish</button>
             </div>
 
             

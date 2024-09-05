@@ -21,7 +21,7 @@ export async function GET(req: any) {
             { collectionName: { $regex: searchString, $options: 'i' } }
         ] }).populate('yourBooks');
 
-        const result2 = await Book.find({
+        var result2 = await Book.find({
             $or: [
                 { name: { $regex: searchString, $options: 'i' } },
                 { tags: { $in: [new RegExp(searchString, 'i')] } }
@@ -29,6 +29,7 @@ export async function GET(req: any) {
         });
 
         result1 = result1.filter(user => user.collectionName !== "")
+        result2 = result2.filter((book) =>{!book.isAdminRemoved && !book.isHidden })
 
         const slicedResult1 = result1?.slice(0, 2) || [];
         const slicedResult2 = result2?.slice(0, 2) || [];

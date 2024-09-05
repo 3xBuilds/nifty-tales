@@ -109,7 +109,7 @@ export default function AuthorFetcher(){
 
 
             user.yourBooks.reverse().map((item:any, i)=>{
-                if(item.isPublished && !item.isHidden){
+                if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
                     subArr1.push(item);
                 }
                 if(subArr1.length == slicer || i == user.yourBooks.length-1){

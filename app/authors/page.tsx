@@ -32,22 +32,29 @@ export default function Home() {
     const router = useRouter()
     const { setIsLoading } = useLoading()
     const { user, getUser } = useGlobalContext();
-    const [mintPrice, setMintPrice] = useState<number>(0);
-
+    
     const [publishedBooks, setPublishedBooks] = useState([])
     const [draftBooks, setDraftBooks] = useState([])
     const [hiddenBooks, setHiddenBooks] = useState([])
-
+    
     const [slicer, setSlicer] = useState<number>(4);
-
+    
     const [addtime, setAddtime] = useState("");
-
+    
     const [loading, setLoading] = useState(false);
     const [priceModal, setPriceModal] = useState(false);
     const [id, setId] = useState("");
-    const [price, setPrice] = useState("");
     const [pausedBooks, setPausedBooks] = useState<Array<BookType>>([])
     const [boostModal, setBoostModal] = useState(false);
+    const [price, setPrice] = useState("");
+    
+    const [mintPrice, setMintPrice] = useState<number>(0);
+    const [maxMints, setMaxMints] = useState<number>(0);
+    const [maxMintsPerWallet, setMaxMintsPerWallet] = useState<number>(0);
+
+    const [ogmintprice, setogMintPrice] = useState<number>(0);
+    const [ogmaxMints, setogMaxMints] = useState<number>(0);
+    const [ogmaxMintsPerWallet, setogMaxMintsPerWallet] = useState<number>(0);
 
     const [name, setName] = useState<string>("")
 
@@ -124,8 +131,7 @@ export default function Home() {
                 if(item.isPaused){
                     pausedArr.push(item)
                 }
-                if (item.isPublished && !item.isHidden) {
-
+                if (item.isPublished && !item.isHidden && !item.isAdminRemoved) {
                     subArr1.push(item);
                 }
                 if (subArr1.length == slicer || i == user.yourBooks.length - 1) {
@@ -143,7 +149,7 @@ export default function Home() {
                     subArr2 = []
                 }
 
-                if (item.isPublished && item.isHidden) {
+                if (item.isPublished && item.isHidden && !item.isAdminRemoved) {
                     subArr3.push(item);
                 }
                 if (subArr3.length == slicer || i == user.yourBooks.length - 1) {
@@ -408,22 +414,53 @@ export default function Home() {
 
     const [tokenId, setTokenId] = useState<number>(0);
 
+    const [status, setStatus] = useState<string>("");
+
     async function handlePriceChange() {
         try {
             setLoading(true);
             const contract = await contractSetup();
-            const txn = await contract?.changePrice(tokenId, ethers.utils.parseEther(String(mintPrice)));
 
-            await txn.wait()
+            if(ogmintprice != mintPrice){
+                setStatus("Updating Mint Price");
+                const txn = await contract?.changePrice(tokenId, ethers.utils.parseEther(String(mintPrice)));
+                await txn.wait()
+                if(txn)
+                await axios.patch("/api/book/" + id, { price: mintPrice})
+            }
 
-            await axios.patch("/api/book/" + id, { price: mintPrice }).then((res) => {
-                setLoading(false);
-                setPriceModal(false);
-            })
+            if(ogmaxMints != maxMints){
+                setStatus("Updating Max Mints");
+                const txn = await contract?.changeMaxMints(tokenId, maxMints);
+                await txn.wait()
+
+                if(txn)
+                await axios.patch("/api/book/" + id, { maxMint: maxMints})
+            }
+
+            if(ogmaxMintsPerWallet != maxMintsPerWallet){
+                setStatus("Updating Max Mints Per Wallet");
+                const txn = await contract?.changeMaxMintsPerWallet(tokenId, maxMintsPerWallet);
+                await txn.wait();
+                
+                if(txn)
+                await axios.patch("/api/book/" + id, { maxMintsPerWallet: maxMintsPerWallet})
+            }
+
+            setLoading(false);
+            setStatus("");
+            setPriceModal(false);
+            getUser()
+            toast.success("All details updated");
+
+
         }
         catch (err) {
+            setStatus("");
             setLoading(false);
             console.log(err);
+            toast.success("Error while uploading details");
+
         }
     }
 
@@ -483,7 +520,7 @@ export default function Home() {
         }
         catch(err){
             console.log(err);
-            toast.error("Error while pausing mint.");
+            toast.error("Error while un-pausing mint.");
             setLoadingPause(false);
 
         }
@@ -545,17 +582,34 @@ export default function Home() {
                 </div>
             </div>
 
+            
+            {/* Mint update progress */}
+            <div className={` ${status !== "" ? "translate-y-0" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[510] justify-center fixed top-0 left-0 w-screen h-screen`}>
+                <div className="w-80 p-4 shadow-xl shadow-black/30 rounded-xl bg-white flex flex-col items-center">
+                <h2 className="text-nifty-gray-1 text-sm">Confirm all the transactions to change data on contract level</h2>
+                <h2 className="flex items-center justify-center gap-2 my-4"><RiLoader5Fill className="animate-spin text-xl"/>{status}</h2>
+                </div>
+            </div>
 
             {/* Update Price Modal */}
             <div className={` ${priceModal ? "translate-y-0" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[110] justify-center fixed top-0 left-0 w-screen h-screen`}>
+
                 <div className="bg-white rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2">
-                    <h3 className="text-xl font-bold">Update New Price</h3>
+                    <h3 className="text-xl font-bold">Update Mint Details</h3>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMintPrice(Number(e.target.value)) }} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH</h2>
                     </div>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMints(Math.round(Number(e.target.value))) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints</h2>
+                    </div>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value))) }} value={maxMintsPerWallet} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints per Wallet</h2>
+                    </div>
                     <div className="flex gap-2 w-full">
-                        <button onClick={handlePriceChange} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
+                        <button disabled={loading} onClick={handlePriceChange} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
                         <button onClick={() => { setPriceModal(false) }} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
                     </div>
 
@@ -631,7 +685,7 @@ export default function Home() {
                             </div>
                         </div>
 
-                        {publishedBooks.map((item: any) => (
+                        {publishedBooks?.map((item: any) => (
                             <div className="w-full mb-5">
                                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                                     {item.map((item2: BookType) => (<div className={`flex group relative flex-col ${item2.isPaused && "grayscale"} items-center px-2 md:px-10 mt-2 justify-center gap-4`}>
@@ -640,9 +694,9 @@ export default function Home() {
                                         </div>
                                         <div className="absolute z-50 top-1 flex gap-2 " >
                                             <button onClick={() => { hide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash /></button>
-                                            <button onClick={() => { setPriceModal(true); setTokenId(item2.tokenId); setId(item2._id) }} className="bg-black text-white p-3 text-md rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md" /></button>
+                                            <button onClick={() => {setTokenId(item2.tokenId); setId(item2._id); setMintPrice(item2.price as number); setogMintPrice(item2.price as number); setogMaxMints(item2.maxMint as number); setogMaxMintsPerWallet(item2.maxMintsPerWallet as number); setMaxMints(item2.maxMint as number); setMaxMintsPerWallet(item2.maxMintsPerWallet as number); setPriceModal(true);  }} className="bg-black text-white p-3 text-md rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md" /></button>
                                             <button onClick={() => { setId(item2._id); setBoostModal(true) }} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket /></button>
-                                            <button onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>
+                                            <button disabled={loadingPause} onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>
                                         </div>
                                         <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                                             <Book img={item2.cover} />
@@ -661,7 +715,7 @@ export default function Home() {
                     </div>}
 
                     {/* HIDDEN BOOKS */}
-                    {hiddenBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                    {hiddenBooks?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                         <div className="w-full mb-5">
 
                             <h3 className="text-2xl font-bold ">Hidden</h3>
@@ -690,7 +744,7 @@ export default function Home() {
                     </div>}
 
                     {/* DRAFT BOOKS */}
-                    {draftBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                    {draftBooks?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                         <div className="w-full mb-4">
 
                             <h3 className="text-2xl font-bold ">Drafts</h3>
@@ -723,7 +777,7 @@ export default function Home() {
                 </>
             }
 
-            {pausedBooks.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+            {pausedBooks?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                 <h2 className="text-2xl font-bold">Paused Books</h2>
                 <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
                     <div className='overflow-x-auto '>
@@ -776,7 +830,7 @@ export default function Home() {
             </div>}
 
 
-            {reportedArr.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+            {reportedArr?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                 <h2 className="text-2xl font-bold">Reports</h2>
                 <h2 className="mt-4 text-sm text-nifty-gray-1">These are your books which have been reported by readers. To resolve an issue or report a misunderstanding, please contact us.</h2>
                 <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
@@ -806,7 +860,7 @@ export default function Home() {
 
                                 <div className="flex flex-col w-full justify-center items-center">
                                     {reportedArr.map((item, i) => (
-                                        <div className={`flex w-full text-center h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
+                                        <div className={`flex w-full text-center border-gray-300 h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
                                             <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 <h2>{i+1}</h2>
                                             </div>

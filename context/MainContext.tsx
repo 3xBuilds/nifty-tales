@@ -155,11 +155,11 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       var arr2:any= books.data.data
 
       books.data.data.reverse().map((item:any, i:number)=>{
-        if(item.isPublished && !item.isHidden){
+        if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
             subArr1.push(item);
         }
 
-        if(item.isBoosted && Number(item.isBoosted) > Date.now()){
+        if(item.isBoosted && Number(item.isBoosted) > Date.now() && !item.isAdminRemoved){
           subArr4.push(item);
         }
 
@@ -182,7 +182,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     var subArr3:any = []
 
       arr2.map((item:any, i:number)=>{
-        if(item.isPublished && !item.isHidden){
+        if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
             subArr3.push(item);
         }
         if(subArr3.length == slicer || i == books.data.data.length-1){
