@@ -8,7 +8,7 @@ const About = () => {
         <h2 className='text-lg max-md:text-base max-md:w-[80%] text-gray-500 font-light w-[60%] mx-auto mt-10'>Nifty Tales is a digital platform where authors publish stories as NFTs, allowing readers to enjoy free reading or mint stories for cultural support.</h2>
         <h3 className='text-3xl max-md:text-xl mt-20 font-bold'>Our Vision</h3>
         <h2 className='text-lg max-md:text-base max-md:w-[80%] text-gray-500 font-light w-[60%] mx-auto mt-10'>We aim to revolutionize storytelling by merging literature with blockchain, empowering authors and creating a space for readers to engage and support.</h2>
-        <h3 className='text-3xl max-md:text-xl mt-20 font-bold'>Our Team</h3>
+        <h3 className='text-3xl max-md:text-xl mt-20 font-bold'>Why Nifty Tales?</h3>
         <h2 className='text-lg max-md:text-base max-md:w-[80%] text-gray-500 font-light w-[60%] mx-auto mt-10'>Nifty Tales offers a unique blend of free access to unlimited stories and the opportunity to support authors by minting their work as NFTs, making it easy to engage with great content and support creativity.</h2>
         {/* <div className='flex items-center justify-center my-20 gap-10'>
             <div className='w-72 hover:scale-110 duration-150 rounded-xl bg-[#fafafa] shadow-black/25 shadow-lg p-5 flex flex-col items-center justify-center'>
