@@ -47,7 +47,7 @@ export default function Home(){
         try{
             await axios.get("/api/admin/reportedBooks").then((res)=>{
                 setReportedArr(res.data.array);
-                console.log(res.data.array);
+                // console.log(res.data.array);
             })
         }
         catch(err){
