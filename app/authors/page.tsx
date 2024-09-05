@@ -1,4 +1,5 @@
 "use client"
+import { GoDotFill } from "react-icons/go";
 
 import { usePathname } from "next/navigation"
 import { ethers } from "ethers";
@@ -128,7 +129,7 @@ export default function Home() {
 
 
             user.yourBooks.reverse().map((item: any, i) => {
-                if(item.isPaused){
+                if(item.isPaused && !item.isAdminRemoved){
                     pausedArr.push(item)
                 }
                 if (item.isPublished && !item.isHidden && !item.isAdminRemoved) {
@@ -778,7 +779,7 @@ export default function Home() {
             }
 
             {pausedBooks?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                <h2 className="text-2xl font-bold">Paused Books</h2>
+                <h2 className="text-2xl font-bold flex gap-2 items-center justify-center"><GoDotFill className="animate-pulse text-orange-500"/>Paused Books</h2>
                 <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
                     <div className='overflow-x-auto '>
                         <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
@@ -831,7 +832,7 @@ export default function Home() {
 
 
             {reportedArr?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                <h2 className="text-2xl font-bold">Reports</h2>
+                <h2 className="text-2xl font-bold flex gap-2 items-center justify-center"><GoDotFill className="animate-pulse text-red-500"/>Reports</h2>
                 <h2 className="mt-4 text-sm text-nifty-gray-1">These are your books which have been reported by readers. To resolve an issue or report a misunderstanding, please contact us.</h2>
                 <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
                     <div className='overflow-x-auto '>
@@ -882,7 +883,7 @@ export default function Home() {
                                             </div>
                                             <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
                                                 {/* @ts-ignore */}
-                                                <h2>{item.status ? "Disabled" : "Live"}</h2>
+                                                <h2>{item.status ? <GoDotFill className="text-red-500 mx-auto text-lg" /> : <GoDotFill className="text-green-500 mx-auto text-lg" />}</h2>
                                             </div>
                                             {/* <div className='flex-shrink-0 flex items-center justify-center min-w-32 w-[25%] font-medium text-md text-black'>
                                                 <a href="https://www.3xbuilds.com" target="_blank" ><FaDiscord></FaDiscord></a>
