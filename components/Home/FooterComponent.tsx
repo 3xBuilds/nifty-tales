@@ -14,6 +14,7 @@ const FooterComponent = () => {
                 <li><a href="https://x.com/niftytales" className='flex items-center justify-center gap-2 w-fit' target='_blank'> <FaTwitter className='text-white'/> Twitter</a></li>
                 {/* <li>Discord</li> */}
             </ul>
+            
             {/* <ul className='flex flex-col'>
                 <li className='font-bold'>Links</li>
                 <li>Publish Books</li>
