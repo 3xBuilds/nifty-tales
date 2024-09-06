@@ -15,11 +15,7 @@ export async function GET(req:any){
         if(!users){
             return NextResponse.json({error: "No books found"}, {status:404});
         }
-
-        const arr = users.filter(user=>user.contractAdd !== "");
-
-        console.log(arr);
-        return NextResponse.json({array:arr}, {status:200});
+        return NextResponse.json({array:users}, {status:200});
 
     }
     catch(err){

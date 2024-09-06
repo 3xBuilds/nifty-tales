@@ -116,13 +116,13 @@ const Navbar = () => {
           <button onClick={()=>{setOpenSettingsModal(false)}} className='w-1/2 flex justify-end items-center text-black hover:text-red-600 duration-200'><ImCross/></button>
         </div>
         <div className='flex flex-col mt-4 items-center h-full gap-2'>
-          <button onClick={()=>{setConfirmBox(true)}} className='w-full h-10 text-xl bg-red-500 hover:brightness-105 duration-200 text-white font-bold rounded-lg'>Delete Account</button>
-          <h2 className='text-red-500 font-bold animate-bounce'>DESTRUCTIVE ACTION!</h2>
           <h2 className='text-sm text-left w-full text-nifty-gray-2'>Use this action only if</h2>
           <ul className='list-disc ml-4 text-nifty-gray-1'>
             <li><h2 className='text-xs text-nifty-gray-1'>You have to connect the associated email/wallet to another account</h2></li>
             <li><h2 className='text-xs text-nifty-gray-1'>You don't have published books on this account.</h2></li>
           </ul>
+          <h2 className='text-red-500 font-bold animate-bounce'>DESTRUCTIVE ACTION!</h2>
+          <button onClick={()=>{setConfirmBox(true)}} className='w-full h-10 text-xl bg-red-500 hover:brightness-105 duration-200 text-white font-bold rounded-lg'>Delete Account</button>
         </div>
       </div>
     </div>

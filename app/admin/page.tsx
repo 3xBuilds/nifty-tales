@@ -77,8 +77,19 @@ export default function Home(){
         try{
             setLoading(true);
             const contract = await contractSetup(contractAdd);
-            console.log(contract, contractAdd);
-            const txn = await contract?.pauseMint(tokenId);
+
+            const gasEstimate = await contract?.estimateGas.pauseMint(tokenId).catch((err) => { console.log(err) });
+                console.log("hello2", gasEstimate);
+                // Add a 20% buffer to the gas estimate
+                const gasLimit = gasEstimate?.mul(130).div(100);
+
+                // Get current gas price
+                const gasPrice = await contract?.provider.getGasPrice();
+
+            const txn = await contract?.pauseMint(tokenId, {
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
 
             await txn.wait();
 
@@ -103,7 +114,18 @@ export default function Home(){
 
             const contract = await contractSetup(contractAdd);
 
-            const txn = await contract?.unpauseMint(tokenId);
+            const gasEstimate = await contract?.estimateGas.unpauseMint(tokenId).catch((err) => { console.log(err) });
+                console.log("hello2", gasEstimate);
+                // Add a 20% buffer to the gas estimate
+                const gasLimit = gasEstimate?.mul(130).div(100);
+
+                // Get current gas price
+                const gasPrice = await contract?.provider.getGasPrice();
+
+            const txn = await contract?.unpauseMint(tokenId, {
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
 
             await txn.wait();
 
@@ -231,13 +253,12 @@ export default function Home(){
             </div>}
 
             <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
-                <h2 className="text-2xl font-bold">Authors</h2>
-                
+                <h2 className="text-2xl font-bold">Users</h2>
 
                 {authorArr &&
                     <div className='w-full max-w-full overflow-x-auto mx-auto my-10'>
                     <div className='overflow-x-auto '>
-                        <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
+                        <div className='min-w-[800px] w-[100%]'>
                             <div className=''>
                                 <div className='flex text-center py-2 border-[1px] rounded-t-xl border-gray-300 text-black'>
                                     <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
