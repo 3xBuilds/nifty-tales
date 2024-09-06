@@ -419,7 +419,7 @@ async function increaseReader(num:number, id:any){
 
         <div className="w-screen relative h-[47rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
           <div className='absolute flex gap-2 items-center justify-center top-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >
-            <span className='border-r-[1px] pr-2 border-white text-white'>Readers: {bookDetails?.readers}</span>
+            <span className='border-r-[1px] pr-2 border-white text-white'>Views: {bookDetails?.readers}</span>
             <h2>Minted: {bookDetails?.minted ? bookDetails.minted : 0}{bookDetails?.maxMint != 0 && "/" + bookDetails?.maxMint}</h2>
           </div>
 

@@ -373,7 +373,7 @@ export const Analytics = () => {
         </div>
 
         <div className='p-6 flex items-start justify-center flex-col md:w-[30%] w-80 rounded-xl border-[1px] border-gray-300' >
-          <h2 className='text-xl text-nifty-gray-1'>Total Readers</h2>
+          <h2 className='text-xl text-nifty-gray-1'>Total Views</h2>
           <h2 className='text-4xl font-bold flex gap-2 items-center'>{option == "Daily" && dailyStats?.totalReaders}{option == "Weekly" && weeklyStats?.totalReaders}{option == "Monthly" && monthlyStats?.totalReaders}{option == "All Time" && allTimeStats?.totalReaders} {!dailyStats && !weeklyStats && !monthlyStats && !allTimeStats && <div className='h-12 rounded-lg bg-nifty-gray-1/40 animate-pulse w-24'></div>}</h2>
         </div>
       </div>
@@ -396,7 +396,7 @@ export const Analytics = () => {
                   <h2>Minted</h2>
                 </div>
                 <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
-                  <h2>Readers</h2>
+                  <h2>Views</h2>
                 </div>
                 <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-nifty-gray-1'>
                   <h2>Status</h2>
