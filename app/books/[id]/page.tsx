@@ -1,6 +1,5 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { BookFetcher } from '@/components/fetcher/bookFetcher';
-
  
 type Props = {
   params: { id: string }

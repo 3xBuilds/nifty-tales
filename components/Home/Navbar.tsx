@@ -224,7 +224,8 @@ const Navbar = () => {
             {/* @ts-ignore */}
             {session?.role != "ANONYMOUS" && <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{setOpenSettingsModal(true)}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'>Settings</button></li>}
             <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{signOut({callbackUrl: "/connect"})}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'>Logout</button></li>
-            <li className='' ><WalletConnectButton/></li>
+            {/* @ts-ignore */}
+            {session?.role != "ANONYMOUS" && <li className='' ><WalletConnectButton/></li>}
           </ul>
         </div>
     </>

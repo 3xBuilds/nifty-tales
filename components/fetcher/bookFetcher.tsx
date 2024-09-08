@@ -29,6 +29,8 @@ export const BookFetcher = () => {
 
   const router = useRouter()
 
+  const { data: session } = useSession()
+
   const [readListed, setReadListed] = useState<boolean>(false);
   const [bookDetails, setBookDetails] = useState<BookType>();
   const [price, setPrice] = useState<string>("0");
@@ -59,7 +61,7 @@ export const BookFetcher = () => {
   async function contractSetup() {
     try {
       //@ts-ignore
-      if (typeof window.ethereum !== 'undefined') {
+      if (typeof window.ethereum !== 'undefined' && session.role != "ANONYMOUS") {
 
         //@ts-ignore
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -84,7 +86,24 @@ export const BookFetcher = () => {
     }
   }
 
-  const { data: session } = useSession()
+  async function fetcherContractSetup() {
+    try {
+
+        //@ts-ignore
+        const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/Fm-wANB61-hzoUevEz8Of07SUsUp0k0E");;
+
+        //@ts-ignore
+        const contract = new ethers.Contract(bookDetails?.contractAddress, abi, provider);
+
+        return contract;
+
+    }
+    catch (err) {
+      setLoading(false);
+
+      console.error(err);
+    }
+  }
 
   async function mint() {
     // @ts-ignore
@@ -156,7 +175,7 @@ export const BookFetcher = () => {
 
   async function setMintPrice() {
     try {
-      const contract = await contractSetup();
+      const contract = await fetcherContractSetup();
 
       const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
       const minted = await contract?.tokenIdMintedByAddress(bookDetails?.tokenId, address);
@@ -175,7 +194,7 @@ export const BookFetcher = () => {
   async function fetchHolders() {
     try {
       setLoadingHolders(true);
-      const contract = await contractSetup();
+      const contract = await fetcherContractSetup();
       const holders = await contract?.returnHolders(bookDetails?.tokenId);
 
       var arr:any = []
