@@ -104,8 +104,8 @@ const Navbar = () => {
       {/* @ts-ignore */}
       {session?.role != "ANONYMOUS" && <button onClick={()=>{
         setOpenSettingsModal(true);
-      }} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'><IoIosSettings/>Settings</button>}
-      <button onClick={()=>{signOut({callbackUrl: "/connect"})}} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'><MdLogout/>Logout</button>
+      }} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-tl-xl hover:translate-x-1 w-full flex gap-2'><IoIosSettings/>Settings</button>}
+      <button onClick={()=>{signOut({callbackUrl: "/connect"})}} className='h-10 hover:brightness-125 justify-center items-center font-bold duration-200 rounded-bl-xl hover:translate-x-1 w-full flex gap-2'><MdLogout/>Logout</button>
     </div>
 
     {/* SETTINGS */}

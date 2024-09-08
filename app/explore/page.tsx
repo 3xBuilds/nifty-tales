@@ -206,7 +206,8 @@ useEffect(() => {
           <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
         </button>
         <div className='flex gap-2 items-center justify-center'>
-        <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0]}</h2>
+          {/* @ts-ignore */}
+        <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0].substring(0,12)}{user?.username?.split(" ")[0]?.length>12 && "..."}</h2>
         <button onClick={()=>{setModal(true)}} className='text-gray-500 flex items-center justify-center bg-gray-100 duration-200 hover:brightness-90 p-3 text-xl rounded-lg'><FaEdit/></button>
           </div>
       </div>
