@@ -1,54 +1,37 @@
 import User from "@/schemas/userSchema";
 import { connectToDB } from "@/utils/db";
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
 import jwt from "jsonwebtoken";
 import { walletAuthProvider } from "../../walletAuthProvider/credsProvider";
 import { revalidatePath } from "next/cache";
-
+import CredentialsProvider from 'next-auth/providers/credentials'
 
 const handler = NextAuth({
   providers: [
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
-    }),
+    CredentialsProvider({
+      id: 'anonymous',
+      name: 'Anonym',
+      credentials: {},
+      //@ts-ignore
+      authorize: async () => {
+        const anonymousUser = {
+          id: String(Date.now()),
+          name: `anon-${String(Date.now()).substring(0,10)}`,
+          email: `anon-${Date.now()}@niftytales`
+        };
+          return anonymousUser
+      }
+  }),
     walletAuthProvider,
   ],
   callbacks: {
 
     async signIn( {user, account} : {user:any, account:any} ) {
       revalidatePath('/', 'layout') 
-
       await connectToDB();
-
-      if (account.provider === "google") {
-         const {name, email} = user;
-         const userNameExists = await User.findOne({
-          email
-         });
-         if(userNameExists){
-          //  console.log('----user exists in db: ', userNameExists);
-           return true;
-         }
-         else{
-            const user = await User.findOne({name});
-            // console.log('----creating user in db');
-            if(user){
-              const newName = name+Math.ceil(Math.random()*10)+Math.ceil(Math.random()*10)+Math.ceil(Math.random()*10)
-              await User.create({
-                email,
-                username: newName,
-              });
-            }
-            else{
-              await User.create({
-                email,
-                username: name,
-              });
-            }
-            return true;
-         }
+      if (account.provider === "anonymous") {
+        console.log("Anonymous login detected");
+        return true;
       }
       
       return true;
@@ -62,18 +45,27 @@ const handler = NextAuth({
         ]
       });
 
-      if(!dbUser){
-        // console.log('----user not found in db');
+      if(!dbUser && account?.provider !== "anonymous"){
         return token;
       }
 
+      console.log("WASSUP DAWG");
       // Add user id and provider to the token
       if (account?.provider && user) {
         token.provider = account.provider;
         token.id = user.id;
+
         if (user && 'address' in user) {
           token.walletAddress = user.address;
         }
+
+        else if (account.provider === "anonymous") {
+          console.log("BEFORE");
+          token.username = user.name;
+          console.log("AFTER");
+          token.email = user.email;
+          token.role = "ANONYMOUS";
+        } 
 
         // Generate your own access token and refresh token
         const accessToken = jwt.sign(
@@ -89,11 +81,17 @@ const handler = NextAuth({
           process.env.NEXTAUTH_SECRET,
           { expiresIn: '6h' }
         );
+
+        token.accessToken = accessToken;
+        token.refreshToken = refreshToken;
+
+        if(account.provider === "anonymous"){
+          return token;
+        }
+
         token.username = dbUser.username;
         token.role = dbUser.role || 'USER';
         token.email = dbUser.email;
-        token.accessToken = accessToken;
-        token.refreshToken = refreshToken;
         token.picture = dbUser.profileImage;
       }
       return token;
@@ -106,7 +104,8 @@ const handler = NextAuth({
       session.refreshToken = token.refreshToken;
       session.role = token.role;
       session.image = token.picture;
-      session.user = {username: token.username, email:token.email};
+      console.log("GOT TILL HERE")
+      session.user = {name: token.username, email:token.email};
 
       session.walletAddress = token.walletAddress;
 

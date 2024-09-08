@@ -29,10 +29,20 @@ export async function GET(req: any) {
         });
 
         result1 = result1.filter(user => user.collectionName !== "")
-        result2 = result2.filter((book) =>{!book.isAdminRemoved && !book.isHidden })
+        result2 = result2.filter(book => !book.isAdminRemoved && !book.isHidden )
+
 
         const slicedResult1 = result1?.slice(0, 2) || [];
         const slicedResult2 = result2?.slice(0, 2) || [];
+
+        const session = await getToken({
+            req,
+            secret: process.env.NEXTAUTH_SECRET
+        });
+
+        if (!session || session.role == "ANONYMOUS") {
+            return new NextResponse(JSON.stringify({ history: null, user: slicedResult1, book: slicedResult2}), { status: 200 });
+        }
 
         const user = await User.findOne({email:email});
 
@@ -40,14 +50,6 @@ export async function GET(req: any) {
             return NextResponse.json({error: "USER NOT FOUND"}, {status: 404});
         }
 
-        const session = await getToken({
-            req,
-            secret: process.env.NEXTAUTH_SECRET
-        });
-    
-        if (!session) {
-            return new NextResponse(JSON.stringify({ history: null, user: slicedResult1, book: slicedResult2}), { status: 200 });
-        }
 
         return new NextResponse(JSON.stringify({user: slicedResult1, book: slicedResult2, history: user.searchHistory}), { status: 200 });
     } catch (error) {

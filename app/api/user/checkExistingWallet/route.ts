@@ -20,6 +20,10 @@ export async function POST(req:any){
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
+        }
+
         await connectToDB();
 
         const user = await User.findOne({wallet: wallet});

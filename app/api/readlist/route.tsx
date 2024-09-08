@@ -20,34 +20,40 @@ export async function POST(req: any) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        const user = await User.findOne({ email: email });
-        
-        if (!user) {
-            return NextResponse.json({ message: "User not found" }, { status: 404 });
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
         }
 
-        if (user.readlist.includes(bookId)) {
-            return NextResponse.json({ message: "Book already in readlist" }, { status: 400 });
-        }
+            const user = await User.findOne({ email: email });
+            
+            if (!user) {
+                return NextResponse.json({ message: "User not found" }, { status: 404 });
+            }
+    
+            if (user.readlist.includes(bookId)) {
+                return NextResponse.json({ message: "Book already in readlist" }, { status: 400 });
+            }
+    
+            const book = await Book.findById(bookId);
+            if (!book) {
+                return NextResponse.json({ message: "Book not found" }, { status: 404 });
+            }
+    
+            book.readers = (book.readers || 0) + 1;
+            await book.save();
+    
+            user.readlist.push(bookId);
+            await user.save();
+    
+            await Readlists.create({user:user._id, book: bookId});
+    
+            return NextResponse.json({
+                message: "Book Added to Readlist! successfully",
+                book: book,
+                user: user
+            }, { status: 200 });
 
-        const book = await Book.findById(bookId);
-        if (!book) {
-            return NextResponse.json({ message: "Book not found" }, { status: 404 });
-        }
 
-        book.readers = (book.readers || 0) + 1;
-        await book.save();
-
-        user.readlist.push(bookId);
-        await user.save();
-
-        await Readlists.create({user:user._id, book: bookId});
-
-        return NextResponse.json({
-            message: "Book Added to Readlist! successfully",
-            book: book,
-            user: user
-        }, { status: 200 });
     } catch (err) {
         console.error("Error adding book to readlist:", err);
         return NextResponse.json({ message: "Internal server error" }, { status: 500 });
@@ -67,6 +73,10 @@ export async function DELETE(req: any) {
         
         if (!session) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        }
+
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
         }
 
         // console.log(`Attempting to remove book ${bookId} from readlist of user ${email}`);

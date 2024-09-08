@@ -83,11 +83,15 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   async function getUser(){
     try{
+      console.log("Getting for ", session?.user?.email)
       await axios.get(`/api/user/${session?.user?.email}`).then((res)=>{
         // console.log("user",res);
         setUser(res.data.user);
         setUserRaw(res.data.unPopulated);
       }).catch((err)=>{
+        const user = {username: session?.user?.name, email:session?.user?.email, profileImage: "", wallet: ""}
+        //@ts-ignore
+        setUser(user);
         // console.log("user",err);
         // router.push("/connect");
       });
@@ -202,6 +206,8 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       console.log(err);
     }
   }
+
+  console.log(session);
 
 useEffect(()=>{
     const screenWidth = window.innerWidth;

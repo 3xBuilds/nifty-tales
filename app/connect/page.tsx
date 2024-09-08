@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import axios from 'axios';
 import { useRouter } from 'next/navigation'
-import { IoBackspaceSharp } from 'react-icons/io5';
-import Icon from '@/components/Global/Icon';
-import { WalletNotRegistered } from '@/components/popups/walletNotRegistered';
+
 import { IoMdArrowBack } from 'react-icons/io';
 import { WalletConnectRegister } from '@/components/buttons/WalletConnectRegister';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { useAccount } from 'wagmi';
-import { useConnectModal } from '@rainbow-me/rainbowkit';
+
+import { CgProfile } from "react-icons/cg";
 
 
 const PreRegister = () => {
@@ -24,10 +23,9 @@ const PreRegister = () => {
     setIsLoading(false)
   },[])
 
-  const handleGoogleSignIn = () => {
-    signIn('google')
+  const handleGuestSignIn = () =>{
+    signIn('anonymous', { callbackUrl: '/explore' });
   }
-
 
   useEffect(()=>{
     if(session){
@@ -35,11 +33,6 @@ const PreRegister = () => {
       router.push("/explore");
     }
   },[session])
-
-
-  useEffect(()=>{
-    // console.log("THIS IS ADDRESS", address)
-  },[address])
 
   async function tokenChecker() {
     try {
@@ -70,8 +63,8 @@ const PreRegister = () => {
       <div className='flex flex-col items-center justify-center'>
             <h2 className=' max-md:text-center max-md:text-xl text-center text-3xl font-bold'>Connect</h2>
             <div className='bg-white w-72 outline-nifty-black rounded-xl shadow-2xl shadow-black/50 p-5 flex flex-col items-center justify-center gap-4 mt-5'>
-              <button onClick={handleGoogleSignIn} className='bg-nifty-white hover:-translate-y-1 duration-200 w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2' > <Icon name='google'/> Use Google</button>
               <WalletConnectRegister/>
+              <button onClick={handleGuestSignIn} className='bg-nifty-white hover:-translate-y-1 duration-200 w-full rounded-xl px-6 py-3 text-black flex flex-row items-center justify-center gap-2'><CgProfile/> Guest Login</button>
             </div>
           </div>
       

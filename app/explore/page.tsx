@@ -32,13 +32,21 @@ const Explore = () => {
 
   async function rename(){
     try{
+      console.log("TF");
       await axios.patch("/api/user/"+session?.user?.email, {username: username}).then((res)=>{
         setModal(false);
         getUser();
       });
     }
-    catch(err){
-
+    catch(err:any){
+      console.log(err);
+      if(err.response.status == 501){
+        toast.error(err.response.data.error);
+      }
+      else{
+        toast.error("Error while changing name. Try again.")
+      }
+      setModal(false);
     }
   }
 
@@ -76,8 +84,13 @@ const Explore = () => {
 };
 
   async function handleSubmit(e:any) {
-    e.preventDefault();
 
+    //@ts-ignore
+    if(session?.role == "ANONYMOUS"){
+      toast.error("This action cannot be performed as a guest.")
+      return ;
+  }
+    e.preventDefault();
     setLoading(true);
     if(!user?.wallet){
         setLoading(false);
@@ -116,9 +129,15 @@ const Explore = () => {
         }
         setLoading(false);
         // alert("Collection created successfully!");
-    } catch (error) {
-      setLoading(false);
-        toast.error("An error occurred while creating the collection. Please try again.");
+    } catch (error:any) {
+        setLoading(false);
+
+        if(error.response.status == 501){
+          toast.error(error.response.data.error);
+        }
+        else{
+          toast.error("Error while uploading image. Try again.")
+        }
         // console.log(error);
     }
 }

@@ -56,6 +56,11 @@ export async function PATCH(req:any){
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
+        }
+
         const id = req.nextUrl.pathname.split("/")[3];
 
         // console.log(id);

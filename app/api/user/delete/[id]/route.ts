@@ -17,6 +17,10 @@ export async function DELETE(req:any){
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
+        }
+
         const email = req.nextUrl.pathname.split("/")[4];
         await connectToDB();
 

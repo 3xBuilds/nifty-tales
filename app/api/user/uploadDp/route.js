@@ -65,6 +65,10 @@ export async function PATCH(request){
         if (!session) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
+
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
+        }
         
         const user = await User.findOne({wallet: wallet});
         // console.log("USER", user, "WALLET", wallet);

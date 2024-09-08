@@ -57,6 +57,10 @@ export async function PATCH(req:any){
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
+        if(session.role == "ANONYMOUS"){
+            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
+        }
+
         const email = req.nextUrl.pathname.split("/")[3];
 
         await connectToDB();
@@ -65,7 +69,6 @@ export async function PATCH(req:any){
             { $set: body },    // update with all fields from the body
             { new: true, runValidators: true }  // options: return updated doc and run schema validators
         );
-
 
         return new NextResponse(JSON.stringify({
             updatedUser

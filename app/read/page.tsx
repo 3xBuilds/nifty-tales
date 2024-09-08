@@ -71,8 +71,14 @@ export default function Home() {
                 toast.success("Bookmark added at page "+Number(currentPage+1))
             })
         }
-        catch(err){
+        catch(err:any){
             console.log(err);
+            if(err.response.status == 501){
+                toast.error(err.response.data.error);
+              }
+              else{
+                toast.error("Error while adding Bookmark. Try again!")
+              }
         }
       }
 

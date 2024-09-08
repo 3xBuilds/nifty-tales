@@ -56,13 +56,18 @@ const Highlights = () => {
     const readlist = async (id:string) => {
         try{
             await axios.post("/api/readlist", {email: session?.user?.email, bookId:id}).then((res)=>{
-
                 toast.success("Added to Readlist!");
                 getUser();
             });
         }
-        catch(err){
+        catch(err:any){
             console.log(err);
+            if(err.response.status == 501){
+                toast.error(err.response.data.error);
+              }
+              else{
+                toast.error("Error while adding to readlist. Try again!")
+              }
         }
     }
 

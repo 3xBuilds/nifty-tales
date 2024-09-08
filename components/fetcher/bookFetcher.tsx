@@ -87,6 +87,13 @@ export const BookFetcher = () => {
   const { data: session } = useSession()
 
   async function mint() {
+    // @ts-ignore
+    if(session?.role == "ANONYMOUS"){
+      toast.error("This action cannot be performed as a guest.");
+      setLoading(false);
+      setShowModal(false);
+      return ;
+    }
     try {
       const contract = await contractSetup();
       console.log("hello", bookDetails?.price);
@@ -218,13 +225,18 @@ export const BookFetcher = () => {
         getBookDetails()
       });
     }
-    catch (err) {
-      console.log(err);
+    catch (err:any) {
+      if(err.response.status == 501){
+        toast.error(err.response.data.error);
+      }
+      else{
+        toast.error("Error while adding to readlist");
+      }
     }
   }
 
   useEffect(() => {
-    user?.readlist.map((item: any) => {
+    user?.readlist?.map((item: any) => {
       if (item._id == bookDetails?._id) {
         setReadListed(true);
       }
@@ -319,9 +331,14 @@ async function makeReport(){
       setOpenReportModal(false);
     });
   }
-  catch(err){
+  catch(err:any){
     console.log(err);
-    toast.error("Error while making report");
+    if(err.response.status == 501){
+      toast.error(err.response.data.error);
+    }
+    else{
+      toast.error("Error while making report");
+    }
     setOpenReportModal(false);
   }
 }

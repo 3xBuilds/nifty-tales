@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { useLoading } from '../PageLoader/LoadingContext';
+import { toast } from 'react-toastify';
 
 type Props = {
 
@@ -44,6 +45,7 @@ type Props = {
     const getSearchResults = async () => {
         try{
             const res = await axios.get(`/api/search?query=${debouncedSearch}&user=${user?.email}`);
+            console.log(res);
             setSearchResults(res.data.user);
             setBookHistory(res.data.book);
             setHistory(res.data.history);
@@ -57,8 +59,14 @@ type Props = {
         try{
             await axios.post("/api/user/history", {search: id});
         }
-        catch(err){
+        catch(err:any){
             console.log(err);
+            if(err.response.status == 501){
+                toast.error(err.response.data.error);
+              }
+              else{
+                toast.error("Error while changing name. Try again.")
+              }
         }
     }
 
@@ -67,8 +75,9 @@ type Props = {
         setHistoryUserResult([]);
         setHistoryBookResult([]);
         try{
-            if(user){
-                user.searchHistory.map(async(item:string)=>{
+            //@ts-ignore
+            if(user && session?.role != "ANONYMOUS"){
+                user.searchHistory?.map(async(item:string)=>{
                         if(item[0] == "U"){
                             console.log("AYOOOO")
                             const response = await axios.get("/api/user/"+item.slice(1,item.length));
