@@ -36,7 +36,7 @@ export const WalletConnectButton = () => {
     updateWallet()
   },[address])
 
-  
+
 
   return (
     <div className=''>
@@ -59,6 +59,15 @@ export const WalletConnectButton = () => {
           chain &&
           (!authenticationStatus ||
             authenticationStatus === 'authenticated');
+
+            useEffect(() => {
+              if (connected && account.ensName) {
+                setEns(account.ensName);
+              } else {
+                setEns("");
+              }
+            }, [connected, account]);
+
         return (
           <div
             {...(!ready && {
@@ -90,8 +99,6 @@ export const WalletConnectButton = () => {
               }
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
-                  
-                    <>{account.ensName && setEns(account.ensName)}</>
                   <button title='Click to view address' onClick={openAccountModal} type="button" className='flex bg-white font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center text-black rounded-lg max-md:w-full text-sm border-2 h-10 border-black px-3 py-1 transform transition '>
                     {/* <Image src={wallet} alt="stickerGen" className='w-10'/>
                      */}
