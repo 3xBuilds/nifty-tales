@@ -50,7 +50,7 @@ export async function POST(req) {
         
         const user = await User.create({
             wallet: rest.wallet,
-            username: rest.wallet,
+            username: rest.username,
             email: `${rest.wallet.substring(0,5)}@wallet`,
         }
     )

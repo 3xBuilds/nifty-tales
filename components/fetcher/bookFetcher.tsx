@@ -126,8 +126,6 @@ export const BookFetcher = () => {
   
       // Get current gas price
       const gasPrice = await contract?.provider.getGasPrice();
-  
-      console.log("wtf", gasPrice, contract)
 
       // Execute the transaction with the estimated gas
       const txn = await contract?.mint(amount, bookDetails?.tokenId, {
@@ -135,8 +133,6 @@ export const BookFetcher = () => {
         gasLimit: gasLimit,
         gasPrice: gasPrice
       });
-
-      console.log("wtf")
       
       await txn?.wait();
       console.log(txn);
@@ -161,7 +157,7 @@ export const BookFetcher = () => {
       await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
       if(!exists){
         console.log("ENS NAME: ", ensName)
-        await axios.post("/api/user/create", {wallet:address, username:ensName || address , mintedBook:pathname.split("/")[2]}).catch((err)=>{console.log(err)});
+        await axios.post("/api/user/create", {wallet:address, username:ensName || `${address?.slice(0,5)}-wallet` , mintedBook:pathname.split("/")[2]}).catch((err)=>{console.log(err)});
       }
       toast.success("Book minted successfully!");
       setShowModal(false);

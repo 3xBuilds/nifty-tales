@@ -14,7 +14,7 @@ import { IoClose } from 'react-icons/io5'
 import Image, { StaticImageData } from 'next/image'
 import logo from "@/assets/logo.png"
 import { toast } from "react-toastify";
-import { useAccount } from 'wagmi'
+import { useAccount, useEnsName } from 'wagmi'
 import { AiOutlineLoading } from 'react-icons/ai'
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher'
 
@@ -159,6 +159,26 @@ async function tokenChecker() {
 useEffect(() => {
   tokenChecker();
 }, []);
+
+const { data: ensName} = useEnsName({ address: address});
+
+async function changeUsernametoEns(){
+  try{
+    if(user?.username.includes("-wallet")){
+      await axios.patch("/api/user/"+user.email,{username:ensName})
+    }
+  }
+  catch(err){
+    console.log(err);
+  }
+}
+
+useEffect(()=>{
+  console.log("YOUR ENSNAME IS", ensName);
+  if(ensName){
+    changeUsernametoEns();
+  }
+},[ensName])
 
   return (
     <div className=''>
