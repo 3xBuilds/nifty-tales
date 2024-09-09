@@ -57,6 +57,8 @@ type Props = {
 
     async function setHistoryData(id:string){
         try{
+            //@ts-ignore
+            if(session?.role != "ANONYMOUS")
             await axios.post("/api/user/history", {search: id});
         }
         catch(err:any){
