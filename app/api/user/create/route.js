@@ -47,18 +47,9 @@ export async function POST(req) {
         // if(userNameExists != null ){
         //     return new NextResponse(JSON.stringify({success: false, error: "Username already exists"}), { status: 409 });
         // }
-
-        console.log("------------")
-        console.log("------------")
-        console.log("------------")
-        console.log("------------")
-        console.log("JANI RE BABA", rest.mintedBook)
-        console.log("------------")
-        console.log("------------")
-        console.log("------------")
-        console.log("------------")
         
         const user = await User.create({
+            wallet: rest.wallet,
             username: rest.wallet,
             email: `${rest.wallet.substring(0,5)}@wallet`,
         }
@@ -67,7 +58,7 @@ export async function POST(req) {
         user.mintedBooks[0] = rest.mintedBook;
         await user.save();
 
-        
+
         return new NextResponse(JSON.stringify({
             user
         }), { status: 200 });

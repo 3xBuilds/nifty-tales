@@ -395,7 +395,8 @@ async function checkExistingUser(){
 }
 
 useEffect(()=>{
-  if(address){
+  //@ts-ignore
+  if(address && session?.role == "ANONYMOUS"){
     checkExistingUser();
   }
 },[address])
