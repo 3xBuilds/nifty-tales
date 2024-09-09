@@ -165,7 +165,8 @@ const { data: ensName} = useEnsName({ address: address});
 async function changeUsernametoEns(){
   try{
     if(user?.username.includes("-wallet")){
-      await axios.patch("/api/user/"+user.email,{username:ensName})
+      await axios.patch("/api/user/"+user.email,{username:ensName});
+      getUser()
     }
   }
   catch(err){
