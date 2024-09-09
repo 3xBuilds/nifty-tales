@@ -7,7 +7,7 @@ export async function POST(req) {
     try{
         const body = await req.json();
         
-        const {username, ...rest } = body;
+        const {...rest } = body;
         
         await connectToDB();
 
@@ -20,13 +20,15 @@ export async function POST(req) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
 
-        if(session.role == "ANONYMOUS"){
-            return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
-        }
+        // if(session.role == "ANONYMOUS"){
+        //     return NextResponse.json({error:"This action cannot be performed as a guest."}, {status:501})
+        // }
 
-        const userNameExists = await User.findOne({
-            username
-        });
+        // const userNameExists = await User.findOne({
+        //     username
+        // });
+
+       
 
         if(rest.email){
             const emailExists = await User.findOne({
@@ -42,15 +44,30 @@ export async function POST(req) {
             
         }
 
-        if(userNameExists != null ){
-            return new NextResponse(JSON.stringify({success: false, error: "Username already exists"}), { status: 409 });
-        }
+        // if(userNameExists != null ){
+        //     return new NextResponse(JSON.stringify({success: false, error: "Username already exists"}), { status: 409 });
+        // }
 
+        console.log("------------")
+        console.log("------------")
+        console.log("------------")
+        console.log("------------")
+        console.log("JANI RE BABA", rest.mintedBook)
+        console.log("------------")
+        console.log("------------")
+        console.log("------------")
+        console.log("------------")
+        
         const user = await User.create({
-            username,
-            ...rest
+            username: rest.wallet,
+            email: `${rest.wallet.substring(0,5)}@wallet`,
         }
     )
+
+        user.mintedBooks[0] = rest.mintedBook;
+        await user.save();
+
+        
         return new NextResponse(JSON.stringify({
             user
         }), { status: 200 });

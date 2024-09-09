@@ -11,7 +11,7 @@ import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher';
 import { useGlobalContext } from '@/context/MainContext';
 import { FaBookOpen, FaCrown, FaInfinity, FaLocationArrow, FaPause } from 'react-icons/fa';
 import Book from '@/components/Global/Book';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { TiMinus, TiPlus } from 'react-icons/ti';
 import { AiOutlineLoading } from 'react-icons/ai';
 import Icon from '@/components/Global/Icon';
@@ -25,6 +25,7 @@ import { useAccount } from 'wagmi';
 import { ImCross, ImPause } from 'react-icons/im';
 import { WalletConnectButton } from '../buttons/WalletConnectButton';
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister';
+import { WalletGuest } from '../popups/walletGuest';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
@@ -156,14 +157,20 @@ export const BookFetcher = () => {
       }
       //@ts-ignore
       await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
+      if(!exists){
+        await axios.post("/api/user/create", {wallet:address, mintedBook:pathname.split("/")[2]}).catch((err)=>{console.log(err)});
+      }
       toast.success("Book minted successfully!");
       setShowModal(false);
       setLoading(false);
       fetchHolders();
       getBookDetails();
+      signOut();
+
       
     } catch (err) {
       toast.error("Error occurred while minting");
+      setShowModal(false);
       setLoading(false);
       console.log(err);
     }
@@ -373,11 +380,39 @@ async function increaseReader(num:number, id:any){
   }
 }
 
-console.log(address);
+const [exists, setExists] = useState<boolean>(false);
+
+async function checkExistingUser(){
+  try{
+    const res = await axios.get("/api/user/wallet/"+address);
+    if(res.data.user){
+      setExists(true);
+    }
+  }
+  catch(err){
+    console.log(err);
+  }
+}
+
+useEffect(()=>{
+  if(address){
+    checkExistingUser();
+  }
+},[address])
+
 
   return (
     <>
       <div className=''>
+
+        {/* WARNING MODAL */}
+        <div className={` ${exists ? "-translate-y-0" : "translate-y-[300rem]"} duration-200 backdrop-blur-xl w-screen h-screen fixed top-0 left-0 z-[1000] flex items-center justify-center`}>
+          <button onClick={()=>{signOut()}} className='w-40 bg-nifty-white font-semibold absolute h-10 rounded-lg hover:-translate-y-1 duration-200 top-4 right-4 text-black'>Sign Out</button>
+              <div className='w-80 bg-white shadow-xl shadow-black/30 rounded-xl p-4 font-semibold'>
+                  <h2 className='text-md'>You've connected <span className=' font-bold '>{address?.slice(0,7)}...{address?.slice(address.length-5, address.length)}</span> which is connected to an account.</h2>
+                  <h2 className='text-sm my-2 text-nifty-gray-1'>Please Sign Out and login via Metamask.</h2>
+              </div>
+        </div>
 
         {/* REPORT MODAL */}
         <div className={`${openReportModal ? "translate-y-0": "-translate-y-[300rem]"} duration-200 h-screen w-screen backdrop-blur-xl fixed top-0 left-0 z-[500] flex items-center justify-center`} >
@@ -455,7 +490,8 @@ console.log(address);
               }
               <button disabled={loading} onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
 
-              <h3 className='w-full text-nifty-gray-1 text-xs mt-2 text-center'>If you're a guest, no data will be saved.</h3>
+              {/* @ts-ignore */}
+              {session?.role == "ANONYMOUS" && <h3 className='w-full text-nifty-gray-1 text-xs mt-2 text-center'>An account will be created <b>with this wallet</b> and you will be logged out automatically on completion of the mint.</h3>}
 
             </div>
           </div>
