@@ -3,6 +3,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { IoMdWallet } from 'react-icons/io';
 import Icon from '../Global/Icon';
+import { signOut } from 'next-auth/react';
 
 export const WalletConnectRegister = () => {
   return (
@@ -38,7 +39,7 @@ export const WalletConnectRegister = () => {
               {(() => {
                 if (!connected) {
                   return (
-                    <button onClick={openConnectModal} className='bg-black hover:-translate-y-1 duration-200 w-[15.3rem] rounded-xl px-6 py-3 text-white font-semibold flex flex-row items-center justify-center gap-2'>
+                    <button onClick={()=>{openConnectModal()}} className='bg-black hover:-translate-y-1 duration-200 w-64 rounded-xl px-6 py-3 text-white font-semibold flex flex-row items-center justify-center gap-2'>
                       <Icon name='metamask'/> Use Metamask
                     </button>
                   );
@@ -52,7 +53,7 @@ export const WalletConnectRegister = () => {
                 }
                 return (
                   <div style={{ display: 'flex', gap: 12 }}>
-                    <button title='Click to view address' onClick={openAccountModal} type="button" className='flex font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center text-white bg-green-500 rounded-lg max-md:text-md w-[15.3rem] text-lg px-3 py-1 transform transition '>
+                    <button title='Click to view address' onClick={openAccountModal} type="button" className='flex font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center text-white bg-green-500 rounded-lg max-md:text-md w-64 text-lg  h-10 transform transition '>
                       <IoMdWallet/>
                       Connected
                     </button>

@@ -46,7 +46,7 @@ export default function AuthorFetcher(){
 
 
                 //@ts-ignore
-                const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/Fm-wANB61-hzoUevEz8Of07SUsUp0k0E");;
+                const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");;
 
                 //@ts-ignore
                 const contract = new ethers.Contract(user?.contractAdd, abi, provider);

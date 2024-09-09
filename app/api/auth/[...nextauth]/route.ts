@@ -29,6 +29,20 @@ const handler = NextAuth({
     async signIn( {user, account} : {user:any, account:any} ) {
       revalidatePath('/', 'layout') 
       await connectToDB();
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log(account.provider);
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+      console.log("--------------------")
+
       if (account.provider === "anonymous") {
         console.log("Anonymous login detected");
         return true;

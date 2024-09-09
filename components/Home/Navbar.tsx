@@ -142,7 +142,7 @@ const Navbar = () => {
     {/* {user?.email.includes("@wallet") && <AddEmail/>} */}
 
     {user && user?.wallet != "" && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-80 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is not linked to your account. <b className="block mt-5">Go to your wallet and connect {user?.wallet.slice(0,32)}...</b> <h3 className='my-4 font-bold'>OR</h3>
-    <button className='text-black w-32 h-10 bg-gray-300 font-bold rounded-lg hover:-translate-y-1 duration-200' onClick={()=>{signOut(); router.push("/connect")}}>Sign Out</button> </div> </div>}
+    <button className='text-black w-32 h-10 bg-gray-300 font-bold rounded-lg hover:-translate-y-1 duration-200' onClick={()=>{signOut();}}>Sign Out</button> </div> </div>}
 
         <button onClick={()=>{setIsLoading(true);router.push("/")}} className='flex items-center'>
             <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />

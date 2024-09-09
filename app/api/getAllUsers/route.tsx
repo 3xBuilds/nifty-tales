@@ -15,6 +15,9 @@ export async function POST(req:any){
         
         const arr = await Promise.all(array.map(async(item:any)=>{
             const user = await User.findOne({wallet: item});
+            if(!user){
+                return "Guest";
+            }
             return user.username;
         }))
 

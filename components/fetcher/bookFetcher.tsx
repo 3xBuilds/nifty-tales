@@ -23,12 +23,14 @@ import { CiShare2 } from 'react-icons/ci';
 import { RiLoader5Line, RiLoaderFill } from 'react-icons/ri';
 import { useAccount } from 'wagmi';
 import { ImCross, ImPause } from 'react-icons/im';
+import { WalletConnectButton } from '../buttons/WalletConnectButton';
+import { WalletConnectRegister } from '../buttons/WalletConnectRegister';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
 
   const router = useRouter()
-
+  const {address} = useAccount();
   const { data: session } = useSession()
 
   const [readListed, setReadListed] = useState<boolean>(false);
@@ -61,7 +63,7 @@ export const BookFetcher = () => {
   async function contractSetup() {
     try {
       //@ts-ignore
-      if (typeof window.ethereum !== 'undefined' && session.role != "ANONYMOUS") {
+      if (typeof window.ethereum !== 'undefined' && address) {
 
         //@ts-ignore
         await window.ethereum.request({ method: 'eth_requestAccounts' });
@@ -90,7 +92,7 @@ export const BookFetcher = () => {
     try {
 
         //@ts-ignore
-        const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/Fm-wANB61-hzoUevEz8Of07SUsUp0k0E");;
+        const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");;
 
         //@ts-ignore
         const contract = new ethers.Contract(bookDetails?.contractAddress, abi, provider);
@@ -106,20 +108,12 @@ export const BookFetcher = () => {
   }
 
   async function mint() {
-    // @ts-ignore
-    if(session?.role == "ANONYMOUS"){
-      toast.error("This action cannot be performed as a guest.");
-      setLoading(false);
-      setShowModal(false);
-      return ;
-    }
+
     try {
       const contract = await contractSetup();
-      console.log("hello", bookDetails?.price);
-
+      
       // Calculate the value to send with the transaction
       const valueToSend = ethers.utils.parseEther(String(((bookDetails?.price as number + 0.0007) * amount).toFixed(4)));
-      console.log("hello2", String(valueToSend));
 
       // Estimate gas
       const gasEstimate = await contract?.estimateGas.mint(amount, bookDetails?.tokenId, { value: valueToSend });
@@ -130,17 +124,22 @@ export const BookFetcher = () => {
       // Get current gas price
       const gasPrice = await contract?.provider.getGasPrice();
   
+      console.log("wtf", gasPrice, contract)
+
       // Execute the transaction with the estimated gas
       const txn = await contract?.mint(amount, bookDetails?.tokenId, {
         value: valueToSend,
         gasLimit: gasLimit,
         gasPrice: gasPrice
       });
+
+      console.log("wtf")
       
-      await txn.wait();
+      await txn?.wait();
       console.log(txn);
       
-      if(txn){
+      //@ts-ignore
+      if(txn && session.role!="ANONYMOUS"){
         await axios.post("/api/transaction/create", {
           txnHash: txn.hash,
           bookId: pathname.split("/")[2],
@@ -154,11 +153,10 @@ export const BookFetcher = () => {
           console.log(err);
         })
     
-        //@ts-ignore
-        await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
-    
-        window.location.reload()
       }
+      //@ts-ignore
+      await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
+      toast.success("Book minted successfully!")
       
     } catch (err) {
       toast.error("Error occurred while minting");
@@ -170,8 +168,6 @@ export const BookFetcher = () => {
   useEffect(() => {
     getBookDetails();
   }, [])
-
-  const {address} = useAccount();
 
   async function setMintPrice() {
     try {
@@ -373,6 +369,8 @@ async function increaseReader(num:number, id:any){
   }
 }
 
+console.log(address);
+
   return (
     <>
       <div className=''>
@@ -410,7 +408,7 @@ async function increaseReader(num:number, id:any){
 
         {/* MINTING MODAL */}
         <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
-          <div className='bg-white rounded-xl flex flex-col shadow-xl shadow-black/30 gap-4 justify-center items-start p-5'>
+          <div className='bg-white rounded-xl flex flex-col shadow-xl w-80 shadow-black/30 gap-4 justify-center items-start p-5'>
             <h2 className='text-2xl font-bold' >Mint</h2>
             <h2 className='text-lg text-nifty-gray-1' >Choose number of mints</h2>
 
@@ -447,8 +445,14 @@ async function increaseReader(num:number, id:any){
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >
-              <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
+              {/* @ts-ignore */}
+            { address? <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
+              :<WalletConnectButton/>
+              }
               <button disabled={loading} onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
+
+              <h3 className='w-full text-nifty-gray-1 text-xs mt-2 text-center'>If you're a guest, no data will be saved.</h3>
+
             </div>
           </div>
         </div>

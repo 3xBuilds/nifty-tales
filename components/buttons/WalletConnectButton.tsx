@@ -19,7 +19,8 @@ export const WalletConnectButton = () => {
 
   async function updateWallet(){
     try{
-      if(user?.wallet == ""){
+      //@ts-ignore
+      if(user?.wallet == "" && session?.role != "ANONYMOUS"){
         await axios.patch("/api/user/"+session?.user?.email, {wallet: address}).then((res)=>{
           getUser();
         });
@@ -70,7 +71,7 @@ export const WalletConnectButton = () => {
             {(() => {
               if (!connected) {
                 return (
-                  <button onClick={openConnectModal} type="button" className='text-white bg-black h-10 w-48 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>
+                  <button onClick={openConnectModal} type="button" className='text-white bg-black h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0'>
                     {/* <Image src={wallet} alt="stickerGen" className='w-10'/> */}
                     <h3 className=''>Connect Wallet</h3>
                   </button>
