@@ -28,7 +28,7 @@ const Explore = () => {
   const[characterName, setCharacterName] = useState(0)
   // const{data:session} = useSession();
 
-  const {user, getUser, ensImg} = useGlobalContext();
+  const {user, getUser, ensImg, ens} = useGlobalContext();
 
   async function rename(){
     try{
@@ -165,7 +165,7 @@ const { data: ensName, isLoading} = useEnsName({ address: address});
 async function changeUsernametoEns(){
   try{
     if(user?.username.includes("-wallet")){
-      await axios.patch("/api/user/"+user.email,{username:ensName});
+      await axios.patch("/api/user/"+user.email,{username:ensName || ens});
       getUser()
     }
   }

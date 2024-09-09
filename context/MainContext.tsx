@@ -28,6 +28,8 @@ type GlobalContextType = {
   setUserRaw: Dispatch<SetStateAction<UserType | null>>;
   ensImg: string | "";
   setEnsImg: Dispatch<SetStateAction<string | "">>;
+  ens: string | "";
+  setEns: Dispatch<SetStateAction<string | "">>;
   publishedBooks: Array<BookType> | null;
   setPublishedBooks: Dispatch<SetStateAction<any | "">>;
   recentBooks: Array<BookType> | null;
@@ -46,6 +48,8 @@ const GlobalContext = createContext<GlobalContextType>({
   setUserRaw: () =>{ },
   ensImg: "",
   setEnsImg: () =>{ },
+  ens: "",
+  setEns: () =>{ },
   publishedBooks : [],
   setPublishedBooks: () =>{},
   recentBooks : [],
@@ -69,7 +73,9 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const {address} = useAccount();
   const pathname = usePathname();
 
+  const router = useRouter()
   const [user, setUser] = useState<UserType | null>(null);
+  const [ens, setEns] = useState<string>("")
 
   async function getUser(){
     try{
@@ -215,7 +221,7 @@ useEffect(()=>{
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
+      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeCollection" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}
