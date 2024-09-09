@@ -160,12 +160,10 @@ useEffect(() => {
   tokenChecker();
 }, []);
 
-const { data: ensName, isLoading} = useEnsName({ address: address});
-
 async function changeUsernametoEns(){
   try{
-    if(user?.username.includes("-wallet")){
-      await axios.patch("/api/user/"+user.email,{username:ensName || ens});
+    if(user?.username.includes("-wallet") && ens != ""){
+      await axios.patch("/api/user/"+user.email,{username:ens});
       getUser()
     }
   }
@@ -175,10 +173,11 @@ async function changeUsernametoEns(){
 }
 
 useEffect(()=>{
-  if(ensName || ens){
+
+  if(ens){
     changeUsernametoEns();
   }
-},[ensName, isLoading])
+},[ens])
 
   return (
     <div className=''>

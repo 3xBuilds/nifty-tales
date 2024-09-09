@@ -36,6 +36,8 @@ export const WalletConnectButton = () => {
     updateWallet()
   },[address])
 
+  
+
   return (
     <div className=''>
     <ConnectButton.Custom>
