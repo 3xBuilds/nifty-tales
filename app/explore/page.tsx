@@ -162,6 +162,7 @@ useEffect(() => {
 
 async function changeUsernametoEns(){
   try{
+    console.log("Updating user's ens name...")
     if(user?.username.includes("-wallet") && ens != ""){
       await axios.patch("/api/user/"+user.email,{username:ens});
       getUser()
@@ -173,7 +174,7 @@ async function changeUsernametoEns(){
 }
 
 useEffect(()=>{
-
+  console.log("YOUR ENS NAME IS ",ens)
   if(ens){
     changeUsernametoEns();
   }
