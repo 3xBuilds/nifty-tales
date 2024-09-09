@@ -176,7 +176,7 @@ async function changeUsernametoEns(){
 
 useEffect(()=>{
   console.log("YOUR ENSNAME IS", ensName, isLoading);
-  if(ensName){
+  if(ensName || ens){
     changeUsernametoEns();
   }
 },[ensName, isLoading])
