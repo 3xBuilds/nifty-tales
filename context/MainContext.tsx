@@ -207,7 +207,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   }
 
-  console.log(session);
 
 useEffect(()=>{
     const screenWidth = window.innerWidth;

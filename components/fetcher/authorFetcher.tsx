@@ -40,21 +40,20 @@ export default function AuthorFetcher(){
     async function contractSetup(){
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+
 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+
 
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
-                const signer = provider.getSigner();
+                const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/Fm-wANB61-hzoUevEz8Of07SUsUp0k0E");;
 
                 //@ts-ignore
-                const contract = new ethers.Contract(user?.contractAdd, abi, signer);
+                const contract = new ethers.Contract(user?.contractAdd, abi, provider);
 
             return contract;
 
-            }
+
 
         }
         catch (err) {
@@ -201,7 +200,7 @@ export default function AuthorFetcher(){
                         <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                         {item.map((item2:any)=>(<div className="flex relative group flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
                             <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center"> 
-                                <h2 className="font-semibold text-sm mt-5" >{item2.name}</h2>
+                                <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,10)}{item2.name.length >10 && "..."}</h2>
                             </div>
                             <button onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                                 <Book img={item2.cover} />

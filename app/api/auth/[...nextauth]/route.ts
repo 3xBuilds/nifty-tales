@@ -104,7 +104,7 @@ const handler = NextAuth({
       session.refreshToken = token.refreshToken;
       session.role = token.role;
       session.image = token.picture;
-      console.log("GOT TILL HERE")
+
       session.user = {name: token.username, email:token.email};
 
       session.walletAddress = token.walletAddress;
