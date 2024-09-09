@@ -160,7 +160,7 @@ useEffect(() => {
   tokenChecker();
 }, []);
 
-const { data: ensName} = useEnsName({ address: address});
+const { data: ensName, isLoading} = useEnsName({ address: address});
 
 async function changeUsernametoEns(){
   try{
@@ -175,11 +175,11 @@ async function changeUsernametoEns(){
 }
 
 useEffect(()=>{
-  console.log("YOUR ENSNAME IS", ensName);
+  console.log("YOUR ENSNAME IS", ensName, isLoading);
   if(ensName){
     changeUsernametoEns();
   }
-},[ensName])
+},[ensName, isLoading])
 
   return (
     <div className=''>
