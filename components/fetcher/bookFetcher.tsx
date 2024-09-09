@@ -21,7 +21,7 @@ import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
 import { CiShare2 } from 'react-icons/ci';
 import { RiLoader5Line, RiLoaderFill } from 'react-icons/ri';
-import { useAccount } from 'wagmi';
+import { useAccount, useEnsName } from 'wagmi';
 import { ImCross, ImPause } from 'react-icons/im';
 import { WalletConnectButton } from '../buttons/WalletConnectButton';
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister';
@@ -33,6 +33,8 @@ export const BookFetcher = () => {
   const router = useRouter()
   const {address} = useAccount();
   const { data: session } = useSession()
+
+  const { data: ensName} = useEnsName({ address: address});
 
   const [readListed, setReadListed] = useState<boolean>(false);
   const [bookDetails, setBookDetails] = useState<BookType>();
@@ -158,7 +160,7 @@ export const BookFetcher = () => {
       //@ts-ignore
       await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
       if(!exists){
-        await axios.post("/api/user/create", {wallet:address, mintedBook:pathname.split("/")[2]}).catch((err)=>{console.log(err)});
+        await axios.post("/api/user/create", {wallet:address, username:ensName || address , mintedBook:pathname.split("/")[2]}).catch((err)=>{console.log(err)});
       }
       toast.success("Book minted successfully!");
       setShowModal(false);
@@ -624,7 +626,7 @@ useEffect(()=>{
                       {holders.length > 0 && holders.map((item:any, i)=>(
                         <div className='flex text-center py-2 border-b-[1px] border-gray-300'>
                         <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs '>
-                          <h2 className={`flex gap-2 items-center justify-center font-semibold ${i+1==1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i+1==2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i+1==3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i <= 3 && <FaCrown className={`${i+1 == 1 && "text-yellow-500"} ${i+1 == 2 && "text-gray-400"} ${i+1 == 3 && "text-orange-700"}`}/>}{i+1}</h2>
+                          <h2 className={`flex gap-2 items-center justify-center font-semibold ${i+1==1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i+1==2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i+1==3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i < 3 && <FaCrown className={`${i+1 == 1 && "text-yellow-500"} absolute -translate-x-5 ${i+1 == 2 && "text-gray-400"} ${i+1 == 3 && "text-orange-700"}`}/>}{i+1}</h2>
                         </div>
                         <div className='flex-shrink-0 w-[33.3%] font-medium text-sm max-md:text-xs text-nifty-gray-2'>
                           <h2>{item.username.slice(0,10)}{item.username.length>10 && "..."}</h2>
