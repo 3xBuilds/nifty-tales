@@ -160,6 +160,7 @@ export const BookFetcher = () => {
       //@ts-ignore
       await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
       if(!exists){
+        console.log("ENS NAME: ", ensName)
         await axios.post("/api/user/create", {wallet:address, username:ensName || address , mintedBook:pathname.split("/")[2]}).catch((err)=>{console.log(err)});
       }
       toast.success("Book minted successfully!");
