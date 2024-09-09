@@ -58,7 +58,7 @@ export const walletAuthProvider = CredentialsProvider({
       user = await User.create({
         wallet: message.address,
         email: `${message.address.slice(0,6)}@wallet`, 
-        username: `${message.address.slice(0, 6)}`, // placeholder username
+        username: `${message.address.slice(0, 6)}-wallet`, // placeholder username
       });
 
       // console.log("Created");
