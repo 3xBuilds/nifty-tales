@@ -155,8 +155,12 @@ export const BookFetcher = () => {
     
       }
       //@ts-ignore
-      await axios.patch("/api/book/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
-      toast.success("Book minted successfully!")
+      await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
+      toast.success("Book minted successfully!");
+      setShowModal(false);
+      setLoading(false);
+      fetchHolders();
+      getBookDetails();
       
     } catch (err) {
       toast.error("Error occurred while minting");
