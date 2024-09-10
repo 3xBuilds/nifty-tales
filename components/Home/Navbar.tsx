@@ -19,6 +19,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister'
 import { ImCross } from 'react-icons/im'
+import { ethers } from 'ethers'
 
 
 const Navbar = () => {
@@ -31,33 +32,15 @@ const Navbar = () => {
   },[])
 
   const[openSettingsModal, setOpenSettingsModal] = useState(false);
-  const {user, ensImg, setEnsImg, getUser} = useGlobalContext();
+  const {user} = useGlobalContext();
   const {data: session} = useSession();
 
   const [walletNotAvailable, setWalletNotAvailable] = useState(false);
 
   const { address, isConnected, isReconnecting } = useAccount();
-  const { data: ensName, isLoading: isLoadingName } = useEnsName({ address: address});
-  const { data: ensAvatar, isLoading: isLoadingAvatar } = useEnsAvatar({ name:ensName as string });
+
   const [confirmBox, setConfirmBox] = useState(false);
   const [bringModal, setBringModal] = useState<boolean>(false);
-
-  async function ensImageSetter(){
-    try{
-      setEnsImg(ensAvatar as string)
-      // console.log("THIS IS AVATAR", ensAvatar, ensName);
-      await axios.patch("/api/user/"+session?.user?.email,{profileImage: ensAvatar})
-    }
-    catch(err){
-      console.log(err);
-    }
-  }
-
-  useEffect(()=>{
-    if(ensName && ensAvatar && session && user){
-      ensImageSetter();
-    }
-  },[ensAvatar, session, user])
 
   const[bringSearchBar, setBringSearchBar] = useState<boolean>(false);
   const[search, setSearch] = useState<string>("")
@@ -170,7 +153,7 @@ const Navbar = () => {
             <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
           </button>
 
-          {pathName.split("/")[1] !== "register" && !isLoadingAvatar && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" && ensImg == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? ensImg !== "" ? ensImg : logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
+          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
        </>}
        {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0 justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 
@@ -210,7 +193,7 @@ const Navbar = () => {
               </div>} 
           </>}
 
-          <button onClick={()=>{setBringModal((prev)=>!prev)}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{!ensImg && user?.profileImage == "" && <IoIosMenu className='text-lg text-black'/>}{ensImg && user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={ensImg} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='ensImg' width={1080} height={1080} className='group-hover:brightness-50 object-fill object-center duration-200 rounded-full w-full group-hover:scale-105' /></div>}</button>
+          <button onClick={()=>{setBringModal((prev)=>!prev)}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>
           {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0  justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 
         </div>

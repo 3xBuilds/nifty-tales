@@ -2,6 +2,7 @@
 
 import { WalletNotRegistered } from "@/components/popups/walletNotRegistered";
 import axios from "axios";
+import { ethers } from "ethers";
 import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
@@ -14,6 +15,7 @@ import {
   ReactNode,
   useEffect
 } from "react";
+import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
 
 
@@ -24,12 +26,10 @@ type GlobalContextType = {
   fetch: boolean | false;
   setFetch: Dispatch<SetStateAction<boolean | false>>;
   getUser: () => void;
+  ensNameFetcher: () => void;
+  ensImageFetcher: () => void;
   userRaw: UserType | null;
   setUserRaw: Dispatch<SetStateAction<UserType | null>>;
-  ensImg: string | "";
-  setEnsImg: Dispatch<SetStateAction<string | "">>;
-  ens: string | "";
-  setEns: Dispatch<SetStateAction<string | "">>;
   publishedBooks: Array<BookType> | null;
   setPublishedBooks: Dispatch<SetStateAction<any | "">>;
   recentBooks: Array<BookType> | null;
@@ -44,12 +44,10 @@ const GlobalContext = createContext<GlobalContextType>({
   fetch: false,
   setFetch: () => {},
   getUser: () => { },
+  ensImageFetcher: () => {},
+  ensNameFetcher: () => {},
   userRaw: null,
   setUserRaw: () =>{ },
-  ensImg: "",
-  setEnsImg: () =>{ },
-  ens: "",
-  setEns: () =>{ },
   publishedBooks : [],
   setPublishedBooks: () =>{},
   recentBooks : [],
@@ -66,7 +64,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const [recentBooks, setRecentBooks] = useState([])
   const [boosted, setBoosted] = useState([])
 
-  const [ensImg, setEnsImg] = useState<string>("")
   const[slicer, setSlicer] = useState(0);
 
 
@@ -75,7 +72,69 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   const router = useRouter()
   const [user, setUser] = useState<UserType | null>(null);
-  const [ens, setEns] = useState<string>("")
+
+  async function ensImageFetcher(){
+    try{
+      if (typeof window.ethereum !== 'undefined') {
+        //@ts-ignore
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        //@ts-ignore
+        const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
+        const ensName = await provider.lookupAddress(address);
+        if(!ensName){
+          window.location.reload()
+
+          return ;
+        }
+        const ensAvatar = await provider.getAvatar(ensName);
+
+        if(ensAvatar){
+          await axios.patch("/api/user/"+user?.email, {profileImage: ensAvatar}).then((res)=>{
+            getUser()
+          window.location.reload()
+
+          });
+        }
+        else{
+          window.location.reload()
+
+        }
+      }
+      return true;
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
+
+  async function ensNameFetcher(){
+    try{
+      if (typeof window.ethereum !== 'undefined') {
+        //@ts-ignore
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        //@ts-ignore
+        const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
+        const ensName = await provider.lookupAddress(address);
+
+        if(!ensName){
+          toast.error("Couldn't find ENS Name");
+          window.location.reload()
+        }
+
+        if(ensName){
+        await axios.patch("/api/user/"+user?.email, {username: ensName}).then((res)=>{
+          window.location.reload();
+        });
+      }
+    }
+    return true;
+    }
+    catch(err){
+      console.log(err);
+    }
+  }
 
   async function getUser(){
     try{
@@ -221,7 +280,7 @@ useEffect(()=>{
 
   return (
     <GlobalContext.Provider value={{
-      user, setUser, fetch, setFetch, getUser, userRaw, setUserRaw, ensImg, setEnsImg, ens, setEns, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
+      user, setUser, fetch, setFetch, getUser, ensImageFetcher, ensNameFetcher, userRaw, setUserRaw, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeCollection" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}

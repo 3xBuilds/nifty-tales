@@ -14,7 +14,7 @@ import { useSession } from 'next-auth/react';
 export const WalletConnectButton = () => {
 
   const {address} = useAccount();
-  const {user, getUser, setEns, setEnsImg} = useGlobalContext();
+  const {user, getUser} = useGlobalContext();
   const {data:session} = useSession()
 
   async function updateWallet(){
@@ -59,17 +59,6 @@ export const WalletConnectButton = () => {
           chain &&
           (!authenticationStatus ||
             authenticationStatus === 'authenticated');
-
-            useEffect(() => {
-              if (connected && account.ensName) {
-                setEns(account.ensName);
-              } else {
-                setEns("");
-              }
-              if(connected && account.ensAvatar){
-                setEnsImg(account.ensAvatar);
-              }
-            }, [connected, account]);
 
         return (
           <div

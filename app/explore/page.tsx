@@ -17,9 +17,11 @@ import { toast } from "react-toastify";
 import { useAccount, useEnsName } from 'wagmi'
 import { AiOutlineLoading } from 'react-icons/ai'
 import { RecommendedFetcher } from '@/components/fetcher/recommendedFetcher'
+import { RiLoader5Fill } from 'react-icons/ri'
 
 
 const Explore = () => {
+
   const {data:session} = useSession();
   const router = useRouter();
   const {address} = useAccount();
@@ -28,7 +30,7 @@ const Explore = () => {
   const[characterName, setCharacterName] = useState(0)
   // const{data:session} = useSession();
 
-  const {user, getUser, ensImg, ens} = useGlobalContext();
+  const {user, getUser, ensImageFetcher, ensNameFetcher} = useGlobalContext();
 
   async function rename(){
     try{
@@ -160,31 +162,59 @@ useEffect(() => {
   tokenChecker();
 }, []);
 
-async function changeUsernametoEns(){
+const [ensNameLoader, setEnsNameLoader] = useState<boolean>(false);
+const [ensImageLoader, setEnsImageLoader] = useState<boolean>(false);
+
+async function getUserEnsImage(){
+  setEnsImageLoader(true);
+  //@ts-ignore
+  if(session?.role == "ANONYMOUS"){
+    toast.error("This action cannot be performed as a guest");
+    setEnsImageLoader(false);
+    return ;
+  }
   try{
-    console.log("Updating user's ens name...")
-    if(user?.username.includes("-wallet") && ens != ""){
-      await axios.patch("/api/user/"+user.email,{username:ens});
-      getUser()
-    }
+    ensImageFetcher();
   }
   catch(err){
     console.log(err);
+    toast.error("Couldn't find ENS Image");
+    setEnsImageLoader(false);
   }
 }
 
 useEffect(()=>{
-  console.log("YOUR ENS NAME IS ",ens)
-  if(ens){
-    changeUsernametoEns();
+  if(user && user?.profileImage == ""){
+    ensImageFetcher();
+    console.log("ENDED HERE");
+
   }
-},[ens])
+},[user])
+
+async function getUserEnsName(){
+  setEnsNameLoader(true);
+  //@ts-ignore
+  if(session?.role == "ANONYMOUS"){
+    toast.error("This action cannot be performed as a guest");
+    setEnsNameLoader(false);
+    return ;
+  }
+  try{
+    ensNameFetcher();
+  }
+  catch(err){
+    console.log(err);
+    toast.error("Couldn't find ENS Name");
+    setEnsNameLoader(false);
+  }
+}
+
 
   return (
     <div className=''>
 
         <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
-                <div className="bg-white shadow-xl shadow-black/30 gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-6 flex flex-col items-center justify-center" >
+                <div className="bg-white shadow-xl shadow-black/30 gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-4 flex flex-col items-center justify-center" >
                     <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-black hover:text-red-500 duration-200" ><IoClose/></button></div>
                     <div>
                         <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-full cursor-pointer hover:bg-jel-gray-1">
@@ -197,7 +227,10 @@ useEffect(()=>{
                             <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
                         </label>
                     </div>
-                    <button onClick={handleSubmit} className="py-2 bg-black md:w-40 max-md:text-sm w-32 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
+                    <div className='flex gap-2 w-full'>
+                      <button onClick={()=>{getUserEnsImage()}} className='font-bold text-black w-1/2 bg-gray-200 h-10 rounded-lg hover:-translate-y-1 duration-200'>{ensImageLoader ? <RiLoader5Fill className='animate-spin mx-auto text-xl'/> : "Use ENS"}</button>
+                      <button onClick={handleSubmit} className="py-2 bg-black max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white'/> : "Save"}</button>
+                    </div>
                 </div>
             </div>
 
@@ -213,7 +246,11 @@ useEffect(()=>{
             </div>
               <h2 className='text-bold text-xs font-semibold'>Limit: {username.length}/15 characters</h2>
               <input onKeyDown={(e)=>{if(characterName == 15 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Username..." onChange={(e) => { if(characterName < 15){setUserName(e.target.value); setCharacterName(e.target.value.length) }}} value={username} className={`p-2 placeholder:text-gray-300 my-2 w-full peer focus:outline-none  focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-              <button onClick={rename} className='font-bold text-white w-full bg-black h-10 rounded-lg hover:-translate-y-1 duration-200' >Save</button>
+              
+              <div className='flex gap-2 '>
+                <button onClick={()=>{getUserEnsName()}} className='font-bold text-black w-1/2 bg-gray-200 h-10 rounded-lg hover:-translate-y-1 duration-200'>{ensNameLoader ? <RiLoader5Fill className='animate-spin mx-auto text-xl'/> : "Use ENS"}</button>
+                <button onClick={rename} className='font-bold text-white w-1/2 bg-black h-10 rounded-lg hover:-translate-y-1 duration-200' >Save</button>
+              </div>
           </div>
       </div>
       {/* <div className='relative z-[100]'>
@@ -222,7 +259,7 @@ useEffect(()=>{
       <div className='flex max-md:flex-col gap-4 w-full px-5 items-center justify-start'>
         <button onClick={()=>{setImageModal(true)}} className='rounded-full w-28 h-28 group border-4 border-black overflow-hidden flex items-center justify-center relative'>
           {/* @ts-ignore */}
-          <Image width={1080} height={1080} src={user?.profileImage == "" && !ensImg ? logo : user?.profileImage != "" ? user?.profileImage+"?v="+Date.now() : ensImg } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
+          <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+Date.now() } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
           <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
         </button>
         <div className='flex gap-2 items-center justify-center'>
