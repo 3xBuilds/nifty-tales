@@ -80,6 +80,9 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   async function ensImageFetcher(){
     try{
+      //@ts-ignore
+      if(user && address && session?.role!= "ANONYMOUS"){
+
         //@ts-ignore
         const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
         const ensName = await provider.lookupAddress(address);
@@ -98,6 +101,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         else{return false};
 
       return true;
+      }
     }
     catch(err){
       console.log(err);
@@ -106,7 +110,8 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   async function ensNameFetcher(){
     try{
-        
+        //@ts-ignore
+      if(user && address && session?.role!= "ANONYMOUS"){
         //@ts-ignore
         const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
         const ensName = await provider.lookupAddress(address);
@@ -122,7 +127,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
       }
 
     return true;
-    }
+    }}
     catch(err){
       console.log(err);
     }
