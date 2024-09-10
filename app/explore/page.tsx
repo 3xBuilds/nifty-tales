@@ -196,8 +196,6 @@ async function getUserEnsImage(){
 useEffect(()=>{
   if(user && user?.profileImage == ""){
     ensImageFetcher();
-    console.log("ENDED HERE");
-
   }
 },[user])
 
