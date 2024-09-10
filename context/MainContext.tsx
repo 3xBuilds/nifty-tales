@@ -80,10 +80,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   async function ensImageFetcher(){
     try{
-      if (typeof window.ethereum !== 'undefined') {
-        //@ts-ignore
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        
         //@ts-ignore
         const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
         const ensName = await provider.lookupAddress(address);
@@ -101,7 +97,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         }
         else{return false};
 
-      }
       return true;
     }
     catch(err){
@@ -111,9 +106,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   async function ensNameFetcher(){
     try{
-      if (typeof window.ethereum !== 'undefined') {
-        //@ts-ignore
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
         
         //@ts-ignore
         const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
@@ -128,7 +120,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
           window.location.reload();
         });
       }
-    }
+
     return true;
     }
     catch(err){
