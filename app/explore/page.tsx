@@ -28,13 +28,11 @@ const Explore = () => {
   const[username, setUserName] = useState<string>("");
   const[modal, setModal] = useState<boolean>(false);
   const[characterName, setCharacterName] = useState(0)
-  // const{data:session} = useSession();
 
   const {user, getUser, ensImageFetcher, ensNameFetcher} = useGlobalContext();
   
   async function rename(){
     try{
-      console.log("TF");
       await axios.patch("/api/user/"+session?.user?.email, {username: username}).then((res)=>{
         setModal(false);
         getUser();
