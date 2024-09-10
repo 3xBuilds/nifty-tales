@@ -32,8 +32,6 @@ const Explore = () => {
 
   const {user, getUser, ensImageFetcher, ensNameFetcher} = useGlobalContext();
   
-  // COMMENT TO MAKE THIS RIGHT
-  // ??Udbshjdb
   async function rename(){
     try{
       console.log("TF");
