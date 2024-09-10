@@ -174,11 +174,21 @@ async function getUserEnsImage(){
     return ;
   }
   try{
-    ensImageFetcher();
+    const res = await ensImageFetcher();
+    if(res == false){
+      setEnsImageLoader(false);
+      toast.error("ENS image not found")
+      setImageModal(false);
+    }
+    if(res){
+      setEnsImageLoader(false);
+      toast.success("ENS image updated!")
+      setImageModal(false);
+    }
   }
   catch(err){
     console.log(err);
-    toast.error("Couldn't find ENS Image");
+    toast.error("Couldn't find ENS image");
     setEnsImageLoader(false);
   }
 }
@@ -200,7 +210,18 @@ async function getUserEnsName(){
     return ;
   }
   try{
-    ensNameFetcher();
+    const res = await ensNameFetcher();
+    if(res == false){
+      setEnsNameLoader(false);
+      toast.error("ENS name not found")
+      setModal(false);
+    }
+    if(res){
+      setEnsNameLoader(false);
+      toast.success("ENS name updated!")
+      setModal(false);
+    }
+    
   }
   catch(err){
     console.log(err);

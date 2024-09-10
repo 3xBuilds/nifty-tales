@@ -26,8 +26,8 @@ type GlobalContextType = {
   fetch: boolean | false;
   setFetch: Dispatch<SetStateAction<boolean | false>>;
   getUser: () => void;
-  ensNameFetcher: () => void;
-  ensImageFetcher: () => void;
+  ensNameFetcher: () => boolean;
+  ensImageFetcher: () => boolean;
   userRaw: UserType | null;
   setUserRaw: Dispatch<SetStateAction<UserType | null>>;
   publishedBooks: Array<BookType> | null;
@@ -44,8 +44,8 @@ const GlobalContext = createContext<GlobalContextType>({
   fetch: false,
   setFetch: () => {},
   getUser: () => { },
-  ensImageFetcher: () => {},
-  ensNameFetcher: () => {},
+  ensImageFetcher: () => false,
+  ensNameFetcher: () => false,
   userRaw: null,
   setUserRaw: () =>{ },
   publishedBooks : [],
@@ -83,23 +83,19 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         const provider = new ethers.getDefaultProvider("https://eth-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");
         const ensName = await provider.lookupAddress(address);
         if(!ensName){
-          window.location.reload()
-
-          return ;
+          return false;
         }
         const ensAvatar = await provider.getAvatar(ensName);
 
         if(ensAvatar){
           await axios.patch("/api/user/"+user?.email, {profileImage: ensAvatar}).then((res)=>{
             getUser()
-          window.location.reload()
+            window.location.reload()
 
           });
         }
-        else{
-          window.location.reload()
+        else{return false};
 
-        }
       }
       return true;
     }
@@ -119,8 +115,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         const ensName = await provider.lookupAddress(address);
 
         if(!ensName){
-          toast.error("Couldn't find ENS Name");
-          window.location.reload()
+          return false;
         }
 
         if(ensName){
@@ -280,6 +275,7 @@ useEffect(()=>{
 
   return (
     <GlobalContext.Provider value={{
+      // @ts-ignore
       user, setUser, fetch, setFetch, getUser, ensImageFetcher, ensNameFetcher, userRaw, setUserRaw, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeCollection" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
