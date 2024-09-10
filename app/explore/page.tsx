@@ -31,7 +31,8 @@ const Explore = () => {
   // const{data:session} = useSession();
 
   const {user, getUser, ensImageFetcher, ensNameFetcher} = useGlobalContext();
-
+  
+  // COMMENT TO MAKE THIS RIGHT
   async function rename(){
     try{
       console.log("TF");
