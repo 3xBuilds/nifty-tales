@@ -4,14 +4,19 @@
 import { motion } from 'framer-motion';
 import { useLoading } from './LoadingContext';
 import { useEffect, useState } from 'react';
+import { useGlobalContext } from '@/context/MainContext';
 
 
 const Loader = () => {
   const { isLoading } = useLoading();
-
+  const {night} = useGlobalContext()
+  const [color, setColor] = useState("");
   const [length, setLength] = useState<number>(0);
 
    useEffect(()=>{
+
+    if(night){setColor("#FFFFFF")};
+    if(!night){setColor("#000000")}
 
     if(isLoading){
       setLength(0);
@@ -37,7 +42,7 @@ const Loader = () => {
         left: 0,
         right: 0,
         height: '4px',
-        background: '#000',
+        background: color,
         transformOrigin: 'left',
         zIndex: 9999,
       }}

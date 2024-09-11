@@ -22,8 +22,8 @@ export const RecommendedFetcher = () => {
     setIsLoading(false)
   },[])
     
-    const {recentBooks, publishedBooks, boosted} = useGlobalContext()
-
+    const {recentBooks, publishedBooks, boosted} = useGlobalContext();
+    const {night} = useGlobalContext();
     const [type, setType] = useState('Trending');
 
   return (
@@ -77,7 +77,7 @@ export const RecommendedFetcher = () => {
                 </div>
                 ))}
                 </div>
-                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
+                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
                 </div>
                 </div>
             ))}

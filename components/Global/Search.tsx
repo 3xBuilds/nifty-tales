@@ -74,19 +74,17 @@ type Props = {
 
 
     async function getHistory(){
-        setHistoryUserResult([]);
-        setHistoryBookResult([]);
         try{
             //@ts-ignore
             if(user && session?.role != "ANONYMOUS"){
                 user.searchHistory?.map(async(item:string)=>{
-                        if(item[0] == "U"){
-                            console.log("AYOOOO")
+                    if(item[0] == "U"){
+                            setHistoryUserResult([]);
                             const response = await axios.get("/api/user/"+item.slice(1,item.length));
-                            console.log("RESPONSE")
                             setHistoryUserResult((prev)=>[...prev, response.data.user]);
                         }
                         else if(item[0] == "B"){
+                            setHistoryBookResult([]);
                             const response = await axios.get("/api/book/"+item.slice(1,item.length));
                             setHistoryBookResult((prev)=>[...prev, response.data.data]);
                         }

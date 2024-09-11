@@ -42,7 +42,7 @@ export const Analytics = () => {
   const[boostModal, setBoostModal] = useState(false);
 
   const { data: session } = useSession();
-  const { user } = useGlobalContext();
+  const { user, night } = useGlobalContext();
 
   const{address} = useAccount();
 
@@ -326,7 +326,7 @@ export const Analytics = () => {
   }, [user])
 
   return (
-    <div id="analytics" className='flex flex-col mx-4 md:mx-10 overflow-x-hidden items-start mt-5 pt-10 border-t-[1px] border-gray-300 justify-start'>
+    <div id="analytics" className={` ${night ? "text-white" : " "} flex flex-col mx-4 md:mx-10 overflow-x-hidden items-start mt-5 pt-10 border-t-[1px] border-gray-300 justify-start`}>
 
       <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
           <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
@@ -352,7 +352,7 @@ export const Analytics = () => {
 
               <div className='w-full flex gap-2 items-center justify-center mt-5'>
                 <button onClick={handleBoost} className="bg-black text-white font-semibold  h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >{loading ?<div className='w-full flex items-center justify-center'><RiLoader5Line className="animate-spin text-xl" /></div> : "Confirm"}</button>
-                <button onClick={()=>{setBoostModal(false)}} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+                <button onClick={()=>{setBoostModal(false)}} className="bg-gray-200 font-semibold    h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
               </div>
           </div>
         </div>
@@ -407,23 +407,23 @@ export const Analytics = () => {
             <div className='border-x-[1px] border-b-[1px] rounded-b-lg border-gray-300'>
               {option == "Daily" && dailyArr.length > 0 ? dailyArr.map((item, i) => (
                 <div key={i} className='flex text-center py-2'>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{i + 1}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.name}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.revenue} ETH</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.minted}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.readers}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button disabled={item.boost > Date.now()} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
+                    <button disabled={item.boost > Date.now()} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black  bg-gray-300 py-1 w-24 rounded-md'>
                       {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
@@ -432,23 +432,23 @@ export const Analytics = () => {
 
               {option == "Weekly" && weeklyArr.length > 0 ? weeklyArr.map((item, i) => (
                 <div key={i} className='flex text-center py-2'>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{i + 1}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.name}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.revenue} ETH</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.minted}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.readers}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black  bg-gray-300 py-1 w-24 rounded-md'>
                     {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
@@ -457,23 +457,23 @@ export const Analytics = () => {
 
               {option == "Monthly" && monthlyArr.length > 0 ? monthlyArr.map((item, i) => (
                 <div key={i} className='flex text-center py-2'>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{i + 1}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.name}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.revenue} ETH</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.minted}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
                     <h2>{item.readers}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md  '>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold  text-black bg-gray-300 py-1 w-24 rounded-md'>
                     {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>
@@ -482,23 +482,23 @@ export const Analytics = () => {
 
               {option == "All Time" && allTimeArr.length> 0 ? allTimeArr.map((item, i) => (
                 <div key={i} className='flex text-center py-2'>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md '>
                     <h2>{i + 1}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md '>
                     <h2>{item.name}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md '>
                     <h2>{item.revenue} ETH</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md '>
                     <h2>{item.minted}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md '>
                     <h2>{item.readers}</h2>
                   </div>
-                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md text-black'>
-                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>
+                  <div className='flex-shrink-0 min-w-32 w-[16.6%] font-medium text-md '>
+                    <button disabled={item.boost} onClick={()=>{setId(item.id); setBoostModal(true)}} className='text-sm font-bold text-black  bg-gray-300 py-1 w-24 rounded-md'>
                       {item.boost > Date.now() ? formatTimeDifference(item.boost) : "Boost"}
                     </button>
                   </div>

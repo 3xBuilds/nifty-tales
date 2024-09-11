@@ -8,9 +8,10 @@ import { IoIosLogOut, IoIosMenu, IoIosSettings, IoMdLogOut, IoMdWallet } from 'r
 import { useGlobalContext } from '@/context/MainContext'
 import { WalletConnectButton } from '../buttons/WalletConnectButton'
 import { MdAccountCircle, MdLogout, MdOutlineDashboard } from 'react-icons/md'
-import { FaPenNib, FaSearch, FaSignOutAlt } from 'react-icons/fa'
+import { FaMoon, FaPenNib, FaSearch, FaSignOutAlt } from 'react-icons/fa'
 import { Search } from '../Global/Search'
-
+import { LuSun } from "react-icons/lu";
+import logo_night from "@/assets/logo_night.png"
 import { useLoading } from '../PageLoader/LoadingContext'
 
 import { useAccount, useEnsName } from 'wagmi'
@@ -32,7 +33,7 @@ const Navbar = () => {
   },[])
 
   const[openSettingsModal, setOpenSettingsModal] = useState(false);
-  const {user} = useGlobalContext();
+  const {user, night, setNight} = useGlobalContext();
   const {data: session} = useSession();
 
   const [walletNotAvailable, setWalletNotAvailable] = useState(false);
@@ -81,7 +82,7 @@ const Navbar = () => {
 
   if(pathName.split("/")[1] !== "connect" && pathName.split("/")[1] !== "")
   return (<>
-    <div className='bg-white w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 '>
+    <div className={`${night ? "bg-[#212121]" : "bg-white"} duration-200 w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 `}>
 
     <div className={` w-40 flex flex-col items-center justify-center rounded-l-xl absolute right-0 top-16 ${bringModal ? "translate-x-0" : "translate-x-[30rem]"} absolute duration-200 bg-gray-200 border-2 border-nifty-gray-2/30 text-nifty-gray-2 `}>
       {/* @ts-ignore */}
@@ -124,12 +125,12 @@ const Navbar = () => {
 
     {/* {user?.email.includes("@wallet") && <AddEmail/>} */}
 
-    {user && user?.wallet != "" && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className="p-4 bg-white w-80 rounded-lg shadow-xl shadow-black/30">Wallet address you're trying to connect is not linked to your account. <b className="block mt-5">Go to your wallet and connect {user?.wallet.slice(0,32)}...</b> <h3 className='my-4 font-bold'>OR</h3>
-    <button className='w-40 bg-nifty-white font-semibold absolute h-10 rounded-lg hover:-translate-y-1 duration-200 top-4 right-4 text-black' onClick={()=>{signOut();}}>Sign Out</button> </div> </div>}
+    {user && user?.wallet != "" && address && user?.wallet != address && <div className="w-screen h-screen text-sm backdrop-blur-xl flex flex-col items-center justify-center fixed top-0 left-0 z-[10000000000000000]"><div className={`p-4 ${night ? "bg-[#313131] text-white" :"bg-white text-black"} w-80 rounded-lg shadow-xl shadow-black/30`}>Wallet address you're trying to connect is not linked to your account. <b className="block mt-5">Go to your wallet and connect {user?.wallet.slice(0,32)}...</b> <h3 className='my-4 font-bold text-center'>OR</h3>
+    <button className=' bg-nifty-white font-semibold mx-auto w-full h-10 rounded-lg hover:-translate-y-1 duration-200 top-4 right-4 text-black' onClick={()=>{signOut();}}>Sign Out</button> </div> </div>}
 
         <button onClick={()=>{setIsLoading(true);router.push("/")}} className='flex items-center'>
-            <Image src={logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
-            <h1 className='text-2xl max-md:text-base font-bold ml-2'>Nifty Tales</h1>
+            <Image src={night ? logo_night : logo} alt='logo' className='w-10 h-10 max-md:w-8 max-md:h-8 ml-4' />
+            <h1 className={`text-2xl max-md:text-base font-bold ${night ? "text-white" : "text-black"} duration-200 ml-2`}>Nifty Tales</h1>
             {/* <h2 className='text-xs text-nifty-gray-1/70 ml-2' >BETA</h2> */}
             <h2 className='text-xs text-red-500 ml-2' >BETA</h2>
 
@@ -144,16 +145,16 @@ const Navbar = () => {
           <Search bringSearchBar={bringSearchBar} search={search} setSearch={setSearch} setBringSearchBar={setBringSearchBar} />
 
           <button onClick={()=>{setBringSearchBar(true)}} >
-            <FaSearch/>
+            <FaSearch className={` ${night ? "text-white" : "text-black"} `}/>
           </button>
 
-          <button onClick={()=>{setIsOpen(prev=>!prev)}} className='flex p-2 mr-2 flex-col gap-1'>
-            <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " rotate-45 translate-y-[3px] "}`}></div>
-            {!isOpen && <div className='rounded-full bg-black w-5 h-[3px]'></div>}
-            <div className={`rounded-full duration-300 bg-black w-5 h-[3px] ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
+          <button onClick={()=>{setIsOpen(prev=>!prev)}} className={`flex p-2 mr-2 flex-col ${night ? "text-white" : "text-black"} gap-1`}>
+            <div className={`rounded-full duration-300  w-5 h-[3px] ${night ? "bg-white" : "bg-black"} ${isOpen && " rotate-45 translate-y-[3px] "}`}></div>
+            {!isOpen && <div className={`rounded-full ${night ? "bg-white" : "bg-black"} w-5 h-[3px]`}></div>}
+            <div className={`rounded-full duration-300 w-5 h-[3px] ${night ? "bg-white" : "bg-black"} ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
           </button>
 
-          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
+          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? night ? logo_night:logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
        </>}
        {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0 justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 
@@ -167,11 +168,11 @@ const Navbar = () => {
           {session && <>
             <Search bringSearchBar={bringSearchBar} search={search} setSearch={setSearch} setBringSearchBar={setBringSearchBar} />
 
-            <button className='mr-2 hover:bg-gray-200 duration-200 bg-gray-100 rounded-full p-3' onClick={()=>{setBringSearchBar(true)}} >
-              <FaSearch/>
+            <button className='mr-2 hover:bg-gray-400/30 duration-200 bg-gray-400/20 rounded-full p-3' onClick={()=>{setBringSearchBar(true)}} >
+              <FaSearch className={`${night && "text-white"}`}/>
             </button>
 
-            {!pathName.split("/").includes("explore") && <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='text-black text-md font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200'>Explore</button>}
+            {!pathName.split("/").includes("explore") && <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className={`${night ? "text-white" : "text-black"} text-md font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200`}>Explore</button>}
 
             {/* @ts-ignore */}
             {session && session.role != "ANONYMOUS" && <div className='flex gap-4 items-center justify-center'>
@@ -186,19 +187,19 @@ const Navbar = () => {
               }
               
               </>
-              {pathName.split("/")[1] == "yourShelf" ? <button disabled onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username.slice(0,12)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
+              {pathName?.split("/")[1] == "yourShelf" ? <button disabled onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username?.slice(0,12)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
               {!walletNotAvailable && address && <WalletConnectButton/>}
 
               
               </div>} 
           </>}
-
-          <button onClick={()=>{setBringModal((prev)=>!prev)}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>
+          <button onClick={()=>{if(night)localStorage.setItem('mode', "day"); else{localStorage.setItem('mode', "night")}setNight((prev)=>!prev);}} className={` ${night ? "hover:bg-white/20" : "hover:bg-black/20"} mx-2 p-2 rounded-full duration-200`} >{night ? <LuSun className='text-white' /> : <FaMoon className='text-black'/>}</button>
+          <button onClick={()=>{setBringModal((prev)=>!prev)}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={night ? logo_night : logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>
           {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0  justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 
         </div>
     </div>
-    <div className={`w-screen bg-white fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
+    <div className={`w-screen ${night ? "bg-[#212121] text-white" : "bg-white"} fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
             {/* <li><WalletConnectButton/></li> */}
             <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/explore");}} >Explore</li>
@@ -208,7 +209,8 @@ const Navbar = () => {
             {session?.role != "ANONYMOUS" && <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{setOpenSettingsModal(true)}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'>Settings</button></li>}
             <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{signOut({callbackUrl: "/connect"})}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'>Logout</button></li>
             {/* @ts-ignore */}
-            {session?.role != "ANONYMOUS" && <li className='' ><WalletConnectButton/></li>}
+            {session?.role != "ANONYMOUS" && <li className='flex gap-2 items-center justify-center w-full' ><WalletConnectButton/>  <button onClick={()=>{if(night)localStorage.setItem('mode', "day"); else{localStorage.setItem('mode', "night")}setNight((prev)=>!prev);}} className={` ${night ? "hover:bg-white/20" : "hover:bg-black/20"} items-center flex justify-center bg-gray-300/40 w-1/2 mx-auto p-2 rounded-full duration-200`} >{night ? <LuSun className='text-white' /> : <FaMoon className='text-black'/>}</button>
+            </li>}
           </ul>
         </div>
     </>

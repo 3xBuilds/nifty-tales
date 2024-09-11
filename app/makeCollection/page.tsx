@@ -29,7 +29,7 @@ export default function Home() {
     const [bannerImg, setBannerImg] = useState<File | null>(null);
 
     const { address, isDisconnected, isReconnecting, isConnecting } = useAccount();
-    const {user, getUser} = useGlobalContext();
+    const {user, getUser, night} = useGlobalContext();
 
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -192,14 +192,13 @@ export default function Home() {
 
 
     return (
-        <div className=" gap-10 w-screen min-h-screen md:p-10 p-4 -mt-16">
-        
+        <div className={` gap-10 w-screen min-h-screen md:p-10 p-4 -mt-16 ${night ? "bg-[#212121] text-white" : "bg-white text-black"} duration-200`}>
             {/* <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <Navbar/>
             </div> */}
 
             {loading && <div className="w-screen h-screen fixed top-0 left-0 backdrop-blur-xl flex items-center justify-center">
-                    <div className="bg-white shadow-xl shadow-black/30 w-80 h-20 font-semibold flex gap-4 items-center justify-center text-xl rounded-xl"><AiOutlineLoading className="animate-spin"/>Creating your Library</div>
+                    <div className={`${night ? "bg-[#313131]" : "bg-white"} shadow-xl shadow-black/30 w-80 h-20 font-semibold flex gap-4 items-center justify-center text-xl rounded-xl`}><AiOutlineLoading className="animate-spin"/>Creating your Library</div>
                 </div>}
 
             {isDisconnected && !isReconnecting && <div className="w-screen h-screen fixed flex items-center justify-center flex-col gap-4 z-50 backdrop-blur-2xl top-0 left-0">
@@ -220,14 +219,14 @@ export default function Home() {
 
                     <div className="flex max-md:flex-col md:items-start items-center justify-center gap-4" >
                         <div className="flex flex-col items-center justify-center md:justify-start md:w-[40%]">
-                            <h2 className="text-sm text-nifty-gray-2">Upload a Photo<span className="text-red-500 font-semibold ml-1">*</span></h2>
+                            <h2 className="text-sm text-nifty-gray-1">Upload a Photo<span className="text-red-500 font-semibold ml-1">*</span></h2>
 
                             <div>
                                 <label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-48 h-48 border-2 border-jel-gray-3 border-dashed rounded-xl cursor-pointer hover:bg-jel-gray-1">
                                     <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
-                                        {!profileImg ?<div className="bg-nifty-gray-1/40 text-nifty-gray-2 w-full h-full flex gap-2 flex-col items-center justify-center rounded-xl" > <svg className="w-8 h-8 text-jel-gray-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        {!profileImg ?<div className="bg-nifty-gray-1/40 text-nifty-gray-2 w-full h-full flex gap-2 flex-col items-center justify-center rounded-xl" > <svg className={`w-8 h-8 ${night ? "text-white" : "text-jel-gray-4"} `} aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
                                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                        </svg><h2 className="text-sm text-center px-2 font-semibold text-nifty-gray-2" >Upload a photo for your collection</h2></div> :
+                                        </svg><h2 className={`text-sm text-center px-2 font-semibold ${night ? "text-white" : "text-nifty-gray-2"} `} >Upload a photo for your collection</h2></div> :
                                             <Image alt="hello" className='w-full h-full object-cover rounded-xl hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!profileImg ? "" : (profileImg instanceof File ? URL.createObjectURL(profileImg) : profileImg)} />}
                                     </div>
                                     <input id="dropzone-file" type="file" accept='image/*' onChange={handleFileChange} className="hidden" />
@@ -237,13 +236,13 @@ export default function Home() {
 
                         <div className="md:w-[60%]">
                             <div className="w-full text-start flex flex-col">
-                                <input placeholder="John's Collection" onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-nifty-gray-1/40"></input>
-                                <h2 className="text-sm text-semibold text-nifty-gray-2 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Name your collection <span className="text-red-500 font-semibold ml-1">*</span></h2>
+                                <input placeholder="John's Collection" onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                                <h2 className={`text-sm text-semibold text-nifty-gray-1 order-first mt-4 ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:text-black peer-focus:font-semibold duration-200`}>Name your collection <span className="text-red-500 font-semibold ml-1">*</span></h2>
                             </div>
 
                             <div className="w-full text-start flex flex-col">
-                                <input placeholder="JCN" onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-nifty-gray-1/40"></input>
-                                <h2 className="text-sm text-semibold text-nifty-gray-2 order-first mt-4 peer-focus:text-black peer-focus:font-semibold duration-200">Collection Symbol <span className="text-red-500 font-semibold ml-1">*</span></h2>
+                                <input placeholder="JCN" onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                                <h2 className={`text-sm text-semibold text-nifty-gray-1 order-first mt-4 ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:text-black peer-focus:font-semibold duration-200`}>Collection Symbol <span className="text-red-500 font-semibold ml-1">*</span></h2>
                             </div>
 
                         </div>
@@ -257,8 +256,8 @@ export default function Home() {
                                     <label htmlFor="banner-dropzone-file" className="flex rounded-xl flex-col items-center justify-center w-full h-full border-2 border-jel-gray-3 border-dashed  cursor-pointer hover:bg-jel-gray-1">
                                         <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
                                             {!bannerImg ? <div className="w-full h-full bg-nifty-gray-1/40 rounded-xl flex flex-col items-center justify-center">
-                                                    <CiImageOn className="text-2xl text-nifty-gray-2" />
-                                                    <h3 className="text-sm text-nifty-gray-2 font-semibold text-center" >Upload a 1500x500 png image for best quality</h3>
+                                                    <CiImageOn className={`text-2xl ${night ? "text-white" : "text-jel-gray-4"} `} />
+                                                    <h3 className={`text-sm text-center px-2 font-semibold ${night ? "text-white" : "text-nifty-gray-2"} `} >Upload a 1500x500 png image for best quality</h3>
                                                 </div> :
                                                 <Image alt="hello" className='w-full h-full object-cover rounded-lg hover:scale-110 hover:opacity-30 duration-300' width={1000} height={1000} src={!bannerImg ? "" : (bannerImg instanceof File ? URL.createObjectURL(bannerImg) : bannerImg)} />}
                                         </div>

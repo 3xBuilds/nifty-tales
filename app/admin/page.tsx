@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 export default function Home(){
 
     const {data:session} = useSession();
-    const {user} = useGlobalContext();
+    const {user, night} = useGlobalContext();
 
     const[reportedArr, setReportedArr] = useState([]);
     const [authorArr, setAuthorArr] = useState([])
@@ -180,7 +180,7 @@ export default function Home(){
 
     if(session && user?.role == "ADMIN")
     return(
-        <div className="md:px-10 px-4 mt-20">
+        <div className={`md:px-10 px-4 mt-20 ${night ? "bg-[#212121]" : "bg-white"} `}>
             <h2 className="text-2xl font-bold" >Admin Dashboard</h2>
             {reportedArr?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                 <h2 className="text-2xl font-bold">Reports</h2>

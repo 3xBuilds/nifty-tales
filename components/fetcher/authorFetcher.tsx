@@ -23,6 +23,8 @@ export default function AuthorFetcher(){
     const [slicer, setSlicer] = useState<number>(0);
     const [user,setUser] = useState<UserType>()
 
+    const {night} = useGlobalContext()
+
     const[publishedBooks, setPublishedBooks] = useState([])
 
 
@@ -161,7 +163,7 @@ export default function AuthorFetcher(){
   }, []);
 
     return(
-        <div className="">
+        <div className={`min-h-screen ${night ? "text-white bg-[#212121]" : "text-black bg-white"}`}>
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
@@ -208,8 +210,8 @@ export default function AuthorFetcher(){
                         </div>
                         ))}
                         </div>
-                            <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
-                            </div>
+                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                        </div>
                         </div>
                     ))}
 

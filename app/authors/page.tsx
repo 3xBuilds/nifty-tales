@@ -32,7 +32,7 @@ export default function Home() {
 
     const router = useRouter()
     const { setIsLoading } = useLoading()
-    const { user, getUser } = useGlobalContext();
+    const { user, getUser, night } = useGlobalContext();
     
     const [publishedBooks, setPublishedBooks] = useState([])
     const [draftBooks, setDraftBooks] = useState([])
@@ -128,14 +128,14 @@ export default function Home() {
             var pausedArr: any = []
 
 
-            user.yourBooks.reverse().map((item: any, i) => {
-                if(item.isPaused && !item.isAdminRemoved){
+            user?.yourBooks?.reverse().map((item: any, i) => {
+                if(item?.isPaused && !item?.isAdminRemoved){
                     pausedArr.push(item)
                 }
-                if (item.isPublished && !item.isHidden && !item.isAdminRemoved) {
+                if (item?.isPublished && !item?.isHidden && !item?.isAdminRemoved) {
                     subArr1.push(item);
                 }
-                if (subArr1.length == slicer || i == user.yourBooks.length - 1) {
+                if (subArr1.length == slicer || i == user?.yourBooks?.length - 1) {
                     if (subArr1.length > 0)
                         arr1.push(subArr1);
                     subArr1 = []
@@ -528,14 +528,14 @@ export default function Home() {
     }
 
     return (
-        <div className="">
+        <div className={`${night ? "bg-[#212121] text-white" : "bg-white text-black"} duration-200`}>
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
 
             {/* BOOST MODAL */}
             <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
-                <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>
+                <div className={` ${night ? "bg-[#212121]" : "bg-white"} shadow-xl shadow-black/30 w-80 rounded-xl p-4 `}>
                     <h2 className='text-2xl font-bold mb-5'>Duration</h2>
                     <div className='flex gap-2 flex-wrap items-center justify-center'>
                         <button onClick={() => { setPrice("1000000000000000"); setAddtime("86400000") }} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-1-2/80`}>
@@ -659,7 +659,7 @@ export default function Home() {
                     </button>
                     <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
-                        <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd.substring(0, 7)}...{user?.contractAdd.substring(user.contractAdd.length - 7, user.contractAdd.length)}</a>
+                        <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd?.substring(0, 7)}...{user?.contractAdd?.substring(user.contractAdd.length - 7, user.contractAdd.length)}</a>
                     </div>
                 </div>
 
@@ -696,8 +696,8 @@ export default function Home() {
                                         <div className="absolute z-50 top-1 flex gap-2 " >
                                             <button onClick={() => { hide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEyeSlash /></button>
                                             <button onClick={() => {setTokenId(item2.tokenId); setId(item2._id); setMintPrice(item2.price as number); setogMintPrice(item2.price as number); setogMaxMints(item2.maxMint as number); setogMaxMintsPerWallet(item2.maxMintsPerWallet as number); setMaxMints(item2.maxMint as number); setMaxMintsPerWallet(item2.maxMintsPerWallet as number); setPriceModal(true);  }} className="bg-black text-white p-3 text-sm rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaPen className="text-md" /></button>
-                                            <button onClick={() => { setId(item2._id); setBoostModal(true) }} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><IoIosRocket /></button>
-                                            {!item2.isPaused && <button disabled={loadingPause} onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>}
+                                            <button onClick={() => { setId(item2._id); setBoostModal(true) }} className={`bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 text-black group-hover:opacity-100 duration-200`} ><IoIosRocket /></button>
+                                            {!item2.isPaused && <button disabled={loadingPause} onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>}
                                         </div>
                                         <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                                             <Book img={item2.cover} />
@@ -705,7 +705,7 @@ export default function Home() {
                                     </div>
                                     ))}
                                 </div>
-                                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
+                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
                                 </div>
                             </div>
                         ))}
@@ -738,7 +738,7 @@ export default function Home() {
                                     </div>
                                     ))}
                                 </div>
-                                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-gray-300 relative z-10">
+                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
                                 </div>
                             </div>
                         ))}
@@ -768,7 +768,7 @@ export default function Home() {
                                     </div>
                                     ))}
                                 </div>
-                                <div className="w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b from-white to-black/20 relative z-10">
+                                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
                                 </div>
                             </div>
                         ))}
@@ -803,14 +803,14 @@ export default function Home() {
                                 <div className="flex flex-col w-full justify-center items-center">
                                     {pausedBooks.map((item, i) => (
                                         <div className={`flex w-full text-center h-12 border-b-[1px] border-x-[1px] border-gray-300 ${i+1 == pausedBooks.length && "rounded-b-xl"} items-center justify-center`}>
-                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md'>
                                                 <h2>{i+1}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md'>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.name.slice(0,15)}{item.name.length > 15 && "..."}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[33.3%] font-medium text-md'>
                                                 {/* @ts-ignore */}
                                                 <button onClick={()=>{setLoadingPause(true); unpauseMint(item.tokenId, item._id)}} className='text-sm font-bold text-black bg-gray-300 py-1 w-24 rounded-md'>{loadingPause ? <RiLoader5Fill className="animate-spin mx-auto text-xl"/> : "Unpause"}</button>
                                             </div>
@@ -862,18 +862,18 @@ export default function Home() {
                                 <div className="flex flex-col w-full justify-center items-center">
                                     {reportedArr.map((item, i) => (
                                         <div className={`flex w-full text-center border-gray-300 h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
-                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md '>
                                                 <h2>{i+1}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md '>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.name.slice(0,10)}{item.name.length > 10 && "..."}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md '>
                                                 {/* @ts-ignore */}
                                                 <h2>{item.reportNum}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[40%] flex items-center justify-center font-medium text-xs text-black'>
+                                            <div className='flex-shrink-0 min-w-32 w-[40%] flex items-center justify-center font-medium text-xs '>
                                                 {/* @ts-ignore */}
                                                 {item.tagsArr.map((item2)=>(
                                                     <div className={`py-2 w-24 px-2 hover:scale-105 duration-200 hover:brightness-105 rounded-xl flex gap-2 items-center justify-center bg-gray-200 border-2 border-gray-400 font-semibold text-center text-gray-400 text-[0.6rem]`}>

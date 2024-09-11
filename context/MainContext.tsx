@@ -38,6 +38,8 @@ type GlobalContextType = {
   setRecentBooks: Dispatch<SetStateAction<any | "">>;
   boosted: Array<BookType> | null;
   setBoosted: Dispatch<SetStateAction<any | "">>;
+  night: boolean;
+  setNight: Dispatch<SetStateAction<boolean>>
 }
 
 const GlobalContext = createContext<GlobalContextType>({
@@ -57,7 +59,9 @@ const GlobalContext = createContext<GlobalContextType>({
   recentBooks : [],
   setRecentBooks: () =>{},
   boosted : [],
-  setBoosted: () =>{}
+  setBoosted: () =>{},
+  night: false,
+  setNight: () => {}
 });
 
 export const GlobalContextProvider = ({ children } : { children: ReactNode}) => {
@@ -66,7 +70,8 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   const [publishedBooks, setPublishedBooks] = useState([])
   const [recentBooks, setRecentBooks] = useState([])
-  const [boosted, setBoosted] = useState([])
+  const [boosted, setBoosted] = useState([]);
+  const[night, setNight] = useState<boolean>(false);
 
   const[slicer, setSlicer] = useState(0);
 
@@ -268,6 +273,14 @@ useEffect(()=>{
     } else if(screenWidth <= 1100){
         setSlicer(4);
     }
+    const mode = localStorage.getItem('mode');
+
+    if(mode == "night"){
+      setNight(true);
+    }
+    else{
+      setNight(false);
+    }
   },[])
 
   useEffect(()=>{
@@ -278,7 +291,7 @@ useEffect(()=>{
   return (
     <GlobalContext.Provider value={{
       // @ts-ignore
-      ensImg, setEnsImg, user, setUser, fetch, setFetch, getUser, ensImageFetcher, ensNameFetcher, userRaw, setUserRaw, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted
+      ensImg, setEnsImg, user, setUser, fetch, setFetch, getUser, ensImageFetcher, ensNameFetcher, userRaw, setUserRaw, publishedBooks, setPublishedBooks, recentBooks, setRecentBooks, boosted, setBoosted, night, setNight
     }}>
       {walletNotRegistered && (pathname.split("/")[2] == "makeCollection" || pathname.split("/")[pathname.split("/").length-1] == "authors") && <WalletNotRegistered/>}
       {children}
