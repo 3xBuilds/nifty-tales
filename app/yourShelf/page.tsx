@@ -171,7 +171,7 @@ export default function Home(){
       }, []);
 
     return(
-        <div className={`min-h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-10 ${night ? "text-white bg-[#212121]" : "text-black bg-white"} `} >
+        <div className={`min-h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-10 duration-200 ${night ? "text-white bg-[#212121]" : "text-black bg-white"} `} >
             {/* <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div> */}
@@ -203,7 +203,7 @@ export default function Home(){
                 </div>:<>
                 
                 {toggle == "Readlist" && <div className="w-full h-80 flex flex-col text-center items-center justify-center">
-                        <h3 className={`text-xl font-semibold ${night ? "text-white" : 'text-gray-500'} mb-3`}>Your shelf seems empty</h3>
+                        <h3 className={`text-xl font-semibold duration-200 ${night ? "text-white" : 'text-gray-500'} mb-3`}>Your shelf seems empty</h3>
                         <h3 className="text-lg font-medium text-nifty-gray-1 mb-5 flex max-md:flex-col gap-2 items-center">Add some books from <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
@@ -233,7 +233,7 @@ export default function Home(){
                     </div> : 
                     <>
                         {toggle == "Bookmarks" && <div className="w-full text-center h-80 flex flex-col items-center justify-center">
-                            <h3 className={`text-xl font-semibold ${night ? "text-white" : 'text-gray-500'} mb-3`}>Seems like you haven't bookmarked anything</h3>
+                            <h3 className={`text-xl font-semibold duration-200 ${night ? "text-white" : 'text-gray-500'} mb-3`}>Seems like you haven't bookmarked anything</h3>
                             <h3 className="text-lg font-medium text-nifty-gray-1 mb-5 flex max-md:flex-col gap-2 items-center">Find a book to read <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                             
                         </div>}
@@ -256,14 +256,14 @@ export default function Home(){
                         </div>
                         ))}
                         </div>
-                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
                         </div>
                         </div>
                     ))}
                 </div>:
                     <>
                     {toggle == "Minted" && <div className="w-full text-center h-80 flex flex-col items-center justify-center">
-                        <h3 className={`text-xl font-semibold ${night ? "text-white" : 'text-gray-500'} mb-3`}>Seems like you haven't minted anything</h3>
+                        <h3 className={`text-xl font-semibold duration-200 ${night ? "text-white" : 'text-gray-500'} mb-3`}>Seems like you haven't minted anything</h3>
                         <h3 className="text-lg font-medium text-nifty-gray-1 mb-5 flex max-md:flex-col gap-2 items-center">Find an author to support <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className="h-10 w-32 bg-gray-200 font-semibold hover:-translate-y-1 duration-200 text-black rounded-lg" >Explore</button></h3>
                         
                     </div>}
