@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import { useGlobalContext } from '@/context/MainContext';
 import { IoIosBookmark } from 'react-icons/io';
 
+import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 
 export default function Home() {
 
@@ -31,7 +32,7 @@ export default function Home() {
     const [bookId, setBookId] = useState("");
     const[pdf, setPdf] = useState<string>("")
 
-    const {user} = useGlobalContext();
+    const {user, night} = useGlobalContext();
 
     const [page, setPage] = useState<number>();
 
@@ -98,24 +99,33 @@ export default function Home() {
       if(session && page!= undefined)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.2.146/build/pdf.worker.min.js">
-            <div className='relative flex items-center justify-center w-screen h-screen pt-20'>
-                <div className='fixed top-20 z-50 bg-white h-16 px-4 flex items-center justify-center rounded-lg w-[80%] '>
-                    <Toolbar />
-                    <button onClick={()=>{addBookmark()}} className=' bg-white hover:bg-nifty-white text-black rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'><IoIosBookmark/></button>
+      <div className={`relative flex items-center justify-center w-screen h-screen pt-20 ${night ? "bg-[#212121]" : "bg-white"}`}>
+        <div className="fixed top-20 z-50 bg-white h-16 px-4 flex items-center justify-center rounded-lg w-[80%]">
+          <Toolbar />
+          <button 
+            onClick={addBookmark} 
+            className='bg-white hover:bg-gray-100 text-black rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'
+          >
+            <IoIosBookmark/>
+          </button>
+        </div>
+        {/* <div className={`mt-20 ${night ? "invert" : ""}`}> */}
+          <Viewer theme={night?"dark":"light"}
+            onPageChange={(e) => setCurrentPage(e.currentPage)}
+            renderLoader={(percentages: number) => (
+              <div style={{ width: '300px', margin: "50px" }}>
+                <ProgressBar progress={Math.round(percentages)} />
+              </div>
+            )}
+            plugins={[toolbarPluginInstance]}
+            initialPage={page}
+            defaultScale={0.9}
+            fileUrl={pdf}
+          />
+        {/* </div> */}
+      </div>
+    </Worker>
 
-                </div>
-                {/* <div className='mt-20'> */}
-                    <Viewer onPageChange={(e)=>{setCurrentPage(e.currentPage)}} renderLoader={(percentages: number) => (
-                    <div style={{ width: '300px', margin: "50px" }}>
-                        <ProgressBar progress={Math.round(percentages)} />
-                    </div>
-                )} plugins={[
-                    toolbarPluginInstance,
-                ]} initialPage={page} defaultScale={0.9} fileUrl={pdf} />
-                {/* </div> */}
-            </div>
-            
-        </Worker>
     );
 
 }
