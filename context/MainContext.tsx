@@ -17,6 +17,7 @@ import {
 } from "react";
 import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
+import { Alchemy, Network } from 'alchemy-sdk';
 
 
 type GlobalContextType = {
@@ -83,6 +84,12 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const router = useRouter()
   const [user, setUser] = useState<UserType | null>(null);
 
+  const config = {
+    apiKey: "2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v", // Replace with your Alchemy API key
+    network: Network.ETH_MAINNET,
+  };
+  const alchemy = new Alchemy(config);
+
   async function ensImageFetcher(){
     try{
       //@ts-ignore
@@ -94,16 +101,41 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         if(!ensName){
           return false;
         }
+
         const ensAvatar = await provider.getAvatar(ensName);
 
         if(ensAvatar){
           await axios.patch("/api/user/"+user?.email, {profileImage: ensAvatar}).then((res)=>{
             getUser()
             window.location.reload()
-
           });
         }
-        else{return false};
+        else{
+          const resolver = await provider.getResolver(ensName);
+          const avatarText = await resolver.getText('avatar');
+
+          console.log("AVATARA", avatarText);
+
+          const contractAddress = avatarText.split("/")[1].split(":")[1];
+          const tokenId = avatarText.split("/")[2]
+  
+          const response = await alchemy.nft.getNftMetadata(
+            contractAddress,
+            tokenId
+          );
+
+          await axios.patch("/api/user/"+user?.email, {profileImage: response.image.pngUrl}).then((res)=>{
+            getUser()
+            window.location.reload()
+          });
+
+          if(!response){
+            toast.error("ENS Image not found!");
+          }
+        };
+
+
+        
 
       return true;
       }
