@@ -46,13 +46,15 @@ export default function Home() {
 
                 //@ts-ignore
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
+
                 const signer = provider.getSigner();
 
+                
                 const uri = "https://niftytales.s3.us-east-1.amazonaws.com/users/" + address + "/metadata/";
-
+                
                 const factory = new ethers.ContractFactory(abi, bytecode, signer);
-                const contract = await factory.deploy(collectionName, symbol, uri);
-
+                const contract = await factory.deploy(collectionName, symbol, uri, { value: 0 });
+                
 
                 await contract.deployed();
                 await axios.patch("/api/user/"+user?.email, {collectionName: collectionName})
