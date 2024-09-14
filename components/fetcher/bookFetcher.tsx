@@ -26,6 +26,7 @@ import { ImCross, ImPause } from 'react-icons/im';
 import { WalletConnectButton } from '../buttons/WalletConnectButton';
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister';
 import { WalletGuest } from '../popups/walletGuest';
+import masterABI from '@/utils/abis/masterABI';
 
 export const BookFetcher = () => {
   const pathname = usePathname();
@@ -49,6 +50,8 @@ export const BookFetcher = () => {
   const[holders, setHolders] = useState([]);
   const[userMinted, setUserMinted] = useState<number>(0);
 
+  const[platformFee, setPlatformFee] = useState<number>(0)
+
   async function getBookDetails() {
     try {
       await axios.get("/api/book/" + pathname.split("/")[2]).then((res) => {
@@ -61,6 +64,34 @@ export const BookFetcher = () => {
       console.log(err);
     }
   }
+
+  async function getFeePerMint() {
+    try {
+        //@ts-ignore
+        if (typeof window.ethereum !== 'undefined') {
+            const add = "0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF";
+            
+            //@ts-ignore
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
+            
+            console.log(add);
+            //@ts-ignore
+            const provider = new ethers.providers.Web3Provider(window.ethereum);
+            const signer = provider.getSigner();
+            //@ts-ignore
+            const contract = new ethers.Contract(add, masterABI, signer);
+            
+            const fee = await contract.getFeePerMint();
+
+            setPlatformFee(Number(ethers.utils.formatEther(fee)));
+        }
+
+    }
+    catch (err) {
+        setTimeout(getFeePerMint,500);
+        console.error(err);
+    }
+}
 
 
   async function contractSetup() {
@@ -116,7 +147,7 @@ export const BookFetcher = () => {
       const contract = await contractSetup();
       
       // Calculate the value to send with the transaction
-      const valueToSend = ethers.utils.parseEther(String(((bookDetails?.price as number + 0.0007) * amount).toFixed(4)));
+      const valueToSend = ethers.utils.parseEther(String(((bookDetails?.price as number +  platformFee) * amount).toFixed(4)));
 
       // Estimate gas
       const gasEstimate = await contract?.estimateGas.mint(amount, bookDetails?.tokenId, { value: valueToSend });
@@ -177,6 +208,7 @@ export const BookFetcher = () => {
 
   useEffect(() => {
     getBookDetails();
+    getFeePerMint();
   }, [])
 
   async function setMintPrice() {
@@ -475,12 +507,12 @@ useEffect(()=>{
               </div>
               <div className='w-full flex my-2'>
                 <h2 className='w-1/2 text-[0.7rem]'>Platform Fee</h2>
-                <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(0.0007 * amount).toFixed(4)} ETH (${(amount * ethPrice * 0.0007).toFixed(2)})</h2>
+                <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{( platformFee * amount).toFixed(4)} ETH (${(amount * ethPrice *  platformFee).toFixed(2)})</h2>
               </div>
 
               <div className={`w-full ${night ? "text-white" : "text-black"} font-bold flex mb-2 mt-4`}>
                 <h2 className='w-1/2 text-[0.85rem] font-bold'>Total</h2>
-                <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((0.0007 + Number(price)) * amount).toFixed(4)} ETH (${(amount * ethPrice * (0.0007 + Number(price))).toFixed(2)})</h2>
+                <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{(( platformFee + Number(price)) * amount).toFixed(4)} ETH (${(amount * ethPrice * ( platformFee + Number(price))).toFixed(2)})</h2>
               </div>
             </div>
             <div className='flex gap-2 items-center flex-col justify-center w-full' >

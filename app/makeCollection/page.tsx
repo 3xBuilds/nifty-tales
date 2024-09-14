@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useExitAlert } from "@/components/alert/alert";
+import masterABI from "@/utils/abis/masterABI";
 
 export default function Home() {
 
@@ -32,8 +33,44 @@ export default function Home() {
     const {user, getUser, night} = useGlobalContext();
 
     const [loading, setLoading] = useState<boolean>(false);
+    const[authorFee, setAuthorFee] = useState<number>(0)
 
     const router = useRouter()
+
+    async function getAuthorFee() {
+        try {
+            //@ts-ignore
+            if (typeof window.ethereum !== 'undefined') {
+                const add = "0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF";
+                
+                //@ts-ignore
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                
+                console.log(add);
+                //@ts-ignore
+                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const signer = provider.getSigner();
+                //@ts-ignore
+                const contract = new ethers.Contract(add, masterABI, signer);
+                
+                const wl = await contract.returnWhitelist(address);
+
+                if(!wl){
+                    const fee = await contract.returnfeeForAuthor();
+                    setAuthorFee(Number(ethers.utils.formatEther(fee)));
+                }
+
+                else{
+                    setAuthorFee(0);
+                }
+            }
+    
+        }
+        catch (err) {
+            setTimeout(getAuthorFee,500);
+            console.error(err);
+        }
+    }
 
 
     async function deployContract() {
@@ -53,7 +90,7 @@ export default function Home() {
                 const uri = "https://niftytales.s3.us-east-1.amazonaws.com/users/" + address + "/metadata/";
                 
                 const factory = new ethers.ContractFactory(abi, bytecode, signer);
-                const contract = await factory.deploy(collectionName, symbol, uri, { value: 0 });
+                const contract = await factory.deploy(collectionName, symbol, uri, { value: ethers.utils.parseEther(String(authorFee)) });
                 
 
                 await contract.deployed();
@@ -171,7 +208,8 @@ export default function Home() {
     const {setIsLoading} = useLoading()
 
   useEffect(()=>{
-    setIsLoading(false)
+    setIsLoading(false);
+    getAuthorFee();
   },[])
 
   async function tokenChecker() {
@@ -278,10 +316,10 @@ export default function Home() {
                 </div>
 
                 <div className="md:w-[40%] md:px-10 px-3 flex items-center text-nifty-gray-2">
-                    <ul className="flex flex-col gap-2 list-disc max-md:my-5">
+                    <ul className="flex flex-col gap-4 list-disc max-md:my-5">
                         <li>By becoming an author, you are giving niftytales.xyz access to your uploaded images and pdfs</li>
-                        <li>Each book minted will have a platform fee (0.0007 ETH) attached which is independant of what you earn from each mint.</li>
-
+                        <li>Each book minted will have a platform fee attached which is independant of what you earn from each mint.</li>
+                        <li>To prevent spamming, there is a fee of <b>{authorFee} ETH </b>for becoming an author.</li>
                     </ul>
                 </div>
 

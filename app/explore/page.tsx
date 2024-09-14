@@ -40,7 +40,7 @@ const Explore = () => {
     }
     catch(err:any){
       console.log(err);
-      if(err.response.status == 501){
+      if(err?.response?.status == 501){
         toast.error(err.response.data.error);
       }
       else{
@@ -261,7 +261,7 @@ async function getUserEnsName(){
 
               </div>
             </div>
-              <h2 className={` ${night ? "text-white" : "text-black"} duration-200 text-bold text-xs font-semibold`}>Limit: {username.length}/15 characters</h2>
+              <h2 className={` ${night ? "text-white" : "text-black"} duration-200 text-bold text-xs font-semibold`}>Limit: {username?.length}/15 characters</h2>
               <input onKeyDown={(e)=>{if(characterName == 15 && e.key == "Backspace"){setCharacterName((prev)=>(prev-1))}}} placeholder="Enter Username..." onChange={(e) => { if(characterName < 15){setUserName(e.target.value); setCharacterName(e.target.value.length) }}} value={username} className={`p-2 placeholder:text-gray-300 my-2 w-full peer focus:outline-none bg-gray-200/20  ${night ? "focus:border-white" : "focus:border-black"}focus:border-black focus:border-2 ${night ? "text-white" : "text-black"} duration-200 rounded-xl border-[1px] duration-200 `}></input>
               
               <div className='flex gap-2 '>
@@ -281,7 +281,7 @@ async function getUserEnsName(){
         </button>
         <div className='flex gap-2 items-center justify-center'>
           {/* @ts-ignore */}
-        <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0].substring(0,12)}{user?.username?.split(" ")[0]?.length>12 && "..."}</h2>
+        <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username.split(" ")[0]?.substring(0,12)}{user?.username?.split(" ")[0]?.length>12 && "..."}</h2>
         <button onClick={()=>{setModal(true)}} className='text-gray-500 flex items-center justify-center bg-gray-100 duration-200 hover:brightness-90 p-3 text-xl rounded-lg'><FaEdit/></button>
           </div>
       </div>
