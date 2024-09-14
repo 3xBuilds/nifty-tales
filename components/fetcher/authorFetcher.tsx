@@ -14,6 +14,8 @@ import axios from "axios";
 import Book from "@/components/Global/Book";
 import { useLoading } from "@/components/PageLoader/LoadingContext"
 import placeholder from "@/assets/og.png"
+import { CiShare2 } from "react-icons/ci";
+import { toast } from "react-toastify";
 
 export default function AuthorFetcher(){
 
@@ -169,10 +171,15 @@ export default function AuthorFetcher(){
             </div> */}
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
                 <div className="w-screen absolute h-full overflow-hidden">
-                <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner as string : placeholder}  alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
+                <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner + "?v=" + Date.now() as string : placeholder}  alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
                 </div>
+
+                <button onClick={() => { navigator.clipboard.writeText("https://niftytales.xyz/authors/" + user?.wallet); toast.success("Successfully copied link!") }} className='absolute bottom-0 right-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:right-0 rounded-tl-xl border-t-[1px] hover:bg-white/20 duration-200 border-l-[1px] border-white'>
+                    <CiShare2 />
+                </button>
+
                 <div className="flex gap-8 max-md:gap-4 object-center items-center h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl">
-                    <Image width={1080} height={1080} src={user?.collectionImage || ""} alt="dp" className="md:w-[10rem] object-cover object-center md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
+                    <Image width={1080} height={1080} src={user?.collectionImage + "?v=" + Date.now() || ""} alt="dp" className="md:w-[10rem] object-cover object-center md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     <div className="flex flex-col gap-1">
 
                         <h2 className="md:text-5xl text-2xl font-bold text-white">{user?.collectionName}</h2>
