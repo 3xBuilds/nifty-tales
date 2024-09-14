@@ -1,7 +1,5 @@
 "use client"
 import { GoDotFill } from "react-icons/go";
-
-import { usePathname } from "next/navigation"
 import { ethers } from "ethers";
 import abi from "@/utils/abis/templateABI"
 import { useAccount } from "wagmi";
@@ -11,19 +9,17 @@ import { IoIosRocket, IoMdTrash } from "react-icons/io";
 import masterABI from "@/utils/abis/masterABI";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaPause, FaPen, FaPlusCircle } from "react-icons/fa";
+import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaPause, FaPen } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { IoClose, IoTrashBin } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import { CiImageOn, CiShare2 } from "react-icons/ci";
 import Book from "@/components/Global/Book";
 import { Analytics } from "@/components/Author/Analytics";
 import Link from "next/link";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { useSession } from "next-auth/react";
-import { useExitAlert } from "@/components/alert/alert";
 import { RiLoader5Fill, RiLoader5Line } from "react-icons/ri";
-import { MdContentCopy } from "react-icons/md";
 
 import placeholder from "@/assets/og.png"
 import { AiOutlineLoading } from "react-icons/ai";

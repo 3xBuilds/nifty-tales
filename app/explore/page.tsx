@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react'
 import { FaEdit, FaPen } from 'react-icons/fa'
 import { IoClose } from 'react-icons/io5'
 import Image, { StaticImageData } from 'next/image'
-import logo from "@/assets/logo.png"
+import logo from "@/assets/profileImg.png"
 import { toast } from "react-toastify";
 import { useAccount, useEnsName } from 'wagmi'
 import { AiOutlineLoading } from 'react-icons/ai'
@@ -231,8 +231,8 @@ async function getUserEnsName(){
 
 
   return (
-    <div className={`${night ? "text-white bg-[#212121]" : "text-black bg-white"} duration-200 min-h-screen`}>
-
+    <div className={` ${night ? "text-white bg-[#212121]" : "text-black bg-white"} duration-200 min-h-screen`}>
+        <div className={`w-screen h-screen fixed z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
         <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
                 <div className={`${night ? "bg-[#313131]" : "bg-white"}  shadow-xl shadow-black/30 gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-4 flex flex-col items-center justify-center`} >
                     <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-gray-300 hover:text-red-500 duration-200" ><IoClose/></button></div>

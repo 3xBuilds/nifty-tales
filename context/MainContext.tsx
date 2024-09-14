@@ -114,8 +114,6 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
           const resolver = await provider.getResolver(ensName);
           const avatarText = await resolver.getText('avatar');
 
-          console.log("AVATARA", avatarText);
-
           const contractAddress = avatarText.split("/")[1].split(":")[1];
           const tokenId = avatarText.split("/")[2]
   
@@ -124,19 +122,15 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
             tokenId
           );
 
+          if(!response){
+            toast.error("ENS Image not found! Set a profile image manually.");
+          }
           await axios.patch("/api/user/"+user?.email, {profileImage: response.image.pngUrl}).then((res)=>{
             getUser()
             window.location.reload()
           });
 
-          if(!response){
-            toast.error("ENS Image not found!");
-          }
         };
-
-
-        
-
       return true;
       }
     }

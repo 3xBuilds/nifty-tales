@@ -1,26 +1,25 @@
 'use client'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { logo } from '@/assets/assets'
+import  {logo} from '@/assets/assets'
+import logo_night from "@/assets/logo_night.png"
 import { usePathname, useRouter } from 'next/navigation'
 import { useSession, signOut } from 'next-auth/react'
-import { IoIosLogOut, IoIosMenu, IoIosSettings, IoMdLogOut, IoMdWallet } from 'react-icons/io'
+import { IoIosMenu, IoIosSettings} from 'react-icons/io'
 import { useGlobalContext } from '@/context/MainContext'
 import { WalletConnectButton } from '../buttons/WalletConnectButton'
-import { MdAccountCircle, MdLogout, MdOutlineDashboard } from 'react-icons/md'
+import {MdLogout, MdOutlineDashboard } from 'react-icons/md'
 import { FaMoon, FaPenNib, FaSearch, FaSignOutAlt } from 'react-icons/fa'
 import { Search } from '../Global/Search'
 import { LuSun } from "react-icons/lu";
-import logo_night from "@/assets/logo_night.png"
 import { useLoading } from '../PageLoader/LoadingContext'
 
-import { useAccount, useEnsName } from 'wagmi'
-import { useEnsAvatar } from 'wagmi'
+import { useAccount } from 'wagmi'
 import axios from 'axios'
 import { toast } from 'react-toastify'
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister'
 import { ImCross } from 'react-icons/im'
-import { ethers } from 'ethers'
+
 
 
 const Navbar = () => {
@@ -154,7 +153,7 @@ const Navbar = () => {
             <div className={`rounded-full duration-300 w-5 h-[3px] ${night ? "bg-white" : "bg-black"} ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
           </button>
 
-          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? night ? logo_night:logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
+          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
        </>}
        {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0 justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 
@@ -194,7 +193,7 @@ const Navbar = () => {
               </div>} 
           </>}
           <button onClick={()=>{if(night)localStorage.setItem('mode', "day"); else{localStorage.setItem('mode', "night")}setNight((prev)=>!prev);}} className={` ${night ? "hover:bg-white/20" : "hover:bg-black/20"} mx-2 p-2 rounded-full duration-200`} >{night ? <LuSun className='text-white' /> : <FaMoon className='text-black'/>}</button>
-          <button onClick={()=>{setBringModal((prev)=>!prev)}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={night ? logo_night : logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>
+          <button onClick={()=>{setBringModal((prev)=>!prev)}} className='text-gray-500 p-1 h-10 w-10 overflow-hidden text-2xl group hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>
           {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0  justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 
         </div>

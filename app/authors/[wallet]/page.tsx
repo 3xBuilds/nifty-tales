@@ -1,7 +1,6 @@
 import AuthorFetcher from "@/components/fetcher/authorFetcher";
 import type { Metadata, ResolvingMetadata } from 'next'
-import { BookFetcher } from '@/components/fetcher/bookFetcher';
-import axios from 'axios';
+
  
 type Props = {
   params: { wallet: string }

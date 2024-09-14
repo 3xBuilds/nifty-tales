@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import axios from 'axios';
-import { ReactNode, useEffect, useState } from 'react';
+import {useEffect, useState } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { ethers } from 'ethers';
@@ -16,16 +16,14 @@ import { TiMinus, TiPlus } from 'react-icons/ti';
 import { AiOutlineLoading } from 'react-icons/ai';
 import Icon from '@/components/Global/Icon';
 import { toast } from 'react-toastify';
-import { MdContentCopy, MdLibraryAddCheck, MdReport } from 'react-icons/md';
+import { MdLibraryAddCheck, MdReport } from 'react-icons/md';
 import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
 import { CiShare2 } from 'react-icons/ci';
-import { RiLoader5Line, RiLoaderFill } from 'react-icons/ri';
+import { RiLoader5Line } from 'react-icons/ri';
 import { useAccount, useEnsName } from 'wagmi';
 import { ImCross, ImPause } from 'react-icons/im';
 import { WalletConnectButton } from '../buttons/WalletConnectButton';
-import { WalletConnectRegister } from '../buttons/WalletConnectRegister';
-import { WalletGuest } from '../popups/walletGuest';
 import masterABI from '@/utils/abis/masterABI';
 
 export const BookFetcher = () => {

@@ -4,15 +4,12 @@ import { ethers } from "ethers";
 import abi from "@/utils/abis/templateABI"
 import { bytecode } from "@/utils/bytecode/bytecode";
 import { useAccount } from "wagmi";
-import Navbar from "@/components/Home/Navbar";
 import { WalletConnectButton } from "@/components/buttons/WalletConnectButton";
 import axios from "axios";
 import Image from "next/image";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { RiLoader5Line } from "react-icons/ri";
 import { CiImageOn } from "react-icons/ci";
-import { Loader } from "@/components/Global/Loader";
 import { toast } from "react-toastify";
 import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { AiOutlineLoading } from "react-icons/ai";
