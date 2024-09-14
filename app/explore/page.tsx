@@ -192,6 +192,9 @@ async function getUserEnsImage(){
 }
 
 useEffect(()=>{
+  if(user && user.username.includes("-wallet")){
+    ensNameFetcher()
+  }
   if(user && user?.profileImage == ""){
     ensImageFetcher();
   }
