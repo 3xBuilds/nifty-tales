@@ -1,5 +1,5 @@
 import React from 'react'
-import placeholder from "@/assets/books/NIFTYTALES.png"
+import placeholder from "@/assets/NIFTYTALES.png"
 import Image from 'next/image'
 
 const Book = ({img}:any) => {
