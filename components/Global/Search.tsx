@@ -80,17 +80,20 @@ type Props = {
                 const arrUser:any = [];
                 const arrBook:any = []
 
-                user.searchHistory?.slice(0,4).map(async(item:string)=>{
-                    if(item[0] == "U"){
-                            const response = await axios.get("/api/user/"+item.slice(1,item.length));
-                            arrUser.push(response.data.user);
-                        }
-                        else if(item[0] == "B"){
-                            const response = await axios.get("/api/book/"+item.slice(1,item.length));
-                            arrBook.push(response.data.data);
-                        }
-                })
+                await Promise.all(
+                    user.searchHistory?.slice(0,4).map(async(item:string)=>{
+                        if(item[0] == "U"){
+                                const response = await axios.get("/api/user/"+item.slice(1,item.length));
+                                arrUser.push(response.data.user);
+                            }
+                            else if(item[0] == "B"){
+                                const response = await axios.get("/api/book/"+item.slice(1,item.length));
+                                arrBook.push(response.data.data);
+                            }
+                    })
+                )
 
+                console.log(arrBook, arrUser);
                 setHistoryBookResult(arrBook);
                 setHistoryUserResult(arrUser);
 
@@ -105,7 +108,7 @@ type Props = {
         if(user){
             getHistory();
         }
-    },[user])
+    },[user, bringSearchBar])
     
 
     useEffect(()=>{
