@@ -16,6 +16,8 @@ import { useLoading } from "@/components/PageLoader/LoadingContext"
 import placeholder from "@/assets/og.png"
 import { CiShare2 } from "react-icons/ci";
 import { toast } from "react-toastify";
+import { FaGlobeAmericas, FaInstagram } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function AuthorFetcher(){
 
@@ -184,9 +186,16 @@ export default function AuthorFetcher(){
                     <Image width={1080} height={1080} src={user?.collectionImage + "?v=" + Date.now() || ""} alt="dp" className="md:w-[10rem] object-cover object-center md:h-[10rem] h-[6rem] w-[6rem] border-4 border-white rounded-xl" />
                     <div className="flex flex-col gap-1">
 
-                        <h2 className="md:text-5xl text-2xl font-bold text-white">{user?.collectionName}</h2>
-                        <h2 className="md:text-2xl text-md my-1 font-semibold text-white" >Author: {user?.username}</h2>
+                        <h2 className="md:text-4xl text-2xl font-bold text-white">{user?.collectionName}</h2>
+                        <h2 className="md:text-xl text-md my-1 font-semibold text-white" >Author: {user?.username}</h2>
                         <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md underline text-xs font-semibold text-white">Check on BaseScan</a>
+
+                        <div className="flex gap-2 my-2">
+                            {user?.instagram != "" && <a href={user?.instagram} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaInstagram/></a>}
+                            {user?.twitter != "" && <a href={user?.twitter} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaXTwitter/></a>}
+                            {user?.website != "" && <a href={user?.website} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaGlobeAmericas/></a>}
+                        </div>
+
                     </div>
                 </div>
 

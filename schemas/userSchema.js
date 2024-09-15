@@ -33,6 +33,21 @@ const UserSchema = new Schema({
         unique: true,
         required: true
     },
+    twitter:{
+        type:String,
+        required:false,
+        default:""
+    },
+    instagram:{
+        type:String,
+        required:false,
+        default:""
+    },
+    website:{
+        type:String,
+        required:false,
+        default:""
+    },
     username: {
         type: String,
         required: true,

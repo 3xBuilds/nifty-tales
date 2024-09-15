@@ -9,7 +9,7 @@ import { IoIosRocket, IoMdTrash } from "react-icons/io";
 import masterABI from "@/utils/abis/masterABI";
 import { useGlobalContext } from "@/context/MainContext";
 import { useRouter } from "next/navigation";
-import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaPause, FaPen } from "react-icons/fa";
+import { FaChartLine, FaDiscord, FaEdit, FaEye, FaEyeSlash, FaGlobeAmericas, FaInstagram, FaPause, FaPen } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { IoClose } from "react-icons/io5";
@@ -23,6 +23,7 @@ import { RiLoader5Fill, RiLoader5Line } from "react-icons/ri";
 
 import placeholder from "@/assets/og.png"
 import { AiOutlineLoading } from "react-icons/ai";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function Home() {
 
@@ -523,6 +524,41 @@ export default function Home() {
         }
     }
 
+    const [bringSocialsModal, setBringSocialsModal] = useState(false);
+    const [insta, setInsta] = useState<string>("");
+    const [twitter, setTwitter] = useState<string>("");
+    const [web, setWeb] = useState<string>("");
+
+    async function handleUpdateSocials(){
+        try{
+            const localInsta = insta !== "" && insta.split("/")[0] == "https:" ? insta : insta != "" ? "https://"+insta : "" ;
+            const localTwitter = twitter !== "" && twitter.split("/")[0] == "https:" ? twitter : twitter != "" ? "https://"+twitter : ""; 
+            const localWebsite = web !== "" && web.split("/")[0] == "https:" ? web : web != "" ? "https://"+web : ""; 
+
+            setLoading(true);
+            await axios.patch("/api/user/"+user?.email, {instagram: localInsta, twitter:localTwitter, website:localWebsite}).then((res)=>{
+                toast.success("Updated your socials!");
+                getUser();
+                setBringSocialsModal(false);
+                setLoading(false);
+            });
+        }
+        catch(err){
+            console.log(err);
+            toast.error("Error while updating socials");
+            setLoading(false);
+
+        }
+    }
+
+    useEffect(()=>{
+        if(user){
+            setInsta(user?.instagram);
+            setTwitter(user?.twitter);
+            setWeb(user?.website);
+        }
+    },[user])
+
     return (
         <div className={`${night ? "bg-[#212121] text-white" : "bg-white text-black"} duration-200`}>
             {/* <div className="h-16 w-screen relative z-[1000]">
@@ -589,21 +625,46 @@ export default function Home() {
                 </div>
             </div>
 
+            {/*Socials Modal*/}
+            <div className={` ${bringSocialsModal ? "translate-y-0" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[110] justify-center fixed top-0 left-0 w-screen h-screen`}>
+
+                <div className={`${night ? "bg-[#313131]" : "bg-white"} rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2`}>
+                    <h3 className="text-xl font-bold">Update Socials</h3>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`https://...`} onChange={(e) => {setInsta(e.target.value)}} value={insta} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Instagram</h2>
+                    </div>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`https://...`} onChange={(e) => {setTwitter(e.target.value)}} value={twitter} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>X (Twitter)</h2>
+                    </div>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`https://...`} onChange={(e) => {setWeb(e.target.value)}} value={web} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Website</h2>
+                    </div>
+                    <div className="flex gap-2 w-full">
+                        <button disabled={loading} onClick={handleUpdateSocials} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
+                        <button onClick={() => { setBringSocialsModal(false) }} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
+                    </div>
+
+                </div>
+            </div>
+
             {/* Update Price Modal */}
             <div className={` ${priceModal ? "translate-y-0" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[110] justify-center fixed top-0 left-0 w-screen h-screen`}>
 
-                <div className="bg-white rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2">
+                <div className={`${night ? "bg-[#313131]" : "bg-white"} rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2`}>
                     <h3 className="text-xl font-bold">Update Mint Details</h3>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMints(Math.round(Number(e.target.value))) }} value={maxMints} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMints(Math.round(Number(e.target.value))) }} value={maxMints} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value))) }} value={maxMintsPerWallet} className="p-2 placeholder:text-gray-300 w-full peer focus:outline-none focus:border-black focus:border-2  rounded-xl border-[1px] duration-200 border-gray-400"></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value))) }} value={maxMintsPerWallet} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints per Wallet</h2>
                     </div>
                     <div className="flex gap-2 w-full">
@@ -657,6 +718,14 @@ export default function Home() {
                     <div className="flex flex-col gap-2 relative z-50">
                         <h2 className="md:text-5xl text-xl font-bold text-white">{user?.collectionName}</h2>
                         <a href={`https://basescan.org/address/${user?.contractAdd}`} target="_blank" className="md:text-md text-sm underline font-semibold text-white">{user?.contractAdd?.substring(0, 7)}...{user?.contractAdd?.substring(user.contractAdd.length - 7, user.contractAdd.length)}</a>
+                        
+                        <div className="my-2 flex gap-2 text-white">
+                            {user?.instagram != "" && <a href={user?.instagram} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaInstagram/></a>}
+                            {user?.twitter != "" && <a href={user?.twitter} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaXTwitter/></a>}
+                            {user?.website != "" && <a href={user?.website} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaGlobeAmericas/></a>}
+
+                            <button onClick={()=>{setBringSocialsModal(true)}} className="w-8 h-8 rounded-md bg-white/10 hover:scale-[1.05] text-xl duration-200 border-[1px] border-white" >+</button>
+                        </div>
                     </div>
                 </div>
 

@@ -6,6 +6,9 @@ type UserType = {
   wallet: string;
   email: string;
   username: string;
+  instagram: string;
+  twitter: string;
+  website: string;
   contractAdd: string;
   profileImage: string;
   readlist: Array<string>;
