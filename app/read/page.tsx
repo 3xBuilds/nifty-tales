@@ -98,7 +98,7 @@ export default function Home() {
 
       if(session && page!= undefined)
     return (
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.2.146/build/pdf.worker.min.js">
+        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                       <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
       <div className={`relative flex items-center justify-center w-screen h-screen pt-20 ${night ? "bg-[#212121]" : "bg-white"}`}>

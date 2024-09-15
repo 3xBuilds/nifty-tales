@@ -43,7 +43,7 @@
     "mongoose": "^8.5.1",
     "next": "14.2.5",
     "next-auth": "^4.24.7",
-    "pdfjs-dist": "^3.2.146",
+    "pdfjs-dist": "^3.11.174",
     "quill-image-resize-module": "^3.0.0",
     "quill-image-resize-module-react": "^3.0.0",
     "react": "^18",
