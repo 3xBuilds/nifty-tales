@@ -20,6 +20,7 @@ export default function Home(){
     const [authorArr, setAuthorArr] = useState([])
     const router = useRouter()
     const[loading, setLoading] = useState(false);
+    const[whitelistedUsers, setWhitelistedUsers] = useState<Array<UserType>>([])
 
     async function contractSetup(add:string) {
         try {
@@ -69,9 +70,45 @@ export default function Home(){
         }
     }
 
+    async function getWhitelistedAddresses(){
+        try{
+           const res = await axios.get("/api/admin/getAuthors");
+           const contract = await adminContractSetup()
+
+           console.log("ALL USER", res);
+
+           const whitelisted:Array<UserType> = [];
+           
+           await Promise.all(res.data.array?.map(async(item:UserType)=>{
+            if(item.wallet!=""){
+                try{
+                    console.log(item.wallet);
+                    const status = await contract?.whiteListed(item.wallet);
+                    console.log(status);
+
+                if(status == true){
+                    whitelisted.push(item);
+                }
+                }
+                catch(err){
+                    console.log(err);
+                }
+
+            }
+           }))
+
+           setWhitelistedUsers(whitelisted);
+        }
+        catch(err){
+            console.log(err)        
+        }
+    }
+
     useEffect(()=>{
         fetchReported();
-        fetchAuthors()
+        fetchAuthors();
+        fetchDetails();
+        getWhitelistedAddresses();
     },[])
 
     async function pauseMint(tokenId:number, id:string, contractAdd:string){
@@ -207,6 +244,19 @@ export default function Home(){
         }
     }
 
+    async function fetchDetails(){
+        try{
+            const contract = await adminContractSetup();
+
+            setAuthorFee(Number(ethers.utils.formatEther(await contract?.returnfeeForAuthor())));
+            setPlatformFee(Number(ethers.utils.formatEther(await contract?.getFeePerMint())));
+
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+
     const[addWl, setAddWl] = useState<string>("");
     const[loadingAddWl, setLoadingAddWl] = useState<boolean>(false);
 
@@ -224,7 +274,15 @@ export default function Home(){
             setLoadingAddWl(true);
             const contract = await adminContractSetup();
 
-            const res = await contract?.addWhitelist(addWl);
+            const gasEstimate = await contract?.estimateGas.addWhitelist(addWl).catch((err) => { console.log(err) });
+
+                const gasLimit = gasEstimate?.mul(150).div(100);
+                const gasPrice = await contract?.provider.getGasPrice();
+
+            const res = await contract?.addWhitelist(addWl, {
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
 
             await res.wait().then((response:any)=>{
                 toast.success(addWl+" has been Whitelisted!");
@@ -243,7 +301,15 @@ export default function Home(){
             setLoadingRemWl(true);
             const contract = await adminContractSetup();
 
-            const res = await contract?.removeWhitelist(remWl);
+            const gasEstimate = await contract?.estimateGas.removeWhitelist(remWl).catch((err) => { console.log(err) });
+
+            const gasLimit = gasEstimate?.mul(150).div(100);
+            const gasPrice = await contract?.provider.getGasPrice();
+
+            const res = await contract?.removeWhitelist(remWl, {
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
 
             await res.wait().then((response:any)=>{
                 toast.success(remWl+" removed from Whitelist!");
@@ -263,7 +329,15 @@ export default function Home(){
             setLoadingAuthorFee(true);
             const contract = await adminContractSetup();
 
-            const res = await contract?.setFeeForAuthor(ethers.utils.parseEther(String(authorFee)));
+            const gasEstimate = await contract?.estimateGas.setFeeForAuthor(ethers.utils.parseEther(String(authorFee))).catch((err) => { console.log(err) });
+
+            const gasLimit = gasEstimate?.mul(150).div(100);
+            const gasPrice = await contract?.provider.getGasPrice();
+
+            const res = await contract?.setFeeForAuthor(ethers.utils.parseEther(String(authorFee)),{
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
 
             await res.wait().then((response:any)=>{
                 toast.success("New Author fee: "+authorFee+ " ETH");
@@ -282,7 +356,15 @@ export default function Home(){
             setLoadingPlatformFee(true);
             const contract = await adminContractSetup();
 
-            const res = await contract?.setFeePerMint(ethers.utils.parseEther(String(platformFee)));
+            const gasEstimate = await contract?.estimateGas.setFeePerMint(ethers.utils.parseEther(String(platformFee))).catch((err) => { console.log(err) });
+
+            const gasLimit = gasEstimate?.mul(150).div(100);
+            const gasPrice = await contract?.provider.getGasPrice();
+
+            const res = await contract?.setFeePerMint(ethers.utils.parseEther(String(platformFee)),{
+                gasLimit: gasLimit,
+                gasPrice: gasPrice
+            });
 
             await res.wait().then((response:any)=>{
                 toast.success("New Platform fee: "+platformFee+ " ETH");
@@ -299,7 +381,7 @@ export default function Home(){
     if(session && user?.role == "ADMIN")
     return(
         <div className={`md:px-10 px-4 pt-10 duration-200 ${night ? "bg-[#212121] text-white" : "bg-white"} min-h-screen text-black`}>
-            <h2 className="text-2xl font-bold" >Admin Dashboard</h2>
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
             {/* FEE SECTION */}
             <h2 className="text-2xl font-bold my-4">Fees</h2>
@@ -319,20 +401,73 @@ export default function Home(){
 
 
             {/* WL SECTION */}
-            <h2 className="text-2xl font-bold my-4">Whitelists</h2>
-            <div className="flex gap-8 border-b-[1px] border-nifty-gray-1 pb-10">
-                <div className="w-1/2">
-                    <h2 className="text-xl font-bold my-4">Add WL</h2>
-                    <input placeholder="0xe2f..." onChange={(e) => { setAddWl(e.target.value) }} value={addWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                    <button onClick={handleAddWl} disabled={loadingAddWl} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingAddWl ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
+            <div className=" border-b-[1px] border-nifty-gray-1 pb-10">
+                <h2 className="text-2xl font-bold my-4">Whitelists</h2>
+
+                <div className="flex gap-8">
+                    <div className="w-1/2">
+                        <h2 className="text-xl font-bold my-4">Add WL</h2>
+                        <input placeholder="0xe2f..." onChange={(e) => { setAddWl(e.target.value) }} value={addWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <button onClick={handleAddWl} disabled={loadingAddWl} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingAddWl ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
+                    </div>
+
+                    <div className="w-1/2">
+                        <h2 className="text-xl font-bold my-4">Remove WL</h2>
+                        <input placeholder="0xe2f..." onChange={(e) => { setRemWl(e.target.value) }} value={remWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <button onClick={handleRemWl} disabled={loadingRemWl} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingRemWl ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
+                    </div>
+
                 </div>
 
-                <div className="w-1/2">
-                    <h2 className="text-xl font-bold my-4">Remove WL</h2>
-                    <input placeholder="0xe2f..." onChange={(e) => { setRemWl(e.target.value) }} value={remWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                    <button onClick={handleRemWl} disabled={loadingRemWl} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingRemWl ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
+                {whitelistedUsers?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
+                <h2 className="text-xl font-bold">Whitelisted</h2>
+                <div className='w-full max-w-full overflow-x-auto mx-auto my-5'>
+                    <div className='overflow-x-auto '>
+                        <div className='min-w-[800px] w-[100%]'> {/* Set a minimum width for the table */}
+                            <div className=''>
+                                <div className='flex text-center py-2 border-[1px] rounded-t-xl border-gray-300  '>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>ID</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Username</h2>
+                                    </div>
+                                    <div className='flex-shrink-0 min-w-32 w-[70%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Wallet</h2>
+                                    </div>
+                                </div>
+
+                                <div className="flex flex-col w-full justify-center items-center">
+                                    {whitelistedUsers.map((item, i) => (
+                                        <div className={`flex w-full text-center border-gray-300 h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md  '>
+                                                <h2>{i+1}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md  '>
+                                                {/* @ts-ignore */}
+                                                <h2>{item.username}</h2>
+                                            </div>
+                                            <div className='flex-shrink-0 min-w-32 w-[70%] font-medium text-md  '>
+                                                {/* @ts-ignore */}
+                                                <h2>{item.wallet}</h2>
+                                            </div>
+                                            
+                                        </div>
+                                    ))}
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
                 </div>
+                
+            </div>}
+
             </div>
+
+
 
             {reportedArr?.length > 0 && <div className="flex flex-col items-start mt-8 justify-center md:px-10 px-4">
                 <h2 className="text-2xl font-bold">Reports</h2>

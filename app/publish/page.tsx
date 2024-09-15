@@ -545,6 +545,7 @@ export default function Home(){
             {/* <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div> */}
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
             <div className={` ${confirmPublishModal ? "translate-y-0" : "-translate-y-[300rem]"} z-[500] duration-200 w-screen h-screen fixed top-0 left-0 backdrop-blur-xl flex items-center justify-center`}>
                 <div className={`w-80 p-4 rounded-xl ${night ? "bg-[#313131]" : "bg-white"} shadow-xl shadow-black/30`}>

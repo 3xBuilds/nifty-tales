@@ -434,6 +434,7 @@ useEffect(()=>{
   return (
     <>
       <div className={`${night ? "bg-[#212121] text-white" : "bg-white text-black"} duration-200`}>
+      <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
         {/* WARNING MODAL */}
         <div className={` ${exists ? "-translate-y-0" : "translate-y-[300rem]"} duration-200 backdrop-blur-xl w-screen h-screen fixed top-0 left-0 z-[1000] flex items-center justify-center`}>

@@ -169,6 +169,8 @@ export default function AuthorFetcher(){
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
                 <div className="w-screen absolute h-full overflow-hidden">
                 <Image width={1080} height={1080} src={user?.banner != "" ? user?.banner + "?v=" + Date.now() as string : placeholder}  alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2"/>
@@ -190,7 +192,7 @@ export default function AuthorFetcher(){
 
             </div>
 
-            { user && user?.yourBooks?.length == 0 ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
+            { user && publishedBooks.length == 0 ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
                 <h2 className="text-xl font-bold">No Published books!</h2>
             </div>: 
             <>

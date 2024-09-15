@@ -528,6 +528,7 @@ export default function Home() {
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
             {/* BOOST MODAL */}
             <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>

@@ -29,7 +29,7 @@ export async function GET(req: any) {
         });
 
         result1 = result1.filter(user => user.collectionName !== "")
-        result2 = result2.filter(book => !book.isAdminRemoved && !book.isHidden )
+        result2 = result2.filter(book => !book.isAdminRemoved && !book.isHidden && book.isPublished )
 
 
         const slicedResult1 = result1?.slice(0, 2) || [];

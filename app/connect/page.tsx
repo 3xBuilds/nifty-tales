@@ -56,6 +56,8 @@ const PreRegister = () => {
 
   return (
     <div className={`${night ? "bg-[#212121]" : "bg-white"} h-screen w-screen overflow-y-hidden -my-16`}>
+        <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+
       <div className={`w-screen h-screen fixed top-0 flex flex-col items-center justify-center overflow-y-hidden object-contain -my-10 `}>
 
         <button onClick={()=>{setIsLoading(true);router.push("/")}} className='bg-gray-300/20 shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute z-[100] top-16 left-5'>

@@ -28,7 +28,6 @@ type Props = {
 
     const [debouncedSearch] = useDebouncedValue(search, 200);
     const [searchResults, setSearchResults] = useState<Array<UserType>>([]);
-    const [history, setHistory] = useState<Array<string>>([])
 
     const [historyUserResults, setHistoryUserResult] = useState<Array<UserType>>([]);
     const [historyBookResults, setHistoryBookResult] = useState<Array<BookType>>([]);
@@ -48,7 +47,6 @@ type Props = {
             console.log(res);
             setSearchResults(res.data.user);
             setBookHistory(res.data.book);
-            setHistory(res.data.history);
         }
         catch(e){
             console.error(e);
@@ -75,20 +73,26 @@ type Props = {
 
     async function getHistory(){
         try{
+            setHistoryUserResult([]);
+            setHistoryBookResult([]);
             //@ts-ignore
             if(user && session?.role != "ANONYMOUS"){
-                user.searchHistory?.map(async(item:string)=>{
+                const arrUser:any = [];
+                const arrBook:any = []
+
+                user.searchHistory?.slice(0,4).map(async(item:string)=>{
                     if(item[0] == "U"){
-                            setHistoryUserResult([]);
                             const response = await axios.get("/api/user/"+item.slice(1,item.length));
-                            setHistoryUserResult((prev)=>[...prev, response.data.user]);
+                            arrUser.push(response.data.user);
                         }
                         else if(item[0] == "B"){
-                            setHistoryBookResult([]);
                             const response = await axios.get("/api/book/"+item.slice(1,item.length));
-                            setHistoryBookResult((prev)=>[...prev, response.data.data]);
+                            arrBook.push(response.data.data);
                         }
                 })
+
+                setHistoryBookResult(arrBook);
+                setHistoryUserResult(arrUser);
 
             }
         }
@@ -98,19 +102,17 @@ type Props = {
     }
 
     useEffect(()=>{
-        if(user && bringSearchBar)
-        getHistory();
-    },[history])
-
+        if(user){
+            getHistory();
+        }
+    },[user])
     
 
     useEffect(()=>{
         if(debouncedSearch ){
             setSearchResults([]);
             setBookHistory([]);
-            setHistory([]);
             getSearchResults();
-            // getBookResults();
         }
     },[debouncedSearch])
 

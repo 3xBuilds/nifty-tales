@@ -38,19 +38,18 @@ export default function Home() {
         try {
             //@ts-ignore
             if (typeof window.ethereum !== 'undefined') {
-                const add = "0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF";
                 
                 //@ts-ignore
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
                 
-                console.log(add);
                 //@ts-ignore
                 const provider = new ethers.providers.Web3Provider(window.ethereum);
                 const signer = provider.getSigner();
+                const user = address;
                 //@ts-ignore
-                const contract = new ethers.Contract(add, masterABI, signer);
-                
-                const wl = await contract.returnWhitelist(address);
+                const contract = new ethers.Contract("0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF", masterABI, signer);
+
+                const wl = await contract?.whiteListed(user);
 
                 if(!wl){
                     const fee = await contract.returnfeeForAuthor();
@@ -87,6 +86,7 @@ export default function Home() {
                 const uri = "https://niftytales.s3.us-east-1.amazonaws.com/users/" + address + "/metadata/";
                 
                 const factory = new ethers.ContractFactory(abi, bytecode, signer);
+
                 const contract = await factory.deploy(collectionName, symbol, uri, { value: ethers.utils.parseEther(String(authorFee)) });
                 
 
@@ -205,9 +205,11 @@ export default function Home() {
     const {setIsLoading} = useLoading()
 
   useEffect(()=>{
-    setIsLoading(false);
-    getAuthorFee();
-  },[])
+    if(address && !isConnecting){
+        setIsLoading(false);
+        getAuthorFee();
+    }
+  },[address])
 
   async function tokenChecker() {
     try {
@@ -233,6 +235,7 @@ export default function Home() {
             {/* <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <Navbar/>
             </div> */}
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
             {loading && <div className="w-screen h-screen fixed top-0 left-0 backdrop-blur-xl flex items-center justify-center">
                     <div className={`${night ? "bg-[#313131]" : "bg-white"} shadow-xl shadow-black/30 w-80 h-20 font-semibold flex gap-4 items-center justify-center text-xl rounded-xl`}><AiOutlineLoading className="animate-spin"/>Creating your Library</div>

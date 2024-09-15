@@ -19,6 +19,7 @@ import axios from 'axios'
 import { toast } from 'react-toastify'
 import { WalletConnectRegister } from '../buttons/WalletConnectRegister'
 import { ImCross } from 'react-icons/im'
+import { RiAdminLine } from 'react-icons/ri'
 
 
 
@@ -135,7 +136,7 @@ const Navbar = () => {
 
         </button>
 
-        {user?.role == "ADMIN" && <button onClick={()=>{router.push("/admin")}} className='text-xl text-black bg-gray-300 h-10 px-4 rounded-xl font-bold'>ADMIN</button>}
+        {user?.role == "ADMIN" && <button onClick={()=>{router.push("/admin")}} className='text-xl text-black bg-gray-300 w-10 h-10 rounded-full flex items-center justify-center font-bold'><RiAdminLine/></button>}
 
 
       {/* MOBILE NAVBAR */}
@@ -153,7 +154,7 @@ const Navbar = () => {
             <div className={`rounded-full duration-300 w-5 h-[3px] ${night ? "bg-white" : "bg-black"} ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
           </button>
 
-          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" ? <div></div> :<> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-10 h-10 rounded-full object-cover object-center duration-200' /></>}</button>}
+          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' ><> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-8 h-8 rounded-full object-cover object-center duration-200' /></></button>}
        </>}
        {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0 justify-end pt-3 pr-3'><WalletConnectRegister/></div></> }
 

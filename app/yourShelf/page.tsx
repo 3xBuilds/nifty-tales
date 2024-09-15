@@ -175,6 +175,7 @@ export default function Home(){
             {/* <div className="flex w-screen z-[1000] justify-end absolute">
                <Navbar/>
             </div> */}
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
 
             <div className="w-full px-5">
                 <h3 className="text-3xl font-bold mb-2">Your Shelf</h3>
