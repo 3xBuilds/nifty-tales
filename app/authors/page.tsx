@@ -24,6 +24,7 @@ import { RiLoader5Fill, RiLoader5Line } from "react-icons/ri";
 import placeholder from "@/assets/og.png"
 import { AiOutlineLoading } from "react-icons/ai";
 import { FaXTwitter } from "react-icons/fa6";
+import { SiFarcaster } from "react-icons/si";
 
 export default function Home() {
 
@@ -528,15 +529,18 @@ export default function Home() {
     const [insta, setInsta] = useState<string>("");
     const [twitter, setTwitter] = useState<string>("");
     const [web, setWeb] = useState<string>("");
+    const [farcaster, setFarcaster] = useState<string>("");
 
     async function handleUpdateSocials(){
         try{
             const localInsta = insta !== "" && insta.split("/")[0] == "https:" ? insta : insta != "" ? "https://"+insta : "" ;
             const localTwitter = twitter !== "" && twitter.split("/")[0] == "https:" ? twitter : twitter != "" ? "https://"+twitter : ""; 
             const localWebsite = web !== "" && web.split("/")[0] == "https:" ? web : web != "" ? "https://"+web : ""; 
+            const localFarcaster = farcaster !== "" && farcaster.split("/")[0] == "https:" ? farcaster : farcaster != "" ? "https://"+farcaster : ""; 
+
 
             setLoading(true);
-            await axios.patch("/api/user/"+user?.email, {instagram: localInsta, twitter:localTwitter, website:localWebsite}).then((res)=>{
+            await axios.patch("/api/user/"+user?.email, {instagram: localInsta, twitter:localTwitter, website:localWebsite, farcaster: localFarcaster}).then((res)=>{
                 toast.success("Updated your socials!");
                 getUser();
                 setBringSocialsModal(false);
@@ -556,6 +560,7 @@ export default function Home() {
             setInsta(user?.instagram);
             setTwitter(user?.twitter);
             setWeb(user?.website);
+            setFarcaster(user?.farcaster);
         }
     },[user])
 
@@ -642,6 +647,10 @@ export default function Home() {
                         <input placeholder={`https://...`} onChange={(e) => {setWeb(e.target.value)}} value={web} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Website</h2>
                     </div>
+                    <div className="w-full text-start flex flex-col my-2">
+                        <input placeholder={`https://...`} onChange={(e) => {setFarcaster(e.target.value)}} value={farcaster} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Farcaster</h2>
+                    </div>
                     <div className="flex gap-2 w-full">
                         <button disabled={loading} onClick={handleUpdateSocials} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
                         <button onClick={() => { setBringSocialsModal(false) }} className="bg-gray-200 font-semibold  text-black h-10 w-1/2 rounded-lg hover:-translate-y-1 duration-200" >Cancel</button>
@@ -723,6 +732,7 @@ export default function Home() {
                             {user?.instagram != "" && <a href={user?.instagram} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaInstagram/></a>}
                             {user?.twitter != "" && <a href={user?.twitter} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaXTwitter/></a>}
                             {user?.website != "" && <a href={user?.website} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaGlobeAmericas/></a>}
+                            {user?.farcaster != "" && <a href={user?.farcaster} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><SiFarcaster/></a>}
 
                             <button onClick={()=>{setBringSocialsModal(true)}} className="w-8 h-8 rounded-md bg-white/10 hover:scale-[1.05] text-xl duration-200 border-[1px] border-white" >+</button>
                         </div>

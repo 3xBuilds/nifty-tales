@@ -48,6 +48,11 @@ const UserSchema = new Schema({
         required:false,
         default:""
     },
+    farcaster:{
+        type:String,
+        required:false,
+        default:""
+    },
     username: {
         type: String,
         required: true,

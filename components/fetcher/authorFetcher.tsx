@@ -18,6 +18,7 @@ import { CiShare2 } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { FaGlobeAmericas, FaInstagram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
+import { SiFarcaster } from "react-icons/si";
 
 export default function AuthorFetcher(){
 
@@ -194,6 +195,7 @@ export default function AuthorFetcher(){
                             {user?.instagram != "" && <a href={user?.instagram} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaInstagram/></a>}
                             {user?.twitter != "" && <a href={user?.twitter} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaXTwitter/></a>}
                             {user?.website != "" && <a href={user?.website} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><FaGlobeAmericas/></a>}
+                            {user?.farcaster != "" && <a href={user?.farcaster} target="_blank" className="w-8 h-8 text-xl bg-white/10 hover:scale-105 duration-200 border-[1px] border-white rounded-md flex items-center justify-center"><SiFarcaster/></a>}
                         </div>
 
                     </div>

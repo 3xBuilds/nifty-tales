@@ -9,6 +9,7 @@ type UserType = {
   instagram: string;
   twitter: string;
   website: string;
+  farcaster: string;
   contractAdd: string;
   profileImage: string;
   readlist: Array<string>;
