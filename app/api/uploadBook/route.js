@@ -4,7 +4,7 @@ import {
   CreateMultipartUploadCommand,
   UploadPartCommand,
   CompleteMultipartUploadCommand,
-  AbortMultipartUploadCommand,
+  AbortMultipartUploadCommand, DeleteObjectCommand
 } from "@aws-sdk/client-s3";
 
 import { getToken } from "next-auth/jwt";
@@ -109,6 +109,29 @@ async function uploadFileToS3(cover, content, wallet, date) {
   }
 }
 
+async function deleteFileFromS3(key){
+  try{
+    const bucketName = process.env.AWS_S3_BUCKET_NAME;
+    const data = await s3Client.send(new DeleteObjectCommand({Bucket:bucketName, Key:key}));
+    if(data){
+      console.log("____----____----____----____----");
+      console.log("____----____----____----____----");
+      console.log("____----____----____----____----");
+      console.log("Success. Object deleted.", data);
+      console.log("____----____----____----____----");
+      console.log("____----____----____----____----");
+      console.log("____----____----____----____----");
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  catch(err){
+    console.log(err);
+  }
+}
+
 export async function POST(request) {
   try {
     // console.log("UPLOAD FUNCTION HAS BEEN CALLED");
@@ -144,8 +167,6 @@ export async function POST(request) {
     const id = formData.get('id');
     const maxMintsPerWallet = formData.get('maxMintsPerWallet');
 
-    const publishStatus = false; 
-
     // console.log("COVER",cover, content)
     if( !name  || !tags || !tokenId || !wallet ) {
       return NextResponse.json({error: "All fields are required."}, {status: 401});
@@ -161,7 +182,7 @@ export async function POST(request) {
 
     let bookdData = {
       name,
-      isPublished: publishStatus === "publish" || false,
+      isPublished: false,
       tokenId,
       contractAddress: contractAdd,
       maxMintsPerWallet,
@@ -173,6 +194,7 @@ export async function POST(request) {
       description,
       tags: tags || []
     }
+
 
     if( content && !cover && id==""){
       const contentArrayBuffer = await content.arrayBuffer();
@@ -202,8 +224,16 @@ export async function POST(request) {
       }
     }
 
-
     if(cover && !content && id !== ""){
+      const book = await Book.findById(id);
+
+      const key = `users/${wallet}/content/${book.cover.split("/")[6]}/cover`;
+      const res = await deleteFileFromS3(key);
+
+      if(!res){
+        return NextResponse.json({error: "Error while deleting previous file"}, {status:406});
+      }
+
       const coverBuffer = Buffer.from(await cover.arrayBuffer());
       const status = await uploadFileToS3(coverBuffer, null, wallet, date);
 
@@ -212,7 +242,6 @@ export async function POST(request) {
       }
 
       if(status === true){
-        const book = await Book.findById(id);
         book.name = name;
         book.ISBN = isbn
         book.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/cover`;
@@ -224,12 +253,6 @@ export async function POST(request) {
         book.maxMint = maxMint;
         book.maxMintsPerWallet = maxMintsPerWallet;
 
-        if(publishStatus == "draft"){
-          book.isPublished = false;
-        }
-        else{
-          book.isPublished = true
-        }
         book.createdAt = Date.now();
         
         await book.save();
@@ -244,6 +267,15 @@ export async function POST(request) {
     }
     // Handle PDF content
     if(content && !cover && id !== ""){
+      const book = await Book.findById(id);
+
+      const key = `users/${wallet}/content/${book.pdf.split("/")[6]}/book`;
+      const res = await deleteFileFromS3(key);
+
+      if(!res){
+        return NextResponse.json({error: "Error while deleting previous file"}, {status:406});
+      }
+
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
 
@@ -254,7 +286,6 @@ export async function POST(request) {
       }
 
       if(status === true){
-        const book = await Book.findById(id);
         book.name = name;
         book.ISBN = isbn
         book.description = description;
@@ -277,7 +308,6 @@ export async function POST(request) {
           return NextResponse.json({success: book}, {status:200});
         }
     }
-
 
     if(content && cover && id == ""){
       const contentArrayBuffer = await content.arrayBuffer();
@@ -306,6 +336,21 @@ export async function POST(request) {
     }
 
     if(content && cover && id !== ""){
+      const book = await Book.findById(id);
+
+      const key1 = `users/${wallet}/content/${book.cover.split("/")[6]}/cover`;
+      const res1 = await deleteFileFromS3(key1);
+
+      if(!res1){
+        return NextResponse.json({error: "Error while deleting previous file"}, {status:406});
+      }
+
+      const key2 = `users/${wallet}/content/${book.pdf.split("/")[6]}/book`;
+      const res2 = await deleteFileFromS3(key2);
+
+      if(!res2){
+        return NextResponse.json({error: "Error while deleting previous file"}, {status:406});
+      }
 
       const contentArrayBuffer = await content.arrayBuffer();
       const contentBuffer = Buffer.from(contentArrayBuffer);
@@ -315,13 +360,12 @@ export async function POST(request) {
 
       if(status === true){
         
-        const book = await Book.findById(id);
         book.name = name;
         book.ISBN = isbn
         book.description = description;
         book.tags = tags;
-        book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${tokenId}/book`;
-
+        book.pdf = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/book`;
+        book.cover = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_REGION}.amazonaws.com/users/${wallet}/content/${date}/cover`;
         book.artist = artist;
         book.price = price;
         book.tokenId = tokenId;

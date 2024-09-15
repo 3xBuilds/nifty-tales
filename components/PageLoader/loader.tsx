@@ -9,14 +9,9 @@ import { useGlobalContext } from '@/context/MainContext';
 
 const Loader = () => {
   const { isLoading } = useLoading();
-  const {night} = useGlobalContext()
-  const [color, setColor] = useState("");
   const [length, setLength] = useState<number>(0);
 
    useEffect(()=>{
-
-    if(night){setColor("#FFFFFF")};
-    if(!night){setColor("#000000")}
 
     if(isLoading){
       setLength(0);
@@ -32,7 +27,7 @@ const Loader = () => {
    },[isLoading]);
 
   return (
-    <motion.div
+    <motion.div className='shadow-lg shadow-red-500/80'
       initial={{ scaleX: 0 }}
       animate={{ scaleX: isLoading ? length : 0 }}
       // transition={{ duration: 2 }}
@@ -42,7 +37,7 @@ const Loader = () => {
         left: 0,
         right: 0,
         height: '4px',
-        background: color,
+        background: "#ef4444",
         transformOrigin: 'left',
         zIndex: 9999,
       }}
