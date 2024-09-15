@@ -1,6 +1,5 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { book1, book2, book3, book4, book5 } from '@/assets/assets';
 import Image from 'next/image';
 import Icon from '../Global/Icon';
 import { openSans } from '@/utils/font';
