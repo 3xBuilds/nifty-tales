@@ -548,19 +548,19 @@ export default function Home(){
                         <div className='min-w-[800px] w-[100%]'>
                             <div className=''>
                                 <div className='flex text-center py-2 border-[1px] rounded-t-xl border-gray-300  '>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>ID</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Name</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Collection</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
-                                        <h2>Email</h2>
+                                    <div className='flex-shrink-0 min-w-32 w-[30%] font-medium text-md text-nifty-gray-1'>
+                                        <h2>Wallet</h2>
                                     </div>
-                                    <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md text-nifty-gray-1'>
+                                    <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md text-nifty-gray-1'>
                                         <h2>Books</h2>
                                     </div>
                                     {/* <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md text-nifty-gray-1'>
@@ -571,22 +571,22 @@ export default function Home(){
                                 <div className="flex flex-col w-full justify-center items-center">
                                     {authorArr.map((item:UserType, i) => (
                                         <div className={`flex w-full text-center border-gray-300 h-12 border-b-[1px] border-x-[1px] ${i+1 == reportedArr.length && "rounded-b-xl"} items-center justify-center`}>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md  '>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md  '>
                                                 <h2>{i+1}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md  '>
+                                            <div className='flex-shrink-0 min-w-32 w-[25%] font-medium text-md  '>
                                                 {/* @ts-ignore */}
-                                                <h2 >{item?.username.slice(0,10)}{item?.username.length > 10 && "..."}</h2>
+                                                <h2 >{item?.username.slice(0,20)}{item?.username.length > 20 && "..."}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md  '>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md  '>
                                                 {/* @ts-ignore */}
                                                 <button className="hover:underline duration-200" onClick={()=>{router.push("/authors/"+item?.wallet)}} >{item?.collectionName}</button>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] flex items-center justify-center font-medium text-xs  '>
+                                            <div className='flex-shrink-0 min-w-32 w-[30%] flex items-center justify-center font-medium text-xs  '>
                                                 {/* @ts-ignore */}
-                                                <h2>{item?.email}</h2>
+                                                <h2>{item?.wallet}</h2>
                                             </div>
-                                            <div className='flex-shrink-0 min-w-32 w-[20%] font-medium text-md  '>
+                                            <div className='flex-shrink-0 min-w-32 w-[15%] font-medium text-md  '>
                                                 {/* @ts-ignore */}
                                                 <h2>{item?.yourBooks?.length}</h2>
                                             </div>
