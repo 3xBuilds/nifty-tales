@@ -20,7 +20,25 @@ export default function Home(){
     const [authorArr, setAuthorArr] = useState([])
     const router = useRouter()
     const[loading, setLoading] = useState(false);
-    const[whitelistedUsers, setWhitelistedUsers] = useState<Array<UserType>>([])
+    const[whitelistedUsers, setWhitelistedUsers] = useState<Array<UserType>>([]);
+    const [owner, setOwner] = useState<string>("");
+    const [loadingOwner, setLoadingOwner] = useState(false);
+
+    async function handleOwner(){
+        try{
+            setLoadingOwner(true)
+            const contract = await adminContractSetup();
+            const txn = await contract?.transferOwnership(owner);
+
+            await txn.wait();
+        }
+        catch(err){
+            console.log(err);
+        }
+        finally{
+            setLoadingOwner(false)
+        }
+    }
 
     async function contractSetup(add:string) {
         try {
@@ -382,6 +400,15 @@ export default function Home(){
     return(
         <div className={`md:px-10 px-4 pt-10 duration-200 ${night ? "bg-[#212121] text-white" : "bg-white"} min-h-screen text-black`}>
             <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+
+            <h2 className="text-2xl font-bold my-4">Change Owner</h2>
+            <div className="flex gap-8 border-b-[1px] border-nifty-gray-1 pb-10">
+                <div className="w-1/2">
+                    <input onChange={(e) => { setOwner(e.target.value) }} value={owner} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                    <button onClick={handleOwner} disabled={loadingOwner} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingOwner ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
+                </div>
+
+            </div>
 
             {/* FEE SECTION */}
             <h2 className="text-2xl font-bold my-4">Fees</h2>
