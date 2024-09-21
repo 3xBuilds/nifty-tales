@@ -633,7 +633,7 @@ export const BookFetcher = () => {
           height: 40px;
           }
           div :global(audio::-webkit-media-controls-panel) {
-            background-color: #d5cc72;
+            background-color: rgba(255, 255, 255, 1);
         }
         div :global(audio::-webkit-media-controls-current-time-display),
         div :global(audio::-webkit-media-controls-time-remaining-display),
