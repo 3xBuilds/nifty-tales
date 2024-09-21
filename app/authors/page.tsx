@@ -598,13 +598,17 @@ export default function Home() {
             formData.append('bookId', id)
 
             const response = await axios.post("/api/uploadAudiobook", formData);
-            console.log(response.data.res);
+            //@ts-ignore
+            if(response == true){
+                toast.success("Audio uploaded!")
+            }
         }
         catch(err){
             console.log(err);
         }
         finally{
             setUploading(false);
+            setPriceModal(false);
         }
     }
 

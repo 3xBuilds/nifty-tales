@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getToken } from "next-auth/jwt";
 import { connectToDB } from "@/utils/db";
-import {
+import {CreateMultipartUploadCommand,
+  UploadPartCommand,
+  CompleteMultipartUploadCommand,
  DeleteObjectCommand
 } from "@aws-sdk/client-s3";
 
@@ -25,33 +27,61 @@ async function uploadFileToS3(content, wallet, date) {
       return false;
     }
 
-    console.log("Content type:", typeof content);
-    console.log("Content length:", content.byteLength);
+    // Ensure content is a Buffer
+    const contentBuffer = Buffer.isBuffer(content) ? content : Buffer.from(content);
 
-    const params = {
+    const multipartUpload = await s3Client.send(new CreateMultipartUploadCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME,
       Key: `users/${wallet}/content/${date}/audio`,
-      Body: Buffer.from(content),
-      ContentType: "audio/mpeg"
-    };
+      ContentType: 'audio/mpeg',
+      ContentDisposition: 'inline',
+    }));
 
-    console.log("S3 upload params:", {
-      Bucket: params.Bucket,
-      Key: params.Key,
-      ContentType: params.ContentType,
-      BodyLength: params.Body.length
-    });
+    const uploadId = multipartUpload.UploadId;
 
-    const command = new PutObjectCommand(params);
+    const partSize = 5 * 1024 * 1024; // 5 MB
+    const numParts = Math.ceil(contentBuffer.length / partSize);
+    const uploadPromises = [];
 
-    console.log("Sending S3 command...");
-    const result = await s3Client.send(command);
-    console.log("S3 upload result:", result);
+    for (let i = 0; i < numParts; i++) {
+      const start = i * partSize;
+      const end = Math.min(start + partSize, contentBuffer.length);
+      const partNumber = i + 1;
 
+      const uploadPartCommand = new UploadPartCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME,
+        Key: `users/${wallet}/content/${date}/audio`,
+        UploadId: uploadId,
+        Body: contentBuffer.slice(start, end),
+        PartNumber: partNumber,
+      });
+
+      uploadPromises.push(
+        s3Client.send(uploadPartCommand)
+          .then((data) => {
+            console.log(`Part ${partNumber} uploaded`);
+            return { ETag: data.ETag, PartNumber: partNumber };
+          })
+          .catch((error) => {
+            console.error(`Error uploading part ${partNumber}:`, error);
+            throw error;
+          })
+      );
+    }
+
+    const uploadResults = await Promise.all(uploadPromises);
+
+    await s3Client.send(new CompleteMultipartUploadCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME,
+      Key: `users/${wallet}/content/${date}/audio`,
+      UploadId: uploadId,
+      MultipartUpload: { Parts: uploadResults },
+    }));
+
+    console.log("Multipart upload completed successfully");
     return true;
   } catch (e) {
-    console.error("Error in uploadFileToS3:");
-    console.error(e);
+    console.error("Error in uploadFileToS3:", e);
     if (e.name === 'CredentialsProviderError') {
       console.error("AWS credentials are invalid or not properly configured");
     } else if (e.$metadata) {
