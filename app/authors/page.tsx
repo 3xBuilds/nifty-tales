@@ -605,6 +605,7 @@ export default function Home() {
         }
         catch(err){
             console.log(err);
+            toast.error("Error while uploading audio");
         }
         finally{
             setUploading(false);
