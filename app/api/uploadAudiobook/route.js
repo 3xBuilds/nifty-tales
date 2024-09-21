@@ -3,10 +3,7 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getToken } from "next-auth/jwt";
 import { connectToDB } from "@/utils/db";
 import {
-  CreateMultipartUploadCommand,
-  UploadPartCommand,
-  CompleteMultipartUploadCommand,
-  AbortMultipartUploadCommand, DeleteObjectCommand
+ DeleteObjectCommand
 } from "@aws-sdk/client-s3";
 
 import Book from "@/schemas/bookSchema";
@@ -138,9 +135,3 @@ export async function POST(req) {
     return NextResponse.json({ error: err.message }, { status: 500 });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
