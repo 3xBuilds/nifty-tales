@@ -49,6 +49,11 @@ const BookSchema = new Schema({
         default: null,
         unique: false
     },
+    audiobook: {
+        type: String,
+        default: "",
+        unique: false
+    },
     author: {
         type: ObjectId,
         default: null,

@@ -30,6 +30,7 @@ type BookType = {
   tokenId: number;
   contractAddress: string;
   maxMint?: number;
+  audiobook?:string;
   cover?: string | null;
   author: Object | null;
   artist?: string | null;
