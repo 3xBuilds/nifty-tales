@@ -168,10 +168,11 @@ export const BookFetcher = () => {
       });
 
       await txn?.wait();
-      console.log(txn);
 
       //@ts-ignore
       if (txn && session.role != "ANONYMOUS") {
+        //@ts-ignore
+        await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
         await axios.post("/api/transaction/create", {
           txnHash: txn.hash,
           bookId: pathname.split("/")[2],
@@ -184,20 +185,29 @@ export const BookFetcher = () => {
         }).catch((err) => {
           console.log(err);
         })
+        
+      }
 
+      // @ts-ignore
+      if (txn && session.role == "ANONYMOUS") {
+        //@ts-ignore
+        await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
+        const res = await axios.post("/api/user/create", { wallet: address, username: ensName || `${address?.slice(0, 5)}-wallet`, mintedBook: [pathname.split("/")[2]] }).catch((err) => { console.log(err) });
+        await axios.post("/api/transaction/create", {
+          txnHash: txn.hash,
+          bookId: pathname.split("/")[2],
+          userId: res?.data.user?._id,
+          value: bookDetails?.price as number * amount
+        }).then(async (res) => {
+          getBookDetails()
+          setShowModal(false);
+          setLoading(false);
+          signOut()
+        }).catch((err) => {
+          console.log(err);
+        })
       }
-      //@ts-ignore
-      await axios.patch("/api/book/updateMinted/" + pathname.split("/")[2], { minted: bookDetails?.minted + amount });
-      if (!exists) {
-        console.log("ENS NAME: ", ensName)
-        await axios.post("/api/user/create", { wallet: address, username: ensName || `${address?.slice(0, 5)}-wallet`, mintedBook: pathname.split("/")[2] }).catch((err) => { console.log(err) });
-      }
-      toast.success("Book minted successfully!");
-      setShowModal(false);
-      setLoading(false);
-      fetchHolders();
-      getBookDetails();
-      signOut();
+      
 
 
     } catch (err) {

@@ -44,6 +44,14 @@ export async function POST(req) {
             
         }
 
+        if(rest.wallet){
+            const walletExists = await User.findOne({wallet:rest.wallet})
+
+            if(walletExists != null){
+                return new NextResponse(JSON.stringify({user: walletExists}, {status: 200}));
+            }
+        }
+
         // if(userNameExists != null ){
         //     return new NextResponse(JSON.stringify({success: false, error: "Username already exists"}), { status: 409 });
         // }
