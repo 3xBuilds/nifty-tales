@@ -91,8 +91,8 @@ export default function Home() {
                 
 
                 await contract.deployed();
-                await axios.patch("/api/user/"+user?.email, {collectionName: collectionName})
-                await axios.patch(`/api/user/${user?.email}`, {contractAdd: contract.address});
+                await axios.patch("/api/user/"+user?.email, {collectionName: collectionName, contractAdd: contract.address})
+
                 getUser()
                 setIsLoading(true);
                 toast.success("Welcome, author!")
