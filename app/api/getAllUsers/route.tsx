@@ -15,7 +15,7 @@ export async function POST(req:any){
             if(!user){
                 return "Guest";
             }
-            return user.username;
+            return user;
         }))
 
         return NextResponse.json({arr: arr}, {status:200});
