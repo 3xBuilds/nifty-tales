@@ -91,8 +91,7 @@ export const BookFetcher = () => {
 
     }
     catch (err) {
-      setTimeout(getFeePerMint, 500);
-      console.error(err);
+      console.log(err);
     }
   }
 
@@ -121,7 +120,7 @@ export const BookFetcher = () => {
     catch (err) {
       setLoading(false);
 
-      console.error(err);
+      console.log(err);
     }
   }
 
@@ -140,7 +139,7 @@ export const BookFetcher = () => {
     catch (err) {
       setLoading(false);
 
-      console.error(err);
+      console.log(err);
     }
   }
 
@@ -263,7 +262,10 @@ export const BookFetcher = () => {
           const username = item?.username;
           const image = item?.profileImage;
           const holding = Number(holders[i][1]);
-          arr1.push({ username, holding, image })
+
+          if(username){
+            arr1.push({ username, holding, image })
+          }
         })
 
         arr1.sort((a: any, b: any) => b.holding - a.holding);

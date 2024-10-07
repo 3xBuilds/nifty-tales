@@ -15,7 +15,7 @@ export async function generateMetadata(
   const id = params.id
   // console.log(id);
 
-  const book = await axios.get(`http://localhost:3004/api/book/${id}`)
+  const book = await axios.get(`http://localhost:3000/api/book/${id}`)
   // console.log("BOOK DATA",book.data);
  
   return {
