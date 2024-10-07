@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker:dev": "./start-dev.sh",
+    "docker:prod": "./start-prod.sh"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.623.0",
