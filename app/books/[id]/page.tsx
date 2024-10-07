@@ -1,5 +1,6 @@
 import type { Metadata, ResolvingMetadata } from 'next'
 import { BookFetcher } from '@/components/fetcher/bookFetcher';
+import axios from 'axios';
  
 type Props = {
   params: { id: string }
@@ -14,24 +15,24 @@ export async function generateMetadata(
   const id = params.id
   // console.log(id);
 
-  const book = await fetch(`https://niftytales.xyz/api/book/${id}`).then((res) => res.json())
+  const book = await axios.get(`http://host.docker.internal:3004/api/book/${id}`)
   // console.log("BOOK DATA",book.data);
  
   return {
-    title: book?.data?.name,
+    title: book?.data?.data?.name,
     openGraph: {
-      title: book?.data?.name,
-      description: book?.data?.description,
+      title: book?.data?.data?.name,
+      description: book?.data?.data?.description,
       url: `https://niftytales.xyz/books/${id}`,
       siteName: 'Nifty Tales',
       images: [
         {
-          url: book?.data?.cover, // Must be an absolute URL
+          url: book?.data?.data?.cover, // Must be an absolute URL
           width: 800,
           height: 600,
         },
         {
-          url: book?.data?.cover, // Must be an absolute URL
+          url: book?.data?.data?.cover, // Must be an absolute URL
           width: 1800,
           height: 1600,
           alt: 'My custom alt',

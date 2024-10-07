@@ -1,5 +1,6 @@
 import AuthorFetcher from "@/components/fetcher/authorFetcher";
 import type { Metadata, ResolvingMetadata } from 'next'
+import axios from "axios";
 
  
 type Props = {
@@ -14,12 +15,12 @@ export async function generateMetadata(
   // read route params
   const id = params.wallet
 
-  const user = await fetch(`https://niftytales.xyz/api/user/wallet/${id}`).then((res) => res.json())
+  const user = await axios.get(`http://host.docker.internal:3004/api/user/wallet/${id}`)
  
   return {
-    title: user?.user?.collectionName,
+    title: user?.data?.user?.collectionName,
     openGraph: {
-      title: user?.user?.collectionName,
+      title: user?.data?.user?.collectionName,
       url: `https://niftytales.xyz/authors/${id}`,
       siteName: 'Nifty Tales',
       images: [
