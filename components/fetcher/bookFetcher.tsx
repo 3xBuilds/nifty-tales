@@ -260,8 +260,8 @@ export const BookFetcher = () => {
         var arr1: any = [];
 
         res.data.arr.map((item: any, i: number) => {
-          const username = item.username;
-          const image = item.profileImage;
+          const username = item?.username;
+          const image = item?.profileImage;
           const holding = Number(holders[i][1]);
           arr1.push({ username, holding, image })
         })
@@ -310,7 +310,7 @@ export const BookFetcher = () => {
 
   useEffect(() => {
     user?.readlist?.map((item: any) => {
-      if (item._id == bookDetails?._id) {
+      if (item?._id == bookDetails?._id) {
         setReadListed(true);
       }
     })
@@ -741,13 +741,13 @@ export const BookFetcher = () => {
                               <h2 className={`flex gap-2 items-center justify-center relative font-semibold ${i + 1 == 1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i + 1 == 2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i + 1 == 3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i < 3 && <FaCrown className={`${i + 1 == 1 && "text-yellow-500"} absolute -translate-x-5 ${i + 1 == 2 && "text-gray-400"} ${i + 1 == 3 && "text-orange-700"}`} />}{i + 1}</h2>
                             </div>
                             <div className='w-[15%] flex justify-center'>
-                                {item.image != "" ? <Image width={1080} height={1080} src={item.image} alt='dp' className='w-8 h-8 rounded-full ' /> : <div className='w-8 h-8 border-[1px] border-dashed rounded-full bg-nifty-gray-1/20'></div>}
+                                {item?.image != "" ? <Image width={1080} height={1080} src={item?.image} alt='dp' className='w-8 h-8 rounded-full ' /> : <div className='w-8 h-8 border-[1px] border-dashed rounded-full bg-nifty-gray-1/20'></div>}
                               </div>
                             <div className={`flex-shrink-0 w-[15%] font-medium flex gap-2 items-center justify-center text-sm max-md:text-xs ${night ? "text-white" : "text-nifty-gray-2"} `}>
-                              <h2 className='text-center '>{item.username.slice(0, 20)}{item.username.length > 20 && "..."}</h2>
+                              <h2 className='text-center '>{item?.username?.slice(0, 20)}{item?.username?.length > 20 && "..."}</h2>
                             </div>
                             <div className={`flex-shrink-0 w-[35%] font-medium text-sm max-md:text-xs ${night ? "text-white" : "text-nifty-gray-2"} `}>
-                              <h2>{item.holding}</h2>
+                              <h2>{item?.holding}</h2>
                             </div>
 
                           </div>
