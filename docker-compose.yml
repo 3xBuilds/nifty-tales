@@ -12,7 +12,7 @@ services:
     container_name: niftytales-prod
     restart: unless-stopped
     ports:
-      - "${PROD_PORT:-3000}:3000"
+      - "${PROD_PORT:-3002}:3000"
     environment:
       - NODE_ENV=production
     env_file:
@@ -33,7 +33,7 @@ services:
     container_name: niftytales-dev
     restart: unless-stopped
     ports:
-      - "${DEV_PORT:-3002}:3000"
+      - "${DEV_PORT:-3004}:3000"
     environment:
       - NODE_ENV=production
     env_file:
