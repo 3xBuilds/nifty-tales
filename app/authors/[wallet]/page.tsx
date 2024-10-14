@@ -15,7 +15,7 @@ export async function generateMetadata(
   // read route params
   const id = params.wallet
 
-  const user = await axios.get(`https://dev.niftytales.xyz/api/user/wallet/${id}`)
+  const user = await axios.get(`https://niftytales.xyz/api/user/wallet/${id}`)
  
   return {
     title: user?.data?.user?.collectionName,
