@@ -210,7 +210,8 @@ export const BookFetcher = () => {
       
 
 
-    } catch (err) {
+    } catch (err:any) {
+      toast.error(err?.data?.message)
       toast.error("Error occurred while minting");
       setShowModal(false);
       setLoading(false);
