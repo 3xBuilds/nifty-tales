@@ -211,8 +211,15 @@ export const BookFetcher = () => {
 
 
     } catch (err:any) {
-      toast.error(err?.data?.message)
-      toast.error("Error occurred while minting");
+      if(err?.data?.message.includes("insufficient")){
+        toast.error("Insufficient funds for transaction")
+    }
+    else if(err?.code == "ACTION_REJECTED"){
+        toast.error("You rejected the transaction!")
+    }
+    else{
+        toast.error("Error while sending tip. Try again!")
+    }
       setShowModal(false);
       setLoading(false);
       console.log(err);
