@@ -218,7 +218,7 @@ export const BookFetcher = () => {
         toast.error("You rejected the transaction!")
     }
     else{
-        toast.error("Error while sending tip. Try again!")
+        toast.error("Error while minting. Try again!")
     }
       setShowModal(false);
       setLoading(false);
