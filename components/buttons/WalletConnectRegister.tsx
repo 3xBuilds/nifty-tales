@@ -40,7 +40,7 @@ export const WalletConnectRegister = () => {
                 if (!connected) {
                   return (
                     <button onClick={()=>{openConnectModal()}} className='bg-black hover:-translate-y-1 duration-200 w-64 rounded-xl px-6 py-3 text-white font-semibold flex flex-row items-center justify-center gap-2'>
-                      <Icon name='metamask'/> Use Metamask
+                      <IoMdWallet /> Use Wallet
                     </button>
                   );
                 }
