@@ -11,6 +11,7 @@ import { useAccount } from 'wagmi';
 
 import { CgProfile } from "react-icons/cg";
 import { useGlobalContext } from '@/context/MainContext';
+// import { useNetwork } from '@mantine/hooks';
 
 
 const PreRegister = () => {

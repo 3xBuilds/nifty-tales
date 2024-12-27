@@ -22,7 +22,7 @@ import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { SiOpensea } from "react-icons/si";
 import { CiShare2 } from 'react-icons/ci';
 import { RiLoader5Line } from 'react-icons/ri';
-import { useAccount, useEnsName } from 'wagmi';
+import { useAccount, useChainId, useEnsName } from 'wagmi';
 import { ImCross, ImPause } from 'react-icons/im';
 import { WalletConnectButton } from '../buttons/WalletConnectButton';
 import masterABI from '@/utils/abis/masterABI';
@@ -143,9 +143,15 @@ export const BookFetcher = () => {
     }
   }
 
-  async function mint() {
+  const chainId = useChainId();
 
+  async function mint() {
+    if(chainId !== 8453){
+      toast.error("Please switch to Base Mainnet to mint");
+      return;
+    }
     try {
+
       const contract = await contractSetup();
 
       // Calculate the value to send with the transaction
