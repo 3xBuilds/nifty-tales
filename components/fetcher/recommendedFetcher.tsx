@@ -1,6 +1,6 @@
 "use client"
 
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
@@ -21,6 +21,7 @@ export const RecommendedFetcher = () => {
 
     const router = useRouter()
     const {setIsLoading} = useLoading()
+    const pathname = usePathname();
 
   useEffect(()=>{
     setIsLoading(false)
@@ -53,9 +54,9 @@ export const RecommendedFetcher = () => {
     },[page])
 
   return (
-    <div className='lg:px-5 px-4 lg:flex gap-4 mt-8 max-lg:flex-col items-start justify-center w-full max-lg:pb-20'>
+    <div className='lg:px-5 px-4 flex gap-4 mt-8 flex-col items-start justify-center w-full pb-20'>
 
-      <div className="flex flex-col items-start justify-center lg:w-[50%]">
+      <div className="flex flex-col items-start justify-center w-full">
 
 
               {boosted && boosted?.length > 0 && <div className='mb-16 w-full'>
@@ -135,12 +136,12 @@ export const RecommendedFetcher = () => {
 
       </div>
 
-      <div className='lg:w-[50%] max-lg:mt-10'>
+      {pathname == "/explore" && <div className=' max-lg:mt-10 w-full'>
         <div className="w-full">
               <h3 className="text-2xl font-bold">Latest Mints</h3>
         </div>
 
-        <div className="w-full h-full">
+       <div className="w-full h-full">
           <div className='border-[1px] rounded-t-lg border-gray-300 bg-nifty-gray-1/20 flex py-2'>
               <div className='w-[25%] font-bold text-center'>By</div>
               <div className='w-[25%] font-bold text-center'>Book</div>
@@ -150,9 +151,9 @@ export const RecommendedFetcher = () => {
           <div>
               {txnData && txnData.map((item:any, i)=>(
                 <div key={i} className={`border-x-[1px] border-b-[1px] ${i==9 && "rounded-b-lg"} border-gray-300 flex py-2 ${night ? "text-nifty-gray-1" : "text-black"}`}>
-                    <div className='w-[25%] flex items-center justify-center gap-2 text-xs'>{item.user.profileImage !== "" ? <Image width={540} height={540} src={item.user.profileImage} alt='user' className='w-8 h-8 rounded-full' /> : <div className='w-8 h-8 rounded-full bg-nifty-gray-1/20'></div>}<h2 className='w-20 truncate'>{item.user.username}</h2></div>
-                    <Link href={`/books/${item.book._id}`} className='w-[25%] text-center my-auto text-xs font-bold'>{item.book.name.substring(0,15)}{item.book.name.length > 15 && "..."}</Link>
-                    <Link href={`https://basescan.org/tx/${item.txnHash}`} className='w-[25%] text-center mx-auto text-xs text-black font-semibold flex justify-center items-center gap-2'>Basescan <FaExternalLinkAlt/></Link>
+                    <div className='w-[25%] flex items-center justify-center gap-2 text-xs'>{item.user.profileImage !== "" ? <Image width={540} height={540} src={item.user.profileImage} alt='user' className='w-8 h-8 rounded-full' /> : <div className='w-8 h-8 rounded-full bg-nifty-gray-1/20'></div>}<h2 className='w-32 max-lg:w-20 truncate'>{item.user.username}</h2></div>
+                    <Link href={`/books/${item.book._id}`} className='w-[25%] text-center my-auto hover:underline text-xs font-bold'>{item.book.name.substring(0,15)}{item.book.name.length > 15 && "..."}</Link>
+                    <Link href={`https://basescan.org/tx/${item.txnHash}`} className='w-[25%] text-center mx-auto text-xs  font-semibold flex justify-center items-center gap-2'>Basescan <FaExternalLinkAlt/></Link>
                     <div className='w-[25%] text-center text-xs my-auto'>{moment(item.createdAt).fromNow()}</div>
                 </div>
               ))}
@@ -161,7 +162,7 @@ export const RecommendedFetcher = () => {
 
         </div>
 
-      </div>
+      </div>}
     </div>
   )
 }
