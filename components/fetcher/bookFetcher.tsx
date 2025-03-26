@@ -694,7 +694,7 @@ export const BookFetcher = () => {
 
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>Mint Price</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{Number(price) > 0 ? price + " ETH" : "Free Mint"}</h2>
+                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{bookDetails?.price as number > 0 ? bookDetails?.price + " ETH" : "Free Mint"}</h2>
                   </div>
                 </div>
 
