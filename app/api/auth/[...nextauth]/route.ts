@@ -29,19 +29,6 @@ const handler = NextAuth({
     async signIn( {user, account} : {user:any, account:any} ) {
       revalidatePath('/', 'layout') 
       await connectToDB();
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log(account.provider);
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
-      console.log("--------------------")
 
       if (account.provider === "anonymous") {
         console.log("Anonymous login detected");
@@ -63,7 +50,6 @@ const handler = NextAuth({
         return token;
       }
 
-      console.log("WASSUP DAWG");
       // Add user id and provider to the token
       if (account?.provider && user) {
         token.provider = account.provider;
@@ -74,9 +60,9 @@ const handler = NextAuth({
         }
 
         else if (account.provider === "anonymous") {
-          console.log("BEFORE");
+
           token.username = user.name;
-          console.log("AFTER");
+
           token.email = user.email;
           token.role = "ANONYMOUS";
         } 

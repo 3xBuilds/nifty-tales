@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 import { FaTwitter } from 'react-icons/fa'
 import { IoMdMail } from 'react-icons/io'
@@ -15,7 +16,11 @@ const FooterComponent = () => {
             </ul>
 
         </div>
-        <h2 className='text-sm text-center mx-auto text-[#b4b4b4] max-md:pt-10 pt-16 pb-5'> All Rights Reserved by NiftyTales © </h2>
+        <div className='flex items-center justify-center gap-5 mt-10 pb-10'>
+          <h2 className='text-sm flex text-center text-[#b4b4b4]'>All Rights Reserved by NiftyTales ©</h2>
+          <Link href="/terms" className='text-sm text-[#b4b4b4] hover:text-gray-200 duration-200'>Terms of Service</Link>
+          <Link href="/privacy" className='text-sm text-[#b4b4b4] hover:text-gray-200 duration-200'>Privacy Policy</Link>
+        </div>
     </div>
   )
 }

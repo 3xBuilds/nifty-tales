@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import Providers from "@/utils/provider/Providers"
 import Navbar from "@/components/Home/Navbar";
 import { poppins } from "@/utils/font";
@@ -59,10 +59,11 @@ export default function RootLayout({
           transition={Slide}
             />
         <Providers>
-          {/* <div className="flex w-screen z-[1000] justify-end fixed top-0">
+          <div className="flex w-screen z-[1000] justify-end fixed top-0">
                <Navbar/>
-            </div>  */}
-            <div className="">
+            </div> 
+            <div className="mt-16">
+              
               {children}
             </div>
         </Providers>
