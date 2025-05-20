@@ -50,16 +50,16 @@ export default function Home() {
         setBookId(localStorage.getItem('bookId') || "");
     }, [])
 
-    async function tokenChecker(){
-        await axios.get("/api/tokenChecker").then((res)=>{
-            console.log(res);
-        });
-      }
+    // async function tokenChecker(){
+    //     await axios.get("/api/tokenChecker").then((res)=>{
+    //         console.log(res);
+    //     });
+    //   }
       
-      useEffect(()=>{
-        tokenChecker();
-        setIsLoading(false);
-      },[])
+    //   useEffect(()=>{
+    //     tokenChecker();
+    //     setIsLoading(false);
+    //   },[])
 
       useEffect(()=>{
         if(bookId != "")

@@ -142,24 +142,6 @@ const Explore = () => {
     }
 }
 
-async function tokenChecker() {
-  try {
-    const res = await axios.get("/api/tokenChecker");
-    console.log(res.data);
-  } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      console.log(error, "WTF BRO")
-      router.push('/connect');
-    } else {
-      console.error("An error occurred:", error);
-    }
-  }
-}
-
-useEffect(() => {
-  tokenChecker();
-}, []);
-
 const [ensNameLoader, setEnsNameLoader] = useState<boolean>(false);
 const [ensImageLoader, setEnsImageLoader] = useState<boolean>(false);
 
@@ -232,7 +214,7 @@ async function getUserEnsName(){
 
   return (
     <div className={` ${night ? "text-white bg-[#212121]" : "text-black bg-white"} duration-200 min-h-screen`}>
-        <div className={`w-screen h-screen fixed z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+        {/* <div className={`w-screen h-screen fixed z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
         <div className={`h-screen w-screen backdrop-blur-xl z-[100] flex items-center justify-center fixed top-0 ${imageModal ? "translate-y-0": "-translate-y-[120rem]"} duration-300 ease-in-out left-0`}>
                 <div className={`${night ? "bg-[#313131]" : "bg-white"}  shadow-xl shadow-black/30 gap-4 max-md:w-[90%] h-84 w-80 rounded-xl p-4 flex flex-col items-center justify-center`} >
                     <div className="w-full items-end flex justify-end text-xl"><button onClick={()=>{setImageModal(false)}} className="text-gray-300 hover:text-red-500 duration-200" ><IoClose/></button></div>
@@ -272,22 +254,22 @@ async function getUserEnsName(){
                 <button onClick={rename} className='font-bold text-white w-1/2 bg-black h-10 rounded-lg hover:-translate-y-1 duration-200' >Save</button>
               </div>
           </div>
-      </div>
+      </div> */}
       {/* <div className='relative z-[100]'>
         <Navbar/>
       </div> */}
-      <div className='flex max-md:flex-col gap-4 w-full px-5 items-center justify-start pt-10 -mt-10'>
+      {/* <div className='flex max-md:flex-col gap-4 w-full px-5 items-center justify-start pt-10 -mt-10'>
         <button onClick={()=>{setImageModal(true)}} className='rounded-full w-28 h-28 group border-4 border-black overflow-hidden flex items-center justify-center relative'>
-          {/* @ts-ignore */}
+
           <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+Date.now() } alt="dp" className='group-hover:scale-105 group-hover:brightness-75 w-full h-full object-cover object-center duration-200' />
           <FaPen className="group-hover:opacity-100 opacity-0 duration-200 absolute z-50 text-xl text-white brightness-200" />
         </button>
         <div className='flex gap-2 items-center justify-center'>
-          {/* @ts-ignore */}
+
         <h2 className="text-[2.5rem] max-md:text-[1.7rem] font-bold my-4 ">Hi, {user?.username?.split(" ")[0]?.substring(0,12)}{user?.username?.split(" ")[0]?.length>12 && "..."}</h2>
         <button onClick={()=>{setModal(true)}} className='text-gray-500 flex items-center justify-center bg-gray-100 duration-200 hover:brightness-90 p-3 text-xl rounded-lg'><FaEdit/></button>
           </div>
-      </div>
+      </div> */}
 
         <Highlights/>
        <RecommendedFetcher/>

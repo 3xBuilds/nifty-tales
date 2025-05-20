@@ -166,9 +166,9 @@ export default function Home(){
         }
       },[user])
       
-      useEffect(() => {
-        tokenChecker();
-      }, []);
+    //   useEffect(() => {
+    //     tokenChecker();
+    //   }, []);
 
     return(
         <div className={`min-h-screen w-screen flex flex-col items-center justify-start md:px-16 pt-10 duration-200 ${night ? "text-white bg-[#212121]" : "text-black bg-white"} `} >

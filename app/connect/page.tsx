@@ -36,23 +36,23 @@ const PreRegister = () => {
     }
   },[session])
 
-  async function tokenChecker() {
-    try {
-      const res = await axios.get("/api/tokenChecker");
-      // console.log(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        console.log(error, "WTF BRO")
-        router.push('/connect');
-      } else {
-        console.error("An error occurred:", error);
-      }
-    }
-  }
+  // async function tokenChecker() {
+  //   try {
+  //     const res = await axios.get("/api/tokenChecker");
+  //     // console.log(res.data);
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error) && error.response?.status === 401) {
+  //       console.log(error, "WTF BRO")
+  //       router.push('/connect');
+  //     } else {
+  //       console.error("An error occurred:", error);
+  //     }
+  //   }
+  // }
   
-  useEffect(() => {
-    tokenChecker();
-  }, []);
+  // useEffect(() => {
+  //   tokenChecker();
+  // }, []);
   
 
   return (

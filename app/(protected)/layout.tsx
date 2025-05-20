@@ -44,7 +44,7 @@ export default function RootLayout({
     <html lang="en">
      
       <body className={poppins.className + " overflow-x-hidden w-screen "}>
-        {/* <Navbar/> */}
+        <Navbar/>
         <ToastContainer
           position="bottom-right"
           autoClose={3000}
@@ -60,7 +60,7 @@ export default function RootLayout({
             />
         <Providers>
           <div className="flex w-screen z-[1000] justify-end fixed top-0">
-               <Navbar/>
+               {/* <Navbar/> */}
             </div> 
             <div className="mt-16">
               

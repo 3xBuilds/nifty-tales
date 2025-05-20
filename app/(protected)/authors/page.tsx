@@ -394,24 +394,6 @@ export default function Home() {
         }
     }
 
-
-    async function tokenChecker() {
-        try {
-            const res = await axios.get("/api/tokenChecker");
-            console.log(res.data);
-        } catch (error) {
-            if (axios.isAxiosError(error) && error.response?.status === 401) {
-                router.push('/connect');
-            } else {
-                console.error("An error occurred:", error);
-            }
-        }
-    }
-
-    useEffect(() => {
-        tokenChecker();
-    }, []);
-
     const [tokenId, setTokenId] = useState<number>(0);
 
     const [status, setStatus] = useState<string>("");

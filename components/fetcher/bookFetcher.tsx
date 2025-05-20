@@ -367,18 +367,18 @@ export const BookFetcher = () => {
     getTickerPrice()
   }, [])
 
-  async function tokenChecker() {
-    try {
-      const res = await axios.get("/api/tokenChecker");
-      // console.log(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push('/connect');
-      } else {
-        console.error("An error occurred:", error);
-      }
-    }
-  }
+  // async function tokenChecker() {
+  //   try {
+  //     const res = await axios.get("/api/tokenChecker");
+  //     // console.log(res.data);
+  //   } catch (error) {
+  //     if (axios.isAxiosError(error) && error.response?.status === 401) {
+  //       router.push('/connect');
+  //     } else {
+  //       console.error("An error occurred:", error);
+  //     }
+  //   }
+  // }
 
   const [created, setCreated] = useState("");
 
@@ -389,9 +389,9 @@ export const BookFetcher = () => {
     }
   }, [bookDetails])
 
-  useEffect(() => {
-    tokenChecker();
-  }, []);
+  // useEffect(() => {
+  //   tokenChecker();
+  // }, []);
 
   const [openReportModal, setOpenReportModal] = useState(false);
   const [tags, setTags] = useState<Array<string>>([]);

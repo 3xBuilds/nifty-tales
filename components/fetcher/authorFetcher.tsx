@@ -150,22 +150,22 @@ export default function AuthorFetcher(){
     setIsLoading(false)
   },[])
 
-  async function tokenChecker() {
-    try {
-      const res = await axios.get("/api/tokenChecker");
-    //   console.log(res.data);
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 401) {
-        router.push('/connect');
-      } else {
-        console.error("An error occurred:", error);
-      }
-    }
-  }
+//   async function tokenChecker() {
+//     try {
+//       const res = await axios.get("/api/tokenChecker");
+//     //   console.log(res.data);
+//     } catch (error) {
+//       if (axios.isAxiosError(error) && error.response?.status === 401) {
+//         router.push('/connect');
+//       } else {
+//         console.error("An error occurred:", error);
+//       }
+//     }
+//   }
 
-  useEffect(() => {
-    tokenChecker();
-  }, []);
+//   useEffect(() => {
+//     tokenChecker();
+//   }, []);
 
     return(
         <div className={`min-h-screen ${night ? "text-white bg-[#212121]" : "text-black bg-white"}`}>
