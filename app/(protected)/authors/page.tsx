@@ -596,15 +596,15 @@ export default function Home() {
     }
 
     return (
-        <div className={`${night ? "bg-[#212121] text-white" : "bg-white text-black"} duration-200`}>
+        <div className={`dark:bg-nifty-black bg-white dark:text-white bg-white text-black duration-200`}>
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
-            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
 
             {/* BOOST MODAL */}
             <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
-                <div className={` ${night ? "bg-[#212121]" : "bg-white"} shadow-xl shadow-black/30 w-80 rounded-xl p-4 `}>
+                <div className={` dark:bg-nifty-black bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 `}>
                     <h2 className='text-2xl font-bold mb-5'>Duration</h2>
                     <div className='flex gap-2 flex-wrap items-center justify-center'>
                         <button onClick={() => { setPrice("1000000000000000"); setAddtime("86400000") }} className={`flex flex-col ${price == "1000000000000000" && " brightness-125 border-black border-2 "} items-center justify-center w-32 bg-nifty-gray-1/30 hover:scale-105 p-2 rounded-lg duration-200 text-nifty-gray-1-2/80`}>
@@ -664,23 +664,23 @@ export default function Home() {
             {/*Socials Modal*/}
             <div className={` ${bringSocialsModal ? "translate-y-0" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[110] justify-center fixed top-0 left-0 w-screen h-screen`}>
 
-                <div className={`${night ? "bg-[#313131]" : "bg-white"} rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2`}>
+                <div className={`dark:bg-[#313131] bg-white rounded-xl shadow-xl w-80 p-4 shadow-black/30 flex-col flex gap-2`}>
                     <h3 className="text-xl font-bold">Update Socials</h3>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`https://...`} onChange={(e) => {setInsta(e.target.value)}} value={insta} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Instagram</h2>
+                        <input placeholder={`https://...`} onChange={(e) => {setInsta(e.target.value)}} value={insta} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Instagram</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`https://...`} onChange={(e) => {setTwitter(e.target.value)}} value={twitter} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>X (Twitter)</h2>
+                        <input placeholder={`https://...`} onChange={(e) => {setTwitter(e.target.value)}} value={twitter} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>X (Twitter)</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`https://...`} onChange={(e) => {setWeb(e.target.value)}} value={web} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Website</h2>
+                        <input placeholder={`https://...`} onChange={(e) => {setWeb(e.target.value)}} value={web} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Website</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`https://...`} onChange={(e) => {setFarcaster(e.target.value)}} value={farcaster} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first ${night ? "peer-focus:text-white" : "peer-focus:text-black"} peer-focus:font-semibold duration-200`}>Farcaster</h2>
+                        <input placeholder={`https://...`} onChange={(e) => {setFarcaster(e.target.value)}} value={farcaster} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Farcaster</h2>
                     </div>
                     <div className="flex gap-2 w-full">
                         <button disabled={loading} onClick={handleUpdateSocials} className="py-2 bg-black md:w-40 max-md:text-sm w-1/2 flex items-center justify-center text-white font-bold gap-2 rounded-lg hover:-translate-y-1 duration-200">{loading ? <AiOutlineLoading className=' animate-spin text-white' /> : "Save"}</button>
@@ -693,22 +693,22 @@ export default function Home() {
             {/* Update Price Modal */}
             <div className={` ${priceModal ? "translate-y-10" : "-translate-y-[100rem]"} duration-200 backdrop-blur-xl flex flex-col items-center z-[110] justify-center fixed top-0 left-0 w-screen h-screen`}>
 
-                <div className={`${night ? "bg-[#313131]" : "bg-white"} relative pt-10 rounded-xl shadow-xl max-md:w-80 w-[50%] p-4 shadow-black/30 flex max-md:flex-col gap-5`}>
+                <div className={`dark:bg-[#313131] bg-white relative pt-10 rounded-xl shadow-xl max-md:w-80 w-[50%] p-4 shadow-black/30 flex max-md:flex-col gap-5`}>
                 <div className="w-full absolute top-0 left-0 flex justify-end p-4">
                     <button onClick={() => { setPriceModal(false) }} className=" font-semibold rounded-lg duration-200" ><ImCross className={`text-nifty-gray-1 hover:text-red-500 duration-200`}/></button>
                 </div>
                 <div className="md:w-1/2 h-72">
                     <h3 className="text-xl font-bold">Update Mint Details</h3>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Mint Price in ETH</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMints(Math.round(Number(e.target.value))) }} value={maxMints} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMints(Math.round(Number(e.target.value))) }} value={maxMints} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints</h2>
                     </div>
                     <div className="w-full text-start flex flex-col my-2">
-                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value))) }} value={maxMintsPerWallet} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value))) }} value={maxMintsPerWallet} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <h2 className="text-sm text-semibold text-nifty-gray-1 order-first peer-focus:text-black peer-focus:font-semibold duration-200">Max Mints per Wallet</h2>
                     </div>
                     <div className="flex gap-2 w-full">
@@ -723,7 +723,7 @@ export default function Home() {
                     <div className="w-full">
                         <label htmlFor="dropzone-file2" className={`flex flex-col items-center justify-center w-full h-48 border-2 ${requiredAudio ? "border-red-500"  : "border-jel-gray-3" } border-dashed group rounded-xl mt-2 cursor-pointer hover:bg-jel-gray-1`}>
                             <div className="flex flex-col items-center h-full w-full p-2 overflow-hidden justify-center rounded-lg">
-                                {!audio ? <div className={`bg-gray-300/30 ${night ? "text-white" : "text-black"} duration-200 gap-2 flex flex-col items-center justify-center w-full h-full rounded-xl`}>
+                                {!audio ? <div className={`bg-gray-300/30 dark:text-white text-blackduration-200 gap-2 flex flex-col items-center justify-center w-full h-full rounded-xl`}>
                                         <FaFileAudio className="text-xl" />
                                         <h3 className="w-[80%] text-xs text-center">Choose a .mp3 file for best experience.</h3>
                                     </div> :
@@ -842,7 +842,7 @@ export default function Home() {
                                     </div>
                                     ))}
                                 </div>
-                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                                 </div>
                             </div>
                         ))}
@@ -875,7 +875,7 @@ export default function Home() {
                                     </div>
                                     ))}
                                 </div>
-                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                                 </div>
                             </div>
                         ))}
@@ -905,7 +905,7 @@ export default function Home() {
                                     </div>
                                     ))}
                                 </div>
-                                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                                <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                                 </div>
                             </div>
                         ))}

@@ -34,6 +34,9 @@ export const metadata: Metadata = {
   }
 }
 
+
+
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -41,9 +44,9 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
-     
-      <body className={poppins.className + " overflow-x-hidden w-screen "}>
+    <html lang="en" className="dark">
+     <script src="./toggleDarkMode.ts"></script>
+      <body className={poppins.className + " overflow-x-hidden w-screen dark:bg-nifty-black bg-white"}>
         <Navbar/>
         <ToastContainer
           position="bottom-right"

@@ -31,27 +31,6 @@ export const RecommendedFetcher = () => {
     const {night} = useGlobalContext();
     const [type, setType] = useState('Trending');
 
-    const[page, setPage] = useState(1);
-
-    const[txnData, setTxnData] = useState([]);
-
-    async function fetchTxns(page:number){
-      try{
-        const res = await axios.get("/api/transaction/get?page="+1);
-        console.log(res.data.txns)
-        setTxnData(res.data.txns)
-      }
-      catch(err){
-        toast.error("Failed to fetch transactions")
-      }
-    }
-
-
-    useEffect(()=>{
-      setInterval(()=>{
-        fetchTxns(page)
-      }, 5000)
-    },[page])
 
   return (
     <div className='lg:px-5 px-4 flex gap-4 mt-8 flex-col items-start justify-center w-full pb-20'>
@@ -106,7 +85,7 @@ export const RecommendedFetcher = () => {
                   </div>
                   ))}
                   </div>
-                  <div className={`w-full h-5 max-lg:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                  <div className={`w-full h-5 max-lg:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                   </div>
                   </div>
               ))}
@@ -127,7 +106,7 @@ export const RecommendedFetcher = () => {
                   </div>
                   ))}
                   </div>
-                  <div className={`w-full h-5 max-lg:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                  <div className={`w-full h-5 max-lg:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                   </div>
                   </div>
               ))}
@@ -136,33 +115,7 @@ export const RecommendedFetcher = () => {
 
       </div>
 
-      {pathname == "/explore" && <div className=' max-lg:mt-10 w-full'>
-        <div className="w-full">
-              <h3 className="text-2xl font-bold">Latest Mints</h3>
-        </div>
-
-       <div className="w-full h-full">
-          <div className='border-[1px] rounded-t-lg border-gray-300 bg-nifty-gray-1/20 flex py-2'>
-              <div className='w-[25%] font-bold text-center'>By</div>
-              <div className='w-[25%] font-bold text-center'>Book</div>
-              <div className='w-[25%] font-bold text-center'>Txn</div>
-              <div className='w-[25%] font-bold text-center'>Time</div>
-          </div>
-          <div>
-              {txnData && txnData.map((item:any, i)=>(
-                <div key={i} className={`border-x-[1px] border-b-[1px] ${i==9 && "rounded-b-lg"} border-gray-300 flex py-2 ${night ? "text-nifty-gray-1" : "text-black"}`}>
-                    <div className='w-[25%] flex items-center justify-center gap-2 text-xs'>{item.user.profileImage !== "" ? <Image width={540} height={540} src={item.user.profileImage} alt='user' className='w-8 h-8 rounded-full' /> : <div className='w-8 h-8 rounded-full bg-nifty-gray-1/20'></div>}<h2 className='w-32 max-lg:w-20 truncate'>{item.user.username}</h2></div>
-                    <Link href={`/books/${item.book._id}`} className='w-[25%] text-center my-auto hover:underline text-xs font-bold'>{item.book.name.substring(0,15)}{item.book.name.length > 15 && "..."}</Link>
-                    <Link href={`https://basescan.org/tx/${item.txnHash}`} className='w-[25%] text-center mx-auto text-xs  font-semibold flex justify-center items-center gap-2'>Basescan <FaExternalLinkAlt/></Link>
-                    <div className='w-[25%] text-center text-xs my-auto'>{moment(item.createdAt).fromNow()}</div>
-                </div>
-              ))}
-          </div>
-
-
-        </div>
-
-      </div>}
+    
     </div>
   )
 }

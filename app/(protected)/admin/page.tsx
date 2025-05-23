@@ -398,13 +398,13 @@ export default function Home(){
 
     if(session && user?.role == "ADMIN")
     return(
-        <div className={`md:px-10 px-4 pt-10 duration-200 ${night ? "bg-[#212121] text-white" : "bg-white"} min-h-screen text-black`}>
-            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+        <div className={`md:px-10 px-4 pt-10 duration-200 dark:bg-nifty-black bg-white : "bg-white"} min-h-screen text-black`}>
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
 
             <h2 className="text-2xl font-bold my-4">Change Owner</h2>
             <div className="flex gap-8 border-b-[1px] border-nifty-gray-1 pb-10">
                 <div className="w-1/2">
-                    <input onChange={(e) => { setOwner(e.target.value) }} value={owner} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                    <input onChange={(e) => { setOwner(e.target.value) }} value={owner} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                     <button onClick={handleOwner} disabled={loadingOwner} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingOwner ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
                 </div>
 
@@ -415,13 +415,13 @@ export default function Home(){
             <div className="flex gap-8 border-b-[1px] border-nifty-gray-1 pb-10">
                 <div className="w-1/2">
                     <h2 className="text-xl font-bold my-4">Author Fee (ETH)</h2>
-                    <input placeholder="0.003 ETH" type="number" min={0} onChange={(e) => { setAuthorFee(Number((Number(e.target.value))?.toFixed(4))) }} value={authorFee} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                    <input placeholder="0.003 ETH" type="number" min={0} onChange={(e) => { setAuthorFee(Number((Number(e.target.value))?.toFixed(4))) }} value={authorFee} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                     <button onClick={handleAuthorFee} disabled={loadingAuthorFee} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingAuthorFee ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
                 </div>
 
                 <div className="w-1/2">
                     <h2 className="text-xl font-bold my-4">Platform Fee (ETH)</h2>
-                    <input placeholder="0.0007 ETH" type="number" min={0} onChange={(e) => { setPlatformFee(Number((Number(e.target.value))?.toFixed(4))) }} value={platformFee} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                    <input placeholder="0.0007 ETH" type="number" min={0} onChange={(e) => { setPlatformFee(Number((Number(e.target.value))?.toFixed(4))) }} value={platformFee} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                     <button onClick={handlePlatformFee} disabled={loadingPlatformFee} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingPlatformFee ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
                 </div>
             </div>
@@ -434,13 +434,13 @@ export default function Home(){
                 <div className="flex gap-8">
                     <div className="w-1/2">
                         <h2 className="text-xl font-bold my-4">Add WL</h2>
-                        <input placeholder="0xe2f..." onChange={(e) => { setAddWl(e.target.value) }} value={addWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <input placeholder="0xe2f..." onChange={(e) => { setAddWl(e.target.value) }} value={addWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <button onClick={handleAddWl} disabled={loadingAddWl} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingAddWl ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
                     </div>
 
                     <div className="w-1/2">
                         <h2 className="text-xl font-bold my-4">Remove WL</h2>
-                        <input placeholder="0xe2f..." onChange={(e) => { setRemWl(e.target.value) }} value={remWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${night ? "focus:border-white" : "focus:border-black"} focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
+                        <input placeholder="0xe2f..." onChange={(e) => { setRemWl(e.target.value) }} value={remWl} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
                         <button onClick={handleRemWl} disabled={loadingRemWl} className="w-32 h-10 rounded-lg bg-black font-bold text-white my-4 hover:-translate-y-1 duration-200">{loadingRemWl ? <RiLoader5Fill className="text-xl animate-spin mx-auto"/> : "Submit"}</button>
                     </div>
 

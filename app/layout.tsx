@@ -41,7 +41,7 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
+    <html lang="en" className="dark:bg-nifty-black bg-nifty-white">
      
       <body className={poppins.className + " overflow-x-hidden w-screen "}>
         {/* <Navbar/> */}

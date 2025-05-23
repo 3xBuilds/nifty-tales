@@ -2,7 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-body{margin: 0px;}
+@layer base {
+  :root {
+    --primary-color: black;
+    --secondary-color: white;
+  }
+}
 
 .noscr::-webkit-scrollbar {
     display: none;

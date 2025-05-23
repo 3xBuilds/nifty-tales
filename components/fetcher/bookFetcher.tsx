@@ -503,13 +503,13 @@ export const BookFetcher = () => {
 
   return (
     <>
-      <div className={`${night ? "bg-[#212121] text-white" : "bg-white text-black"} duration-200`}>
-        <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+      <div className={`dark:bg-nifty-black bg-white dark:text-white bg-white text-black duration-200`}>
+        <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
 
         {/* WARNING MODAL */}
         <div className={` ${exists ? "-translate-y-0" : "translate-y-[300rem]"} duration-200 backdrop-blur-xl w-screen h-screen fixed top-0 left-0 z-[1000] flex items-center justify-center`}>
           <button onClick={() => { signOut() }} className='w-40 bg-nifty-white font-semibold absolute h-10 rounded-lg hover:-translate-y-1 duration-200 top-4 right-4 text-black'>Sign Out</button>
-          <div className={`w-80 ${night ? "bg-[#313131]" : "bg-white"}  shadow-xl shadow-black/30 rounded-xl p-4 font-semibold`}>
+          <div className={`w-80 dark:bg-[#313131] bg-white  shadow-xl shadow-black/30 rounded-xl p-4 font-semibold`}>
             <h2 className='text-md'>You've connected <span className=' font-bold '>{address?.slice(0, 7)}...{address?.slice(address.length - 5, address.length)}</span> which is connected to an account.</h2>
             <h2 className='text-sm my-2 text-nifty-gray-1'>Please Sign Out and login via Metamask.</h2>
           </div>
@@ -517,7 +517,7 @@ export const BookFetcher = () => {
 
         {/* REPORT MODAL */}
         <div className={`${openReportModal ? "translate-y-0" : "-translate-y-[300rem]"} duration-200 h-screen w-screen backdrop-blur-xl fixed top-0 left-0 z-[500] flex items-center justify-center`} >
-          <div className={`w-80 rounded-xl shadow-xl shadow-black/30 ${night ? "bg-[#313131]" : "bg-white"} p-4`}>
+          <div className={`w-80 rounded-xl shadow-xl shadow-black/30 dark:bg-[#313131] bg-white p-4`}>
             <div className='flex '>
               <h2 className='text-xl font-bold w-1/2'>Report Book</h2>
               <button onClick={() => { setOpenReportModal(false) }} className='text-black hover:text-red-500 duration-200 w-1/2 flex justify-end items-center' ><ImCross /></button>
@@ -548,7 +548,7 @@ export const BookFetcher = () => {
 
         {/* MINTING MODAL */}
         <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
-          <div className={`${night ? "bg-[#313131]" : "bg-white"} rounded-xl flex flex-col shadow-xl w-80 shadow-black/30 gap-4 justify-center items-start p-5`}>
+          <div className={`dark:bg-[#313131] bg-white rounded-xl flex flex-col shadow-xl w-80 shadow-black/30 gap-4 justify-center items-start p-5`}>
             <h2 className='text-2xl font-bold leading-tight' >Mint</h2>
             <h2 className='text-lg text-nifty-gray-1' >Choose number of mints</h2>
 
@@ -557,7 +557,7 @@ export const BookFetcher = () => {
                 if (amount != 0) {
                   setAmount((prev) => (prev - 1))
                 }
-              }} className='hover:scale-105 duration-200' ><TiMinus className={`text-2xl ${night ? "text-white" : "text-black"}`} /></button>
+              }} className='hover:scale-105 duration-200' ><TiMinus className={`text-2xl dark:text-white text-black`} /></button>
               <h3 className='text-2xl font-bold w-24 text-center'>{amount}</h3>
               <button onClick={() => {
                 //@ts-ignore
@@ -567,7 +567,7 @@ export const BookFetcher = () => {
                 else {
                   setAmount((prev) => (prev))
                 }
-              }} className='hover:scale-105 duration-200'><TiPlus className={`text-2xl ${night ? "text-white" : "text-black"}  rotate-180`} /></button>
+              }} className='hover:scale-105 duration-200'><TiPlus className={`text-2xl dark:text-white text-black rotate-180`} /></button>
             </div>
             <div className='text-nifty-gray-1 w-full'>
               <div className='w-full flex'>
@@ -579,7 +579,7 @@ export const BookFetcher = () => {
                 <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(platformFee * amount).toFixed(4)} ETH (${(amount * ethPrice * platformFee).toFixed(2)})</h2>
               </div>
 
-              <div className={`w-full ${night ? "text-white" : "text-black"} font-bold flex mb-2 mt-4`}>
+              <div className={`w-full dark:text-white text-blackfont-bold flex mb-2 mt-4`}>
                 <h2 className='w-1/2 text-[0.85rem] font-bold'>Total</h2>
                 <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((platformFee + Number(price)) * amount).toFixed(4)} ETH (${(amount * ethPrice * (platformFee + Number(price))).toFixed(2)})</h2>
               </div>
@@ -689,34 +689,34 @@ export const BookFetcher = () => {
                 <div className='flex gap-3 w-full'>
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>Published On</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{created}</h2>
+                    <h2 className={`dark:text-white text-blackfont-semibold text-lg`}>{created}</h2>
                   </div>
 
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>Mint Price</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{bookDetails?.price as number > 0 ? bookDetails?.price + " ETH" : "Free Mint"}</h2>
+                    <h2 className={`dark:text-white text-blackfont-semibold text-lg`}>{bookDetails?.price as number > 0 ? bookDetails?.price + " ETH" : "Free Mint"}</h2>
                   </div>
                 </div>
 
                 <div className='flex gap-3 w-full mt-2'>
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>ISBN</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{bookDetails?.ISBN ? bookDetails?.ISBN : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                    <h2 className={`dark:text-white text-blackfont-semibold text-lg`}>{bookDetails?.ISBN ? bookDetails?.ISBN : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                   </div>
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>Illustration Artist</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{bookDetails?.artist ? bookDetails?.artist.slice(0, 15) : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                    <h2 className={`dark:text-white text-blackfont-semibold text-lg`}>{bookDetails?.artist ? bookDetails?.artist.slice(0, 15) : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                   </div>
                 </div>
 
                 <div className='flex gap-3 w-full mt-2'>
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>Wallet Limit</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{bookDetails?.maxMintsPerWallet != 0 ? bookDetails?.maxMintsPerWallet : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
+                    <h2 className={`dark:text-white text-blackfont-semibold text-lg`}>{bookDetails?.maxMintsPerWallet != 0 ? bookDetails?.maxMintsPerWallet : <div className='h-8 w-full rounded-lg bg-nifty-gray-1/30'></div>}</h2>
                   </div>
                   <div className='w-1/2'>
                     <h2 className='text-nifty-gray-2 font-bold text-sm'>Supply</h2>
-                    <h2 className={`${night ? "text-white" : "text-black"} font-semibold text-lg`}>{bookDetails?.maxMint != 0 ? bookDetails?.maxMint : <FaInfinity />}</h2>
+                    <h2 className={`dark:text-white text-blackfont-semibold text-lg`}>{bookDetails?.maxMint != 0 ? bookDetails?.maxMint : <FaInfinity />}</h2>
                   </div>
                 </div>
 
@@ -729,16 +729,16 @@ export const BookFetcher = () => {
 
                   <div className='border-[1px] rounded-t-lg border-gray-300'>
                     <div className='flex text-center py-2 bg-nifty-gray-1/20 '>
-                      <div className={`flex-shrink-0 w-[35%] font-semibold text-md max-md:text-sm ${night ? "text-nifty-gray-1" : "text-black"}`}>
+                      <div className={`flex-shrink-0 w-[35%] font-semibold text-md max-md:text-sm dark:text-nifty-gray-1 text-black`}>
                         <h2>Rank</h2>
                       </div>
-                      <div className={`flex-shrink-0 w-[15%] font-semibold text-md max-md:text-sm ${night ? "text-nifty-gray-1" : "text-black"}`}>
+                      <div className={`flex-shrink-0 w-[15%] font-semibold text-md max-md:text-sm dark:text-nifty-gray-1 text-black`}>
                         <h2></h2>
                       </div>
-                      <div className={`flex-shrink-0 w-[15%] font-semibold text-md max-md:text-sm ${night ? "text-nifty-gray-1" : "text-black"}`}>
+                      <div className={`flex-shrink-0 w-[15%] font-semibold text-md max-md:text-sm dark:text-nifty-gray-1 text-black`}>
                         <h2>Username</h2>
                       </div>
-                      <div className={`flex-shrink-0 w-[35%] font-semibold text-md max-md:text-sm ${night ? "text-nifty-gray-1" : "text-black"}`}>
+                      <div className={`flex-shrink-0 w-[35%] font-semibold text-md max-md:text-sm dark:text-nifty-gray-1 text-black`}>
                         <h2>Collected</h2>
                       </div>
 
@@ -748,7 +748,7 @@ export const BookFetcher = () => {
                   <div className='border-x-[1px] border-b-[1px] rounded-b-lg border-gray-300 h-[10.5rem] overflow-y-scroll'>
 
 
-                    {loadingHolders ? <div className='w-full h-full flex items-center justify-center'> <RiLoader5Line className={`text-xl ${night ? "text-white" : "text-black"} animate-spin`} /> </div> :
+                    {loadingHolders ? <div className='w-full h-full flex items-center justify-center'> <RiLoader5Line className={`text-xl dark:text-white text-blackanimate-spin`} /> </div> :
 
                       <>
                         {holders.length > 0 && holders.map((item: any, i) => (
@@ -759,10 +759,10 @@ export const BookFetcher = () => {
                             <div className='w-[15%] flex justify-center'>
                                 {item?.image != "" ? <Image width={1080} height={1080} src={item?.image} alt='dp' className='w-8 h-8 rounded-full ' /> : <div className='w-8 h-8 border-[1px] border-dashed rounded-full bg-nifty-gray-1/20'></div>}
                               </div>
-                            <div className={`flex-shrink-0 w-[15%] font-medium flex gap-2 items-center justify-center text-sm max-md:text-xs ${night ? "text-white" : "text-nifty-gray-2"} `}>
+                            <div className={`flex-shrink-0 w-[15%] font-medium flex gap-2 items-center justify-center text-sm max-md:text-xs dark:text-white text-nifty-gray-2 `}>
                               <h2 className='text-center '>{item?.username?.slice(0, 20)}{item?.username?.length > 20 && "..."}</h2>
                             </div>
-                            <div className={`flex-shrink-0 w-[35%] font-medium text-sm max-md:text-xs ${night ? "text-white" : "text-nifty-gray-2"} `}>
+                            <div className={`flex-shrink-0 w-[35%] font-medium text-sm max-md:text-xs dark:text-white text-nifty-gray-2 `}>
                               <h2>{item?.holding}</h2>
                             </div>
 

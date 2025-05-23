@@ -326,7 +326,7 @@ export const Analytics = () => {
   }, [user])
 
   return (
-    <div id="analytics" className={` ${night ? "text-white" : " "} flex flex-col mx-4 md:mx-10 overflow-x-hidden items-start mt-5 pt-10 border-t-[1px] border-gray-300 justify-start`}>
+    <div id="analytics" className={`dark:text-white text-black flex flex-col mx-4 md:mx-10 overflow-x-hidden items-start mt-5 pt-10 border-t-[1px] border-gray-300 justify-start`}>
 
       <div className={`w-screen h-screen fixed top-0 left-0 ${boostModal ? "translate-y-0" : "-translate-y-[100rem]"} backdrop-blur-xl duration-200 flex z-[100] items-center justify-center`}>
           <div className='bg-white shadow-xl shadow-black/30 w-80 rounded-xl p-4 '>

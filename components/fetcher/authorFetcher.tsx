@@ -168,11 +168,11 @@ export default function AuthorFetcher(){
 //   }, []);
 
     return(
-        <div className={`min-h-screen ${night ? "text-white bg-[#212121]" : "text-black bg-white"}`}>
+        <div className={`min-h-screen dark:text-white dark:bg-nifty-black text-black bg-white`}>
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
-            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] ${night ? "bg-[#212121]" : "bg-white"}`}></div>
+            <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
 
             <div className="w-screen relative h-[15rem] md:h-[22rem] max-md:flex items-center justify-center overflow-hidden object-fill ">
                 <div className="w-screen absolute h-full overflow-hidden">
@@ -230,7 +230,7 @@ export default function AuthorFetcher(){
                         </div>
                         ))}
                         </div>
-                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 ${night ? "from-[#313131] to-[#232323]" : "from-white to-gray-300"} relative z-10`}>
+                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                         </div>
                         </div>
                     ))}
