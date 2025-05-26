@@ -8,6 +8,7 @@ import { Bounce, Slide, ToastContainer, Zoom } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Head from "next/head";
 import { useGlobalContext } from "@/context/MainContext";
+import { ThemeProvider } from "@/components/themeProvider";
 
 
 export const metadata: Metadata = {
@@ -46,6 +47,15 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
      <script src="./toggleDarkMode.ts"></script>
+     {/* <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem
+      disableTransitionOnChange
+      storageKey="10xlms-theme"
+      forcedTheme="light"
+     > */}
+
       <body className={poppins.className + " overflow-x-hidden w-screen dark:bg-nifty-black bg-white"}>
         <Navbar/>
         <ToastContainer
@@ -71,6 +81,7 @@ export default function RootLayout({
             </div>
         </Providers>
         </body>
+     {/* </ThemeProvider> */}
     </html>
   );
 }

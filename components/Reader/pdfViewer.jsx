@@ -28,8 +28,8 @@ function PDFViewer() {
   }
 
   useEffect(() => {
-      setWallet(localStorage.getItem('address') || "");
-      setId(localStorage.getItem('id') || "")
+      setWallet(localStorage?.getItem('address') || "");
+      setId(localStorage?.getItem('id') || "")
       pdfFetcher();
   }, [])
 

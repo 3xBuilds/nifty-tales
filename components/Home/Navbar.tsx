@@ -165,7 +165,7 @@ const Navbar = () => {
             {/* {session?.role != "ANONYMOUS" && <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{setOpenSettingsModal(true)}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'>Settings</button></li>} */}
             <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{signOut({callbackUrl: "/explore"})}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'>Logout</button></li>
             {/* @ts-ignore */}
-            {/* {session?.role != "ANONYMOUS" && <li className='flex gap-2 items-center justify-center w-full' ><WalletConnectButton/>  <button onClick={()=>{if(night)localStorage.setItem('mode', "day"); else{localStorage.setItem('mode', "night")}setNight((prev)=>!prev);}} className={` ${night ? "hover:bg-white/20" : "hover:bg-black/20"} items-center flex justify-center bg-gray-300/40 w-1/2 mx-auto p-2 rounded-full duration-200`} >{night ? <LuSun className='text-white' /> : <FaMoon className='text-black'/>}</button>
+            {/* {session?.role != "ANONYMOUS" && <li className='flex gap-2 items-center justify-center w-full' ><WalletConnectButton/>  <button onClick={()=>{if(night)localStorage?.setItem('mode', "day"); else{localStorage?.setItem('mode', "night")}setNight((prev)=>!prev);}} className={` ${night ? "hover:bg-white/20" : "hover:bg-black/20"} items-center flex justify-center bg-gray-300/40 w-1/2 mx-auto p-2 rounded-full duration-200`} >{night ? <LuSun className='text-white' /> : <FaMoon className='text-black'/>}</button>
             </li>} */}
           </ul>
 

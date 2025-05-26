@@ -488,28 +488,28 @@ export default function Home(){
 
 
     useEffect(()=>{
-        setBookName(localStorage.getItem('name') || "");
-        setBookDesc(localStorage.getItem("description") || "")
-        setIllustrationArtist(localStorage.getItem("artist") || "")
-        setCoverLink(localStorage.getItem("cover") || "");
-        setFileLink(localStorage.getItem("pdf") || "")
-        // console.log("THIS IS ID",localStorage.getItem("id"))
-        setId(localStorage.getItem("id") || "")
+        setBookName(localStorage?.getItem('name') || "");
+        setBookDesc(localStorage?.getItem("description") || "")
+        setIllustrationArtist(localStorage?.getItem("artist") || "")
+        setCoverLink(localStorage?.getItem("cover") || "");
+        setFileLink(localStorage?.getItem("pdf") || "")
+        // console.log("THIS IS ID",localStorage?.getItem("id"))
+        setId(localStorage?.getItem("id") || "")
         //@ts-ignore
-        setTags(JSON.parse(localStorage.getItem("tags")) || [])
+        setTags(JSON.parse(localStorage?.getItem("tags")) || [])
 
         //@ts-ignore
-        setIsbn(localStorage.getItem("isbn") || "")
+        setIsbn(localStorage?.getItem("isbn") || "")
 
         //@ts-ignore
-        setMintPrice(localStorage.getItem("price") || 0)
+        setMintPrice(localStorage?.getItem("price") || 0)
 
         //@ts-ignore
-        setMaxMints(localStorage.getItem("maxMint") || 0);
+        setMaxMints(localStorage?.getItem("maxMint") || 0);
         //@ts-ignore
-        setMaxMintsPerWallet(localStorage.getItem("maxMintsPerWallet") || 0);
+        setMaxMintsPerWallet(localStorage?.getItem("maxMintsPerWallet") || 0);
         
-        // setTokenId(localStorage.getItem('tokenId') || "");
+        // setTokenId(localStorage?.getItem('tokenId') || "");
 
     },[])
 

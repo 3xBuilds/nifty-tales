@@ -181,22 +181,22 @@ export default function Home() {
     function handleDraft(item: any) {
         ;
         // console.log(item.cover, item.pdf, item.name, item.tags);
-        localStorage.setItem("name", item.name);
-        localStorage.setItem("id", item._id);
+        localStorage?.setItem("name", item.name);
+        localStorage?.setItem("id", item._id);
 
-        localStorage.setItem("price", item.price);
-        localStorage.setItem("maxMint", item.maxMint);
-        localStorage.setItem("cover", item.cover);
-        localStorage.setItem("artist", item.artist);
-        localStorage.setItem("isbn", item.ISBN);
-        localStorage.setItem("description", item.description);
-        localStorage.setItem("tags", JSON.stringify(item.tags));
-        localStorage.setItem("pdf", item.pdf);
-        localStorage.setItem("maxMintsPerWallet", item.maxMintsPerWallet);
-        localStorage.setItem("coverDate", item.cover.split("/")[6])
-        localStorage.setItem("pdfDate", item.pdf.split("/")[6])
+        localStorage?.setItem("price", item.price);
+        localStorage?.setItem("maxMint", item.maxMint);
+        localStorage?.setItem("cover", item.cover);
+        localStorage?.setItem("artist", item.artist);
+        localStorage?.setItem("isbn", item.ISBN);
+        localStorage?.setItem("description", item.description);
+        localStorage?.setItem("tags", JSON.stringify(item.tags));
+        localStorage?.setItem("pdf", item.pdf);
+        localStorage?.setItem("maxMintsPerWallet", item.maxMintsPerWallet);
+        localStorage?.setItem("coverDate", item.cover.split("/")[6])
+        localStorage?.setItem("pdfDate", item.pdf.split("/")[6])
 
-        localStorage.setItem("tokenId", item.tokenId);
+        localStorage?.setItem("tokenId", item.tokenId);
 
         router.push("/publish")
     }

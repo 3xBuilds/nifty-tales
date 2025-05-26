@@ -45,9 +45,9 @@ export default function Home() {
     const { Toolbar } = toolbarPluginInstance;
 
     useEffect(() => {
-        setWallet(localStorage.getItem('address') || "");
-        setPdf(localStorage.getItem('pdf') || "");
-        setBookId(localStorage.getItem('bookId') || "");
+        setWallet(localStorage?.getItem('address') || "");
+        setPdf(localStorage?.getItem('pdf') || "");
+        setBookId(localStorage?.getItem('bookId') || "");
     }, [])
 
     // async function tokenChecker(){

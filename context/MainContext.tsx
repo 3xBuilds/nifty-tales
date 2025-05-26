@@ -209,21 +209,21 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   useEffect(()=>{
     // console.log(pathname.split("/")[1])
     if(pathname.split("/")[1] !== "publish"){
-      localStorage.removeItem("name");
-      localStorage.removeItem("id");
+      localStorage?.removeItem("name");
+      localStorage?.removeItem("id");
 
-      localStorage.removeItem("price");
-      localStorage.removeItem("maxMint");
-      localStorage.removeItem("cover");
-      localStorage.removeItem("artist");
-      localStorage.removeItem("isbn");
-      localStorage.removeItem("description");
-      localStorage.removeItem("tags");
-      localStorage.removeItem("pdf");
-      localStorage.removeItem("maxMintsPerWallet");
+      localStorage?.removeItem("price");
+      localStorage?.removeItem("maxMint");
+      localStorage?.removeItem("cover");
+      localStorage?.removeItem("artist");
+      localStorage?.removeItem("isbn");
+      localStorage?.removeItem("description");
+      localStorage?.removeItem("tags");
+      localStorage?.removeItem("pdf");
+      localStorage?.removeItem("maxMintsPerWallet");
 
-      localStorage.removeItem("coverDate");
-      localStorage.removeItem("pdfDate");
+      localStorage?.removeItem("coverDate");
+      localStorage?.removeItem("pdfDate");
 
 
     }
@@ -299,7 +299,7 @@ useEffect(()=>{
     } else if(screenWidth <= 1100){
         setSlicer(4);
     }
-    const mode = localStorage.getItem('mode');
+    const mode = localStorage?.getItem('mode');
 
     if(mode == "night"){
       setNight(true);

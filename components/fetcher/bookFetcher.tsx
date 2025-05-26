@@ -346,9 +346,9 @@ export const BookFetcher = () => {
   }, [])
 
   function setLocalStorage() {
-    localStorage.setItem('address', userDetails?.wallet as string);
-    localStorage.setItem('pdf', String(bookDetails?.pdf))
-    localStorage.setItem('bookId', String(bookDetails?._id));
+    localStorage?.setItem('address', userDetails?.wallet as string);
+    localStorage?.setItem('pdf', String(bookDetails?.pdf))
+    localStorage?.setItem('bookId', String(bookDetails?._id));
     ;
 
     router.push("/read")
