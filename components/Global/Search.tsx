@@ -129,7 +129,7 @@ type Props = {
         <div className='flex flex-col w-[50%] max-md:w-[90%] bg-black/30 mt-2 rounded-xl'>
             {searchResults.length > 0 && <h2 className='w-full py-2 text-white font-bold px-4 border-b-[1px] border-white' >Authors</h2>}
             {searchResults.map((item)=>(
-                <button onClick={()=>{setHistoryData("U"+item.email) ;setIsLoading(true);router.push("/authors/"+item.wallet); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
+                <button onClick={()=>{setHistoryData("U"+item.email) ;;router.push("/authors/"+item.wallet); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
                     <div className='flex items-center justify-start gap-2'>
                         {/* {console.log(item.profileImage)} */}
                         <Image src={`https://niftytales.s3.us-east-1.amazonaws.com/users/${item?.wallet}/info/profileImage`} alt='img' width={1080} height={1080} className='w-10 border-[1px] border-white h-10 rounded-full' />
@@ -146,7 +146,7 @@ type Props = {
         <div className='flex flex-col w-[50%] max-md:w-[90%] bg-black/30 mt-2 rounded-xl'>
             {bookHistory.length > 0 && <h2 className='w-full py-2 text-white font-bold px-4 border-b-[1px] border-white' >Books</h2>}
             {bookHistory.map((item)=>(
-                <button onClick={()=>{setHistoryData("B"+item._id) ;setIsLoading(true);router.push("/books/"+item._id); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
+                <button onClick={()=>{setHistoryData("B"+item._id) ;;router.push("/books/"+item._id); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
                     <div className='flex items-center justify-start gap-2'>
                         {/* {console.log(item.profileImage)} */}
                         {/* @ts-ignore */}
@@ -164,7 +164,7 @@ type Props = {
         <div className='flex flex-col w-[50%] max-md:w-[90%] bg-black/30 mt-2 rounded-xl'>
             {historyUserResults.length > 0 && <h2 className='w-full py-2 text-white font-bold px-4 border-b-[1px] border-white' >Searched Authors</h2>}
             {historyUserResults.map((item)=>(
-                <button onClick={()=>{setHistoryData("U"+item.email) ;setIsLoading(true);router.push("/authors/"+item.wallet); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
+                <button onClick={()=>{setHistoryData("U"+item.email) ;;router.push("/authors/"+item.wallet); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
                     <div className='flex items-center justify-start gap-2'>
                         {/* {console.log(item.profileImage)} */}
                         <Image src={`https://niftytales.s3.us-east-1.amazonaws.com/users/${item?.wallet}/info/profileImage`} alt='img' width={1080} height={1080} className='w-10 border-[1px] border-white h-10 rounded-full' />
@@ -178,7 +178,7 @@ type Props = {
             ))}
             {historyBookResults.length>0 && <h2 className='w-full py-2 text-white font-bold px-4 border-b-[1px] border-white' >Searched Books</h2>}
             {historyBookResults.map((item)=>(
-                <button onClick={()=>{setHistoryData("B"+item._id) ;setIsLoading(true);("/books/"+item._id); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
+                <button onClick={()=>{setHistoryData("B"+item._id) ;;("/books/"+item._id); setBringSearchBar(false)}} className='px-4 hover:bg-white/20 duration-200 py-4 text-white border-b-2 border-white/50 shadow-xl shadow-black/30 rounded-b-xl relative z-50' >
                     <div className='flex items-center justify-start gap-2'>
                         {/* {console.log(item.profileImage)} */}
                         {/* @ts-ignore */}

@@ -103,7 +103,7 @@ export default function Home() {
         if (user) {
             // console.log("checking");
             if (user?.contractAdd == "") {
-                setIsLoading(true);
+                ;
                 router.push("/makeCollection");
             }
 
@@ -179,7 +179,7 @@ export default function Home() {
     }, [])
 
     function handleDraft(item: any) {
-        setIsLoading(true);
+        ;
         // console.log(item.cover, item.pdf, item.name, item.tags);
         localStorage.setItem("name", item.name);
         localStorage.setItem("id", item._id);
@@ -808,7 +808,7 @@ export default function Home() {
 
             {user && user?.yourBooks?.length == 0 && user?.contractAdd !== "" ? <div className="w-screen h-[25rem] flex items-center justify-center flex-col">
                 <h2 className="text-xl font-bold">Publish your first book!</h2>
-                <button onClick={() => { setIsLoading(true); router.push("/publish") }} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-2 max-md:mx-auto'>Publish</button>
+                <button onClick={() => { ; router.push("/publish") }} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-52 my-2 max-md:mx-auto'>Publish</button>
             </div> :
                 <>
 
@@ -819,7 +819,7 @@ export default function Home() {
                                 <h3 className="text-2xl font-bold">Your Books</h3>
                             </div>
                             <div className="w-1/2 flex justify-end">
-                                <button onClick={() => { setIsLoading(true); router.push("/publish") }} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center max-md:-mr-2 justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
+                                <button onClick={() => { ; router.push("/publish") }} className='bg-[#000000] rounded-lg hover:-translate-y-1 duration-200 text-[#eeeeee] h-10 font-semibold flex items-center max-md:-mr-2 justify-center gap-2 px-5 w-24 my-2 max-md:mx-auto'>+ New</button>
                             </div>
                         </div>
 
@@ -827,7 +827,7 @@ export default function Home() {
                             <div className="w-full mb-5">
                                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                                     {item.map((item2: BookType) => (<div className={`flex group relative flex-col ${item2.isPaused && "grayscale"} items-center px-2 md:px-10 mt-2 justify-center gap-4`}>
-                                        <div onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
+                                        <div onClick={() => { ; router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
                                             <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0, 15)}</h2>
                                         </div>
                                         <div className="absolute z-50 top-1 flex gap-2 " >
@@ -836,7 +836,7 @@ export default function Home() {
                                             <button onClick={() => { setId(item2._id); setBoostModal(true) }} className={`bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 text-black group-hover:opacity-100 duration-200`} ><IoIosRocket /></button>
                                             {!item2.isPaused && <button disabled={loadingPause} onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 text-black p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>}
                                         </div>
-                                        <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
+                                        <button onClick={() => { ; router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                                             <Book img={item2.cover} />
                                         </button>
                                     </div>
@@ -862,14 +862,14 @@ export default function Home() {
                             <div className="w-full mb-5">
                                 <div className="w-full max-md:flex max-md:flex-wrap max-md:gap-6 items-center max-sm:justify-center sm:justify-start md:gap-2 md:grid md:grid-flow-col min-[1100px]:grid-cols-5 md:grid-cols-4 " >
                                     {item.map((item2: any) => (<div className="flex group relative flex-col items-center px-2 md:px-10 mt-2 justify-center gap-4">
-                                        <div onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
+                                        <div onClick={() => { ; router.push("/books/" + item2._id) }} className="flex cursor-pointer gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-md:w-[110%] max-md:translate-y-3 w-[80%]  text-white rounded-b-xl to-black/50 items-center justify-center">
                                             <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0, 15)}</h2>
                                         </div>
                                         <div className="absolute z-50 top-1  " >
                                             <button onClick={() => { unHide(item2._id) }} className="bg-black text-white p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" ><FaEye /></button>
                                             <button onClick={()=>{ setLoadingPause(true); pauseMint(item2.tokenId, item2._id)}} className="bg-gray-200 text-nifty-gray-1-2 p-2 text-xl rounded-lg opacity-0 group-hover:opacity-100 duration-200" >{loadingPause ? <RiLoader5Fill className="animate-spin text-lg" /> : <FaPause/>}</button>
                                         </div>
-                                        <button onClick={() => { setIsLoading(true); router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
+                                        <button onClick={() => { ; router.push("/books/" + item2._id) }} className="md:w-40 md:h-68 w-32 max-md:h-44 flex flex-col cursor-pointer relative items-center hover:scale-105 hover:-translate-y-2 duration-200 justify-center " >
                                             <Book img={item2.cover} />
                                         </button>
                                     </div>

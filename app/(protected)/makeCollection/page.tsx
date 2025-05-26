@@ -94,7 +94,7 @@ export default function Home() {
                 await axios.patch("/api/user/"+user?.email, {collectionName: collectionName, contractAdd: contract.address})
 
                 getUser()
-                setIsLoading(true);
+                ;
                 toast.success("Welcome, author!")
                 router.push("/authors/");
                 
@@ -197,7 +197,7 @@ export default function Home() {
 
     useEffect(()=>{
         if(user && user?.contractAdd !== ""){
-            setIsLoading(true);
+            ;
             router.push("/authors");
         }
     },[user])

@@ -31,7 +31,7 @@ const PreRegister = () => {
 
   useEffect(()=>{
     if(session){
-      setIsLoading(true);
+      ;
       router.push("/explore");
     }
   },[session])
@@ -61,7 +61,7 @@ const PreRegister = () => {
 
       <div className={`w-screen h-screen fixed top-0 flex flex-col items-center justify-center overflow-y-hidden object-contain -my-10 `}>
 
-        <button onClick={()=>{setIsLoading(true);router.push("/")}} className='bg-gray-300/20 shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute z-[100] top-16 left-5'>
+        <button onClick={()=>{;router.push("/")}} className='bg-gray-300/20 shadow-md shadow-black/20 w-10 h-10 rounded-full flex items-center justify-center absolute z-[100] top-16 left-5'>
           <IoMdArrowBack className={`dark:text-white text-blackduration-200`}/>
         </button>
 

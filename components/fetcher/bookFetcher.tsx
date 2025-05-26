@@ -349,7 +349,7 @@ export const BookFetcher = () => {
     localStorage.setItem('address', userDetails?.wallet as string);
     localStorage.setItem('pdf', String(bookDetails?.pdf))
     localStorage.setItem('bookId', String(bookDetails?._id));
-    setIsLoading(true);
+    ;
 
     router.push("/read")
   }
@@ -649,7 +649,7 @@ export const BookFetcher = () => {
                   </div>}
 
                 </div>
-                <button onClick={() => { setIsLoading(true); router.push("/authors/" + userDetails?.wallet) }} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen /></span></button>
+                <button onClick={() => { ; router.push("/authors/" + userDetails?.wallet) }} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen /></span></button>
               </div>
               <p className='text-sm text-white max-md:text-center' >{bookDetails?.description?.substring(0, 200)}</p>
               <div className='flex flex-wrap gap-2'>

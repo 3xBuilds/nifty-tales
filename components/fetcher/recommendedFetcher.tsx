@@ -45,7 +45,7 @@ export const RecommendedFetcher = () => {
                 {boosted.slice(0,11).map((item:any, i)=>(
                   <div className="w-full mb-5">
                   <div className="w-full max-lg:flex max-lg:flex-wrap max-lg:gap-6 items-center max-sm:justify-center sm:justify-start lg:gap-2 lg:grid lg:grid-flow-col min-[1100px]:grid-cols-5 lg:grid-cols-4 " >
-                  {item.map((item2:any)=>(<div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer flex-col relative group items-center px-2 lg:px-10 mt-2 justify-center gap-4">
+                  {item.map((item2:any)=>(<div onClick={()=>{;router.push("/books/"+item2._id)}} className="flex cursor-pointer flex-col relative group items-center px-2 lg:px-10 mt-2 justify-center gap-4">
                       <div className="flex gap-2 absolute bottom-0 pb-2 group-hover:opacity-100 max-lg:translate-y-3 opacity-0 h-20 duration-200 bg-gradient-to-b from-transparent z-50 max-lg:w-[110%] w-[80%] text-white rounded-b-xl to-black/50 items-center justify-center"> 
                               <h2 className="font-semibold text-sm mt-5" >{item2.name.slice(0,12)}{item2.name.length>12 && "..."}</h2>
                           </div>
@@ -75,7 +75,7 @@ export const RecommendedFetcher = () => {
                   <div className="w-full mb-5">
                   <div className="w-full max-lg:flex max-lg:flex-wrap max-lg:gap-6 items-center max-sm:justify-center sm:justify-start lg:gap-2 flex flex-wrap gap-1 " >
                   {item.map((item2:any)=>(
-                    <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer relative group items-start p-4 mt-2 justify-start gap-4 w-80 dark:hover:bg-white dark:hover:text-black dark:text-white dark:bg-white/10 bg-nifty-gray-1/10 text-black hover:bg-black hover:text-white duration-200 border-white rounded-xl ">
+                    <div onClick={()=>{;router.push("/books/"+item2._id)}} className="flex cursor-pointer relative group items-start p-4 mt-2 justify-start gap-4 w-80 dark:hover:bg-white dark:hover:text-black dark:text-white dark:bg-white/10 bg-nifty-gray-1/10 text-black hover:bg-black hover:text-white duration-200 border-white rounded-xl ">
                      
                       <button className="w-fit h-fit flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                           <Book height={32} width={24} img={item2.cover} />
@@ -99,7 +99,7 @@ export const RecommendedFetcher = () => {
                   <div className="w-full mb-5">
                   <div className="w-full max-lg:flex max-lg:flex-wrap max-lg:gap-6 items-center max-sm:justify-center sm:justify-start lg:gap-2 flex flex-wrap gap-1 " >
                   {item.map((item2:any)=>(
-                    <div onClick={()=>{setIsLoading(true);router.push("/books/"+item2._id)}} className="flex cursor-pointer relative group items-start p-4 mt-2 justify-start gap-4 w-80 dark:hover:bg-white dark:hover:text-black dark:text-white dark:bg-white/10 bg-nifty-gray-1/10 text-black hover:bg-black hover:text-white duration-200 border-white rounded-xl ">
+                    <div onClick={()=>{;router.push("/books/"+item2._id)}} className="flex cursor-pointer relative group items-start p-4 mt-2 justify-start gap-4 w-80 dark:hover:bg-white dark:hover:text-black dark:text-white dark:bg-white/10 bg-nifty-gray-1/10 text-black hover:bg-black hover:text-white duration-200 border-white rounded-xl ">
                      
                       <button className="w-fit h-fit flex flex-col cursor-pointer relative items-center hover:-translate-y-2 duration-200 justify-center " >
                           <Book height={32} width={24} img={item2.cover} />

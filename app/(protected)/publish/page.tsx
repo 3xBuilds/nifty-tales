@@ -207,7 +207,7 @@ export default function Home(){
                     if (txn) {
                         await axios.patch("/api/book/"+id, {isPublished: true, createdAt: Date.now()}).then((res) => {
                             setLoading("");
-                            setIsLoading(true);
+                            ;
                             router.push("/authors")
                         });
                     }
@@ -332,7 +332,7 @@ export default function Home(){
                     
                 }
                 else{
-                    setIsLoading(true);
+                    ;
 
                     router.push("/authors")
                 }
@@ -367,7 +367,7 @@ export default function Home(){
                     
                 }
                 else{
-                    setIsLoading(true);
+                    ;
 
                     router.push("/authors")
                 }
@@ -401,7 +401,7 @@ export default function Home(){
                     
                 }
                 else{
-                    setIsLoading(true);
+                    ;
 
                     router.push("/authors")
                 }
@@ -435,7 +435,7 @@ export default function Home(){
                     
                 }
                 else{
-                    setIsLoading(true);
+                    ;
 
                     router.push("/authors")
                 }
@@ -469,7 +469,7 @@ export default function Home(){
                     contractPublishBook(response.data.success._id, response.data.success?.tokenId, response.data.success?.cover.split("/")[6], response.data.success?.pdf.split("/")[6]);
                 }
                 else{
-                    setIsLoading(true);
+                    ;
                     router.push("/authors")
                 }
             }

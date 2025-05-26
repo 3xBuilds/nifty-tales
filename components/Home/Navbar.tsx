@@ -86,7 +86,7 @@ const Navbar = () => {
   return (<>
     <div className={`dark:bg-nifty-black bg-white duration-200 w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[1000] md:px-5 `}>
       <div className='w-1/2 pl-4'>
-        <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='flex items-center gap-2'>
+        <button onClick={()=>{;router.push("/explore")}} className='flex items-center gap-2'>
           <Image src={night ? logo_night : logo} alt="logo" width={1080} height={1080} className='w-10 h-10 object-cover object-center' />
           <h1 className={`font-bold text-xl dark:text-white text-nowrap text-black`}>Nifty Tales</h1>
         </button>
@@ -125,7 +125,7 @@ const Navbar = () => {
               <FaSearch className={`dark:text-white text-black`}/>
             </button>
 
-            {!pathName.split("/").includes("explore") && <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className={`dark:text-white text-blacktext-md font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200`}>Explore</button>}
+            {!pathName.split("/").includes("explore") && <button onClick={()=>{;router.push("/explore")}} className={`dark:text-white text-blacktext-md font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200`}>Explore</button>}
 
             {/* @ts-ignore */}
             {user && <div className='flex gap-4 items-center justify-center'>
@@ -134,13 +134,13 @@ const Navbar = () => {
                   <WalletConnectButton/>
                 </>:<>
                   {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
-                { user && user?.contractAdd == "" ? <button onClick={()=>{setIsLoading(true);router.push("/makeCollection")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{setIsLoading(true);router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}  
+                { user && user?.contractAdd == "" ? <button onClick={()=>{;router.push("/makeCollection")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{;router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}  
                 </>}
                 </>
               }
               
               </>
-              {pathName?.split("/")[1] == "yourShelf" ? <button disabled onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username?.slice(0,12)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
+              {pathName?.split("/")[1] == "yourShelf" ? <button disabled onClick={()=>{;router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username?.slice(0,12)}</button> : <button onClick={()=>{;router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
               {/* {!walletNotAvailable && address && <WalletConnectButton/>} */}
 
               
@@ -158,9 +158,9 @@ const Navbar = () => {
     <div className={`w-screen dark:bg-nifty-black dark:text-white bg-white text-black fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-[1000] top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
             {/* <li><WalletConnectButton/></li> */}
-            <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/explore");}} >Explore</li>
-            {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/yourShelf");}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsOpen(false);setIsLoading(true);router.push("/yourShelf")}} >Reader Dashboard</li>}
-            {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/makeCollection");}} >Become an Author</li>: <li onClick={()=>{setIsOpen(false);setIsLoading(true);router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
+            <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);;router.push("/explore");}} >Explore</li>
+            {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);;router.push("/yourShelf");}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsOpen(false);;router.push("/yourShelf")}} >Reader Dashboard</li>}
+            {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);;router.push("/makeCollection");}} >Become an Author</li>: <li onClick={()=>{setIsOpen(false);;router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
             {/* @ts-ignore */}
             {/* {session?.role != "ANONYMOUS" && <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{setOpenSettingsModal(true)}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-tl-xl hover:bg-white/50 w-full flex gap-2'>Settings</button></li>} */}
             <li className='border-b-[1px] border-gray-300' ><button onClick={()=>{signOut({callbackUrl: "/explore"})}} className=' hover:brightness-125 justify-start items-center font-bold duration-200 rounded-bl-xl hover:bg-white/50 w-full flex gap-2'>Logout</button></li>
