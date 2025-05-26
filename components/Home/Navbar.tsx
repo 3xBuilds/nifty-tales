@@ -21,6 +21,7 @@ import { WalletConnectRegister } from '../buttons/WalletConnectRegister'
 import { ImCross } from 'react-icons/im'
 import { RiAdminLine } from 'react-icons/ri'
 import { initializeTheme, toggleDarkMode } from '@/toggleDarkMode'
+import { IoLogOut } from 'react-icons/io5'
 
 
 
@@ -147,7 +148,7 @@ const Navbar = () => {
               </div>} 
           {/* </>} */}
           
-          {session && <button onClick={()=>{router.push("/profile/"+address)}} className='text-gray-500 p-[1px] h-10 w-10 overflow-hidden text-2xl bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>}
+          {session && <button onClick={()=>{signOut(); router.push('/explore')}} className='text-gray-500 p-[1px] h-10 w-10 overflow-hidden text-2xl bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoLogOut className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>}
           {/* {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0  justify-end pt-3 pr-3'><WalletConnectRegister/></div></> } */}
 
         </div>
