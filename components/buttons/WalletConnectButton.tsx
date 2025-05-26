@@ -91,7 +91,7 @@ export const WalletConnectButton = () => {
               }
               return (
                 <div style={{ display: 'flex', gap: 12 }}>
-                  <button title='Click to view address' onClick={openAccountModal} type="button" className={`flex bg-transparent font-bold hover:-translate-y-1 duration-200 items-center gap-2 justify-center rounded-lg max-md:w-full text-sm border-2 h-10 dark:border-white dark:text-white border-black text-black px-3 py-1 transform transition`}>
+                  <button title='Click to view address' onClick={openAccountModal} type="button" className={`flex bg-transparent font-bold hover:-translate-y-1 text-nowrap duration-200 items-center gap-2 justify-center rounded-lg max-md:w-full text-sm border-2 h-10 dark:border-white dark:text-white border-black text-black px-3 py-1 transform transition`}>
                     {/* <Image src={wallet} alt="stickerGen" className='w-10'/>
                      */}
                      <IoMdWallet/>

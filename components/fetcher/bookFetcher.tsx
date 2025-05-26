@@ -27,6 +27,7 @@ import { ImCross, ImPause } from 'react-icons/im';
 import { WalletConnectButton } from '../buttons/WalletConnectButton';
 import masterABI from '@/utils/abis/masterABI';
 import ReactAudioPlayer from 'react-audio-player';
+import { WalletConnectRegister } from '../buttons/WalletConnectRegister';
 
 
 export const BookFetcher = () => {
@@ -34,7 +35,9 @@ export const BookFetcher = () => {
 
   const router = useRouter()
   const { address } = useAccount();
-  const { data: session } = useSession()
+  const { data: session, status:sessionStatus } = useSession()
+
+  console.log("SESSION", session, sessionStatus);
 
   const { data: ensName } = useEnsName({ address: address });
 
@@ -71,23 +74,17 @@ export const BookFetcher = () => {
   async function getFeePerMint() {
     try {
       //@ts-ignore
-      if (typeof window.ethereum !== 'undefined') {
-        const add = "0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF";
+      const add = "0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF";
 
-        //@ts-ignore
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
+      //@ts-ignore
+      const provider = new ethers.getDefaultProvider("https://base-mainnet.g.alchemy.com/v2/2L082LzB4Kl82BLjvBpMBgEnz3eTuq1v");;
 
-        console.log(add);
-        //@ts-ignore
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        //@ts-ignore
-        const contract = new ethers.Contract(add, masterABI, signer);
+      //@ts-ignore
+      const contract = new ethers.Contract(add, masterABI, provider);
 
-        const fee = await contract.getFeePerMint();
+      const fee = await contract.getFeePerMint();
 
-        setPlatformFee(Number(ethers.utils.formatEther(fee)));
-      }
+      setPlatformFee(Number(ethers.utils.formatEther(fee)));
 
     }
     catch (err) {
@@ -146,7 +143,7 @@ export const BookFetcher = () => {
   const chainId = useChainId();
 
   async function mint() {
-    if(chainId !== 8453){
+    if (chainId !== 8453) {
       toast.error("Please switch to Base Mainnet to mint");
       return;
     }
@@ -191,7 +188,7 @@ export const BookFetcher = () => {
         }).catch((err) => {
           console.log(err);
         })
-        
+
       }
 
       // @ts-ignore
@@ -213,19 +210,19 @@ export const BookFetcher = () => {
           console.log(err);
         })
       }
-      
 
 
-    } catch (err:any) {
-      if(err?.data?.message.includes("insufficient")){
+
+    } catch (err: any) {
+      if (err?.data?.message.includes("insufficient")) {
         toast.error("Insufficient funds for transaction")
-    }
-    else if(err?.code == "ACTION_REJECTED"){
+      }
+      else if (err?.code == "ACTION_REJECTED") {
         toast.error("You rejected the transaction!")
-    }
-    else{
+      }
+      else {
         toast.error("Error while minting. Try again!")
-    }
+      }
       setShowModal(false);
       setLoading(false);
       console.log(err);
@@ -241,10 +238,15 @@ export const BookFetcher = () => {
     try {
       const contract = await fetcherContractSetup();
 
-      const price = await contract?.tokenIdPrice(bookDetails?.tokenId);
-      const minted = await contract?.tokenIdMintedByAddress(bookDetails?.tokenId, address);
-      setUserMinted(Number(minted))
-      setPrice(ethers.utils.formatEther(String(price)));
+      console.log(contract);
+
+      const price = ethers.utils.formatEther(String(await contract?.tokenIdPrice(bookDetails?.tokenId)));
+      if (address) {
+        const minted = await contract?.tokenIdMintedByAddress(bookDetails?.tokenId, address);
+        setUserMinted(Number(minted))
+      }
+
+      setPrice(price);
     }
     catch (err) {
       console.log(err);
@@ -277,7 +279,7 @@ export const BookFetcher = () => {
           const image = item?.profileImage;
           const holding = Number(holders[i][1]);
 
-          if(username){
+          if (username) {
             arr1.push({ username, holding, image })
           }
         })
@@ -335,7 +337,7 @@ export const BookFetcher = () => {
   useEffect(() => {
     if (bookDetails)
       setMintPrice();
-  }, [bookDetails])
+  }, [bookDetails, address])
 
   const { setIsLoading } = useLoading()
 
@@ -503,20 +505,20 @@ export const BookFetcher = () => {
 
   return (
     <>
-      <div className={`dark:bg-nifty-black bg-white dark:text-white bg-white text-black duration-200`}>
+      <div className={`dark:bg-nifty-black dark:text-white bg-white text-black duration-200`}>
         <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
 
         {/* WARNING MODAL */}
-        <div className={` ${exists ? "-translate-y-0" : "translate-y-[300rem]"} duration-200 backdrop-blur-xl w-screen h-screen fixed top-0 left-0 z-[1000] flex items-center justify-center`}>
+        {/* <div className={` ${exists ? "-translate-y-0" : "translate-y-[300rem]"} duration-200 backdrop-blur-xl w-screen h-screen fixed top-0 left-0 z-[1000] flex items-center justify-center`}>
           <button onClick={() => { signOut() }} className='w-40 bg-nifty-white font-semibold absolute h-10 rounded-lg hover:-translate-y-1 duration-200 top-4 right-4 text-black'>Sign Out</button>
           <div className={`w-80 dark:bg-[#313131] bg-white  shadow-xl shadow-black/30 rounded-xl p-4 font-semibold`}>
             <h2 className='text-md'>You've connected <span className=' font-bold '>{address?.slice(0, 7)}...{address?.slice(address.length - 5, address.length)}</span> which is connected to an account.</h2>
             <h2 className='text-sm my-2 text-nifty-gray-1'>Please Sign Out and login via Metamask.</h2>
           </div>
-        </div>
+        </div> */}
 
         {/* REPORT MODAL */}
-        <div className={`${openReportModal ? "translate-y-0" : "-translate-y-[300rem]"} duration-200 h-screen w-screen backdrop-blur-xl fixed top-0 left-0 z-[500] flex items-center justify-center`} >
+        {openReportModal && <div className={` duration-200 h-screen w-screen backdrop-blur-xl fixed top-0 left-0 z-[500] flex items-center justify-center`} >
           <div className={`w-80 rounded-xl shadow-xl shadow-black/30 dark:bg-[#313131] bg-white p-4`}>
             <div className='flex '>
               <h2 className='text-xl font-bold w-1/2'>Report Book</h2>
@@ -544,59 +546,61 @@ export const BookFetcher = () => {
               <button onClick={() => { makeReport() }} className='w-full h-10 mt-4 text-lg font-bold hover:-translate-y-1 duration-200 bg-black text-white rounded-lg'>Submit</button>
             </div>
           </div>
-        </div>
+        </div>}
 
         {/* MINTING MODAL */}
-        <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 ${showModal ? "translate-y-0 opacity-100" : "-translate-y-[400rem] opacity-0"} top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
-          <div className={`dark:bg-[#313131] bg-white rounded-xl flex flex-col shadow-xl w-80 shadow-black/30 gap-4 justify-center items-start p-5`}>
-            <h2 className='text-2xl font-bold leading-tight' >Mint</h2>
-            <h2 className='text-lg text-nifty-gray-1' >Choose number of mints</h2>
+        {showModal && <>
+          <div className={`fixed h-screen w-screen backdrop-blur-xl duration-500 top-0 left-0 flex flex-col z-[10000] items-center justify-center`}>
+            <div className={`dark:bg-[#313131] bg-white rounded-xl flex flex-col shadow-xl w-80 shadow-black/30 gap-4 justify-center items-start p-5`}>
+              <h2 className='text-2xl font-bold leading-tight' >Mint</h2>
+              <h2 className='text-lg text-nifty-gray-1' >Choose number of mints</h2>
 
-            <div className='flex rounded-xl items-center justify-center gap-4 w-full h-28 border-[1px] border-gray-300' >
-              <button onClick={() => {
-                if (amount != 0) {
-                  setAmount((prev) => (prev - 1))
-                }
-              }} className='hover:scale-105 duration-200' ><TiMinus className={`text-2xl dark:text-white text-black`} /></button>
-              <h3 className='text-2xl font-bold w-24 text-center'>{amount}</h3>
-              <button onClick={() => {
-                //@ts-ignore
-                if ((bookDetails?.maxMint == 0 || bookDetails?.minted as number + amount != bookDetails?.maxMint) && (bookDetails?.maxMintsPerWallet == 0 || userMinted + amount != bookDetails?.maxMintsPerWallet)) {
-                  setAmount((prev) => (prev + 1))
-                }
-                else {
-                  setAmount((prev) => (prev))
-                }
-              }} className='hover:scale-105 duration-200'><TiPlus className={`text-2xl dark:text-white text-black rotate-180`} /></button>
-            </div>
-            <div className='text-nifty-gray-1 w-full'>
-              <div className='w-full flex'>
-                <h2 className='w-1/3 text-[0.85rem]'>Book Price</h2>
-                <h2 className='w-2/3 text-[0.85rem] font-semibold text-end text-nowrap'>{(Number(price) * amount).toFixed(4)} ETH (${(amount * ethPrice * Number(price)).toFixed(2)})</h2>
+              <div className='flex rounded-xl items-center justify-center gap-4 w-full h-28 border-[1px] border-gray-300' >
+                <button onClick={() => {
+                  if (amount != 0) {
+                    setAmount((prev) => (prev - 1))
+                  }
+                }} className='hover:scale-105 duration-200' ><TiMinus className={`text-2xl dark:text-white text-black`} /></button>
+                <h3 className='text-2xl font-bold w-24 text-center'>{amount}</h3>
+                <button onClick={() => {
+                  //@ts-ignore
+                  if ((bookDetails?.maxMint == 0 || bookDetails?.minted as number + amount != bookDetails?.maxMint) && (bookDetails?.maxMintsPerWallet == 0 || userMinted + amount != bookDetails?.maxMintsPerWallet)) {
+                    setAmount((prev) => (prev + 1))
+                  }
+                  else {
+                    setAmount((prev) => (prev))
+                  }
+                }} className='hover:scale-105 duration-200'><TiPlus className={`text-2xl dark:text-white text-black rotate-180`} /></button>
               </div>
-              <div className='w-full flex my-2'>
-                <h2 className='w-1/2 text-[0.7rem]'>Platform Fee</h2>
-                <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(platformFee * amount).toFixed(4)} ETH (${(amount * ethPrice * platformFee).toFixed(2)})</h2>
+              <div className='text-nifty-gray-1 w-full'>
+                <div className='w-full flex'>
+                  <h2 className='w-1/3 text-[0.85rem]'>Book Price</h2>
+                  <h2 className='w-2/3 text-[0.85rem] font-semibold text-end text-nowrap'>{(Number(price) * amount).toFixed(4)} ETH (${(amount * ethPrice * Number(price)).toFixed(2)})</h2>
+                </div>
+                <div className='w-full flex my-2'>
+                  <h2 className='w-1/2 text-[0.7rem]'>Platform Fee</h2>
+                  <h2 className='w-1/2 text-[0.7rem] font-semibold text-end'>{(platformFee * amount).toFixed(4)} ETH (${(amount * ethPrice * platformFee).toFixed(2)})</h2>
+                </div>
+
+                <div className={`w-full dark:text-white text-blackfont-bold flex mb-2 mt-4`}>
+                  <h2 className='w-1/2 text-[0.85rem] font-bold'>Total</h2>
+                  <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((platformFee + Number(price)) * amount).toFixed(4)} ETH (${(amount * ethPrice * (platformFee + Number(price))).toFixed(2)})</h2>
+                </div>
               </div>
+              <div className='flex gap-2 items-center flex-col justify-center w-full' >
+                {/* @ts-ignore */}
+                {user && address ? <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
+                  : <WalletConnectRegister />
+                }
+                <button disabled={loading} onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
 
-              <div className={`w-full dark:text-white text-blackfont-bold flex mb-2 mt-4`}>
-                <h2 className='w-1/2 text-[0.85rem] font-bold'>Total</h2>
-                <h2 className='w-1/2 text-[0.85rem] font-bold text-end text-nowrap'>{((platformFee + Number(price)) * amount).toFixed(4)} ETH (${(amount * ethPrice * (platformFee + Number(price))).toFixed(2)})</h2>
+                {/* @ts-ignore */}
+                {session?.role == "ANONYMOUS" && <h3 className='w-full text-nifty-gray-1 text-xs mt-2 text-center'>An account will be created <b>with this wallet</b> and you will be logged out automatically on completion of the mint.</h3>}
+
               </div>
-            </div>
-            <div className='flex gap-2 items-center flex-col justify-center w-full' >
-              {/* @ts-ignore */}
-              {address ? <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
-                : <WalletConnectButton />
-              }
-              <button disabled={loading} onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>
-
-              {/* @ts-ignore */}
-              {session?.role == "ANONYMOUS" && <h3 className='w-full text-nifty-gray-1 text-xs mt-2 text-center'>An account will be created <b>with this wallet</b> and you will be logged out automatically on completion of the mint.</h3>}
-
             </div>
           </div>
-        </div>
+        </>}
 
         <div className="w-screen relative h-[47rem] md:h-[22rem] flex items-center justify-center overflow-hidden object-fill ">
           <div className='absolute flex gap-2 items-center justify-center top-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold max-md:rounded-b-xl md:right-0 rounded-bl-xl border-b-[1px] md:border-l-[1px] border-white' >
@@ -608,9 +612,9 @@ export const BookFetcher = () => {
             <CiShare2 />
           </button>
 
-          <button onClick={() => { setOpenReportModal(true) }} className='absolute top-0 left-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:left-0 rounded-br-xl border-b-[1px] hover:bg-white/20 duration-200 border-r-[1px] border-white'>
+          {user && address && <button onClick={() => { setOpenReportModal(true) }} className='absolute top-0 left-0 bg-white/10 px-4 py-2 z-[100] text-white font-semibold md:left-0 rounded-br-xl border-b-[1px] hover:bg-white/20 duration-200 border-r-[1px] border-white'>
             <MdReport className='text-white text-xl' />
-          </button>
+          </button>}
 
           <div className="w-screen absolute h-full overflow-hidden">
             {bookDetails?.cover && <Image width={1080} height={1080} src={bookDetails?.cover || ""} alt="dp" className="w-full h-full object-cover object-center absolute top-1/2 left-1/2 transform -translate-x-1/2 brightness-75 -translate-y-1/2" />}
@@ -618,7 +622,19 @@ export const BookFetcher = () => {
 
           <div className='flex max-md:flex-col gap-8 object-center items-center max-md:py-10 md:h-full h-full md:px-10 w-screen justify-center md:justify-start my-auto absolute z-50 backdrop-blur-xl'>
             <div className="flex object-center items-center md:h-full md:px-10 md:w-60 h-full justify-center md:justify-start my-auto">
-              <Book img={bookDetails?.cover} />
+              <div className='w-fit h-fit relative hover:brightness-105 duration-150'>
+                <div className='bg-nifty-gray-1 overflow-hidden rounded w-48 h-64 shadow-black/50 shadow relative z-10'>
+                  {bookDetails?.cover && <Image width={1080} height={1080} src={bookDetails?.cover} alt="bookcover" className='w-full h-full object-cover' />
+                  }
+
+                </div>
+                <div className='bg-white rounded w-48 h-64 shadow-black/20 shadow-md absolute top-1 left-1 z-0'>
+
+                </div>
+                <div className='bg-white rounded w-48 h-64 shadow-book absolute top-1 left-1 z-0'>
+
+                </div>
+              </div>
             </div>
             <div className='flex flex-col max-md:items-center max-md:justify-center gap-3 md:w-[50%] max-md:w-[90%] '>
               <div className='flex flex-col gap-2 md:items-start md:justify-start items-center justify-center'>
@@ -626,11 +642,11 @@ export const BookFetcher = () => {
                   <h3 className='text-3xl text-white font-bold flex max-md:flex-col md:hidden items-center justify-center text-center gap-2' >{bookDetails?.name.slice(0, 20)}{bookDetails?.name && bookDetails?.name?.length > 20 && "..."}</h3>
                   <h3 className='text-3xl text-white font-bold flex max-md:flex-col max-md:hidden items-center gap-2' >{bookDetails?.name}</h3>
 
-                  <div className='flex gap-2'>
+                  {user && address && <div className='flex gap-2'>
                     <button disabled={readListed} onClick={() => { readlist(bookDetails?._id as string) }} className='bg-black h-10 w-10 flex hover:-translate-y-1 duration-200 items-center justify-center rounded-lg'>
                       {!readListed ? <Icon name='addread' className='w-5 pl-1 mt-1' color='white' /> : <MdLibraryAddCheck className='text-green-500' />}
                     </button>
-                  </div>
+                  </div>}
 
                 </div>
                 <button onClick={() => { setIsLoading(true); router.push("/authors/" + userDetails?.wallet) }} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen /></span></button>
@@ -650,30 +666,43 @@ export const BookFetcher = () => {
                 {bookDetails && bookDetails?.minted as number > 0 && <a target='_blank' className='w-10 h-10 py-1 px-2 flex items-center justify-center text-xl rounded-lg font-bold hover:-translate-y-1 duration-200 bg-[#2181e3] text-white' href={`https://opensea.io/assets/base/${bookDetails.contractAddress}/${bookDetails.tokenId}`} ><SiOpensea /></a>}
               </div>
               <div>
-                {bookDetails?.audiobook !== "" && <div className='h-10 bg-white/10 w-80 rounded-xl flex gap-2 items-center justify-center text-white'>
+                {bookDetails?.audiobook !== "" && <div className='h-10 bg-white w-80 rounded-xl flex gap-2 items-center justify-center text-white'>
                   <ReactAudioPlayer
                     src={bookDetails?.audiobook}
                     controls
+
                   />
                   <style jsx>{`
-        div :global(audio) {
-          width: 100%;
-          height: 40px;
-          }
-          div :global(audio::-webkit-media-controls-panel) {
-            background-color: rgba(255, 255, 255, 1);
-        }
-        div :global(audio::-webkit-media-controls-current-time-display),
-        div :global(audio::-webkit-media-controls-time-remaining-display),
-        div :global(audio::-webkit-media-controls-timeline),
-        div :global(audio::-webkit-media-controls-volume-slider-container),
-        div :global(audio::-webkit-media-controls-volume-slider),
-        div :global(audio::-webkit-media-controls-seek-back-button),
-        div :global(audio::-webkit-media-controls-seek-forward-button),
-        div :global(audio::-webkit-media-controls-fullscreen-button),
-        div :global(audio::-webkit-media-controls-rewind-button),
-        div :global(audio::-webkit-media-controls-return-to-realtime-button),
-      `}</style>
+  div :global(audio) {
+    width: 100%;
+    height: 40px;
+  }
+  
+  div :global(audio::-webkit-media-controls) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px; /* Reduced from 10px to make it less round */
+  }
+  
+  div :global(audio::-webkit-media-controls-panel) {
+    border-radius: 4px; /* Making the overall panel less round */
+  }
+  
+  div :global(audio::-webkit-media-controls-play-button),
+  div :global(audio::-webkit-media-controls-mute-button) {
+    border-radius: 2px; /* Making buttons less round */
+  }
+  
+  div :global(audio::-webkit-media-controls-current-time-display),
+  div :global(audio::-webkit-media-controls-time-remaining-display),
+  div :global(audio::-webkit-media-controls-timeline),
+  div :global(audio::-webkit-media-controls-volume-slider-container),
+  div :global(audio::-webkit-media-controls-volume-slider),
+  div :global(audio::-webkit-media-controls-seek-back-button),
+  div :global(audio::-webkit-media-controls-seek-forward-button),
+  div :global(audio::-webkit-media-controls-fullscreen-button),
+  div :global(audio::-webkit-media-controls-rewind-button),
+  div :global(audio::-webkit-media-controls-return-to-realtime-button),
+`}</style>
                 </div>}
               </div>
             </div>
@@ -748,7 +777,7 @@ export const BookFetcher = () => {
                   <div className='border-x-[1px] border-b-[1px] rounded-b-lg border-gray-300 h-[10.5rem] overflow-y-scroll'>
 
 
-                    {loadingHolders ? <div className='w-full h-full flex items-center justify-center'> <RiLoader5Line className={`text-xl dark:text-white text-blackanimate-spin`} /> </div> :
+                    {loadingHolders ? <div className='w-full h-full flex items-center justify-center'> <RiLoader5Line className={`text-xl dark:text-white text-black animate-spin`} /> </div> :
 
                       <>
                         {holders.length > 0 && holders.map((item: any, i) => (
@@ -757,8 +786,8 @@ export const BookFetcher = () => {
                               <h2 className={`flex gap-2 items-center justify-center relative font-semibold ${i + 1 == 1 && "bg-gradient-to-b from-yellow-700 via-yellow-400 to-yellow-600 text-transparent bg-clip-text"} ${i + 1 == 2 && "bg-gradient-to-b from-gray-700 via-gray-400 to-gray-600 text-transparent bg-clip-text"} ${i + 1 == 3 && "bg-gradient-to-b from-orange-800 via-orange-500 to-orange-700 text-transparent bg-clip-text"}`}>{i < 3 && <FaCrown className={`${i + 1 == 1 && "text-yellow-500"} absolute -translate-x-5 ${i + 1 == 2 && "text-gray-400"} ${i + 1 == 3 && "text-orange-700"}`} />}{i + 1}</h2>
                             </div>
                             <div className='w-[15%] flex justify-center'>
-                                {item?.image != "" ? <Image width={1080} height={1080} src={item?.image} alt='dp' className='w-8 h-8 rounded-full ' /> : <div className='w-8 h-8 border-[1px] border-dashed rounded-full bg-nifty-gray-1/20'></div>}
-                              </div>
+                              {item?.image != "" ? <Image width={1080} height={1080} src={item?.image} alt='dp' className='w-8 h-8 rounded-full ' /> : <div className='w-8 h-8 border-[1px] border-dashed rounded-full bg-nifty-gray-1/20'></div>}
+                            </div>
                             <div className={`flex-shrink-0 w-[15%] font-medium flex gap-2 items-center justify-center text-sm max-md:text-xs dark:text-white text-nifty-gray-2 `}>
                               <h2 className='text-center '>{item?.username?.slice(0, 20)}{item?.username?.length > 20 && "..."}</h2>
                             </div>

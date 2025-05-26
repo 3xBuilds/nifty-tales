@@ -84,11 +84,11 @@ const Navbar = () => {
   initializeTheme();
 
   return (<>
-    <div className={`dark:bg-nifty-black bg-white duration-200 w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[40] md:px-5 `}>
-      <div className='w-1/2'>
-        <button onClick={()=>{setIsLoading(true);router.push("/")}} className='flex items-center gap-2'>
+    <div className={`dark:bg-nifty-black bg-white duration-200 w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[1000] md:px-5 `}>
+      <div className='w-1/2 pl-4'>
+        <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className='flex items-center gap-2'>
           <Image src={night ? logo_night : logo} alt="logo" width={1080} height={1080} className='w-10 h-10 object-cover object-center' />
-          <h1 className={`font-bold text-xl dark:text-white text-black`}>Nifty Tales</h1>
+          <h1 className={`font-bold text-xl dark:text-white text-nowrap text-black`}>Nifty Tales</h1>
         </button>
       </div>
       <div className='md:w-1/2 flex gap-0 h-10 justify-end' >
@@ -107,7 +107,7 @@ const Navbar = () => {
             <div className={`rounded-full duration-300 w-5 h-[3px] dark:bg-white bg-black ${isOpen && " -rotate-45 -translate-y-[4px] "}`}></div>
           </button>
 
-          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' ><> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage+"?v="+String(Date.now()) as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-8 h-8 rounded-full object-cover object-center duration-200' /></></button>}
+          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' ><> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-8 h-8 rounded-full object-cover object-center duration-200' /></></button>}
        </>}
        {/* {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0 justify-end pt-3 pr-3'><WalletConnectRegister/></div></> } */}
 
@@ -128,7 +128,7 @@ const Navbar = () => {
             {!pathName.split("/").includes("explore") && <button onClick={()=>{setIsLoading(true);router.push("/explore")}} className={`dark:text-white text-blacktext-md font-semibold hover:bg-black/5 w-28 h-10 rounded-lg hover:brightness-75 duration-200`}>Explore</button>}
 
             {/* @ts-ignore */}
-            {session && session.role != "ANONYMOUS" && <div className='flex gap-4 items-center justify-center'>
+            {user && <div className='flex gap-4 items-center justify-center'>
               <>{
                 walletNotAvailable && (pathName.split("/")[0] == "" || pathName.split("/")[1] == "connect") ? <>
                   <WalletConnectButton/>
@@ -141,13 +141,13 @@ const Navbar = () => {
               
               </>
               {pathName?.split("/")[1] == "yourShelf" ? <button disabled onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-48 my-4 max-md:mx-auto'>{user?.username?.slice(0,12)}</button> : <button onClick={()=>{setIsLoading(true);router.push("/yourShelf")}} className='bg-gray-200 rounded-lg text-[#000000] hover:-translate-y-1 duration-200 h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Reader <MdOutlineDashboard className='text-xl'/></button>}
-              {!walletNotAvailable && address && <WalletConnectButton/>}
+              {/* {!walletNotAvailable && address && <WalletConnectButton/>} */}
 
               
               </div>} 
           {/* </>} */}
           
-          {session && <button onClick={()=>{router.push("/profile")}} className='text-gray-500 p-[1px] h-10 w-10 overflow-hidden text-2xl bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage+"?v="+Date.now() as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>}
+          {session && <button onClick={()=>{router.push("/profile/"+address)}} className='text-gray-500 p-[1px] h-10 w-10 overflow-hidden text-2xl bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>}
           {/* {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0  justify-end pt-3 pr-3'><WalletConnectRegister/></div></> } */}
 
         </div>
@@ -155,7 +155,7 @@ const Navbar = () => {
         <button onClick={()=>{toggleDarkMode(); setNight(prev => !prev)}} className={` dark:hover:bg-white/20 hover:bg-black/20 mx-2 w-10 h-10 rounded-full duration-200`} >{night ? <LuSun className='text-white mx-auto' /> : <FaMoon className='text-black mx-auto'/>}</button>
 </div>
     </div>
-    <div className={`w-screen dark:bg-nifty-black dark:text-white bg-white text-black fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-30 top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
+    <div className={`w-screen dark:bg-nifty-black dark:text-white bg-white text-black fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-[1000] top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
             {/* <li><WalletConnectButton/></li> */}
             <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);setIsLoading(true);router.push("/explore");}} >Explore</li>
