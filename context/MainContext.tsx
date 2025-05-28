@@ -299,14 +299,7 @@ useEffect(()=>{
     } else if(screenWidth <= 1100){
         setSlicer(4);
     }
-    const mode = localStorage?.getItem('mode');
 
-    if(mode == "night"){
-      setNight(true);
-    }
-    else{
-      setNight(false);
-    }
   },[])
 
   useEffect(()=>{

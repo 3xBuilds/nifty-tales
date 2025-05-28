@@ -2,6 +2,7 @@ import { useGlobalContext } from "./context/MainContext";
 
 export function toggleDarkMode() {
   // Check if we're running in the browser
+
   if (typeof window === 'undefined') return;
   
   const htmlElement = document.documentElement; // Get the <html> element
@@ -29,7 +30,7 @@ export function initializeTheme() {
     setNight(true);
   } else {
     document.documentElement.classList.remove('dark');
-    // setNight(false); <- REMOVE THIS
+    setNight(false); 
   }
 }
 

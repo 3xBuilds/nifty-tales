@@ -37,8 +37,6 @@ export const BookFetcher = () => {
   const { address } = useAccount();
   const { data: session, status:sessionStatus } = useSession()
 
-  console.log("SESSION", session, sessionStatus);
-
   const { data: ensName } = useEnsName({ address: address });
 
   const [readListed, setReadListed] = useState<boolean>(false);
@@ -61,7 +59,7 @@ export const BookFetcher = () => {
   async function getBookDetails() {
     try {
       await axios.get("/api/book/" + pathname.split("/")[2]).then((res) => {
-        // console.log("REFETCHED BOOK ASSHOLE", res.data.data);
+
         setBookDetails(res.data.data);
         setUserDetails(res.data.user);
       });
@@ -346,10 +344,14 @@ export const BookFetcher = () => {
   }, [])
 
   function setLocalStorage() {
-    localStorage?.setItem('address', userDetails?.wallet as string);
-    localStorage?.setItem('pdf', String(bookDetails?.pdf))
-    localStorage?.setItem('bookId', String(bookDetails?._id));
-    ;
+    if(userDetails){
+      localStorage?.setItem('address', userDetails?.wallet as string);
+    }
+
+    if(bookDetails){
+      console.log(bookDetails);
+      localStorage?.setItem('book', JSON.stringify(bookDetails))
+    }
 
     router.push("/read")
   }
@@ -666,22 +668,18 @@ export const BookFetcher = () => {
                 {bookDetails && bookDetails?.minted as number > 0 && <a target='_blank' className='w-10 h-10 py-1 px-2 flex items-center justify-center text-xl rounded-lg font-bold hover:-translate-y-1 duration-200 bg-[#2181e3] text-white' href={`https://opensea.io/assets/base/${bookDetails.contractAddress}/${bookDetails.tokenId}`} ><SiOpensea /></a>}
               </div>
               <div>
-                {bookDetails?.audiobook !== "" && <div className='h-10 bg-white w-80 rounded-xl flex gap-2 items-center justify-center text-white'>
+                {bookDetails?.audiobook !== "" && <div className='w-80'>
                   <ReactAudioPlayer
                     src={bookDetails?.audiobook}
                     controls
-
+                    style={{ color: "black", backgroundColor: "transparent" }}
                   />
                   <style jsx>{`
   div :global(audio) {
     width: 100%;
     height: 40px;
   }
-  
-  div :global(audio::-webkit-media-controls) {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 4px; /* Reduced from 10px to make it less round */
-  }
+
   
   div :global(audio::-webkit-media-controls-panel) {
     border-radius: 4px; /* Making the overall panel less round */

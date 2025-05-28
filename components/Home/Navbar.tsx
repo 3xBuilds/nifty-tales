@@ -81,6 +81,9 @@ const Navbar = () => {
   //     toast.error("Error while deleting user!");
   //   }
   // }
+  useEffect(()=>{
+    console.log("Night mode changed to: ", night);
+  },[night])
 
   initializeTheme();
 
@@ -135,7 +138,7 @@ const Navbar = () => {
                   <WalletConnectButton/>
                 </>:<>
                   {pathName.split("/")[pathName.split("/").length-1] !== "authors" && <>
-                { user && user?.contractAdd == "" ? <button onClick={()=>{;router.push("/makeCollection")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{;router.push("/authors")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}  
+                { user && user?.contractAdd == "" ? <button onClick={()=>{;router.push("/makeCollection")}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Start <FaPenNib className='text-xl' /></button>: <button onClick={()=>{;router.push("/authors/"+address)}} className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'>Author <MdOutlineDashboard className='text-xl' /></button>}  
                 </>}
                 </>
               }
@@ -148,12 +151,12 @@ const Navbar = () => {
               </div>} 
           {/* </>} */}
           
-          {session && <button onClick={()=>{signOut(); router.push('/explore')}} className='text-gray-500 p-[1px] h-10 w-10 overflow-hidden text-2xl bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoLogOut className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>}
+          {session && <button onClick={()=>{signOut(); router.push("/explore")}} className='text-gray-500 p-[1px] h-10 w-10 overflow-hidden text-2xl bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' >{user?.profileImage == "" &&<div className='flex items-center h-10 w-10 justify-center'><IoLogOut className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={logo} alt='logo' width={1080} height={1080} className='group-hover:brightness-50 duration-200 rounded-full group-hover:scale-105' /></div>}{user?.profileImage !== "" && <div className='flex items-center object-center object-cover justify-center'><IoIosMenu className='absolute text-white z-[10000] group-hover:opacity-100 opacity-0 duration-200' /><Image src={user?.profileImage as string} alt='alt' width={1080} height={1080} className='group-hover:brightness-50 w-full h-full object-cover object-center duration-200 rounded-full group-hover:scale-105' /></div>}</button>}
           {/* {!session && isConnected && !isReconnecting && pathName.split("/")[1] !== "register" && <><div className='h-screen w-screen backdrop-blur-2xl fixed flex top-0 right-0  justify-end pt-3 pr-3'><WalletConnectRegister/></div></> } */}
 
         </div>
 
-        <button onClick={()=>{toggleDarkMode(); setNight(prev => !prev)}} className={` dark:hover:bg-white/20 hover:bg-black/20 mx-2 w-10 h-10 rounded-full duration-200`} >{night ? <LuSun className='text-white mx-auto' /> : <FaMoon className='text-black mx-auto'/>}</button>
+        <button onClick={()=>{toggleDarkMode(); setNight((prev) => !prev)}} className={` dark:hover:bg-white/20 hover:bg-black/20 mx-2 w-10 h-10 rounded-full duration-200`} >{night ? <LuSun className='text-white mx-auto' /> : <FaMoon className='text-black mx-auto'/>}</button>
 </div>
     </div>
     <div className={`w-screen dark:bg-nifty-black dark:text-white bg-white text-black fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-[1000] top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>

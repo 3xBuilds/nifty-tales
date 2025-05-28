@@ -20,6 +20,7 @@ import { useGlobalContext } from '@/context/MainContext';
 import { IoIosBookmark } from 'react-icons/io';
 
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
+import { initializeTheme, toggleDarkMode } from '@/toggleDarkMode';
 
 export default function Home() {
 
@@ -29,10 +30,10 @@ export default function Home() {
     const router = useRouter();
     const [id, setId] = useState<string>("")
     const [currentPage, setCurrentPage] = useState(0);
-    const [bookId, setBookId] = useState("");
+    const [bookId, setBookId] = useState<string>("");
     const[pdf, setPdf] = useState<string>("")
 
-    const {user, night} = useGlobalContext();
+    const {user, night, setNight} = useGlobalContext();
 
     const [page, setPage] = useState<number>();
 
@@ -46,26 +47,18 @@ export default function Home() {
 
     useEffect(() => {
         setWallet(localStorage?.getItem('address') || "");
-        setPdf(localStorage?.getItem('pdf') || "");
-        setBookId(localStorage?.getItem('bookId') || "");
+        const book = JSON.parse(localStorage?.getItem('book') as string);
+        setPdf(book.pdf);
+        setBookId(book._id);
     }, [])
 
-    // async function tokenChecker(){
-    //     await axios.get("/api/tokenChecker").then((res)=>{
-    //         console.log(res);
-    //     });
-    //   }
-      
-    //   useEffect(()=>{
-    //     tokenChecker();
-    //     setIsLoading(false);
-    //   },[])
 
       useEffect(()=>{
-        if(bookId != "")
+        if(bookId != "" && user)
         getBookMark();
       },[bookId, user])
 
+    
       async function addBookmark(){
         try{
             await axios.post("/api/bookmark", {email: session?.user?.email, bookId: bookId, page: currentPage}).then((res)=>{
@@ -96,7 +89,7 @@ export default function Home() {
         }
       }
 
-      if(session && page!= undefined)
+      // if(session && page!= undefined)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                       <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
@@ -104,29 +97,30 @@ export default function Home() {
       <div className={`relative flex items-center justify-center w-screen h-screen pt-20 dark:bg-nifty-black bg-white`}>
         <div className="fixed top-20 z-50 bg-white h-16 px-4 flex items-center justify-center rounded-lg w-[80%]">
           <Toolbar />
-          <button 
+          {session && <button 
             onClick={addBookmark} 
             className='bg-white hover:bg-gray-100 text-black rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'
           >
             <IoIosBookmark/>
-          </button>
+          </button>}
         </div>
-        {/* <div className={`mt-20 ${night ? "invert" : ""}`}> */}
-          <Viewer theme={night?"dark":"light"}
-            onPageChange={(e) => setCurrentPage(e.currentPage)}
+
+          <Viewer theme={window?.localStorage?.getItem('theme') as string}
+            onPageChange={(e) => setCurrentPage(e.currentPage || 0)}
             renderLoader={(percentages: number) => (
               <div style={{ width: '300px', margin: "50px" }}>
                 <ProgressBar progress={Math.round(percentages)} />
               </div>
             )}
             plugins={[toolbarPluginInstance]}
-            initialPage={page}
+            initialPage={page || 0}
             defaultScale={0.9}
             fileUrl={pdf}
           />
-        {/* </div> */}
+        
       </div>
     </Worker>
+
 
     );
 
