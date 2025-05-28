@@ -88,7 +88,6 @@ export default function Home() {
             console.log(err);
         }
       }
-
       // if(session && page!= undefined)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">

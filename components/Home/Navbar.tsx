@@ -42,7 +42,6 @@ const Navbar = () => {
 
   const { address, isConnected, isReconnecting } = useAccount();
 
-  const [confirmBox, setConfirmBox] = useState(false);
   const [bringModal, setBringModal] = useState<boolean>(false);
 
   const[bringSearchBar, setBringSearchBar] = useState<boolean>(false);
@@ -90,7 +89,7 @@ const Navbar = () => {
   return (<>
     <div className={`dark:bg-nifty-black bg-white duration-200 w-screen flex items-center justify-between h-16 fixed top-0 left-0 z-[1000] md:px-5 `}>
       <div className='w-1/2 pl-4'>
-        <button onClick={()=>{;router.push("/explore")}} className='flex items-center gap-2'>
+        <button onClick={()=>{;router.push("/")}} className='flex items-center gap-2'>
           <Image src={night ? logo_night : logo} alt="logo" width={1080} height={1080} className='w-10 h-10 object-cover object-center' />
           <h1 className={`font-bold text-xl dark:text-white text-nowrap text-black`}>Nifty Tales</h1>
         </button>
