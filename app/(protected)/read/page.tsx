@@ -46,10 +46,12 @@ export default function Home() {
     const { Toolbar } = toolbarPluginInstance;
 
     useEffect(() => {
+      if(window){
         setWallet(localStorage?.getItem('address') || "");
         const book = JSON.parse(localStorage?.getItem('book') as string);
         setPdf(book.pdf);
         setBookId(book._id);
+      }
     }, [])
 
 
