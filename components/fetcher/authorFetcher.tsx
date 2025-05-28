@@ -39,9 +39,6 @@ export default function AuthorFetcher(){
 
     const router = useRouter()
 
-    const[profileImgLink, setProfileImgLink] = useState<string>("")
-    const[bannerLink, setBannerLink] = useState<string>("")
-
     const[name, setName] = useState<string>("")
 
     async function contractSetup(){

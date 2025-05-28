@@ -35,6 +35,12 @@ export default function Home() {
 
     const {user, night, setNight} = useGlobalContext();
 
+    let theme = "dark"
+
+    if(typeof window !== 'undefined'){
+      theme = window?.localStorage?.getItem('theme') || 'light';
+    }
+    
     const [page, setPage] = useState<number>();
 
     const toolbarPluginInstance = toolbarPlugin({
@@ -106,7 +112,7 @@ export default function Home() {
           </button>}
         </div>
 
-          <Viewer theme={window?.localStorage?.getItem('theme') as string}
+          <Viewer theme={theme}
             onPageChange={(e) => setCurrentPage(e.currentPage || 0)}
             renderLoader={(percentages: number) => (
               <div style={{ width: '300px', margin: "50px" }}>
