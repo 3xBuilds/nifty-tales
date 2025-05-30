@@ -12,10 +12,10 @@ import { GlobalContextProvider, useGlobalContext } from "@/context/MainContext";
 
 export const metadata: Metadata = {
   title: "NiftyTales",
-  description: "Empowering Authors, Engaging Readers",
+  description: "Own the story. Publish onchain.",
   openGraph: {
     title: "NiftyTales",
-  description: "Empowering Authors, Engaging Readers",
+  description: "Own the story. Publish onchain.",
     url: 'https://niftytales.xyz',
     siteName: 'Nifty Tales',
     images: [
