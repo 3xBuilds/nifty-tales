@@ -15,17 +15,14 @@ import HighlightCards from './highlightCards';
 
 const Highlights = () => {
 
-    const router = useRouter();
-
     const { setIsLoading } = useLoading()
 
     useEffect(() => {
         setIsLoading(false)
     }, [])
 
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
     const { user, getUser, userRaw } = useGlobalContext();
-
 
     const [highlights, setHighlights] = useState<Array<BookType>>([]);
 
@@ -71,7 +68,7 @@ const Highlights = () => {
                         </div> :
                             <>
                                 {highlights?.slice(0, 5).map((highlight: any, i) => (
-                                    <HighlightCards session={session} getUser={getUser} key={i} highlight={highlight} />))}
+                                    <HighlightCards key={session?.walletAddress+String(i)} highlight={highlight} />))}
                             </>
 
                     }

@@ -203,7 +203,6 @@ export const BookFetcher = () => {
           getBookDetails()
           setShowModal(false);
           setLoading(false);
-          signOut()
         }).catch((err) => {
           console.log(err);
         })
@@ -591,7 +590,7 @@ export const BookFetcher = () => {
               </div>
               <div className='flex gap-2 items-center flex-col justify-center w-full' >
                 {/* @ts-ignore */}
-                {user && address ? <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
+                {user || session?.walletAddress ? <button disabled={loading} onClick={() => { setLoading(true); mint() }} className='w-64 h-12 py-1 px-3 flex items-center justify-center rounded-lg text-white font-bold hover:-translate-y-1 duration-200 bg-black' >{loading ? <div className='flex items-center justify-center gap-4' ><AiOutlineLoading className='text-white text-xl animate-spin' /> <h2>Collecting</h2></div> : "Collect"}</button>
                   : <WalletConnectRegister />
                 }
                 <button disabled={loading} onClick={() => { setLoading(false); setShowModal(false) }} className='text-black bg-gray-200 h-12 w-64 font-bold rounded-lg hover:-translate-y-1 px-3 py-1 transform transition duration-200 ease-in-out flex items-center justify-center flex-col gap-0' >Cancel</button>

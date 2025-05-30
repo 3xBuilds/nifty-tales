@@ -202,11 +202,8 @@ export default function Home() {
         }
     },[user])
 
-    const {setIsLoading} = useLoading()
-
   useEffect(()=>{
     if(address && !isConnecting){
-        setIsLoading(false);
         getAuthorFee();
     }
   },[address])

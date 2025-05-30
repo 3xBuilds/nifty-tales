@@ -513,11 +513,7 @@ export default function Home(){
 
     },[])
 
-    const {setIsLoading} = useLoading()
-
-  useEffect(()=>{
-    setIsLoading(false)
-  },[])
+    
   
 //   async function tokenChecker() {
 //     try {

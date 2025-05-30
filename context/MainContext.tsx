@@ -13,7 +13,8 @@ import {
   SetStateAction,
   useState,
   ReactNode,
-  useEffect
+  useEffect,
+  useCallback
 } from "react";
 import { toast } from "react-toastify";
 import { useAccount } from "wagmi";
@@ -75,6 +76,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
   const[night, setNight] = useState<boolean>(false);
 
   const[slicer, setSlicer] = useState(0);
+  const [userRaw, setUserRaw] = useState<UserType | null>(null);
 
   const[ensImg, setEnsImg] = useState<string>("");
 
@@ -164,37 +166,34 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   }
 
-  async function getUser(){
-    try{
-      console.log("Getting for ", session?.user?.email)
-      await axios.get(`/api/user/${session?.user?.email}`).then((res)=>{
-        // console.log("user",res);
-        setUser(res.data.user);
-        setUserRaw(res.data.unPopulated);
-      }).catch((err)=>{
-        const user = {username: session?.user?.name, email:session?.user?.email, profileImage: "", wallet: ""}
-        //@ts-ignore
-        setUser(user);
-        // console.log("user",err);
-        // router.push("/connect");
-      });
-
+  const getUser = useCallback(async () => {
+    if (!session?.user?.email) return;
+    
+    try {
+      const res = await axios.get(`/api/user/${session.user.email}`);
+      
+      console.log("Fetched user in :", res.data.user);
+      // Use functional update to ensure latest state
+      setUser(res.data.user)
+      
+      setUserRaw(res.data.unPopulated);
+    } catch (err) {
+      console.error("Error fetching user:", err);
+      setUser(null);
+      setUserRaw(null);
+    } finally {
     }
-    catch(err){
-      console.error(err);
-    }
-  }
+  }, [session]);
 
   const[fetch, setFetch] = useState(false);
 
   useEffect(()=>{
-    if(session && !user)
+    if(session)
     {
       getUser();
     }
   },[session])
 
-  const [userRaw, setUserRaw] = useState<UserType | null>(null);
   const [walletNotRegistered, setWalletNotRegistered] = useState<boolean>(false);
 
   useEffect(()=>{

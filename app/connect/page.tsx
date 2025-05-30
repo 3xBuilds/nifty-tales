@@ -19,11 +19,7 @@ const PreRegister = () => {
   const router = useRouter()
   const {address} = useAccount()
   const {night} = useGlobalContext()
-  const {setIsLoading} = useLoading()
-
-  useEffect(()=>{
-    setIsLoading(false)
-  },[])
+  
 
   const handleGuestSignIn = () =>{
     signIn('anonymous', { callbackUrl: '/explore' });

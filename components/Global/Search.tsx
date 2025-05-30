@@ -19,11 +19,7 @@ type Props = {
  export const Search = ({bringSearchBar, setBringSearchBar, search, setSearch}:Props) => {
 
     const{user} = useGlobalContext()
-    const {setIsLoading} = useLoading()
-
-  useEffect(()=>{
-    setIsLoading(false)
-  },[])
+    
     const{data:session} = useSession()
 
     const [debouncedSearch] = useDebouncedValue(search, 200);
@@ -105,7 +101,7 @@ type Props = {
     }
 
     useEffect(()=>{
-        if(user){
+        if(user && bringSearchBar){
             getHistory();
         }
     },[user, bringSearchBar])

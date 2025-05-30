@@ -20,12 +20,7 @@ import moment from 'moment';
 export const RecommendedFetcher = () => {
 
     const router = useRouter()
-    const {setIsLoading} = useLoading()
     const pathname = usePathname();
-
-  useEffect(()=>{
-    setIsLoading(false)
-  },[])
     
     const {recentBooks, publishedBooks, boosted} = useGlobalContext();
     const {night} = useGlobalContext();

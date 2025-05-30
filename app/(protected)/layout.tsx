@@ -57,6 +57,7 @@ export default function RootLayout({
      > */}
 
       <body className={poppins.className + " overflow-x-hidden w-screen dark:bg-nifty-black bg-white"}>
+      <Providers>
         <Navbar/>
         <ToastContainer
           position="bottom-right"
@@ -71,7 +72,7 @@ export default function RootLayout({
           theme="dark"
           transition={Slide}
             />
-        <Providers>
+        
           <div className="flex w-screen z-[1000] justify-end fixed top-0">
                {/* <Navbar/> */}
             </div> 

@@ -114,9 +114,9 @@ const handler = NextAuth({
       // console.log('ssssss: ', session)
       return session;
     },
-    async redirect({ url, baseUrl }) {
+    async redirect() {
       // console.log("METAMASK", baseUrl);
-      return `${baseUrl}/explore`
+      return `${process.env.REDIRECT_URL}/explore`
     }
   }
 });

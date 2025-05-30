@@ -18,11 +18,7 @@ export default function Home(){
     const {user, getUser, night} = useGlobalContext();
 
 
-  const {setIsLoading} = useLoading()
-
-  useEffect(()=>{
-    setIsLoading(false)
-  },[])
+  
 
     const[toggle, setToggle] = useState<string>("Bookmarks");
 

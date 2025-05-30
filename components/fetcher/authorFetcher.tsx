@@ -141,11 +141,7 @@ export default function AuthorFetcher(){
 
     },[])
 
-    const {setIsLoading} = useLoading()
-
-  useEffect(()=>{
-    setIsLoading(false)
-  },[])
+    
 
 //   async function tokenChecker() {
 //     try {
