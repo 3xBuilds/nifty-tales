@@ -95,7 +95,7 @@ export default function Home() {
             console.log(err);
         }
       }
-      // if(session && page!= undefined)
+    if(page!= undefined)
     return (
         <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
                       <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
