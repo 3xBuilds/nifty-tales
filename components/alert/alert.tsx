@@ -12,24 +12,24 @@ export function useExitAlert(message = "If transaction request has been made, go
 
     const handlePopState = (e: PopStateEvent) => {
       e.preventDefault();
-      if (window.confirm(message)) {
+      if (window?.confirm(message)) {
         // If the user confirms, allow the navigation
         return;
       } else {
         // If the user cancels, prevent the navigation
-        window.history.pushState(null, '', window.location.pathname);
+        window?.history.pushState(null, '', window?.location.pathname);
       }
     };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    window.addEventListener('popstate', handlePopState);
+    window?.addEventListener('beforeunload', handleBeforeUnload);
+    window?.addEventListener('popstate', handlePopState);
 
     // Push a new state to the history when the component mounts
-    window.history.pushState(null, '', window.location.pathname);
+    window?.history.pushState(null, '', window?.location.pathname);
 
     return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-      window.removeEventListener('popstate', handlePopState);
+      window?.removeEventListener('beforeunload', handleBeforeUnload);
+      window?.removeEventListener('popstate', handlePopState);
     };
   }, [message]);
 }

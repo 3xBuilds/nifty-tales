@@ -24,7 +24,6 @@ import { initializeTheme, toggleDarkMode } from '@/toggleDarkMode';
 
 export default function Home() {
 
-    const{setIsLoading} = useLoading();
     const{data:session} = useSession()
     const [wallet, setWallet] = useState("")
     const router = useRouter();

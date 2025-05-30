@@ -8,10 +8,10 @@ export function toggleDarkMode() {
   const htmlElement = document.documentElement; // Get the <html> element
   if (htmlElement.classList.contains('dark')) {
     htmlElement.classList.remove('dark'); // Disable dark mode
-    window.localStorage?.setItem('theme', 'light'); // Save preference
+    window?.localStorage?.setItem('theme', 'light'); // Save preference
   } else {
     htmlElement.classList.add('dark'); // Enable dark mode
-    window.localStorage?.setItem('theme', 'dark'); // Save preference
+    window?.localStorage?.setItem('theme', 'dark'); // Save preference
   }
 }
 
@@ -24,7 +24,7 @@ export function initializeTheme() {
   // Check if we're running in the browser
   if (typeof window === 'undefined') return;
   
-  const savedTheme = window.localStorage?.getItem('theme');
+  const savedTheme = window?.localStorage?.getItem('theme');
   if (savedTheme === 'dark') {
     document.documentElement.classList.add('dark');
     setNight(true);
@@ -39,7 +39,7 @@ export function useThemeInitializer() {
   const {night, setNight} = useGlobalContext();
   
   if (typeof window !== 'undefined') {
-    const savedTheme = window.localStorage?.getItem('theme');
+    const savedTheme = window?.localStorage?.getItem('theme');
     if (savedTheme === 'dark') {
       document.documentElement.classList.add('dark');
       setNight(true);

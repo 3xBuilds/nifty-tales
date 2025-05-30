@@ -30,7 +30,7 @@ import { ImCross } from "react-icons/im";
 export default function Home() {
 
     const router = useRouter()
-    const { setIsLoading } = useLoading()
+
     const { user, getUser, night } = useGlobalContext();
     
     const [publishedBooks, setPublishedBooks] = useState([])
@@ -61,13 +61,13 @@ export default function Home() {
     async function contractSetup() {
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window?.ethereum !== 'undefined') {
 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
 
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
                 const signer = provider.getSigner();
                 //@ts-ignore
                 const contract = new ethers.Contract(user?.contractAdd, abi, signer);
@@ -170,7 +170,7 @@ export default function Home() {
     }, [slicer, user])
 
     useEffect(() => {
-        const screenWidth = window.innerWidth;
+        const screenWidth = window?.innerWidth;
 
         if (screenWidth > 1100) {
             setSlicer(5);
@@ -271,7 +271,7 @@ export default function Home() {
             // Reset form fields
             if (response.status == 200) {
                 setLoading(false);
-                window.location.reload();
+                window?.location.reload();
             }
 
             // alert("Collection created successfully!");
@@ -324,21 +324,20 @@ export default function Home() {
 
 
     useEffect(() => {
-        setIsLoading(false);
         getUser();
     }, [])
 
     async function masterContractSetup() {
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window?.ethereum !== 'undefined') {
                 const masterAdd = "0xE98C64778fA9ff408af6f00C4eAF76A1997a3Ae7";
 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
 
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
                 const signer = provider.getSigner();
                 //@ts-ignore
                 const contract = new ethers.Contract(masterAdd, masterABI, signer);
@@ -356,7 +355,7 @@ export default function Home() {
     async function handleBoost() {
         try {
             setLoading(true);
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window?.ethereum !== 'undefined') {
 
                 const contract = await masterContractSetup();
 

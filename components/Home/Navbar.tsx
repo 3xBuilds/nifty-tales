@@ -1,4 +1,5 @@
 'use client'
+
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import  {logo} from '@/assets/assets'
@@ -44,7 +45,7 @@ const Navbar = () => {
   const [isSigningOut, setIsSigningOut] = useState(false);
 
   const router = useRouter();
-  router.prefetch("/");
+
   const pathName = usePathname()
 
   // Improved logout function
@@ -140,7 +141,7 @@ const Navbar = () => {
 {user || session?.walletAddress ? (
   <div className='flex gap-4 items-center justify-center'>
     {/* Wallet Connect Button - only show if wallet not available and on home/connect pages */}
-    {walletNotAvailable && (pathName === "/" || pathName.includes("/connect")) ? (
+    {walletNotAvailable && (pathName === "/") ? (
       <WalletConnectButton />
     ) : (
       <>

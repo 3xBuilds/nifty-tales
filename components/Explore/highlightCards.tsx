@@ -31,7 +31,6 @@ interface HighlightCardsProps {
 
 export default function HighlightCards({ highlight }: HighlightCardsProps) {
     const router = useRouter();
-    const { setIsLoading } = useLoading();
     // Get user and getUser from global context
     const { user, getUser } = useGlobalContext();
 
@@ -66,7 +65,6 @@ export default function HighlightCards({ highlight }: HighlightCardsProps) {
         
         try {
             setIsAddingToReadlist(true);
-            setIsLoading(true);
             
             await axios.post("/api/readlist", { 
                 email: session?.user?.email, 
@@ -98,7 +96,6 @@ export default function HighlightCards({ highlight }: HighlightCardsProps) {
             // Only update state if component is still mounted
             if (isMounted) {
                 setIsAddingToReadlist(false);
-                setIsLoading(false);
             }
         }
     };

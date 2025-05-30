@@ -94,13 +94,13 @@ export const BookFetcher = () => {
   async function contractSetup() {
     try {
       //@ts-ignore
-      if (typeof window.ethereum !== 'undefined' && address) {
+      if (typeof window?.ethereum !== 'undefined' && address) {
 
         //@ts-ignore
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        await window?.ethereum.request({ method: 'eth_requestAccounts' });
 
         //@ts-ignore
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const provider = new ethers.providers.Web3Provider(window?.ethereum);
         const signer = provider.getSigner();
 
         // console.log(bookDetails?.contractAddress)
@@ -336,11 +336,6 @@ export const BookFetcher = () => {
       setMintPrice();
   }, [bookDetails, address])
 
-  const { setIsLoading } = useLoading()
-
-  useEffect(() => {
-    setIsLoading(false)
-  }, [])
 
   function setLocalStorage() {
     if(userDetails){

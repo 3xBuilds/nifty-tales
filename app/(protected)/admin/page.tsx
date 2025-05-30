@@ -43,14 +43,14 @@ export default function Home(){
     async function contractSetup(add:string) {
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window !== 'undefined' && typeof window?.ethereum !== 'undefined') {
 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
                 
                 console.log(add);
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
                 const signer = provider.getSigner();
                 //@ts-ignore
                 const contract = new ethers.Contract(add, abi, signer);
@@ -240,15 +240,15 @@ export default function Home(){
     async function adminContractSetup() {
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window?.ethereum !== 'undefined') {
                 const add = "0xBA334807c9b41Db493cD174aaDf3A8c7E8a823AF";
                 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
                 
                 console.log(add);
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
                 const signer = provider.getSigner();
                 //@ts-ignore
                 const contract = new ethers.Contract(add, masterABI, signer);

@@ -109,7 +109,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
         if(ensAvatar){
           await axios.patch("/api/user/"+user?.email, {profileImage: ensAvatar}).then((res)=>{
             getUser()
-            window.location.reload()
+            window?.location.reload()
           });
         }
         else{
@@ -129,7 +129,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
           }
           await axios.patch("/api/user/"+user?.email, {profileImage: response.image.pngUrl}).then((res)=>{
             getUser()
-            window.location.reload()
+            window?.location.reload()
           });
 
         };
@@ -155,7 +155,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
         if(ensName){
         await axios.patch("/api/user/"+user?.email, {username: ensName}).then((res)=>{
-          window.location.reload();
+          window?.location.reload();
         });
       }
 
@@ -291,7 +291,7 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
 
 useEffect(()=>{
-    const screenWidth = window.innerWidth;
+    const screenWidth = window?.innerWidth;
 
     if(screenWidth > 1100){
         setSlicer(5);

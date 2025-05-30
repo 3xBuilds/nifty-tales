@@ -130,7 +130,7 @@ export default function AuthorFetcher(){
     },[slicer, user])
 
     useEffect(()=>{
-        const screenWidth = window.innerWidth;
+        const screenWidth = window?.innerWidth;
 
         if(screenWidth > 1100){
             setSlicer(5);

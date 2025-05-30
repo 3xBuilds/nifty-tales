@@ -94,13 +94,13 @@ export default function Home(){
     async function contractSetup(){
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window?.ethereum !== 'undefined') {
 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
 
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
                 const signer = provider.getSigner();
 
                 //@ts-ignore
@@ -625,7 +625,7 @@ export default function Home(){
 
                     <div className="w-full text-start flex flex-col">
                         <textarea onKeyDown={(e)=>{if(characterDesc == 250 && e.key == "Backspace"){setCharacterDesc((prev)=>(prev-1))}}} placeholder="Description..." onChange={(e) => { if(characterDesc < 250){setBookDesc(e.target.value); setCharacterDesc(e.target.value.length) }}} value={bookDesc} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} dark:focus:border-white focus:border-black focus:border-2 h-64 rounded-xl border-[1px] duration-200 `}></textarea>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Book Description <span className="text-xs">{characterDesc}/250 chars</span></h2>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Book Description <span className="text-xs">{characterDesc}/250 chars</span></h2>
                     </div>
 
                     <div className="w-full text-start flex flex-col">
@@ -649,24 +649,24 @@ export default function Home(){
 
                     <div className="w-full text-start flex flex-col">
                         <input placeholder="Pablo Picasso" onKeyDown={(e)=>{if(characterArtist == 20 && e.key == "Backspace"){setCharacterArtist((prev)=>(prev-1))}}} onChange={(e) => { if(characterArtist < 20){setIllustrationArtist(e.target.value); setCharacterArtist(e.target.value.length) }}} value={illustrationArtist} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Illustration Artist <span className="text-xs">{characterArtist}/20 chars</span></h2>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Illustration Artist <span className="text-xs">{characterArtist}/20 chars</span></h2>
                     </div>
 
                     <div className="flex gap-4">
                         <div className="w-full text-start flex flex-col">
                             <input placeholder={`Leave ${0} if free mint`} min={0} type="number" onChange={(e) => {setMintPrice(Number((Number(e.target.value))?.toFixed(4)))}} value={mintPrice} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                            <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Mint Price in ETH (Leave 0 for free mint)</h2>
+                            <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Mint Price in ETH (Leave 0 for free mint)</h2>
                         </div>
 
                         <div className="w-full text-start flex flex-col">
                             <input type="number" min={0} placeholder={`Leave 0 if no max limit`} onChange={(e) => { setMaxMints(Math.round(Number(e.target.value)))}} value={maxMints} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                            <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Max Mints (Leave 0 for no limit)</h2>
+                            <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Max Mints (Leave 0 for no limit)</h2>
                         </div>
                     </div>
 
                     <div className="w-full text-start flex flex-col">
                         <input type="number" min={0} placeholder={`Leave 0 if no wallet limit`} onChange={(e) => { setMaxMintsPerWallet(Math.round(Number(e.target.value)))}} value={maxMintsPerWallet} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none ${requiredName ? "border-red-500" : "border-gray-400"} dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Max Mints Per Wallet (Leave 0 for no limit)</h2>
+                        <h2 className={`text-sm max-md:text-xs text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Max Mints Per Wallet (Leave 0 for no limit)</h2>
                     </div>
 
                     <div className="flex flex-col items-start justify-center md:justify-start md:w-[40%]">

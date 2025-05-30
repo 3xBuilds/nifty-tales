@@ -18,12 +18,12 @@ const Providers = ({ children }) => {
   return (
     <SessionProvider>
         <RainbowProvider>
-          <LoadingProvider>
-            <Loader/>
+          {/* <LoadingProvider> */}
+            {/* <Loader/> */}
           <GlobalContextProvider>
           {children}
           </GlobalContextProvider>
-          </LoadingProvider>
+          {/* </LoadingProvider> */}
         </RainbowProvider>
     </SessionProvider>
   )

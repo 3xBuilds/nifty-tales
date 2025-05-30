@@ -15,11 +15,6 @@ import HighlightCards from './highlightCards';
 
 const Highlights = () => {
 
-    const { setIsLoading } = useLoading()
-
-    useEffect(() => {
-        setIsLoading(false)
-    }, [])
 
     const { data: session, status } = useSession();
     const { user, getUser, userRaw } = useGlobalContext();

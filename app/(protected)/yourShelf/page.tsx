@@ -78,7 +78,8 @@ export default function Home(){
     const router = useRouter()
 
     useEffect(()=>{
-        const screenWidth = window.innerWidth;
+        if(typeof window !== "undefined"){
+        const screenWidth = window?.innerWidth;
         getUser()
         if(screenWidth > 1100){
             setSlicer(5);
@@ -86,7 +87,7 @@ export default function Home(){
         else{
             setSlicer(4)
         }
-
+    }
     },[])
 
 
@@ -125,20 +126,6 @@ export default function Home(){
             console.log(err);
         }
     }
-
-    async function tokenChecker() {
-        try {
-          const res = await axios.get("/api/tokenChecker");
-          // console.log(res.data);
-        } catch (error) {
-          if (axios.isAxiosError(error) && error.response?.status === 401) {
-            console.log(error, "WTF BRO")
-            router.push('/connect');
-          } else {
-            console.error("An error occurred:", error);
-          }
-        }
-      }
 
       async function getAllBookmarks(){
         try{
@@ -253,7 +240,7 @@ export default function Home(){
                         </div>
                         ))}
                         </div>
-                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
+                        <div className={`w-full h-5 max-md:hidden rounded-md shadow-xl shadow-black/30 bg-gradient-to-b duration-200 dark:from-[#313131] dark:to-[#232323] from-white to-gray-300 relative z-10`}>
                         </div>
                         </div>
                     ))}

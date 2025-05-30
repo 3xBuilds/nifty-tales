@@ -37,13 +37,13 @@ export default function Home() {
     async function getAuthorFee() {
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window !== undefined && typeof window?.ethereum !== 'undefined') {
                 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
                 
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
                 const signer = provider.getSigner();
                 const user = address;
                 //@ts-ignore
@@ -72,13 +72,13 @@ export default function Home() {
     async function deployContract() {
         try {
             //@ts-ignore
-            if (typeof window.ethereum !== 'undefined') {
+            if (typeof window !== undefined && typeof window?.ethereum !== 'undefined') {
 
                 //@ts-ignore
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                await window?.ethereum.request({ method: 'eth_requestAccounts' });
 
                 //@ts-ignore
-                const provider = new ethers.providers.Web3Provider(window.ethereum);
+                const provider = new ethers.providers.Web3Provider(window?.ethereum);
 
                 const signer = provider.getSigner();
 
@@ -228,7 +228,7 @@ export default function Home() {
 
 
     return (
-        <div className={` gap-10 w-screen min-h-screen md:p-10 p-4 -mt-16 dark:bg-nifty-black bg-white dark:text-white bg-white text-black duration-200`}>
+        <div className={` gap-10 w-screen min-h-screen md:p-10 p-4 -mt-16 dark:bg-nifty-black dark:text-white bg-white text-black duration-200`}>
             {/* <div className="flex items-center justify-end absolute top-4 w-screen right-4">
                 <Navbar/>
             </div> */}
@@ -274,12 +274,12 @@ export default function Home() {
                         <div className="md:w-[60%]">
                             <div className="w-full text-start flex flex-col">
                                 <input placeholder="John's Collection" onChange={(e) => { setCollectionName(e.target.value) }} value={collectionName} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                                <h2 className={`text-sm text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Name your collection <span className="text-red-500 font-semibold ml-1">*</span></h2>
+                                <h2 className={`text-sm text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Name your collection <span className="text-red-500 font-semibold ml-1">*</span></h2>
                             </div>
 
                             <div className="w-full text-start flex flex-col">
                                 <input placeholder="JCN" onChange={(e) => { setSymbol(e.target.value) }} value={symbol} className={`p-2  placeholder:text-gray-300/40 bg-gray-300/20 w-full peer focus:outline-none dark:focus:border-white focus:border-black focus:border-2 rounded-xl border-[1px] duration-200 `}></input>
-                                <h2 className={`text-sm text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:text-black peer-focus:font-semibold duration-200`}>Collection Symbol <span className="text-red-500 font-semibold ml-1">*</span></h2>
+                                <h2 className={`text-sm text-semibold text-nifty-gray-1 order-first mt-4 dark:peer-focus:text-white peer-focus:text-black peer-focus:font-semibold duration-200`}>Collection Symbol <span className="text-red-500 font-semibold ml-1">*</span></h2>
                             </div>
 
                         </div>

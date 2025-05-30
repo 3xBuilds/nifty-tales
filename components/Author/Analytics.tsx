@@ -249,11 +249,11 @@ export const Analytics = () => {
   async function handleBoost() {
     try {
       setLoading(true);
-      if (typeof window.ethereum !== 'undefined') {
+      if (typeof window?.ethereum !== 'undefined') {
         useExitAlert("Are you sure you want to leave this page? Your progress will be lost. IF A TRANSACTION HAS BEEN CONFIRMED, GOING BACK WILL CAUSE PROBLEMS.");
 
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        await window?.ethereum.request({ method: 'eth_requestAccounts' });
+        const provider = new ethers.providers.Web3Provider(window?.ethereum);
         const signer = provider.getSigner();
   
         const totalPrice = ethers.BigNumber.from(price);
