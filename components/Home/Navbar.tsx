@@ -114,8 +114,6 @@ const Navbar = () => {
         <div className='md:hidden flex gap-4 items-center justify-center'>
         {user && <>
           <Search bringSearchBar={bringSearchBar} search={search} setSearch={setSearch} setBringSearchBar={setBringSearchBar} />
-
-          {pathName.split("/")[1] !== "register" && <button className='text-gray-500 -ml-4 mr-2 p-1 text-2xl hover:bg-gray-2 bg-gray-100 hover:bg-gray-200 duration-200 rounded-full flex items-center justify-center group' ><> <Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-8 h-8 rounded-full object-cover object-center duration-200' /></></button>}
        </>}
           <button onClick={()=>{setBringSearchBar(true)}} >
             <FaSearch className={` dark:text-white text-black`}/>
@@ -261,7 +259,9 @@ const Navbar = () => {
     </div>
     <div className={`w-screen dark:bg-nifty-black dark:text-white bg-white text-black fixed shadow-xl shadow-black/25 font-bold rounded-b-lg duration-300 z-[1000] top-16 left-0 -translate-y-96 ${isOpen && " translate-y-0 font-bold "}`}>
           <ul className='w-full pb-5 px-5 flex flex-col gap-4'>
-            <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);;router.push("/explore");}} >Explore</li>
+            {session && <li className='flex gap-2 items-center border-b-[1px] border-gray-300 pb-1'><Image width={1080} height={1080} src={user?.profileImage == "" ? logo : user?.profileImage as string } alt="dp" className='group-hover:scale-105 group-hover:brightness-50 w-8 h-8 rounded-full object-cover object-center duration-200' />{session?.user?.name}</li>}
+            <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);router.push("/explore");}} >Explore</li>
+            {session ? <>
             {pathName.split("/")[1] == "yourShelf" ? <li className='border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);;router.push("/yourShelf");}} >{user?.username}</li> : <li className='border-b-[1px] border-gray-300' onClick={()=>{setIsOpen(false);;router.push("/yourShelf")}} >Reader Dashboard</li>}
             {user && user?.contractAdd == "" ? <li className='font-bold border-b-[1px] border-gray-300' onClick={()=>{ setIsOpen(false);;router.push("/makeCollection");}} >Become an Author</li>: <li onClick={()=>{setIsOpen(false);;router.push("/authors/")}} className='font-bold border-b-[1px] border-gray-300'>Author Dashboard</li>}
             <li className='border-b-[1px] border-gray-300' >
@@ -274,6 +274,7 @@ const Navbar = () => {
                 {isSigningOut ? "Signing out..." : "Logout"}
               </button>
             </li>
+            </> : <li className='w-full mx-auto flex items-center justify-center'><WalletConnectRegister/></li> }
           </ul>
         </div>
     </>
