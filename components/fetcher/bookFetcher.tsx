@@ -97,11 +97,21 @@ export const BookFetcher = () => {
       if (typeof window?.ethereum !== 'undefined' && address) {
 
         //@ts-ignore
-        await window?.ethereum.request({ method: 'eth_requestAccounts' });
-
-        //@ts-ignore
         const provider = new ethers.providers.Web3Provider(window?.ethereum);
         const signer = provider.getSigner();
+
+        const network = await provider.getNetwork();
+
+      const isBase =
+        network.chainId === 8453;
+
+      if (!isBase) {
+        setShowModal(false)
+        toast.error("Not connected to Base network");
+        setLoading(false);
+        return null;
+      }
+
 
         // console.log(bookDetails?.contractAddress)
         //@ts-ignore

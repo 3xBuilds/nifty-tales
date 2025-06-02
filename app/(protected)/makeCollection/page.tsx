@@ -15,6 +15,7 @@ import { useLoading } from "@/components/PageLoader/LoadingContext";
 import { AiOutlineLoading } from "react-icons/ai";
 import { useExitAlert } from "@/components/alert/alert";
 import masterABI from "@/utils/abis/masterABI";
+import { WalletConnectRegister } from "@/components/buttons/WalletConnectRegister";
 
 export default function Home() {
 
@@ -239,7 +240,7 @@ export default function Home() {
                 </div>}
 
             {isDisconnected && !isReconnecting && <div className="w-screen h-screen fixed flex items-center justify-center flex-col gap-4 z-50 backdrop-blur-2xl top-0 left-0">
-                <WalletConnectButton/>
+                <WalletConnectRegister/>
                 <h3 className="font-semibold text-xl text-black p-4 rounded-xl shadow-xl shadow-black/30 bg-white">Checking wallet connection</h3>
             </div>}
 

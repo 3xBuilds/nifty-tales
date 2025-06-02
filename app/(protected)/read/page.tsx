@@ -40,7 +40,7 @@ export default function Home() {
       theme = window?.localStorage?.getItem('theme') || 'light';
     }
     
-    const [page, setPage] = useState<number>();
+    const [page, setPage] = useState<number>(0);
 
     const toolbarPluginInstance = toolbarPlugin({
         searchPlugin: {
