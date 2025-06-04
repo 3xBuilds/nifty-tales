@@ -144,7 +144,7 @@ const Navbar = () => {
     ) : (
       <>
         {/* Author/Start Button - don't show on authors page */}
-        {!pathName.includes("/authors") && (
+        {!pathName.includes("/authors/"+user?.wallet) && (
           <>
             {user?.contractAdd === "" ? (
               <button 
@@ -155,7 +155,7 @@ const Navbar = () => {
               </button>
             ) : (
               <button 
-                onClick={() => router.push(`/authors/${address}`)} 
+                onClick={() => router.push(`/authors`)} 
                 className='bg-[#000000] hover:-translate-y-1 duration-200 rounded-lg text-[#eeeeee] h-10 font-semibold flex items-center justify-center gap-2 px-5 w-36 my-4 max-md:mx-auto'
               >
                 Author <MdOutlineDashboard className='text-xl' />
