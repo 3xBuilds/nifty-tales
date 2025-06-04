@@ -1,13 +1,11 @@
 "use client"
 
 import { Worker } from '@react-pdf-viewer/core';
-import { Viewer, SpecialZoomLevel, } from '@react-pdf-viewer/core';
-
+import { Viewer, SpecialZoomLevel } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import { useEffect, useState } from 'react';
 import { ScrollMode } from '@react-pdf-viewer/core';
 import { ProgressBar } from '@react-pdf-viewer/core';
-
 import { toolbarPlugin } from '@react-pdf-viewer/toolbar';
 import '@react-pdf-viewer/toolbar/lib/styles/index.css';
 import axios from 'axios';
@@ -18,9 +16,10 @@ import { useLoading } from '@/components/PageLoader/LoadingContext';
 import { toast } from 'react-toastify';
 import { useGlobalContext } from '@/context/MainContext';
 import { IoIosBookmark } from 'react-icons/io';
-
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
 import { initializeTheme, toggleDarkMode } from '@/toggleDarkMode';
+// Add these new imports
+import { isSafari, isMobile } from 'react-device-detect';
 
 export default function Home() {
 
@@ -49,6 +48,13 @@ export default function Home() {
     });
 
     const { Toolbar } = toolbarPluginInstance;
+
+    // Add state for browser detection
+    const [isSafariBrowser, setIsSafariBrowser] = useState(false);
+    
+    useEffect(() => {
+        setIsSafariBrowser(isSafari || isMobile);
+    }, []);
 
     useEffect(() => {
       if(window){
@@ -97,37 +103,60 @@ export default function Home() {
       }
     if(page!= undefined)
     return (
-        <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
-                      <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
+        <>
+            {isSafariBrowser ? (
+                // Safari/Mobile view
+                <div className="w-screen min-h-screen pt-20 px-4">
+                    <div className="w-full bg-white rounded-lg p-4 shadow-lg">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-semibold">PDF Reader</h2>
+                            {session && (
+                                <button 
+                                    onClick={addBookmark} 
+                                    className='bg-white hover:bg-gray-100 text-black rounded-md duration-100 flex items-center justify-center w-8 h-8'
+                                >
+                                    <IoIosBookmark/>
+                                </button>
+                            )}
+                        </div>
+                        <iframe 
+                            src={`${pdf}#page=${page + 1}`}
+                            className="w-full h-[80vh] border-0"
+                            title="PDF Viewer"
+                        />
+                    </div>
+                </div>
+            ) : (
+                // Desktop view - your existing Worker/Viewer implementation
+                <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js">
+                    <div className={`w-screen h-screen fixed top-0 left-0 z-[-1] dark:bg-nifty-black bg-white`}></div>
+                    <div className={`relative flex items-center justify-center w-screen h-screen pt-20 dark:bg-nifty-black bg-white`}>
+                        <div className="fixed top-20 z-50 bg-white h-16 px-4 flex items-center justify-center rounded-lg w-[80%]">
+                            <Toolbar />
+                            {session && <button 
+                                onClick={addBookmark} 
+                                className='bg-white hover:bg-gray-100 text-black rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'
+                            >
+                                <IoIosBookmark/>
+                            </button>}
+                        </div>
 
-      <div className={`relative flex items-center justify-center w-screen h-screen pt-20 dark:bg-nifty-black bg-white`}>
-        <div className="fixed top-20 z-50 bg-white h-16 px-4 flex items-center justify-center rounded-lg w-[80%]">
-          <Toolbar />
-          {session && <button 
-            onClick={addBookmark} 
-            className='bg-white hover:bg-gray-100 text-black rounded-md duration-100 flex items-center justify-center w-8 h-8 -translate-y-[0.25rem]'
-          >
-            <IoIosBookmark/>
-          </button>}
-        </div>
-
-          <Viewer theme={theme}
-            onPageChange={(e) => setCurrentPage(e.currentPage || 0)}
-            renderLoader={(percentages: number) => (
-              <div style={{ width: '300px', margin: "50px" }}>
-                <ProgressBar progress={Math.round(percentages)} />
-              </div>
+                        <Viewer theme={theme}
+                            onPageChange={(e) => setCurrentPage(e.currentPage || 0)}
+                            renderLoader={(percentages: number) => (
+                            <div style={{ width: '300px', margin: "50px" }}>
+                                <ProgressBar progress={Math.round(percentages)} />
+                            </div>
+                            )}
+                            plugins={[toolbarPluginInstance]}
+                            initialPage={page || 0}
+                            defaultScale={0.9}
+                            fileUrl={pdf}
+                        />
+                    </div>
+                </Worker>
             )}
-            plugins={[toolbarPluginInstance]}
-            initialPage={page || 0}
-            defaultScale={0.9}
-            fileUrl={pdf}
-          />
-        
-      </div>
-    </Worker>
-
-
+        </>
     );
-
+    return null;
 }
