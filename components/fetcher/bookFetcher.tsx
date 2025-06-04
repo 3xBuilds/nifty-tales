@@ -657,7 +657,7 @@ export const BookFetcher = () => {
                 </div>
                 <button onClick={() => { ; router.push("/authors/" + userDetails?.wallet) }} className=' text-sm flex text-semibold gap-2 text-white'>Belongs to: <span className='font-bold flex items-center justify-center gap-1'>{userDetails?.collectionName}<FaBookOpen /></span></button>
               </div>
-              <p className='text-sm text-white max-md:text-center' >{bookDetails?.description?.substring(0, 200)}</p>
+              <p className='text-sm text-white max-md:text-center' >{bookDetails?.description?.substring(0, 250)}{bookDetails?.description?.length as number > 250 && "..."}</p>
               <div className='flex flex-wrap gap-2'>
                 {bookDetails?.tags?.map((item) => (
                   <div className='min-w-20 px-2 py-2 bg-white/10 flex items-center justify-center text-white text-xs font-semibold border-[1px] border-white rounded-lg'>

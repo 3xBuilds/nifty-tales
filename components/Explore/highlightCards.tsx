@@ -131,7 +131,7 @@ export default function HighlightCards({ highlight }: HighlightCardsProps) {
                     {highlight.item.name.slice(0, 40)}{highlight.item.name.length > 40 && "..."}
                 </h2>
                 <p className={openSans.className + ' text-xs font-normal mt-2'}>
-                    {highlight.item.description?.substring(0, 100)}{highlight.item.description?.length > 100 && "..."}
+                    {highlight.item.description?.substring(0, 150)}{highlight.item.description?.length > 150 && "..."}
                 </p>
             </div>
             <div className='w-full h-full absolute top-0 left-0 z-10 bg-black/30 backdrop-blur'></div>
