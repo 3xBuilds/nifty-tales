@@ -595,7 +595,7 @@ export default function Home() {
     }
 
     return (
-        <div className={`dark:bg-nifty-black bg-white dark:text-white bg-white text-black duration-200`}>
+        <div className={`dark:bg-nifty-black dark:text-white bg-white text-black duration-200`}>
             {/* <div className="h-16 w-screen relative z-[1000]">
                 <Navbar/>
             </div> */}
