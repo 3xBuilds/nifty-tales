@@ -2,7 +2,7 @@ import FooterComponent from "@/components/Home/FooterComponent";
 
 export default function Home() {
     return (
-    <><div className='w-screen min-h-screen flex flex-col items-start justify-start p-20 max-md:p-4 bg-white text-black '>
+    <><div className='w-screen min-h-screen flex flex-col items-start justify-start px-20 py-10 max-md:p-4 bg-white text-black '>
         <h1 className=' max-md:text-center max-md:text-5xl text-6xl font-bold'>Terms of Service</h1>
         <p className="text-sm text-nifty-gray-1">
         Last updated: 04/22/2025
