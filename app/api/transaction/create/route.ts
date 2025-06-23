@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
         await connectToDB();
 
         const body = await req.json();
-        const { txnHash, bookId, userId, value } = body;
+        const { txnHash, bookId, userId, value, amount } = body;
 
         const session = await getToken({
             req: req,
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: "Book or User not found" }, { status: 404 });
         }
 
-        const txn = await Transactions.create({ txnHash, book: bookId, user: userId, value });
+        const txn = await Transactions.create({ txnHash, book: bookId, user: userId, value, amount });
         // console.log("I AM USER", user.mintedBooks);
         if(!user.mintedBooks.includes(bookId)){
             // console.log("savingggg");

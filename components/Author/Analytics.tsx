@@ -79,7 +79,7 @@ export const Analytics = () => {
         const revenue:number = dayFiltered[0]?.value * dayFiltered?.length || 0;
         if(revenue)
         totalRev += revenue;
-        const minted:number = dayFiltered?.length || 0;
+        const minted:number = dayFiltered.reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || 0;
         totalMinted += minted;
         const readers:number = dayFilteredReaders?.length || 0;
         totalReaders += readers
@@ -133,7 +133,7 @@ export const Analytics = () => {
         const revenue:number = weekFiltered[0]?.value * weekFiltered?.length || 0;
         if(revenue)
         totalRev += revenue;
-        const minted:number = weekFiltered?.length || 0;
+        const minted:number = weekFiltered.reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || 0;
         totalMinted += minted;
         const readers:number = weekFilteredReaders?.length || 0;
         totalReaders += readers
@@ -187,7 +187,7 @@ export const Analytics = () => {
         const revenue:number = monthFiltered[0]?.value * monthFiltered?.length || 0;
         if(revenue)
         totalRev += revenue;
-        const minted:number = monthFiltered?.length || 0;
+        const minted:number = monthFiltered.reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || 0;
         totalMinted += minted;
         const readers:number = monthFilteredReaders?.length||0;
         totalReaders += readers;
@@ -224,7 +224,7 @@ export const Analytics = () => {
         const revenue:number = item.transactions[0]?.value * item?.transactions?.length || 0;
         if(revenue)
         totalRev += revenue
-        const minted:number = item.transactions?.length || 0;
+        const minted:number = item.transactions.reduce((sum: number, tx: any) => sum + (tx.amount || 0), 0) || 0;
         totalMinted += minted;
         const readers:number = item.readlists?.length||0;
         totalReaders += readers;

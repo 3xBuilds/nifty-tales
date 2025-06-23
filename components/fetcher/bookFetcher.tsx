@@ -188,6 +188,7 @@ export const BookFetcher = () => {
           txnHash: txn.hash,
           bookId: pathname.split("/")[2],
           userId: user?._id,
+          amount: amount,
           value: bookDetails?.price as number * amount
         }).then(async (res) => {
           getBookDetails()
@@ -208,6 +209,7 @@ export const BookFetcher = () => {
           txnHash: txn.hash,
           bookId: pathname.split("/")[2],
           userId: res?.data.user?._id,
+          amount: amount,
           value: bookDetails?.price as number * amount
         }).then(async (res) => {
           getBookDetails()
