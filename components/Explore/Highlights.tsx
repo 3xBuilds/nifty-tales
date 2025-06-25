@@ -51,7 +51,7 @@ const Highlights = () => {
 
     return (
         <div className='w-full p-5'>
-            <h2 className='font-bold text-2xl mb-4 ' >Latest Publishes</h2>
+            <h2 className='font-bold text-2xl mb-4 ' >Latest Publications</h2>
             <div className='w-full  flex-col flex items-start justify-start noscr'>
                 <div className='grid grid-rows-1 md:h-[16.5rem] grid-flow-col gap-2'>
                     {
