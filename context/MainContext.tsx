@@ -70,9 +70,9 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
 
   const {data: session} = useSession();
 
-  const [publishedBooks, setPublishedBooks] = useState([])
-  const [recentBooks, setRecentBooks] = useState([])
-  const [boosted, setBoosted] = useState([]);
+  const [publishedBooks, setPublishedBooks] = useState<Array<BookType>>([]);
+  const [recentBooks, setRecentBooks] = useState<Array<BookType>>([]);
+  const [boosted, setBoosted] = useState<Array<BookType>>([]);
   const[night, setNight] = useState<boolean>(false);
 
   const[slicer, setSlicer] = useState(0);
@@ -228,82 +228,34 @@ export const GlobalContextProvider = ({ children } : { children: ReactNode}) => 
     }
   },[pathname])
 
-  async function getAllBooks(){
-    try{
-      const books = await axios.get("/api/book/");
+  async function getAllBooks() {
+    try {
+        const trendingBooksResponse = await axios.get("/api/book/?limit=10&type=trending");
+        const latestBooksResponse = await axios.get("/api/book/?limit=10&type=latest");
+        const boostedBooksResponse = await axios.get("/api/book/?limit=10&type=boosted");
 
-      var arr1:any= []
-      var subArr1:any = []
+        const publishedBooks = latestBooksResponse.data.data.filter(
+            (item: any) => item.isPublished && !item.isHidden && !item.isAdminRemoved
+        );
+        const boostedBooks = boostedBooksResponse.data.data.filter(
+            (item: any) => item.isBoosted && Number(item.isBoosted) > Date.now() && !item.isAdminRemoved
+        );
 
-      var arr4:any = [];
-      var subArr4:any = [];
+        const trendingBooks = trendingBooksResponse.data.data.filter(
+            (item: any) => item.isPublished && !item.isHidden && !item.isAdminRemoved
+        );
 
-      var arr2:any= books.data.data
-
-      books.data.data.reverse().map((item:any, i:number)=>{
-        if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
-            subArr1.push(item);
-        }
-
-        if(item.isBoosted && Number(item.isBoosted) > Date.now() && !item.isAdminRemoved){
-          subArr4.push(item);
-        }
-
-        if(subArr4.length == slicer || i == books.data.data.length-1){
-          if(subArr4.length>0)
-            arr4.push(subArr4);
-          subArr4 = [];
-        }
-
-        if(subArr1.length == slicer || i == books.data.data.length-1){
-          if(subArr1.length>0)
-            arr1.push(subArr1);
-            subArr1 = []
-        }
-    })
-
-    //@ts-ignore
-    arr2.sort((a:BookType, b:BookType) => b.readers - a.readers)
-    var arr3:any= []
-    var subArr3:any = []
-
-      arr2.map((item:any, i:number)=>{
-        if(item.isPublished && !item.isHidden && !item.isAdminRemoved){
-            subArr3.push(item);
-        }
-        if(subArr3.length == slicer || i == books.data.data.length-1){
-          if(subArr3.length>0)
-            arr3.push(subArr3);
-            subArr3 = []
-        }
-    })
-
-    setRecentBooks(arr3);
-    setBoosted(arr4);
-      //@ts-ignore
-      setPublishedBooks(arr1);
-
-    }
-    catch(err){
-      console.log(err);
+        setPublishedBooks(publishedBooks);
+        setBoosted(boostedBooks);
+        setRecentBooks(trendingBooks);
+    } catch (err) {
+        console.error("Error fetching books:", err);
     }
   }
 
-
-useEffect(()=>{
-    const screenWidth = window?.innerWidth;
-
-    if(screenWidth > 1100){
-        setSlicer(5);
-    } else if(screenWidth <= 1100){
-        setSlicer(4);
-    }
-
-  },[])
-
   useEffect(()=>{
     getAllBooks();
-},[slicer])
+  },[])
 
 
   return (
@@ -316,5 +268,6 @@ useEffect(()=>{
     </GlobalContext.Provider>
   );
 };
+
 
 export const useGlobalContext = () => useContext(GlobalContext);

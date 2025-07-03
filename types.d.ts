@@ -39,7 +39,7 @@ type BookType = {
   description?: string | null;
   tags?: string[];
   pdf: string;
-  readers?: number;
+  readers: number;
   isBoosted?: string | null;
   createdAt?: Date | null;
   mintEnds?: string;

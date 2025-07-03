@@ -24,37 +24,41 @@ type BookType = {
 
 // get all books route
 export async function GET(req: NextRequest) {
-    revalidatePath('/', 'layout') 
+    revalidatePath('/', 'layout');
 
     try {
         await connectToDB();
-        let books: BookType[] = await Book.find();
+        const url = new URL(req.url);
+        const limit = parseInt(url.searchParams.get("limit") || "0", 10);
+        const type = url.searchParams.get("type") || "latest";
 
-        // const res = books.map(async(book: BookType) => {
-        //     return {
-        //         ...book, 
-        //         author: await User.findById(book.author, 'name username profileImage') // Fetch author details
-        //     }
-        // });
+        let books: BookType[] = [];
 
-        // const response = await Promise.all(res);
-        // books = response.filter(book => book.author !== null); // Filter out books without authors
+        if(type == "trending"){
+            books= await Book.find().sort({ readers: -1 }).limit(limit);
+        }
+        else if(type == "latest"){
+            books= await Book.find().sort({ createdAt: -1 }).limit(limit);
+        }
+        else if(type == "boosted"){
+            books= await Book.find({isBoosted:true}).sort({ createdAt: -1 }).limit(limit);
+        }
 
         if (books.length === 0) {
             return NextResponse.json({
                 data: [],
                 message: "No books found"
-            }, { status: 404 })
+            }, { status: 200 });
         }
 
         return NextResponse.json({
             data: books
-        }, { status: 200 })
+        }, { status: 200 });
 
     } catch (error) {
         return NextResponse.json({
             message: "Something went wrong"
-        }, { status: 500 })
+        }, { status: 500 });
     }
 
 }

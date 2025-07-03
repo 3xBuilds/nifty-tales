@@ -112,9 +112,9 @@ const Navbar = () => {
       <div className='md:w-1/2 flex gap-0 h-10 justify-end' >
       {/* MOBILE NAVBAR */}
         <div className='md:hidden flex gap-4 items-center justify-center'>
-        {user && <>
+        {/* {user && <> */}
           <Search bringSearchBar={bringSearchBar} search={search} setSearch={setSearch} setBringSearchBar={setBringSearchBar} />
-       </>}
+       {/* </>} */}
           <button onClick={()=>{setBringSearchBar(true)}} >
             <FaSearch className={` dark:text-white text-black`}/>
           </button>

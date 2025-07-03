@@ -23,7 +23,7 @@ const Highlights = () => {
 
     const fetchHighlights = async () => {
         try {
-            await axios.get("/api/book").then(async (res) => {
+            await axios.get("/api/book?limit=10").then(async (res) => {
 
                 const userNew = userRaw;
 
@@ -35,7 +35,7 @@ const Highlights = () => {
                     }
                 })
 
-                setHighlights(arr.reverse());
+                setHighlights(arr);
 
 
             });
