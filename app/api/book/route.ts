@@ -35,14 +35,18 @@ export async function GET(req: NextRequest) {
         let books: BookType[] = [];
 
         if(type == "trending"){
-            books= await Book.find().sort({ readers: -1 }).limit(limit);
+            books= await Book.find({isAdminRemoved: false, isPaused:false, isHidden:false, isPublished:true}).sort({ readers: -1 }).limit(limit);
         }
         else if(type == "latest"){
-            books= await Book.find().sort({ createdAt: -1 }).limit(limit);
+            books= await Book.find({isAdminRemoved: false, isPaused:false, isHidden:false, isPublished:true}).sort({ createdAt: -1 }).limit(limit);
         }
         else if(type == "boosted"){
-            books= await Book.find({isBoosted:true}).sort({ createdAt: -1 }).limit(limit);
+            books= await Book.find({ isBoosted: { $exists: true, $ne: null }, isAdminRemoved: false, isPaused:false, isHidden:false, isPublished:true })
+                .where("isBoosted").gt((new Date()).getMilliseconds())
+                .sort({ createdAt: -1 }).limit(limit);
         }
+
+        console.log(books.length, limit);
 
         if (books.length === 0) {
             return NextResponse.json({
