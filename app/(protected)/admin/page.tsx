@@ -47,6 +47,8 @@ export default function Home(){
 
                 //@ts-ignore
                 await window?.ethereum.request({ method: 'eth_requestAccounts' });
+
+                
                 
                 console.log(add);
                 //@ts-ignore
