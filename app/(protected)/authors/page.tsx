@@ -1606,7 +1606,7 @@ export default function Home() {
                   </div>
 
                   <div className="flex flex-col w-full justify-center items-center">
-                    {reportedArr.map((item, i) => (
+                    {reportedArr.map((item:any, i:number) => (
                       <div
                         className={`flex w-full text-center border-gray-300 h-12 border-b-[1px] border-x-[1px] ${
                           i + 1 == reportedArr.length && "rounded-b-xl"
